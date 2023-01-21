@@ -34,25 +34,6 @@ public class ClientEventHandlers {
 	    MinecraftForge.EVENT_BUS.register(this);
 	}
 
-
-	
-	@SubscribeEvent
-    public void onBlockBreak(BreakEvent event) {
-		if (event.getPos() != null) {
-			if (ClientControllerManager.controllerPos.containsKey(event.getPos())) {
-				GrappleController control = ClientControllerManager.controllerPos.get(event.getPos());
-
-				control.unattach();
-				
-				ClientControllerManager.controllerPos.remove(event.getPos());
-			}
-		}
-    }
-
-	@SubscribeEvent
-	public void onPlayerLoggedOutEvent(LoggingOut e) {
-		GrappleConfig.setServerOptions(null);
-	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW)
     public void onInputUpdate(MovementInputUpdateEvent event) {
