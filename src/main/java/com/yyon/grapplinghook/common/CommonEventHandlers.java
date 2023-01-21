@@ -1,13 +1,13 @@
 package com.yyon.grapplinghook.common;
 
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.items.GrapplehookItem;
-import com.yyon.grapplinghook.items.LongFallBoots;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.item.GrapplehookItem;
+import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.network.GrappleDetachMessage;
 import com.yyon.grapplinghook.network.LoggedInMessage;
 import com.yyon.grapplinghook.server.ServerControllerManager;
-import com.yyon.grapplinghook.utils.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrapplemodUtils;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.minecraft.server.level.ServerPlayer;

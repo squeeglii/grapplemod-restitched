@@ -2,10 +2,10 @@ package com.yyon.grapplinghook.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.yyon.grapplinghook.common.CommonSetup;
-import com.yyon.grapplinghook.controllers.AirfrictionController;
-import com.yyon.grapplinghook.controllers.ForcefieldController;
-import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.entities.grapplehook.RenderGrapplehookEntity;
+import com.yyon.grapplinghook.controller.AirfrictionController;
+import com.yyon.grapplinghook.controller.ForcefieldController;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.entity.grapplehook.RenderGrapplehookEntity;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.EntityRenderer;

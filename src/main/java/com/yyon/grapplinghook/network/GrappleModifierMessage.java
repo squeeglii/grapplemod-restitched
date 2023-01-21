@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.network;
 
-import com.yyon.grapplinghook.blocks.modifierblock.TileEntityGrappleModifier;
-import com.yyon.grapplinghook.utils.GrappleCustomization;
+import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;

@@ -2,11 +2,11 @@ package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.controllers.AirfrictionController;
-import com.yyon.grapplinghook.controllers.ForcefieldController;
-import com.yyon.grapplinghook.controllers.GrappleController;
-import com.yyon.grapplinghook.items.KeypressItem;
-import com.yyon.grapplinghook.utils.Vec;
+import com.yyon.grapplinghook.controller.AirfrictionController;
+import com.yyon.grapplinghook.controller.ForcefieldController;
+import com.yyon.grapplinghook.controller.GrappleController;
+import com.yyon.grapplinghook.item.KeypressItem;
+import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.core.BlockPos;

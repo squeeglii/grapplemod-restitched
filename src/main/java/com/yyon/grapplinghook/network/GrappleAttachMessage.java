@@ -1,10 +1,10 @@
 package com.yyon.grapplinghook.network;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
-import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.entities.grapplehook.SegmentHandler;
-import com.yyon.grapplinghook.utils.GrappleCustomization;
-import com.yyon.grapplinghook.utils.Vec;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.entity.grapplehook.SegmentHandler;
+import com.yyon.grapplinghook.util.GrappleCustomization;
+import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;

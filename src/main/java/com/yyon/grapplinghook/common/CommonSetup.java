@@ -1,16 +1,16 @@
 package com.yyon.grapplinghook.common;
 
-import com.yyon.grapplinghook.blocks.modifierblock.BlockGrappleModifier;
-import com.yyon.grapplinghook.blocks.modifierblock.TileEntityGrappleModifier;
-import com.yyon.grapplinghook.enchantments.DoublejumpEnchantment;
-import com.yyon.grapplinghook.enchantments.SlidingEnchantment;
-import com.yyon.grapplinghook.enchantments.WallrunEnchantment;
-import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.items.EnderStaffItem;
-import com.yyon.grapplinghook.items.ForcefieldItem;
-import com.yyon.grapplinghook.items.GrapplehookItem;
-import com.yyon.grapplinghook.items.LongFallBoots;
-import com.yyon.grapplinghook.items.upgrades.*;
+import com.yyon.grapplinghook.block.modifierblock.BlockGrappleModifier;
+import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.enchantment.DoublejumpEnchantment;
+import com.yyon.grapplinghook.enchantment.SlidingEnchantment;
+import com.yyon.grapplinghook.enchantment.WallrunEnchantment;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.item.EnderStaffItem;
+import com.yyon.grapplinghook.item.ForcefieldItem;
+import com.yyon.grapplinghook.item.GrapplehookItem;
+import com.yyon.grapplinghook.item.LongFallBoots;
+import com.yyon.grapplinghook.item.upgrade.*;
 import com.yyon.grapplinghook.network.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,7 +35,6 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {

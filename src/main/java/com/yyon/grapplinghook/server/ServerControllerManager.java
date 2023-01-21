@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.server;
 
-import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 

@@ -1,16 +1,16 @@
 package com.yyon.grapplinghook.client;
 
-import com.yyon.grapplinghook.blocks.modifierblock.GuiModifier;
-import com.yyon.grapplinghook.blocks.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.block.modifierblock.GuiModifier;
+import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.controllers.GrappleController;
+import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.items.GrapplehookItem;
+import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.network.BaseMessageClient;
-import com.yyon.grapplinghook.utils.GrappleCustomization;
-import com.yyon.grapplinghook.utils.GrapplemodUtils;
-import com.yyon.grapplinghook.utils.Vec;
+import com.yyon.grapplinghook.util.GrappleCustomization;
+import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.Vec;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

@@ -1,10 +1,10 @@
 package com.yyon.grapplinghook.client;
 
-import com.yyon.grapplinghook.blocks.modifierblock.TileEntityGrappleModifier;
-import com.yyon.grapplinghook.controllers.GrappleController;
+import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.network.BaseMessageClient;
-import com.yyon.grapplinghook.utils.GrappleCustomization;
-import com.yyon.grapplinghook.utils.Vec;
+import com.yyon.grapplinghook.util.GrappleCustomization;
+import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;

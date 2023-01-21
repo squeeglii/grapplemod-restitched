@@ -42,4 +42,9 @@ public class GrappleMod implements ModInitializer {
         CommonSetup.BLOCK_ENTITY_TYPES.register(bus);
 
     }
+
+    @Override
+    public void onInitialize() {
+
+    }
 }
