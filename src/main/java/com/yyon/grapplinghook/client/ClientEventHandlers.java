@@ -53,29 +53,6 @@ public class ClientEventHandlers {
 	public void onPlayerLoggedOutEvent(LoggingOut e) {
 		GrappleConfig.setServerOptions(null);
 	}
-
-	@SubscribeEvent
-	public void onKeyInputEvent(Key event) {
-		Player player = Minecraft.getInstance().player;
-		if (!Minecraft.getInstance().isRunning() || player == null) {
-			return;
-		}
-
-		GrappleController controller = null;
-		if (ClientControllerManager.controllers.containsKey(player.getId())) {
-			controller = ClientControllerManager.controllers.get(player.getId());
-		}
-
-		if (Minecraft.getInstance().options.keyJump.isDown()) {
-			if (controller != null) {
-				if (controller instanceof AirfrictionController && ((AirfrictionController) controller).wasSliding) {
-					controller.slidingJump();
-				}
-			}
-		}
-
-		ClientControllerManager.instance.checkSlide(Minecraft.getInstance().player);
-	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW)
     public void onInputUpdate(MovementInputUpdateEvent event) {

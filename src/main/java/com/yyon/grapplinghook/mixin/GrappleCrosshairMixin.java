@@ -29,8 +29,8 @@ public class GrappleCrosshairMixin {
     @Final @Shadow
     private Minecraft minecraft;
 
-    @Inject(method = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIII)V", shift = At.Shift.AFTER, ordinal = 0))
-    public void renderPlacementAssistText(PoseStack matrices, CallbackInfo ci) {
+    @Inject(method = "renderCrosshair(Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIII)V", shift = At.Shift.AFTER, ordinal = 0))
+    public void renderModCrosshair(PoseStack matrices, CallbackInfo ci) {
 
         LocalPlayer player = this.minecraft.player;
         ItemStack grapplehookItemStack = null;

@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "GrappleCrosshairMixin"
+    "GrappleCrosshairMixin",
+    "KeybindingHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
