@@ -35,21 +35,6 @@ public class CommonEventHandlers {
 
 		AutoConfig.register(GrappleConfig.class, Toml4jConfigSerializer<GrappleConfig>::new);
 	}
-
-	@SubscribeEvent
-    public void onBlockBreak(BreakEvent event) {
-    	Player player = event.getPlayer();
-    	if (player != null) {
-	    	ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-	    	if (stack != null) {
-	    		Item item = stack.getItem();
-	    		if (item instanceof GrapplehookItem) {
-	    			event.setCanceled(true);
-	    			return;
-	    		}
-	    	}
-    	}
-    }
     
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
@@ -80,19 +65,7 @@ public class CommonEventHandlers {
 	
 	@SubscribeEvent
 	public void onLivingHurtEvent(LivingHurtEvent event) {
-		if (event.getEntity() != null && event.getEntity() instanceof Player) {
-			Player player = (Player)event.getEntity();
-			
-			for (ItemStack armor : player.getArmorSlots()) {
-			    if (armor != null && armor.getItem() instanceof LongFallBoots)
-			    {
-			    	if (event.getSource() == DamageSource.FLY_INTO_WALL) {
-						// this cancels the fall event so you take no damage
-						event.setCanceled(true);
-			    	}
-			    }
-			}
-		}
+
 	}
 	
 	@SubscribeEvent

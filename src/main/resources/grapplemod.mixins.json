@@ -4,6 +4,10 @@
   "package": "com.yyon.grapplinghook.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockBreakDetectorMixin",
+    "LivingEntityDeathHandler",
+    "PlayerDeathHandler",
+    "ServerPlayerDeathHandler"
   ],
   "client": [
     "client.BlockBreakDetectorMixin",
