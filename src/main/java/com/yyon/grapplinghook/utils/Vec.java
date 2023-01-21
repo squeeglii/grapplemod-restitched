@@ -17,12 +17,19 @@ public class Vec {
 		
 		this.checkNaN();
 	}
+
+	public Vec(Vector3f vec) {
+		this.x = vec.x;
+		this.y = vec.y;
+		this.z = vec.z;
+
+		this.checkNaN();
+	}
 	
 	public void checkNaN() {
 		if (Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z)) {
 			GrappleMod.LOGGER.error("Error: vector contains NaN");
 			this.x = 0; this.y = 0; this.z = 0;
-//			throw new RuntimeException("hello");
 		}
 	}
 	

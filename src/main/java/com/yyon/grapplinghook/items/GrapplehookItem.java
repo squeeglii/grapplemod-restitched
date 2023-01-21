@@ -12,6 +12,8 @@ import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.utils.GrappleCustomization;
 import com.yyon.grapplinghook.utils.GrapplemodUtils;
 import com.yyon.grapplinghook.utils.Vec;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -21,10 +23,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -97,17 +102,17 @@ public class GrapplehookItem extends Item implements KeypressItem {
         return super.isValidRepairItem(stack, repair);
 	}
 
-
 	@Override
-    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-    	return true;
-    }
-    
-	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
+	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		return true;
 	}
-	
+
+	// previously: onBlockStartBreak
+	@Override
+	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+		return true;
+	}
+
 	@Override
 	public boolean canAttackBlock(BlockState p_195938_1_, Level p_195938_2_, BlockPos p_195938_3_,
 			Player p_195938_4_) {
@@ -405,8 +410,8 @@ public class GrapplehookItem extends Item implements KeypressItem {
     }
     
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag par4) {
+	@Environment(EnvType.CLIENT)
+	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
 		GrappleCustomization custom = getCustomization(stack);
 		
 		if (Screen.hasShiftDown()) {

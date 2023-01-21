@@ -2,6 +2,8 @@ package com.yyon.grapplinghook.network;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.GrappleMod;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,7 +24,7 @@ public abstract class BaseMessageClient {
 	
 	public abstract void encode(FriendlyByteBuf buf);
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public abstract void processMessage(NetworkEvent.Context ctx);
     
     public void onMessageReceived(Supplier<NetworkEvent.Context> ctxSupplier) {

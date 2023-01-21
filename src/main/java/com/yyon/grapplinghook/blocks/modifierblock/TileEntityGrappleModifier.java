@@ -7,6 +7,8 @@ import com.yyon.grapplinghook.utils.GrappleCustomization.upgradeCategories;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,7 +21,7 @@ public class TileEntityGrappleModifier extends BlockEntity {
 	public GrappleCustomization customization;
 
 	public TileEntityGrappleModifier(BlockPos pos, BlockState state) {
-		super(CommonSetup.grappleModifierTileEntityType.get(),pos,state);
+		super(CommonSetup.grappleModifierTileEntityType.get(), pos, state);
 		this.customization = new GrappleCustomization();
 	}
 
@@ -89,9 +91,7 @@ public class TileEntityGrappleModifier extends BlockEntity {
 	//  getUpdateTag() and handleUpdateTag() are used by vanilla to collate together into a single chunk update packet
 	//  Not really required for this example since we only use the timer on the client, but included anyway for illustration
 	@Override
-	@Nullable
-	public ClientboundBlockEntityDataPacket getUpdatePacket()
-	{
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		CompoundTag nbtTagCompound = new CompoundTag();
 		this.saveAdditional(nbtTagCompound);
 		int tileEntityType = 42;  // arbitrary number; only used for vanilla TileEntities.  You can use it, or not, as you want.
@@ -104,8 +104,7 @@ public class TileEntityGrappleModifier extends BlockEntity {
 		this.load(pkt.getTag());   // read from the nbt in the packet
 	}
 
-	/* Creates a tag containing all of the TileEntity information, used by vanilla to transmit from server to client
-	 */
+	/* Creates a tag containing all of the TileEntity information, used by vanilla to transmit from server to client */
 	@Override
 	public CompoundTag getUpdateTag()
 	{

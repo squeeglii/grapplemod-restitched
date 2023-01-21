@@ -12,6 +12,8 @@ import com.yyon.grapplinghook.items.GrapplehookItem;
 import com.yyon.grapplinghook.items.LongFallBoots;
 import com.yyon.grapplinghook.items.upgrades.*;
 import com.yyon.grapplinghook.network.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -38,7 +40,7 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class CommonSetup {
 	public static final CreativeModeTab tabGrapplemod = new CreativeModeTab("grapplemod") {
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public ItemStack makeIcon() {
 			return new ItemStack(grapplingHookItem.get());
 		}

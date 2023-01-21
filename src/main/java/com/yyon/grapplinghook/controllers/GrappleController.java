@@ -55,7 +55,7 @@ public class GrappleController {
 	
 	public GrappleCustomization custom = null;
 	
-	public GrappleController(int grapplehookEntityId, int entityId, Level world, Vec pos, int controllerid, GrappleCustomization custom) {
+	public GrappleController(int grapplehookEntityId, int entityId, Level world, int controllerid, GrappleCustomization custom) {
 		this.entityId = entityId;
 		this.world = world;
 		this.custom = custom;
@@ -982,7 +982,7 @@ public class GrappleController {
 					BlockState blockState = this.entity.level.getBlockState(blockpos);
 					Block blockIn = blockState.getBlock();
 					
-			        SoundType soundtype = blockIn.getSoundType(blockState, world, blockpos, this.entity);
+			        SoundType soundtype = blockIn.getSoundType(blockState);
 
 		            this.entity.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.30F * GrappleConfig.getClientConf().sounds.wallrun_sound_volume, soundtype.getPitch());
 					ticksSinceLastWallrunSoundEffect = 0;

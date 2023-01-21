@@ -40,8 +40,6 @@ public class ServerControllerManager {
 	      	Entity grapple = world.getEntity(hookEntityId);
 	  		if (grapple instanceof GrapplehookEntity) {
 	  			((GrapplehookEntity) grapple).removeServer();
-	  		} else {
-	
 	  		}
 		}
   		

@@ -1,6 +1,8 @@
 package com.yyon.grapplinghook.network;
 
 import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -59,7 +61,7 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
         buf.writeDouble(this.z);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void processMessage(NetworkEvent.Context ctx) {
     	Level world = Minecraft.getInstance().level;
     	Entity grapple = world.getEntity(this.id);

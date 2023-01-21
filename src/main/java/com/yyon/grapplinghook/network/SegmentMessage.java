@@ -3,6 +3,8 @@ package com.yyon.grapplinghook.network;
 import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entities.grapplehook.SegmentHandler;
 import com.yyon.grapplinghook.utils.Vec;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -71,7 +73,7 @@ public class SegmentMessage extends BaseMessageClient {
     	buf.writeEnum(this.bottomFacing);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void processMessage(NetworkEvent.Context ctx) {
     	Level world = Minecraft.getInstance().level;
     	Entity grapple = world.getEntity(this.id);

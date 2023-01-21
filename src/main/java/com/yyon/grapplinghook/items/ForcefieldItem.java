@@ -5,6 +5,8 @@ import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.controllers.GrappleController;
 import com.yyon.grapplinghook.utils.GrapplemodUtils;
 import com.yyon.grapplinghook.utils.Vec;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -43,8 +45,8 @@ public class ForcefieldItem extends Item {
 	}
     
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag par4) {
+	@Environment(EnvType.CLIENT)
+	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
 		list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.repelleritem.desc")));
 		list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.repelleritem2.desc")));
 		list.add(Component.literal(""));

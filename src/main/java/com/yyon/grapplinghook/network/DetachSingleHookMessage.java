@@ -1,6 +1,8 @@
 package com.yyon.grapplinghook.network;
 
 import com.yyon.grapplinghook.client.ClientControllerManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,8 +48,8 @@ public class DetachSingleHookMessage extends BaseMessageClient {
     	buf.writeInt(this.id);
     	buf.writeInt(this.hookid);
     }
-    
-    @OnlyIn(Dist.CLIENT)
+
+    @Environment(EnvType.CLIENT)
     public void processMessage(NetworkEvent.Context ctx) {
     	ClientControllerManager.receiveGrappleDetachHook(this.id, this.hookid);
     }

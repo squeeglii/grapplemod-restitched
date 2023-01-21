@@ -81,25 +81,29 @@ public class GuiModifier extends Screen {
 	public void mainScreen() {
 		clearScreen();
 
-		this.addRenderableWidget(new Button(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10,
-			50, 20, Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.close.desc")), new OnPress() {
-				public void onPress(Button p_onPress_1_) {
-					onClose();
-				}
-			}));
-		this.addRenderableWidget(new Button(this.guiLeft + this.xSize - 50 - 10, this.guiTop + this.ySize - 20 - 10,
-			50, 20, Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.reset.desc")), new OnPress() {
-				public void onPress(Button p_onPress_1_) {
-					customization = new GrappleCustomization();
-					mainScreen();
-				}
-			}));
-		this.addRenderableWidget(new Button(this.guiLeft + 10 + 75, this.guiTop + this.ySize - 20 - 10,
-			50, 20, Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.helpbutton.desc")), new OnPress() {
-				public void onPress(Button p_onPress_1_) {
-					helpScreen();
-				}
-			}));
+		this.addRenderableWidget(Button.builder(
+								Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.close.desc")),
+								onPress -> onClose())
+						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
+						.build()
+		);
+
+		this.addRenderableWidget(Button.builder(
+						Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.reset.desc")),
+						onPress -> {
+							customization = new GrappleCustomization();
+							mainScreen();
+						})
+				.bounds(this.guiLeft + this.xSize - 50 - 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
+				.build()
+		);
+
+		this.addRenderableWidget(Button.builder(
+						Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.helpbutton.desc")),
+						onPress -> helpScreen())
+				.bounds(this.guiLeft + 10 + 75, this.guiTop + this.ySize - 20 - 10, 50, 20)
+				.build()
+		);
 
 		int y = 0;
 		int x = 0;
@@ -110,18 +114,26 @@ public class GuiModifier extends Screen {
 					y = 0;
 					x += 1;
 				}
-				this.addRenderableWidget(
-						new Button(this.guiLeft + 10 + 105*x, this.guiTop + 15 + 30 * y, 95, 20, Component.literal(category.getName()), new PressCategory(category)));
+
+				this.addRenderableWidget(Button.builder(
+									Component.literal(category.getName()),
+									new PressCategory(category))
+								.bounds(this.guiLeft + 10 + 105*x, this.guiTop + 15 + 30 * y, 95, 20)
+								.build()
+				);
+
 				y += 1;
 			}
 		}
 
-		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.apply.desc")), this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10 - 10));
+		this.addRenderableWidget(new TextWidget(
+				Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.apply.desc")),
+				this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10 - 10
+		));
 	}
 
-	class BackgroundWidget extends AbstractWidget {
-		public BackgroundWidget(int p_i232254_1_, int p_i232254_2_, int p_i232254_3_, int p_i232254_4_,
-				Component p_i232254_5_) {
+	static class BackgroundWidget extends AbstractWidget {
+		public BackgroundWidget(int p_i232254_1_, int p_i232254_2_, int p_i232254_3_, int p_i232254_4_, Component p_i232254_5_) {
 			super(p_i232254_1_, p_i232254_2_, p_i232254_3_, p_i232254_4_, p_i232254_5_);
 			this.active = false;
 		}
@@ -130,15 +142,15 @@ public class GuiModifier extends Screen {
 			this(x, y, w, h, Component.literal(""));
 		}
 		
-	   public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
-		RenderSystem.setShaderTexture(0,texture);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		this.blit(p_230431_1_, this.x, this.y, 0, 0, this.width, this.height);
-	   }
+	    public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+			RenderSystem.setShaderTexture(0,texture);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			this.blit(p_230431_1_, this.getX(), this.getY(), 0, 0, this.width, this.height);
+	    }
 
 		@Override
-		public void updateNarration(NarrationElementOutput narrationElementOutput) {
-			
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+
 		}
 	}
 
@@ -152,9 +164,8 @@ public class GuiModifier extends Screen {
 		this.addRenderableWidget(new BackgroundWidget(this.guiLeft, this.guiTop, this.xSize, this.ySize));
 	}
 	
-	class TextWidget extends AbstractWidget {
-		public TextWidget(int p_i232254_1_, int p_i232254_2_, int p_i232254_3_, int p_i232254_4_,
-				Component p_i232254_5_) {
+	static class TextWidget extends AbstractWidget {
+		public TextWidget(int p_i232254_1_, int p_i232254_2_, int p_i232254_3_, int p_i232254_4_, Component p_i232254_5_) {
 			super(p_i232254_1_, p_i232254_2_, p_i232254_3_, p_i232254_4_, p_i232254_5_);
 		}
 		
@@ -162,32 +173,39 @@ public class GuiModifier extends Screen {
 			this(x, y, 50, 15 * text.getString().split("\n").length + 5, text);
 		}
 		
-	   public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
-	      Minecraft minecraft = Minecraft.getInstance();
-	      Font fontrenderer = minecraft.font;
-	      RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
-	      RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
-	      RenderSystem.enableBlend();
-	      RenderSystem.defaultBlendFunc();
-	      RenderSystem.enableDepthTest();
-	      int j = this.getFGColor();
-	      int lineno = 0;
-	      for (String s : this.getMessage().getString().split("\n")) {
-		      drawString(p_230431_1_, fontrenderer, Component.literal(s), this.x, this.y + lineno*15, j | Mth.ceil(this.alpha * 255.0F) << 24);
-	    	  lineno++;
-	      }
-	   }
+		public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+			Minecraft minecraft = Minecraft.getInstance();
+			Font fontRenderer = minecraft.font;
+			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+			RenderSystem.enableBlend();
+			RenderSystem.defaultBlendFunc();
+			RenderSystem.enableDepthTest();
+			int j = this.getFGColor();
+			int lineno = 0;
+			for (String s : this.getMessage().getString().split("\n")) {
+				drawString(p_230431_1_, fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, j | Mth.ceil(this.alpha * 255.0F) << 24);
+				lineno++;
+			}
+		}
 
 		@Override
-		public void updateNarration(NarrationElementOutput narrationElementOutput) {
-			
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+
 		}
 	}
 
 	public void notAllowedScreen(GrappleCustomization.upgradeCategories category) {
 		clearScreen();
 
-		this.addRenderableWidget(new Button(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20, Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")), new PressBack()));
+		this.addRenderableWidget(
+				Button.builder(
+							Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")),
+							new PressBack())
+						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
+						.build()
+		);
+
 		this.category = category;
 		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.unlock1.desc")), this.guiLeft + 10, this.guiTop + 10));
 		this.addRenderableWidget(new TextWidget(Component.literal(this.category.getName()), this.guiLeft + 10, this.guiTop + 25));
@@ -200,9 +218,18 @@ public class GuiModifier extends Screen {
 	public void helpScreen() {
 		clearScreen();
 
-		this.addRenderableWidget(new Button(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20, Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")), new PressBack()));
+		this.addRenderableWidget(
+				Button.builder(
+								Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")),
+								new PressBack())
+						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
+						.build()
+		);
 
-		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.help.desc")), this.guiLeft + 10, this.guiTop + 10));
+		this.addRenderableWidget(new TextWidget(
+						Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.help.desc")),
+						this.guiLeft + 10, this.guiTop + 10
+		));
 		
 	}
 	
@@ -313,7 +340,14 @@ public class GuiModifier extends Screen {
 	public void showCategoryScreen(GrappleCustomization.upgradeCategories category) {
 		clearScreen();
 
-		this.addRenderableWidget(new Button(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20, Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")), new PressBack()));
+		this.addRenderableWidget(
+				Button.builder(
+								Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")),
+								new PressBack())
+						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
+						.build()
+		);
+
 		this.category = category;
 
 		if (category == GrappleCustomization.upgradeCategories.ROPE) {

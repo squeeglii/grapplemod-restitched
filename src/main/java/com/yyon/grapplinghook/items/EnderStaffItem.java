@@ -2,6 +2,8 @@ package com.yyon.grapplinghook.items;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.common.CommonSetup;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -54,8 +56,8 @@ public class EnderStaffItem extends Item {
 	}
     
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag par4) {
+	@Environment(EnvType.CLIENT)
+	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
 		list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.launcheritem.desc")));
 		list.add(Component.literal(""));
 		list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.launcheritemaim.desc")));

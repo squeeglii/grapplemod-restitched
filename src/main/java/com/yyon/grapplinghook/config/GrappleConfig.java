@@ -8,7 +8,6 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry.BoundedDiscrete;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
-//@Config(modid="grapplemod", name="grappling_hook", category="")
 @Config(name = "grapplemod")
 public class GrappleConfig implements ConfigData {
 	public static class Config {

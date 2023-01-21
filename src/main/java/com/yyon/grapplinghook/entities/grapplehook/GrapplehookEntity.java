@@ -529,8 +529,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
     		return checkedset.get(pos);
     	}
 	}
-	
-	@Nonnull
+
 	@Override
 	public Packet<?> getAddEntityPacket() {
 		  return NetworkHooks.getEntitySpawningPacket(this);

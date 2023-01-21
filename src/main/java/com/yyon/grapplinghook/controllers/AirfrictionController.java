@@ -34,8 +34,8 @@ public class AirfrictionController extends GrappleController {
 	public boolean wasRocket = false;
 	public boolean firstTickSinceCreated = true;
 	
-	public AirfrictionController(int grapplehookEntityId, int entityId, Level world, Vec pos, int id, GrappleCustomization custom) {
-		super(grapplehookEntityId, entityId, world, pos, id, custom);
+	public AirfrictionController(int grapplehookEntityId, int entityId, Level world, int id, GrappleCustomization custom) {
+		super(grapplehookEntityId, entityId, world, id, custom);
 	}
 	
 	@Override

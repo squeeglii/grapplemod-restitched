@@ -311,12 +311,10 @@ public class ClientControllerManager {
 			currentcontroller.unattach();
 		}
 		
-//		System.out.println(blockpos);
-		
 		GrappleController control = null;
 		if (controllerId == GrapplemodUtils.GRAPPLEID) {
 			if (!multi) {
-				control = new GrappleController(grapplehookEntityId, playerId, world, pos, controllerId, custom);
+				control = new GrappleController(grapplehookEntityId, playerId, world, controllerId, custom);
 			} else {
 				control = controllers.get(playerId);
 				boolean created = false;
@@ -332,13 +330,13 @@ public class ClientControllerManager {
 					}
 				}
 				if (!created) {
-					control = new GrappleController(grapplehookEntityId, playerId, world, pos, controllerId, custom);
+					control = new GrappleController(grapplehookEntityId, playerId, world, controllerId, custom);
 				}
 			}
 		} else if (controllerId == GrapplemodUtils.REPELID) {
-			control = new ForcefieldController(grapplehookEntityId, playerId, world, pos, controllerId);
+			control = new ForcefieldController(grapplehookEntityId, playerId, world, controllerId);
 		} else if (controllerId == GrapplemodUtils.AIRID) {
-			control = new AirfrictionController(grapplehookEntityId, playerId, world, pos, controllerId, custom);
+			control = new AirfrictionController(grapplehookEntityId, playerId, world, controllerId, custom);
 		} else {
 			return null;
 		}
@@ -473,11 +471,11 @@ public class ClientControllerManager {
 			}
 		}
 		
-		RocketSound sound = new RocketSound(controller, new SoundEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
+		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
 		Minecraft.getInstance().getSoundManager().play(sound);
 	}
 
-	public static HashMap<BlockPos, GrappleController> controllerPos = new HashMap<BlockPos, GrappleController>();
+	public static HashMap<BlockPos, GrappleController> controllerPos = new HashMap<>();
 	
 	public static long prevRopeJumpTime = 0;
 }

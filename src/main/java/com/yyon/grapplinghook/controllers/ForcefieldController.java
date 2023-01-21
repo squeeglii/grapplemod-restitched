@@ -5,8 +5,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public class ForcefieldController extends GrappleController {
-	public ForcefieldController(int grapplehookEntityId, int entityId, Level world, Vec pos, int id) {
-		super(grapplehookEntityId, entityId, world, pos, id, null);
+	public ForcefieldController(int grapplehookEntityId, int entityId, Level world, int id) {
+		super(grapplehookEntityId, entityId, world, id, null);
 		
 		this.playerMovementMult = 1;
 	}
