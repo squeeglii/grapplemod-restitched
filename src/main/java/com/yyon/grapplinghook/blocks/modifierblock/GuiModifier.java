@@ -23,8 +23,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class GuiModifier extends Screen {
-	private static final ResourceLocation texture = new ResourceLocation("grapplemod",
-			"textures/gui/guimodifier_bg.png");
+	private static final ResourceLocation texture = new ResourceLocation("grapplemod", "textures/gui/guimodifier_bg.png");
 
 	int xSize = 221;
 	int ySize = 221;
@@ -42,7 +41,7 @@ public class GuiModifier extends Screen {
 	GrappleCustomization.upgradeCategories category = null;
 
 	public GuiModifier(TileEntityGrappleModifier tileent) {
-		super(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.title.desc")));
+		super(Component.translatable("grapplemodifier.title.desc"));
 
 		this.tileEnt = tileent;
 		customization = tileent.customization;
@@ -82,14 +81,14 @@ public class GuiModifier extends Screen {
 		clearScreen();
 
 		this.addRenderableWidget(Button.builder(
-								Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.close.desc")),
+								Component.translatable("grapplemodifier.close.desc"),
 								onPress -> onClose())
 						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
 						.build()
 		);
 
 		this.addRenderableWidget(Button.builder(
-						Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.reset.desc")),
+						Component.translatable("grapplemodifier.reset.desc"),
 						onPress -> {
 							customization = new GrappleCustomization();
 							mainScreen();
@@ -99,7 +98,7 @@ public class GuiModifier extends Screen {
 		);
 
 		this.addRenderableWidget(Button.builder(
-						Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.helpbutton.desc")),
+						Component.translatable("grapplemodifier.helpbutton.desc"),
 						onPress -> helpScreen())
 				.bounds(this.guiLeft + 10 + 75, this.guiTop + this.ySize - 20 - 10, 50, 20)
 				.build()
@@ -127,7 +126,7 @@ public class GuiModifier extends Screen {
 		}
 
 		this.addRenderableWidget(new TextWidget(
-				Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.apply.desc")),
+				Component.translatable("grapplemodifier.apply.desc"),
 				this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10 - 10
 		));
 	}
@@ -200,19 +199,19 @@ public class GuiModifier extends Screen {
 
 		this.addRenderableWidget(
 				Button.builder(
-							Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")),
+							Component.translatable("grapplemodifier.back.desc"),
 							new PressBack())
 						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
 						.build()
 		);
 
 		this.category = category;
-		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.unlock1.desc")), this.guiLeft + 10, this.guiTop + 10));
+		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock1.desc"), this.guiLeft + 10, this.guiTop + 10));
 		this.addRenderableWidget(new TextWidget(Component.literal(this.category.getName()), this.guiLeft + 10, this.guiTop + 25));
-		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.unlock2.desc")), this.guiLeft + 10, this.guiTop + 40));
-		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.unlock3.desc")), this.guiLeft + 10, this.guiTop + 55));
+		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock2.desc"), this.guiLeft + 10, this.guiTop + 40));
+		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock3.desc"), this.guiLeft + 10, this.guiTop + 55));
 		this.addRenderableWidget(new TextWidget(new ItemStack(this.category.getItem()).getDisplayName(), this.guiLeft + 10, this.guiTop + 70));
-		this.addRenderableWidget(new TextWidget(Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.unlock4.desc")), this.guiLeft + 10, this.guiTop + 85));
+		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock4.desc"), this.guiLeft + 10, this.guiTop + 85));
 	}
 
 	public void helpScreen() {
@@ -220,14 +219,14 @@ public class GuiModifier extends Screen {
 
 		this.addRenderableWidget(
 				Button.builder(
-								Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")),
+								Component.translatable("grapplemodifier.back.desc"),
 								new PressBack())
 						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
 						.build()
 		);
 
 		this.addRenderableWidget(new TextWidget(
-						Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.help.desc")),
+						Component.translatable("grapplemodifier.help.desc"),
 						this.guiLeft + 10, this.guiTop + 10
 		));
 		
@@ -269,8 +268,8 @@ public class GuiModifier extends Screen {
 	}
 
 	public void addCheckbox(String option) {
-		String text = ClientProxyInterface.proxy.localize(this.customization.getName(option));
-		String desc = ClientProxyInterface.proxy.localize(this.customization.getDescription(option));
+		String text = Component.translatable(this.customization.getName(option)).getString();
+		String desc = Component.translatable(this.customization.getDescription(option)).getString();
 		GuiCheckbox checkbox = new GuiCheckbox(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, Component.literal(text), customization.getBoolean(option), option, Component.literal(desc));
 		posy += 22;
 		this.addRenderableWidget(checkbox);
@@ -328,8 +327,8 @@ public class GuiModifier extends Screen {
 		double max = customization.getMax(option, this.getLimits());
 		double min = customization.getMin(option, this.getLimits());
 		
-		String text = ClientProxyInterface.proxy.localize(this.customization.getName(option));
-		String desc = ClientProxyInterface.proxy.localize(this.customization.getDescription(option));
+		String text = Component.translatable(this.customization.getName(option)).getString();
+		String desc = Component.translatable(this.customization.getDescription(option)).getString();
 		GuiSlider slider = new GuiSlider(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, Component.literal(text), min, max, d, option, Component.literal(desc));
 		
 		posy += 22;
@@ -342,7 +341,7 @@ public class GuiModifier extends Screen {
 
 		this.addRenderableWidget(
 				Button.builder(
-								Component.literal(ClientProxyInterface.proxy.localize("grapplemodifier.back.desc")),
+								Component.translatable("grapplemodifier.back.desc"),
 								new PressBack())
 						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
 						.build()
@@ -410,20 +409,20 @@ public class GuiModifier extends Screen {
 			String option = this.options.get(b);
 			boolean enabled = true;
 			
-			String desc = ClientProxyInterface.proxy.localize(this.customization.getDescription(option));
+			String desc = Component.translatable(this.customization.getDescription(option)).getString();
 			
 			if (this.customization.isOptionValid(option)) {
 			} else {
-				desc = ClientProxyInterface.proxy.localize("grapplemodifier.incompatability.desc") + "\n" + desc;
+				desc = Component.translatable("grapplemodifier.incompatability.desc") + "\n" + desc;
 				enabled = false;
 			}
 			
 			int level = this.customization.optionEnabled(option);
 			if (this.getLimits() < level) {
 				if (level == 1) {
-					desc = ClientProxyInterface.proxy.localize("grapplemodifier.limits.desc") + "\n" + desc;
+					desc = Component.translatable("grapplemodifier.limits.desc") + "\n" + desc;
 				} else {
-					desc = ClientProxyInterface.proxy.localize("grapplemodifier.locked.desc") + "\n" + desc;
+					desc = Component.translatable("grapplemodifier.locked.desc") + "\n" + desc;
 				}
 				enabled = false;
 			}

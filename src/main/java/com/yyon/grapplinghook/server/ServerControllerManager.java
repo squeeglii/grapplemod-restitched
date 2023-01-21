@@ -8,32 +8,31 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class ServerControllerManager {
-	public static HashSet<Integer> attached = new HashSet<Integer>(); // server side
-	public static HashMap<Integer, HashSet<GrapplehookEntity>> allGrapplehookEntities = new HashMap<Integer, HashSet<GrapplehookEntity>>(); // server side
+	public static HashSet<Integer> attached = new HashSet<>(); // server side
+	public static HashMap<Integer, HashSet<GrapplehookEntity>> allGrapplehookEntities = new HashMap<>(); // server side
 
 	public static void addGrapplehookEntity(int id, GrapplehookEntity hookEntity) {
 		if (!allGrapplehookEntities.containsKey(id)) {
-			allGrapplehookEntities.put(id, new HashSet<GrapplehookEntity>());
+			allGrapplehookEntities.put(id, new HashSet<>());
 		}
 		allGrapplehookEntities.get(id).add(hookEntity);
 	}
 	
 	public static void removeAllMultiHookGrapplehookEntities(int id) {
 		if (!allGrapplehookEntities.containsKey(id)) {
-			allGrapplehookEntities.put(id, new HashSet<GrapplehookEntity>());
+			allGrapplehookEntities.put(id, new HashSet<>());
 		}
 		for (GrapplehookEntity hookEntity : allGrapplehookEntities.get(id)) {
 			if (hookEntity != null && hookEntity.isAlive()) {
 				hookEntity.removeServer();
 			}
 		}
-		allGrapplehookEntities.put(id, new HashSet<GrapplehookEntity>());
+		allGrapplehookEntities.put(id, new HashSet<>());
 	}
 	
 	public static void receiveGrappleEnd(int id, Level world, HashSet<Integer> hookEntityIds) {
 		if (attached.contains(id)) {
 			attached.remove(id);
-		} else {
 		}
 		
 		for (int hookEntityId : hookEntityIds) {

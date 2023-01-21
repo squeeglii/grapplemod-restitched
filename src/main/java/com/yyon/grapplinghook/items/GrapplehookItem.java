@@ -416,92 +416,92 @@ public class GrapplehookItem extends Item implements KeypressItem {
 		
 		if (Screen.hasShiftDown()) {
 			if (!custom.detachonkeyrelease) {
-				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throw.desc")));
-				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.release.desc")));
-				list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.double.desc") + ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.releaseandthrow.desc")));
+				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc")));
+				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc")));
+				list.add(Component.translatable("grappletooltip.double.desc").append(ClientSetup.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
 			} else {
-				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throwhold.desc")));
+				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc")));
 			}
 			list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindForward) + ", " +
 					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindLeft) + ", " +
 					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindBack) + ", " +
 					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindRight) +
-					" " + ClientProxyInterface.proxy.localize("grappletooltip.swing.desc")));
-			list.add(Component.literal(ClientSetup.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.jump.desc")));
-			list.add(Component.literal(ClientSetup.key_slow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.slow.desc")));
+					" " + Component.translatable("grappletooltip.swing.desc")));
+			list.add(Component.literal(ClientSetup.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc")));
+			list.add(Component.literal(ClientSetup.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc")));
 			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindForward) + " / " +
 					ClientSetup.key_climbup.getTranslatedKeyMessage().getString() + 
-					" " + ClientProxyInterface.proxy.localize("grappletooltip.climbup.desc")));
+					" " + Component.translatable("grappletooltip.climbup.desc")));
 			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindBack) + " / " +
 					ClientSetup.key_climbdown.getTranslatedKeyMessage().getString() + 
-					" " + ClientProxyInterface.proxy.localize("grappletooltip.climbdown.desc")));
+					" " + Component.translatable("grappletooltip.climbdown.desc")));
 			if (custom.enderstaff) {
-				list.add(Component.literal(ClientSetup.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.enderlaunch.desc")));
+				list.add(Component.literal(ClientSetup.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc")));
 			}
 			if (custom.rocket) {
-				list.add(Component.literal(ClientSetup.key_rocket.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.rocket.desc")));
+				list.add(Component.literal(ClientSetup.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc")));
 			}
 			if (custom.motor) {
 				if (custom.motorwhencrouching && !custom.motorwhennotcrouching) {
-					list.add(Component.literal(ClientSetup.key_motoronoff.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.motoron.desc")));
+					list.add(Component.literal(ClientSetup.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc")));
 				}
 				else if (!custom.motorwhencrouching && custom.motorwhennotcrouching) {
-					list.add(Component.literal(ClientSetup.key_motoronoff.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.motoroff.desc")));
+					list.add(Component.literal(ClientSetup.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc")));
 				}
 			}
 			if (custom.doublehook) {
 				if (!custom.detachonkeyrelease) {
-					list.add(Component.literal(ClientSetup.key_leftthrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throwleft.desc")));
-					list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throwright.desc")));
+					list.add(Component.literal(ClientSetup.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc")));
+					list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc")));
 				} else {
-					list.add(Component.literal(ClientSetup.key_leftthrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throwlefthold.desc")));
-					list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throwrighthold.desc")));
+					list.add(Component.literal(ClientSetup.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc")));
+					list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc")));
 				}
 			} else {
-				list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.throwalt.desc")));
+				list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc")));
 			}
 			if (custom.reelin) {
-				list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindSneak) + " " + ClientProxyInterface.proxy.localize("grappletooltip.reelin.desc")));
+				list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc")));
 			}
 		} else {
 			if (Screen.hasControlDown()) {
 				for (String option : GrappleCustomization.booleanoptions) {
 					if (custom.isOptionValid(option) && custom.getBoolean(option) != GrappleCustomization.DEFAULT.getBoolean(option)) {
-						list.add(Component.literal((custom.getBoolean(option) ? "" : ClientProxyInterface.proxy.localize("grappletooltip.negate.desc") + " ") + ClientProxyInterface.proxy.localize(custom.getName(option))));
+						list.add(Component.literal((custom.getBoolean(option) ? "" : Component.translatable("grappletooltip.negate.desc") + " ") + Component.translatable(custom.getName(option))));
 					}
 				}
 				for (String option : GrappleCustomization.doubleoptions) {
 					if (custom.isOptionValid(option) && (custom.getDouble(option) != GrappleCustomization.DEFAULT.getDouble(option))) {
-						list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName(option)) + ": " + Math.floor(custom.getDouble(option) * 100) / 100));
+						list.add(Component.translatable(custom.getName(option)).append(": " + Math.floor(custom.getDouble(option) * 100) / 100));
 					}
 				}
 			} else {
 				if (custom.doublehook) {
-					list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("doublehook"))));
+					list.add(Component.translatable(custom.getName("doublehook")));
 				}
 				if (custom.motor) {
 					if (custom.smartmotor) {
-						list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("smartmotor"))));
+						list.add(Component.translatable(custom.getName("smartmotor")));
 					} else {
-						list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("motor"))));
+						list.add(Component.translatable(custom.getName("motor")));
 					}
 				}
 				if (custom.enderstaff) {
-					list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("enderstaff"))));
+					list.add(Component.translatable(custom.getName("enderstaff")));
 				}
 				if (custom.rocket) {
-					list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("rocket"))));
+					list.add(Component.translatable(custom.getName("rocket")));
 				}
 				if (custom.attract) {
-					list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("attract"))));
+					list.add(Component.translatable(custom.getName("attract")));
 				}
 				if (custom.repel) {
-					list.add(Component.literal(ClientProxyInterface.proxy.localize(custom.getName("repel"))));
+					list.add(Component.translatable(custom.getName("repel")));
 				}
 				
 				list.add(Component.literal(""));
-				list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.shiftcontrols.desc")));
-				list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.controlconfiguration.desc")));
+				list.add(Component.translatable("grappletooltip.shiftcontrols.desc"));
+				list.add(Component.translatable("grappletooltip.controlconfiguration.desc"));
 			}
 		}
 	}

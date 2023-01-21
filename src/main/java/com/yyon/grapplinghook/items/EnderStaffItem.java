@@ -12,10 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /*
@@ -58,9 +55,9 @@ public class EnderStaffItem extends Item {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.launcheritem.desc")));
+		list.add(Component.translatable("grappletooltip.launcheritem.desc"));
 		list.add(Component.literal(""));
-		list.add(Component.literal(ClientProxyInterface.proxy.localize("grappletooltip.launcheritemaim.desc")));
-		list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindUseItem) + ClientProxyInterface.proxy.localize("grappletooltip.launcheritemcontrols.desc")));
+		list.add(Component.translatable("grappletooltip.launcheritemaim.desc"));
+		list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc")));
 	}
 }

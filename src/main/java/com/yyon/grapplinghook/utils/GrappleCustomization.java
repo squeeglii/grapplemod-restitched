@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.GrappleMod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 
 import java.nio.ByteBuffer;
@@ -86,7 +87,7 @@ public class GrappleCustomization {
 		
 		public String getName() {
 			if (ClientProxyInterface.proxy != null) {
-				return ClientProxyInterface.proxy.localize("grapplemod.upgradecategories." + this.nameUnlocalized);
+				return Component.translatable("grapplemod.upgradecategories." + this.nameUnlocalized).getString();
 			} else {
 				return nameUnlocalized;
 			}
