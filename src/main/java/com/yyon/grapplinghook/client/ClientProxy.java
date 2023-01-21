@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.blocks.modifierblock.TileEntityGrappleModifier;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controllers.GrappleController;
-import com.yyon.grapplinghook.grapplemod;
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.items.GrapplehookItem;
 import com.yyon.grapplinghook.network.BaseMessageClient;
 import com.yyon.grapplinghook.utils.GrappleCustomization;
@@ -132,7 +132,7 @@ public class ClientProxy extends ClientProxyInterface {
 		if (grapplingHookVariants == null) {
 			grapplingHookVariants = new ArrayList<ItemStack>();
 			RecipeManager recipemanager = Minecraft.getInstance().player.level.getRecipeManager();
-			recipemanager.getRecipeIds().filter(loc -> loc.getNamespace().equals(grapplemod.MODID)).forEach(loc -> {
+			recipemanager.getRecipeIds().filter(loc -> loc.getNamespace().equals(GrappleMod.MODID)).forEach(loc -> {
 				ItemStack stack = recipemanager.byKey(loc).get().getResultItem();
 				if (stack.getItem() instanceof GrapplehookItem) {
 					if (!CommonSetup.grapplingHookItem.get().getCustomization(stack).equals(new GrappleCustomization())) {

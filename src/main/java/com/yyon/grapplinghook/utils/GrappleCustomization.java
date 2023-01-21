@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.utils;
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.grapplemod;
+import com.yyon.grapplinghook.GrappleMod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
@@ -214,7 +214,7 @@ public class GrappleCustomization {
 		if (compound.contains("crc32")) {
 			long recordedChecksum = compound.getLong("crc32");
 			if (this.getChecksum() != recordedChecksum) {
-				grapplemod.LOGGER.error("Error checksum reading from NBT");
+				GrappleMod.LOGGER.error("Error checksum reading from NBT");
 				this.setDefaults();
 			}
 		}
@@ -336,7 +336,7 @@ public class GrappleCustomization {
 		}
 		long recordedChecksum = buf.readLong();
 		if (this.getChecksum() != recordedChecksum) {
-			grapplemod.LOGGER.error("Error checksum reading from buffer");
+			GrappleMod.LOGGER.error("Error checksum reading from buffer");
 			this.setDefaults();
 		}
 	}

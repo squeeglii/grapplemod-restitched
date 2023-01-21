@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "grapplemod",
+  "version": "${version}",
+  "name": "Grappling Hook Mod",
+  "description": "Fabric port of the Grappling Hook Mod",
+  "authors": ["Yyon", "Nyfaria", "Mayesnake", "CG360"],
+  "contact": {},
+  "license": "GNU GPL 3.0",
+  "icon": "assets/grapplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.yyon.grapplinghook.client.GrappleModClient"
+    ],
+    "main": [
+      "com.yyon.grapplinghook.GrappleMod"
+    ]
+  },
+  "mixins": [
+    "grapplemod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.13",
+    "fabric": "*",
+    "minecraft": "1.19.3"
+  }
+}

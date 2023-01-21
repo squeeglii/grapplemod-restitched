@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.entities.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.grapplemod;
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.GrappleEndMessage;
 import com.yyon.grapplinghook.network.PlayerMovementMessage;
 import com.yyon.grapplinghook.utils.GrappleCustomization;
@@ -83,7 +83,7 @@ public class GrappleController {
 			if (grapplehookEntity != null && grapplehookEntity.isAlive() && grapplehookEntity instanceof GrapplehookEntity) {
 				this.addHookEntity((GrapplehookEntity)grapplehookEntity);
 			} else {
-				grapplemod.LOGGER.warn("no hook entity");
+				GrappleMod.LOGGER.warn("no hook entity");
 				this.unattach();
 			}
 		}

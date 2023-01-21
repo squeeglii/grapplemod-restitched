@@ -24,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Quaternionf;
 
 
 /*
@@ -156,10 +157,10 @@ public class RenderGrapplehookEntity<T extends GrapplehookEntity> extends Entity
 		matrix.pushPose();
 		matrix.scale(0.5F, 0.5F, 0.5F);
 		
-		matrix.mulPose(new Quaternion(new Vec(0, 1, 0).toVector3f(), (float) (-attach_dir.getYaw()), true));
-		matrix.mulPose(new Quaternion(new Vec(1, 0, 0).toVector3f(), (float) (attach_dir.getPitch() - 90), true));
-		matrix.mulPose(new Quaternion(new Vec(0, 1, 0).toVector3f(), (float) (45 * hand_right), true));
-		matrix.mulPose(new Quaternion(new Vec(0, 0, 1).toVector3f(), (float) (-45), true));
+		matrix.mulPose(new Quaternionf(0, 1, 0, (float) (-attach_dir.getYaw())));
+		matrix.mulPose(new Quaternionf(0, 1, 0, (float) (attach_dir.getPitch() - 90)));
+		matrix.mulPose(new Quaternionf(0, 1, 0, (float) (45 * hand_right)));
+		matrix.mulPose(new Quaternionf(0, 0, 1, (float) (-45)));
 		
 		// draw hook
 		ItemStack stack = this.getStackToRender(hookEntity);
