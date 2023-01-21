@@ -4,12 +4,12 @@
   "package": "com.yyon.grapplinghook.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-
   ],
   "client": [
-    "GrappleCrosshairMixin",
-    "KeybindingHandlerMixin",
-    "BlockBreakDetectorMixin"
+    "client.BlockBreakDetectorMixin",
+    "client.GrappleCrosshairMixin",
+    "client.KeybindingHandlerMixin",
+    "client.MovementInputHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

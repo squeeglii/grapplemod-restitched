@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.mixin;
+package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.ClientControllerManager;
 import com.yyon.grapplinghook.controller.AirfrictionController;

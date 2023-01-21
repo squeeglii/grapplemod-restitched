@@ -33,40 +33,6 @@ public class ClientEventHandlers {
 	public ClientEventHandlers() {
 	    MinecraftForge.EVENT_BUS.register(this);
 	}
-
-	
-	@SubscribeEvent(priority=EventPriority.LOW)
-    public void onInputUpdate(MovementInputUpdateEvent event) {
-		Player player = Minecraft.getInstance().player;
-		if (!Minecraft.getInstance().isRunning() || player == null) {
-			return;
-		}
-		
-		int id = player.getId();
-		if (ClientControllerManager.controllers.containsKey(id)) {
-			Input input = event.getInput();
-			GrappleController control = ClientControllerManager.controllers.get(id);
-			control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.jumping, input.shiftKeyDown);
-			
-			boolean overrideMovement = true;
-			if (Minecraft.getInstance().player.isOnGround()) {
-				if (!(control instanceof AirfrictionController) && !(control instanceof ForcefieldController)) {
-					overrideMovement = false;
-				}
-			}
-			
-			if (overrideMovement) {
-				input.jumping = false;
-				input.down = false;
-				input.up = false;
-				input.left = false;
-				input.right = false;
-				input.forwardImpulse = 0;
-				input.leftImpulse = 0;
-//				input.sneak = false; // fix alternate throw angles
-			}
-		}
-	}
 	
 	public float currentCameraTilt = 0;
 
