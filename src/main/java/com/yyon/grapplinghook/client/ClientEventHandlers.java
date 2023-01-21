@@ -34,44 +34,7 @@ public class ClientEventHandlers {
 	    MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	public boolean prevKeys[] = {false, false, false, false, false};
-	
-	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
-		Player player = Minecraft.getInstance().player;
-		if (player != null) {
-			if (!Minecraft.getInstance().isPaused()) {
-				ClientControllerManager.instance.onClientTick(player);
-				
-				if (Minecraft.getInstance().screen == null) {
-					// keep in same order as enum from KeypressItem
-					boolean keys[] = {ClientSetup.key_enderlaunch.isDown(), ClientSetup.key_leftthrow.isDown(), ClientSetup.key_rightthrow.isDown(), ClientSetup.key_boththrow.isDown(), ClientSetup.key_rocket.isDown()};
-					
-					for (int i = 0; i < keys.length; i++) {
-						boolean iskeydown = keys[i];
-						boolean prevkey = prevKeys[i];
-						
-						if (iskeydown != prevkey) {
-							KeypressItem.Keys key = KeypressItem.Keys.values()[i];
-							
-							ItemStack stack = getKeypressStack(player);
-							if (stack != null) {
-								if (!isLookingAtModifierBlock(player)) {
-									if (iskeydown) {
-										((KeypressItem) stack.getItem()).onCustomKeyDown(stack, player, key, true);
-									} else {
-										((KeypressItem) stack.getItem()).onCustomKeyUp(stack, player, key, true);
-									}
-								}
-							}
-						}
-						
-						prevKeys[i] = iskeydown;
-					}
-				}
-			}
-		}
-	}
+
 	
 	@SubscribeEvent
     public void onBlockBreak(BreakEvent event) {
@@ -97,19 +60,19 @@ public class ClientEventHandlers {
 		if (!Minecraft.getInstance().isRunning() || player == null) {
 			return;
 		}
-		
+
 		GrappleController controller = null;
 		if (ClientControllerManager.controllers.containsKey(player.getId())) {
 			controller = ClientControllerManager.controllers.get(player.getId());
 		}
-		
+
 		if (Minecraft.getInstance().options.keyJump.isDown()) {
 			if (controller != null) {
 				if (controller instanceof AirfrictionController && ((AirfrictionController) controller).wasSliding) {
 					controller.slidingJump();
 				}
 			}
-		}	
+		}
 
 		ClientControllerManager.instance.checkSlide(Minecraft.getInstance().player);
 	}
@@ -190,39 +153,4 @@ public class ClientEventHandlers {
 		    event.setRoll(event.getRoll() + currentCameraTilt*GrappleConfig.getClientConf().camera.wallrun_camera_tilt_degrees);
 		}
 	}
-
-	public ItemStack getKeypressStack(Player player) {
-		if (player != null) {
-           ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-           if (stack != null) {
-               Item item = stack.getItem();
-               if (item instanceof KeypressItem) {
-            	   return stack;
-               }
-           }
-           
-           stack = player.getItemInHand(InteractionHand.OFF_HAND);
-           if (stack != null) {
-        	   Item item = stack.getItem();
-        	   if (item instanceof KeypressItem) {
-        		   return stack;
-        	   }
-           }
-		}
-		return null;
-	}
-	
-	public boolean isLookingAtModifierBlock(Player player) {
-		HitResult raytraceresult = Minecraft.getInstance().hitResult;
-		if (raytraceresult != null && raytraceresult.getType() == HitResult.Type.BLOCK) {
-			BlockHitResult bray = (BlockHitResult) raytraceresult;
-			BlockPos pos = bray.getBlockPos();
-			BlockState state = player.level.getBlockState(pos);
-			
-			return (state.getBlock() == CommonSetup.grappleModifierBlock.get());
-		}
-		return false;
-	}
-	
-	
 }
