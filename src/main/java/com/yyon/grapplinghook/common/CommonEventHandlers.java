@@ -35,48 +35,6 @@ public class CommonEventHandlers {
 
 		AutoConfig.register(GrappleConfig.class, Toml4jConfigSerializer<GrappleConfig>::new);
 	}
-    
-    @SubscribeEvent
-    public void onLivingDeath(LivingDeathEvent event) {
-    	if (!event.getEntity().level.isClientSide) {
-    		Entity entity = event.getEntity();
-    		int id = entity.getId();
-    		boolean isconnected = ServerControllerManager.allGrapplehookEntities.containsKey(id);
-    		if (isconnected) {
-    			HashSet<GrapplehookEntity> grapplehookEntities = ServerControllerManager.allGrapplehookEntities.get(id);
-    			for (GrapplehookEntity hookEntity: grapplehookEntities) {
-    				hookEntity.removeServer();
-    			}
-    			grapplehookEntities.clear();
-
-    			ServerControllerManager.attached.remove(id);
-    			
-    			if (GrapplehookItem.grapplehookEntitiesLeft.containsKey(entity)) {
-    				GrapplehookItem.grapplehookEntitiesLeft.remove(entity);
-    			}
-    			if (GrapplehookItem.grapplehookEntitiesRight.containsKey(entity)) {
-    				GrapplehookItem.grapplehookEntitiesRight.remove(entity);
-    			}
-    			
-    			GrapplemodUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entity.level);
-    		}
-    	}
-	}
-	
-	@SubscribeEvent
-	public void onLivingFallEvent(LivingFallEvent event) {
-		if (event.getEntity() != null && event.getEntity() instanceof Player) {
-			Player player = (Player)event.getEntity();
-			
-			for (ItemStack armor : player.getArmorSlots()) {
-			    if (armor != null && armor.getItem() instanceof LongFallBoots)
-			    {
-					// this cancels the fall event so you take no damage
-					event.setCanceled(true);
-			    }
-			}
-		}
-	}
 
 	@SubscribeEvent
 	public void onServerStart(ServerStartedEvent event) {

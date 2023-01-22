@@ -13,7 +13,9 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.HashSet;
 
-public class SharedDeathHandler {
+public class SharedDamageHandler {
+
+    public static final float DAMAGE_CANCELLED = -1f;
 
 
     /** @return true if the death should be cancelled. */
@@ -40,4 +42,16 @@ public class SharedDeathHandler {
         return false;
     }
 
+    /** @return true if the death should be cancelled. */
+    public boolean handleDamage(Entity damagedEntity, DamageSource source) {
+        if (damagedEntity instanceof Player player) {
+
+            for (ItemStack armor : player.getArmorSlots()) {
+                if (armor != null && armor.getItem() instanceof LongFallBoots) continue;
+                if (source == DamageSource.FLY_INTO_WALL) return true;
+            }
+        }
+
+        return false;
+    }
 }
