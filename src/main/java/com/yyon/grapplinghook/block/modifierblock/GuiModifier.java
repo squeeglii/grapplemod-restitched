@@ -34,16 +34,16 @@ public class GuiModifier extends Screen {
 	int id;
 	HashMap<AbstractWidget, String> options;
 
-	TileEntityGrappleModifier tileEnt;
+	TileEntityGrappleModifier tile;
 	GrappleCustomization customization;
 
 	GrappleCustomization.upgradeCategories category = null;
 
-	public GuiModifier(TileEntityGrappleModifier tileent) {
+	public GuiModifier(TileEntityGrappleModifier tile) {
 		super(Component.translatable("grapplemodifier.title.desc"));
 
-		this.tileEnt = tileent;
-		customization = tileent.customization;
+		this.tile = tile;
+		customization = tile.customization;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class GuiModifier extends Screen {
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - this.ySize) / 2;
 
-		mainScreen();
+		this.mainScreen();
 	}
 	
 	class PressCategory implements OnPress {
@@ -61,7 +61,7 @@ public class GuiModifier extends Screen {
 		}
 		
 		public void onPress(Button p_onPress_1_) {
-			boolean unlocked = tileEnt.isUnlocked(category) || Minecraft.getInstance().player.isCreative();
+			boolean unlocked = tile.isUnlocked(category) || Minecraft.getInstance().player.isCreative();
 
 			if (unlocked) {
 				showCategoryScreen(category);
@@ -76,6 +76,7 @@ public class GuiModifier extends Screen {
 			mainScreen();
 		}
 	}
+
 	public void mainScreen() {
 		clearScreen();
 
@@ -131,8 +132,9 @@ public class GuiModifier extends Screen {
 	}
 
 	static class BackgroundWidget extends AbstractWidget {
-		public BackgroundWidget(int p_i232254_1_, int p_i232254_2_, int p_i232254_3_, int p_i232254_4_, Component p_i232254_5_) {
-			super(p_i232254_1_, p_i232254_2_, p_i232254_3_, p_i232254_4_, p_i232254_5_);
+
+		public BackgroundWidget(int posX, int posY, int sizeVertical, int sizeHorizontal, Component text) {
+			super(posX, posY, sizeVertical, sizeHorizontal, text);
 			this.active = false;
 		}
 		
@@ -140,10 +142,10 @@ public class GuiModifier extends Screen {
 			this(x, y, w, h, Component.literal(""));
 		}
 		
-	    public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+	    public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			RenderSystem.setShaderTexture(0,texture);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			this.blit(p_230431_1_, this.getX(), this.getY(), 0, 0, this.width, this.height);
+			this.blit(stack, this.getX(), this.getY(), 0, 0, this.width, this.height);
 	    }
 
 		@Override
@@ -163,15 +165,15 @@ public class GuiModifier extends Screen {
 	}
 	
 	static class TextWidget extends AbstractWidget {
-		public TextWidget(int p_i232254_1_, int p_i232254_2_, int p_i232254_3_, int p_i232254_4_, Component p_i232254_5_) {
-			super(p_i232254_1_, p_i232254_2_, p_i232254_3_, p_i232254_4_, p_i232254_5_);
+		public TextWidget(int posX, int posY, int sizeVertical, int sizeHorizontal, Component text) {
+			super(posX, posY, sizeVertical, sizeHorizontal, text);
 		}
 		
 		public TextWidget(Component text, int x, int y) {
 			this(x, y, 50, 15 * text.getString().split("\n").length + 5, text);
 		}
 		
-		public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			Minecraft minecraft = Minecraft.getInstance();
 			Font fontRenderer = minecraft.font;
 			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
@@ -179,10 +181,10 @@ public class GuiModifier extends Screen {
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
 			RenderSystem.enableDepthTest();
-			int j = this.getFGColor();
+			int colour = this.active ? 16777215 : 10526880;
 			int lineno = 0;
 			for (String s : this.getMessage().getString().split("\n")) {
-				drawString(p_230431_1_, fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, j | Mth.ceil(this.alpha * 255.0F) << 24);
+				drawString(stack, fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
 				lineno++;
 			}
 		}
@@ -235,8 +237,7 @@ public class GuiModifier extends Screen {
 		String option;
 		public Component tooltip;
 
-		public GuiCheckbox(int x, int y, int w, int h,
-				Component text, boolean val, String option, Component tooltip) {
+		public GuiCheckbox(int x, int y, int w, int h, Component text, boolean val, String option, Component tooltip) {
 			super(x, y, w, h, text, val);
 			this.option = option;
 			this.tooltip = tooltip;
@@ -252,16 +253,18 @@ public class GuiModifier extends Screen {
 		}
 		
 		@Override
-		public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
-			super.renderButton(p_230431_1_, p_230431_2_, p_230431_3_, p_230431_4_);
+		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			super.renderButton(stack, mouseX, mouseY, partialTick);
 			
 			if (this.isHovered) {
-				String tooltiptext = tooltip.getString();
-				ArrayList<Component> lines = new ArrayList<Component>();
-				for (String line : tooltiptext.split("\n")) {
+				String tooltipText = tooltip.getString();
+				ArrayList<Component> lines = new ArrayList<>();
+
+				for (String line : tooltipText.split("\n"))
 					lines.add(Component.literal(line));
-				}
-				renderTooltip(p_230431_1_, lines, Optional.empty(), p_230431_2_, p_230431_3_);
+
+
+				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}
@@ -279,8 +282,7 @@ public class GuiModifier extends Screen {
 		double min, max, val;
 		String text, option;
 		public Component tooltip;
-		public GuiSlider(int x, int y, int w, int h,
-				Component text, double min, double max, double val, String option, Component tooltip) {
+		public GuiSlider(int x, int y, int w, int h, Component text, double min, double max, double val, String option, Component tooltip) {
 			super(x, y, w, h, text, (val - min) / (max - min));
 			this.min = min;
 			this.max = max;
@@ -305,16 +307,16 @@ public class GuiModifier extends Screen {
 		}
 		
 		@Override
-		public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
-			super.renderButton(p_230431_1_, p_230431_2_, p_230431_3_, p_230431_4_);
+		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			super.renderButton(stack, mouseX, mouseY, partialTick);
 			
 			if (this.isHovered) {
 				String tooltiptext = tooltip.getString();
-				ArrayList<Component> lines = new ArrayList<Component>();
+				ArrayList<Component> lines = new ArrayList<>();
 				for (String line : tooltiptext.split("\n")) {
 					lines.add(Component.literal(line));
 				}
-				renderTooltip(p_230431_1_, lines, Optional.empty(), p_230431_2_, p_230431_3_);
+				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}
@@ -398,7 +400,7 @@ public class GuiModifier extends Screen {
 	@Override
 	public void onClose() {
 //		this.updateOptions();
-		this.tileEnt.setCustomizationClient(customization);
+		this.tile.setCustomizationClient(customization);
 		
 		super.onClose();
 	}
@@ -410,8 +412,7 @@ public class GuiModifier extends Screen {
 			
 			String desc = Component.translatable(this.customization.getDescription(option)).getString();
 			
-			if (this.customization.isOptionValid(option)) {
-			} else {
+			if (!this.customization.isOptionValid(option)) {
 				desc = Component.translatable("grapplemodifier.incompatability.desc") + "\n" + desc;
 				enabled = false;
 			}
@@ -440,7 +441,7 @@ public class GuiModifier extends Screen {
 	}
 	
 	public int getLimits() {
-		if (this.tileEnt.isUnlocked(GrappleCustomization.upgradeCategories.LIMITS) || Minecraft.getInstance().player.isCreative()) {
+		if (this.tile.isUnlocked(GrappleCustomization.upgradeCategories.LIMITS) || Minecraft.getInstance().player.isCreative()) {
 			return 1;
 		}
 		return 0;
