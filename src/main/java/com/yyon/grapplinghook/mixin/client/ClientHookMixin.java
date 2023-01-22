@@ -4,8 +4,6 @@ import com.yyon.grapplinghook.client.ClientControllerManager;
 import com.yyon.grapplinghook.client.ClientSetup;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.controller.AirfrictionController;
-import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.item.KeypressItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

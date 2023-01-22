@@ -5,13 +5,16 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BasePlayerDamageHandler",
+    "BlockBreakDetectorMixin",
     "LivingEntityDamageHandler",
+    "ServerConfigSyncMixin",
     "ServerPlayerDeathHandler",
-    "BlockBreakDetectorMixin"
+    "ServerStartMixin"
   ],
   "client": [
     "client.BlockBreakDetectorMixin",
     "client.CameraSetupHookMixin",
+    "client.ClientHookMixin",
     "client.GrappleCrosshairMixin",
     "client.KeybindingHandlerMixin",
     "client.MovementInputHandlerMixin"
