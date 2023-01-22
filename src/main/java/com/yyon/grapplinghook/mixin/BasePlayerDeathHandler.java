@@ -9,13 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public class PlayerDeathHandler {
+public class BasePlayerDeathHandler {
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD"), cancellable = true)
     public void handleDeath(DamageSource source, CallbackInfo ci){
-        if(SharedDeathHandler.handleDeath(source, (Entity) (Object) this)) ci.cancel();
+        if(SharedDeathHandler.handleDeath((Entity) (Object) this)) ci.cancel();
     }
-
-
 
 }

@@ -64,11 +64,6 @@ public class CommonEventHandlers {
 	}
 	
 	@SubscribeEvent
-	public void onLivingHurtEvent(LivingHurtEvent event) {
-
-	}
-	
-	@SubscribeEvent
 	public void onLivingFallEvent(LivingFallEvent event) {
 		if (event.getEntity() != null && event.getEntity() instanceof Player) {
 			Player player = (Player)event.getEntity();

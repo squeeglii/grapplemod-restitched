@@ -13,7 +13,7 @@ public class LivingEntityDeathHandler {
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD"), cancellable = true)
     public void handleDeath(DamageSource source, CallbackInfo ci){
-        if(SharedDeathHandler.handleDeath(source, (Entity) (Object) this)) ci.cancel();
+        if(SharedDeathHandler.handleDeath((Entity) (Object) this)) ci.cancel();
     }
 
 
