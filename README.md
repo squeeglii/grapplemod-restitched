@@ -1,67 +1,54 @@
-# Grappling Hook Mod for Minecraft
+# GrappleMod: Restitched
 
-A mod which adds grappling hooks. The aim of this mod is to provide a fun way to get around large builds like cities.
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.19.3-blue?style=flat-square)](https://www.minecraft.net/en-us)
+[![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.13-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
+[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v8.0.75-mint?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)
 
-This mod is for Forge only. No fabric version is planned at the moment.
+[![GPL-3.0](https://img.shields.io/badge/License-GNU_GPL_3.0-mint?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-1.16.5/1.18.2 versions requires Cloth Config API:  https://www.curseforge.com/minecraft/mc-mods/cloth-config-forge
 
-## Mod Description & Downloads
+This is a Fabric port of [Yyon's Grappling Hook Mod](https://github.com/yyon/grapplemod). The mod adds Grappling Hooks 
+to Minecraft, with an assortment of other items to complement its use. The hooks can be combined with several modifiers 
+that can be combined to create the ultimate grappling hook.
+
+Quilt compatability is ***planned*** once the fabric port is complete. No ETA currently.
+
+### Original Forge Mod (+ Downloads)
 
 [https://www.curseforge.com/minecraft/mc-mods/grappling-hook-mod](https://www.curseforge.com/minecraft/mc-mods/grappling-hook-mod)
 
-## Setup for Developing
 
-1. Download the latest Minecraft Forge Mdk for the correct version of Minecraft from [https://files.minecraftforge.net/net/minecraftforge/forge/](https://files.minecraftforge.net/net/minecraftforge/forge/)
-2. Clone this repository into the src folder (e.g. `rm -r src; git clone git@github.com:yyon/grapplemod.git src`)
-3. Copy or symlink build.gradle and gradle.properties into the root of the Mdk
-4. Follow standard Forge Development setup (e.g. `./gradlew build`, see [https://mcforge.readthedocs.io/en/latest/gettingstarted/](https://mcforge.readthedocs.io/en/latest/gettingstarted/))
+---
 
-## Project Structure
+## Credits:
 
-Currently, the versions of this mod for Minecraft 1.12, 1.16, and 1.18 are on branches 1.12, 1.16.5, and 1.18 respectively.
+### Major Components
 
-### Code Structure Overview
+- **Original Mod** - Yyon
+- **1.18/1.19 Update** - Nyfaria
+- **Textures** - Mayesnake
+- **Fabric Port (1.19.3)** - CG360 
 
-- main/java/com/yyon/grapplinghook/client: Client-side code. Initialization in ClientSetup.java and event handlers in ClientEventHandlers.java. All non-client-side code must call ClientProxy.java code through ClientProxyInterface.java.
-- main/java/com/yyon/grapplinghook/common: Code that runs on both client-side and server-side. Initializiation in CommonSetup.java and event handlers in CommonEventHandlers.java.
-- main/java/com/yyon/grapplinghook/server: Server-side code. 
-- main/java/com/yyon/grapplinghook/blocks: All Minecraft blocks added by this mod.
-- main/java/com/yyon/grapplinghook/items: All Minecraft items added by this mod.
-- main/java/com/yyon/grapplinghook/entities: All Minecraft entities added by this mod.
-- main/java/com/yyon/grapplinghook/enchantments: All Minecraft enchantments added by this mod.
-- main/java/com/yyon/grapplinghook/controllers: Code for physics / controlling player movement while on a grappling hook, etc.
-- main/java/com/yyon/grapplinghook/network: Custom network packets which are sent between client and server
-- main/java/com/yyon/grapplinghook/config: Configuration parameters provided by this mod that allows users to configure the parameters through a config file or cloth config
-- main/java/com/yyon/grapplinghook/integrations: Integration of this mod with other mods
-- main/java/com/yyon/grapplinghook/utils: Miscellaneous utilities
 
-## Credits
+### Bug Fixes
 
-1.18 update by Nyfaria
+These issues are from the [original repository!](https://github.com/yyon/grapplemod)
+- Random832 (Issue #84)
+- LachimHeigrim (Original Repo: Issue #37)
 
-Textures by Mayesnake
 
-Bug fixes:
+### Languages
 
-- Random832 (Prevent tick from running when shootingEntity is null)
+- **Russian** - Blueberryy
+- **French** - Neerwan
+- **Brazillian Portugese** -  Eufranio
 
-- LachimHeigrim (Fix for #37: removed forgotten debug prints)
 
-Languages:
+### Sound Effects
 
-- Blueberryy (Russian)
+- **Double Jump** - Iwan Gabovitch (Modified by Yyon) https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes - Copyright Iwan Gabovitch 2009 Under the CC0 1.0 Universal license
+- **Ender Staff Sounds** - Outroelison (Modified by Yyon) https://freesound.org/people/outroelison/sounds/150950/ - Copyright outroelison 2012 under the CC0 1.0 Universal License
 
-- Neerwan (French)
-
-- Eufranio (Brazillian Portugese)
-
-Sound Effects:
-
-- Iwan Gabovitch (Double jump sound effects (modified by me): https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes - Copyright Iwan Gabovitch 2009 Under the CC0 1.0 Universal license)
-
-- Outroelison (Ender staff sound effect (modified by me): https://freesound.org/people/outroelison/sounds/150950/ - Copyright outroelison 2012 under the CC0 1.0 Universal License)
-
-Bug finding:
+### Bug Hunting:
 
 - Shivaxi
