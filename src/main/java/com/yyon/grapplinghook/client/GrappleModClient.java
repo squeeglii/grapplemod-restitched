@@ -15,6 +15,7 @@ import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.network.BaseMessageClient;
+import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -30,6 +31,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -87,21 +89,21 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     public void registerPropertyOverride() {
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("rocket"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyRocket(stack, world, entity) ? 1 : 0);
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("double"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyDouble(stack, world, entity) ? 1 : 0);
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("motor"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyMotor(stack, world, entity) ? 1 : 0);
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("smart"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertySmart(stack, world, entity) ? 1 : 0);
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("enderstaff"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyEnderstaff(stack, world, entity) ? 1 : 0);
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("magnet"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyMagnet(stack, world, entity) ? 1 : 0);
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("attached"), (ItemPropertyFunction) (stack, world, entity, seed) -> {
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("rocket"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertyRocket(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("double"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertyDouble(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("motor"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertyMotor(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("smart"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertySmart(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("enderstaff"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertyEnderstaff(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("magnet"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertyMagnet(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("attached"), (stack, world, entity, seed) -> {
             if (entity == null) return 0;
             return (ClientControllerManager.controllers.containsKey(entity.getId()) && !(ClientControllerManager.controllers.get(entity.getId()) instanceof AirfrictionController)) ? 1 : 0;
         });
-        ItemProperties.register(CommonSetup.forcefieldItem.get(), new ResourceLocation("attached"), (ItemPropertyFunction) (stack, world, entity, seed) -> {
+        ItemProperties.register(GrappleModItems.FORCE_FIELD.getItem(), new ResourceLocation("attached"), (stack, world, entity, seed) -> {
             if (entity == null) return 0;
             return (ClientControllerManager.controllers.containsKey(entity.getId()) && ClientControllerManager.controllers.get(entity.getId()) instanceof ForcefieldController) ? 1 : 0;
         });
-        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("hook"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyHook(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.getItem(), new ResourceLocation("hook"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.getItem().getPropertyHook(stack, world, entity) ? 1 : 0);
     }
 
 
@@ -167,7 +169,7 @@ public class GrappleModClient implements ClientModInitializer {
                 ItemStack stack = recipe.get().getResultItem();
 
                 if (!(stack.getItem() instanceof GrapplehookItem)) return;
-                if (CommonSetup.grapplingHookItem.get().getCustomization(stack).equals(new GrappleCustomization()))
+                if (GrappleModItems.GRAPPLING_HOOK.getItem().getCustomization(stack).equals(new GrappleCustomization()))
                     return;
 
                 grapplingHookVariants.add(stack);
@@ -287,7 +289,7 @@ public class GrappleModClient implements ClientModInitializer {
         @Override
         @NotNull
         public EntityRenderer<GrapplehookEntity> create(Context manager) {
-            return new GrapplehookEntityRenderer<>(manager, CommonSetup.grapplingHookItem.get());
+            return new GrapplehookEntityRenderer<>(manager, GrappleModItems.GRAPPLING_HOOK.getItem());
         }
 
     }

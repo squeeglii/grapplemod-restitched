@@ -1,7 +1,9 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.registry.GrappleModItems;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +37,8 @@ public class GrappleMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         CommonSetup.BLOCKS.register(bus);
-        CommonSetup.ITEMS.register(bus);
+        GrappleModItems.registerAllItems();
         CommonSetup.ENTITY_TYPES.register(bus);
         CommonSetup.ENCHANTMENTS.register(bus);
         CommonSetup.BLOCK_ENTITY_TYPES.register(bus);

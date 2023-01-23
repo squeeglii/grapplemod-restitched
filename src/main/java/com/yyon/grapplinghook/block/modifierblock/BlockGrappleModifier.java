@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.upgrade.BaseUpgradeItem;
+import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.Check;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.Vec;
@@ -117,7 +118,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			GrappleCustomization custom = tile.customization;
-			CommonSetup.grapplingHookItem.get().setCustomOnServer(helditemstack, custom, playerIn);
+			GrappleModItems.GRAPPLING_HOOK.getItem().setCustomOnServer(helditemstack, custom, playerIn);
 
 			playerIn.sendSystemMessage(Component.literal("Applied configuration"));
 
@@ -137,7 +138,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(helditemstack);
 			if (enchantments.getOrDefault(Enchantments.FALL_PROTECTION, -1) >= 4) {
-				ItemStack newitemstack = new ItemStack(CommonSetup.longFallBootsItem.get());
+				ItemStack newitemstack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.getItem());
 				EnchantmentHelper.setEnchantments(enchantments, newitemstack);
 				playerIn.setItemInHand(InteractionHand.MAIN_HAND, newitemstack);
 				gaveitem = true;

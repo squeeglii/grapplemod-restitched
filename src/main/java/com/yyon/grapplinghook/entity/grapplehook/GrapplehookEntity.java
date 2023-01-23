@@ -1,12 +1,13 @@
 package com.yyon.grapplinghook.entity.grapplehook;
 
-import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.config.GrappleConfigUtils;
 import com.yyon.grapplinghook.network.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.GrappleAttachPosMessage;
+import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -393,7 +394,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 
 	@Override
 	protected Item getDefaultItem() {
-		return CommonSetup.grapplingHookItem.get();
+		return GrappleModItems.GRAPPLING_HOOK.getItem();
 	}
 	
 	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit) {

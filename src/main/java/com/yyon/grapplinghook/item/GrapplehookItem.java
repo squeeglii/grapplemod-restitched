@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.item;
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.client.ClientSetup;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
@@ -57,8 +58,8 @@ import java.util.List;
  */
 
 public class GrapplehookItem extends Item implements KeypressItem {
-	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesLeft = new HashMap<Entity, GrapplehookEntity>();
-	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesRight = new HashMap<Entity, GrapplehookEntity>();
+	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesLeft = new HashMap<>();
+	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesRight = new HashMap<>();
 	
 	public GrapplehookItem() {
 		super(new Item.Properties().stacksTo(1).tab(CommonSetup.tabGrapplemod).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
@@ -415,49 +416,49 @@ public class GrapplehookItem extends Item implements KeypressItem {
 		
 		if (Screen.hasShiftDown()) {
 			if (!custom.detachonkeyrelease) {
-				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc")));
-				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc")));
-				list.add(Component.translatable("grappletooltip.double.desc").append(ClientSetup.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
+				list.add(Component.literal(KeyBinding.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc")));
+				list.add(Component.literal(KeyBinding.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc")));
+				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBinding.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
 			} else {
-				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc")));
+				list.add(Component.literal(KeyBinding.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc")));
 			}
 			list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + ", " +
 					GrappleModClient.get().getKeyname(MCKeys.keyBindLeft) + ", " +
 					GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + ", " +
 					GrappleModClient.get().getKeyname(MCKeys.keyBindRight) +
 					" " + Component.translatable("grappletooltip.swing.desc")));
-			list.add(Component.literal(ClientSetup.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc")));
-			list.add(Component.literal(ClientSetup.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc")));
-			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + " / " +
-					ClientSetup.key_climbup.getTranslatedKeyMessage().getString() + 
+			list.add(Component.literal(KeyBinding.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc")));
+			list.add(Component.literal(KeyBinding.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc")));
+			list.add(Component.literal(KeyBinding.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + " / " +
+					KeyBinding.key_climbup.getTranslatedKeyMessage().getString() +
 					" " + Component.translatable("grappletooltip.climbup.desc")));
-			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + " / " +
-					ClientSetup.key_climbdown.getTranslatedKeyMessage().getString() + 
+			list.add(Component.literal(KeyBinding.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + " / " +
+					KeyBinding.key_climbdown.getTranslatedKeyMessage().getString() +
 					" " + Component.translatable("grappletooltip.climbdown.desc")));
 			if (custom.enderstaff) {
-				list.add(Component.literal(ClientSetup.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc")));
+				list.add(Component.literal(KeyBinding.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc")));
 			}
 			if (custom.rocket) {
-				list.add(Component.literal(ClientSetup.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc")));
+				list.add(Component.literal(KeyBinding.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc")));
 			}
 			if (custom.motor) {
 				if (custom.motorwhencrouching && !custom.motorwhennotcrouching) {
-					list.add(Component.literal(ClientSetup.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc")));
+					list.add(Component.literal(KeyBinding.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc")));
 				}
 				else if (!custom.motorwhencrouching && custom.motorwhennotcrouching) {
-					list.add(Component.literal(ClientSetup.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc")));
+					list.add(Component.literal(KeyBinding.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc")));
 				}
 			}
 			if (custom.doublehook) {
 				if (!custom.detachonkeyrelease) {
-					list.add(Component.literal(ClientSetup.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc")));
-					list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc")));
+					list.add(Component.literal(KeyBinding.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc")));
+					list.add(Component.literal(KeyBinding.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc")));
 				} else {
-					list.add(Component.literal(ClientSetup.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc")));
-					list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc")));
+					list.add(Component.literal(KeyBinding.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc")));
+					list.add(Component.literal(KeyBinding.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc")));
 				}
 			} else {
-				list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc")));
+				list.add(Component.literal(KeyBinding.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc")));
 			}
 			if (custom.reelin) {
 				list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc")));

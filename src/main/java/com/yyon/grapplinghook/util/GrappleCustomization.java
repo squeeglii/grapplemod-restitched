@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.registry.GrappleModItems;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -81,7 +82,7 @@ public class GrappleCustomization {
 		ROCKET ("rocket");
 		
 		private String nameUnlocalized;
-		private upgradeCategories(String name) {
+		upgradeCategories(String name) {
 			this.nameUnlocalized = name;
 		}
 		
@@ -108,28 +109,18 @@ public class GrappleCustomization {
 			return upgradeCategories.values().length;
 		}
 		public Item getItem() {
-			if (this == upgradeCategories.ROPE) {
-				return CommonSetup.ropeUpgradeItem.get();
-			} else if (this == upgradeCategories.THROW) {
-				return CommonSetup.throwUpgradeItem.get();
-			} else if (this == upgradeCategories.MOTOR) {
-				return CommonSetup.motorUpgradeItem.get();
-			} else if (this == upgradeCategories.SWING) {
-				return CommonSetup.swingUpgradeItem.get();
-			} else if (this == upgradeCategories.STAFF) {
-				return CommonSetup.staffUpgradeItem.get();
-			} else if (this == upgradeCategories.FORCEFIELD) {
-				return CommonSetup.forcefieldUpgradeItem.get();
-			} else if (this == upgradeCategories.MAGNET) {
-				return CommonSetup.magnetUpgradeItem.get();
-			} else if (this == upgradeCategories.DOUBLE) {
-				return CommonSetup.doubleUpgradeItem.get();
-			} else if (this == upgradeCategories.LIMITS) {
-				return CommonSetup.limitsUpgradeItem.get();
-			} else if (this == upgradeCategories.ROCKET) {
-				return CommonSetup.rocketUpgradeItem.get();
-			}
-			return null;
+			return switch (this) {
+				case ROPE -> GrappleModItems.ROPE_UPGRADE.getItem();
+				case THROW -> GrappleModItems.THROW_UPGRADE.getItem();
+				case MOTOR -> GrappleModItems.MOTOR_UPGRADE.getItem();
+				case SWING -> GrappleModItems.SWING_UPGRADE.getItem();
+				case STAFF -> GrappleModItems.ENDER_STAFF_UPGRADE.getItem();
+				case FORCEFIELD -> GrappleModItems.FORCE_FIELD.getItem();
+				case MAGNET -> GrappleModItems.MAGNET_UPGRADE.getItem();
+				case DOUBLE -> GrappleModItems.DOUBLE_UPGRADE.getItem();
+				case LIMITS -> GrappleModItems.LIMITS_UPGRADE.getItem();
+				case ROCKET -> GrappleModItems.ROCKET_UPGRADE.getItem();
+			};
 		}
 	}
 	

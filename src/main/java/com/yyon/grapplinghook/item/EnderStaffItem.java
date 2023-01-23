@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class EnderStaffItem extends Item {
 	}
 	
     @Override
+	@NotNull
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
     	ItemStack stack = playerIn.getItemInHand(hand);
         this.doRightClick(worldIn, playerIn);

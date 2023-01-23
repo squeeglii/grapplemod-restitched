@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.entity.grapplehook;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.network.SegmentMessage;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -22,7 +23,7 @@ public class SegmentHandler {
 	public GrapplehookEntity hookEntity;
 	
 	Vec prevHookPos = null;
-	Vec prevPlayerPos = null;;
+	Vec prevPlayerPos = null;
 	
 	final double bendOffset = 0.05;
 	final double intoBlock = 0.05;

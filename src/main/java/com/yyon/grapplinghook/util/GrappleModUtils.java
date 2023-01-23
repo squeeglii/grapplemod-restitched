@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.util;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.common.CommonSetup;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

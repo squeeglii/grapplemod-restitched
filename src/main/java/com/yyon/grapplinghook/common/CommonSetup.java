@@ -1,16 +1,11 @@
 package com.yyon.grapplinghook.common;
 
 import com.yyon.grapplinghook.block.modifierblock.BlockGrappleModifier;
-import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.enchantment.SlidingEnchantment;
 import com.yyon.grapplinghook.enchantment.WallrunEnchantment;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.item.EnderStaffItem;
-import com.yyon.grapplinghook.item.ForcefieldItem;
-import com.yyon.grapplinghook.item.GrapplehookItem;
-import com.yyon.grapplinghook.item.LongFallBoots;
-import com.yyon.grapplinghook.item.upgrade.*;
 import com.yyon.grapplinghook.network.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,18 +16,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Optional;
 
@@ -44,30 +27,7 @@ public class CommonSetup {
 			return new ItemStack(grapplingHookItem.get());
 		}
 	};
-	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "grapplemod");
-	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, "grapplemod");
-	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "grapplemod");
-	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, "grapplemod");
-	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, "grapplemod");
 
-    public static RegistryObject<GrapplehookItem> grapplingHookItem = ITEMS.register("grapplinghook", GrapplehookItem::new);
-    public static RegistryObject<EnderStaffItem> enderStaffItem = ITEMS.register("launcheritem", EnderStaffItem::new);
-    public static RegistryObject<ForcefieldItem> forcefieldItem = ITEMS.register("repeller", ForcefieldItem::new);
-
-    public static RegistryObject<BaseUpgradeItem> baseUpgradeItem = ITEMS.register("baseupgradeitem", BaseUpgradeItem::new);
-    public static RegistryObject<DoubleUpgradeItem> doubleUpgradeItem = ITEMS.register("doubleupgradeitem", DoubleUpgradeItem::new);
-    public static RegistryObject<ForcefieldUpgradeItem> forcefieldUpgradeItem = ITEMS.register("forcefieldupgradeitem", ForcefieldUpgradeItem::new);
-    public static RegistryObject<MagnetUpgradeItem> magnetUpgradeItem = ITEMS.register("magnetupgradeitem", MagnetUpgradeItem::new);
-    public static RegistryObject<MotorUpgradeItem> motorUpgradeItem = ITEMS.register("motorupgradeitem", MotorUpgradeItem::new);
-    public static RegistryObject<RopeUpgradeItem> ropeUpgradeItem = ITEMS.register("ropeupgradeitem", RopeUpgradeItem::new);
-    public static RegistryObject<StaffUpgradeItem> staffUpgradeItem = ITEMS.register("staffupgradeitem", StaffUpgradeItem::new);
-    public static RegistryObject<SwingUpgradeItem> swingUpgradeItem = ITEMS.register("swingupgradeitem", SwingUpgradeItem::new);
-    public static RegistryObject<ThrowUpgradeItem> throwUpgradeItem = ITEMS.register("throwupgradeitem", ThrowUpgradeItem::new);
-    public static RegistryObject<LimitsUpgradeItem> limitsUpgradeItem = ITEMS.register("limitsupgradeitem", LimitsUpgradeItem::new);
-    public static RegistryObject<RocketUpgradeItem> rocketUpgradeItem = ITEMS.register("rocketupgradeitem", RocketUpgradeItem::new);
-
-    public static RegistryObject<Item> longFallBootsItem = ITEMS.register("longfallboots", ()->new LongFallBoots(ArmorMaterials.DIAMOND, 3));
-    
     public static RegistryObject<WallrunEnchantment> wallrunEnchantment = ENCHANTMENTS.register("wallrunenchantment", WallrunEnchantment::new);
     public static RegistryObject<DoubleJumpEnchantment> doubleJumpEnchantment = ENCHANTMENTS.register("doublejumpenchantment", DoubleJumpEnchantment::new);
     public static RegistryObject<SlidingEnchantment> slidingEnchantment = ENCHANTMENTS.register("slidingenchantment", SlidingEnchantment::new);
@@ -79,8 +39,6 @@ public class CommonSetup {
 	public static RegistryObject<BlockItem> grappleModifierBlockItem = ITEMS.register("block_grapple_modifier", ()->new BlockItem(grappleModifierBlock.get(),new Item.Properties().stacksTo(64).tab(tabGrapplemod)));
 	
 
-	
-	public static CommonEventHandlers eventHandlers = new CommonEventHandlers();;
 
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
