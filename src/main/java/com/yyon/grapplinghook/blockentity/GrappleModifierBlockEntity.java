@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.block.modifierblock;
+package com.yyon.grapplinghook.blockentity;
 
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.network.GrappleModifierMessage;
@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-public class TileEntityGrappleModifier extends BlockEntity {
+public class GrappleModifierBlockEntity extends BlockEntity {
 	public HashMap<GrappleCustomization.upgradeCategories, Boolean> unlockedCategories = new HashMap<>();
 	public GrappleCustomization customization;
 
-	public TileEntityGrappleModifier(BlockPos pos, BlockState state) {
+	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
 		super(CommonSetup.grappleModifierTileEntityType.get(), pos, state);
 		this.customization = new GrappleCustomization();
 	}

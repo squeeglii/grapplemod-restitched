@@ -1,7 +1,8 @@
-package com.yyon.grapplinghook.block.modifierblock;
+package com.yyon.grapplinghook.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class GuiModifier extends Screen {
+public class GrappleModiferGUI extends Screen {
 	private static final ResourceLocation texture = new ResourceLocation("grapplemod", "textures/gui/guimodifier_bg.png");
 
 	int xSize = 221;
@@ -34,12 +35,12 @@ public class GuiModifier extends Screen {
 	int id;
 	HashMap<AbstractWidget, String> options;
 
-	TileEntityGrappleModifier tile;
+	GrappleModifierBlockEntity tile;
 	GrappleCustomization customization;
 
 	GrappleCustomization.upgradeCategories category = null;
 
-	public GuiModifier(TileEntityGrappleModifier tile) {
+	public GrappleModiferGUI(GrappleModifierBlockEntity tile) {
 		super(Component.translatable("grapplemodifier.title.desc"));
 
 		this.tile = tile;

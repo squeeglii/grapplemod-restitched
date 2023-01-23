@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.network;
 
-import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -49,8 +49,8 @@ public class GrappleModifierMessage extends BaseMessageServer {
 		
 		BlockEntity ent = w.getBlockEntity(this.pos);
 
-		if (ent != null && ent instanceof TileEntityGrappleModifier) {
-			((TileEntityGrappleModifier) ent).setCustomizationServer(this.custom);
+		if (ent != null && ent instanceof GrappleModifierBlockEntity) {
+			((GrappleModifierBlockEntity) ent).setCustomizationServer(this.custom);
 		}
     }
 }

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.block.modifierblock;
 
-import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
@@ -41,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class BlockGrappleModifier extends BaseEntityBlock {
 
@@ -53,7 +52,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new TileEntityGrappleModifier(pos,state);
+		return new GrappleModifierBlockEntity(pos,state);
 	}
 	
 	@Override
@@ -63,7 +62,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 
 		BlockEntity ent = lootContext.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 
-		if (!(ent instanceof TileEntityGrappleModifier tile)) return drops;
+		if (!(ent instanceof GrappleModifierBlockEntity tile)) return drops;
 
 		for (GrappleCustomization.upgradeCategories category : GrappleCustomization.upgradeCategories.values()) {
 			if (tile.unlockedCategories.containsKey(category) && tile.unlockedCategories.get(category)) {
@@ -75,7 +74,8 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult raytraceresult) {
+	@NotNull
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult raytraceresult) {
 		ItemStack helditemstack = playerIn.getItemInHand(InteractionHand.MAIN_HAND);
 		Item helditem = helditemstack.getItem();
 
@@ -84,7 +84,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 				return InteractionResult.PASS;
 
 			BlockEntity ent = worldIn.getBlockEntity(pos);
-			TileEntityGrappleModifier tile = (TileEntityGrappleModifier) ent;
+			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
 
 			if (Check.missingTileEntity(tile, playerIn, worldIn, pos))
 				return InteractionResult.FAIL;
@@ -111,7 +111,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 				return InteractionResult.PASS;
 
 			BlockEntity ent = worldIn.getBlockEntity(pos);
-			TileEntityGrappleModifier tile = (TileEntityGrappleModifier) ent;
+			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
 
 			if (Check.missingTileEntity(tile, playerIn, worldIn, pos))
 				return InteractionResult.FAIL;
@@ -157,7 +157,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 				return InteractionResult.PASS;
 
 			BlockEntity ent = worldIn.getBlockEntity(pos);
-			TileEntityGrappleModifier tile = (TileEntityGrappleModifier) ent;
+			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
 
 			GrappleModClient.get().openModifierScreen(tile);
 		}

@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.block.modifierblock.GuiModifier;
-import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
+import com.yyon.grapplinghook.gui.GrappleModiferGUI;
+import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
@@ -12,7 +12,7 @@ import com.yyon.grapplinghook.controller.AirfrictionController;
 import com.yyon.grapplinghook.controller.ForcefieldController;
 import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.entity.grapplehook.RenderGrapplehookEntity;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.network.BaseMessageClient;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -131,8 +131,8 @@ public class GrappleModClient implements ClientModInitializer {
         };
     }
 
-    public void openModifierScreen(TileEntityGrappleModifier tile) {
-        Minecraft.getInstance().setScreen(new GuiModifier(tile));
+    public void openModifierScreen(GrappleModifierBlockEntity tile) {
+        Minecraft.getInstance().setScreen(new GrappleModiferGUI(tile));
     }
 
     public void onMessageReceivedClient(BaseMessageClient msg, NetworkEvent.Context ctx) {
@@ -287,7 +287,7 @@ public class GrappleModClient implements ClientModInitializer {
         @Override
         @NotNull
         public EntityRenderer<GrapplehookEntity> create(Context manager) {
-            return new RenderGrapplehookEntity<>(manager, CommonSetup.grapplingHookItem.get());
+            return new GrapplehookEntityRenderer<>(manager, CommonSetup.grapplingHookItem.get());
         }
 
     }

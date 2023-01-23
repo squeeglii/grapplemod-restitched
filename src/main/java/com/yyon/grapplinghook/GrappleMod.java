@@ -42,4 +42,8 @@ public class GrappleMod implements ModInitializer {
         CommonSetup.ENCHANTMENTS.register(bus);
         CommonSetup.BLOCK_ENTITY_TYPES.register(bus);
     }
+
+    public static ResourceLocation id(String id) {
+        return new ResourceLocation(MODID, id);
+    }
 }

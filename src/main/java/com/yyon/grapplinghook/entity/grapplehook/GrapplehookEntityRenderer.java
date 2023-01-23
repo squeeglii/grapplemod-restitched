@@ -44,7 +44,7 @@ import org.joml.Quaternionf;
  */
 
 @Environment(EnvType.CLIENT)
-public class RenderGrapplehookEntity<T extends GrapplehookEntity> extends EntityRenderer<T>
+public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends EntityRenderer<T>
 {
     protected final Item item;
     private static final ResourceLocation HOOK_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/hook.png");
@@ -53,7 +53,7 @@ public class RenderGrapplehookEntity<T extends GrapplehookEntity> extends Entity
     private static final RenderType ROPE_RENDER = RenderType.entitySolid(ROPE_TEXTURES);
     EntityRendererProvider.Context context;
 
-	public RenderGrapplehookEntity(EntityRendererProvider.Context context, Item itemIn) {
+	public GrapplehookEntityRenderer(EntityRendererProvider.Context context, Item itemIn) {
 		super(context);
 		this.item = itemIn;
 		this.context = context;
