@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.item;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -38,16 +39,15 @@ public class EnderStaffItem extends Item {
 		super(new Item.Properties().stacksTo(1).tab(CommonSetup.tabGrapplemod));
 	}
 	
-	public void doRightClick(ItemStack stack, Level worldIn, Player player) {
-		if (worldIn.isClientSide) {
-			ClientProxyInterface.proxy.launchPlayer(player);
-		}
+	public void doRightClick(Level worldIn, Player player) {
+		if (!worldIn.isClientSide) return;
+		GrappleModClient.get().launchPlayer(player);
 	}
 	
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
     	ItemStack stack = playerIn.getItemInHand(hand);
-        this.doRightClick(stack, worldIn, playerIn);
+        this.doRightClick(worldIn, playerIn);
 
     	return InteractionResultHolder.success(stack);
 	}
@@ -58,6 +58,6 @@ public class EnderStaffItem extends Item {
 		list.add(Component.translatable("grappletooltip.launcheritem.desc"));
 		list.add(Component.literal(""));
 		list.add(Component.translatable("grappletooltip.launcheritemaim.desc"));
-		list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc")));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc")));
 	}
 }

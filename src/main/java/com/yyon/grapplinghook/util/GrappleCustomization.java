@@ -86,7 +86,7 @@ public class GrappleCustomization {
 		}
 		
 		public String getName() {
-			if (ClientProxyInterface.proxy != null) {
+			if (GrappleModClient.get() != null) {
 				return Component.translatable("grapplemod.upgradecategories." + this.nameUnlocalized).getString();
 			} else {
 				return nameUnlocalized;

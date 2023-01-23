@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.network;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -38,7 +39,7 @@ public abstract class BaseMessageClient {
         ctx.setPacketHandled(true);
         
         ctx.enqueueWork(() -> 
-        	ClientProxyInterface.proxy.onMessageReceivedClient(this, ctx)
+        	GrappleModClient.get().onMessageReceivedClient(this, ctx)
         );
     }
 

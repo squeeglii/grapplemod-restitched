@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.entity.grapplehook;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.config.GrappleConfigUtils;
@@ -456,7 +457,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 		this.setAttachPos(x, y, z);
 		
 		if (this.shootingEntity instanceof Player) {
-			ClientProxyInterface.proxy.resetLauncherTime(this.shootingEntityID);
+			GrappleModClient.get().resetLauncherTime(this.shootingEntityID);
 		}
 	}
 	

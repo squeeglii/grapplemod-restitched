@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.controller;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.Vec;
@@ -59,7 +60,7 @@ public class AirfrictionController extends GrappleController {
 		}
 
 		if (this.attached) {
-			boolean issliding = ClientProxyInterface.proxy.isSliding(entity, motion);
+			boolean issliding = GrappleModClient.get().isSliding(entity, motion);
 			
 			if (issliding && !wasSliding) {
 				playSlideSound();
@@ -199,6 +200,6 @@ public class AirfrictionController extends GrappleController {
 	}
 	
 	public void playSlideSound() {
-		ClientProxyInterface.proxy.playSlideSound(this.entity);
+		GrappleModClient.get().playSlideSound();
 	}
 }

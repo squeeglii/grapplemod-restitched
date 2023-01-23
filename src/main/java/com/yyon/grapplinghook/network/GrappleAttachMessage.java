@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.network;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.SegmentHandler;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -142,6 +143,6 @@ public class GrappleAttachMessage extends BaseMessageClient {
     	} else {
     	}
     	            	
-    	ClientProxyInterface.proxy.createControl(this.controlId, this.id, this.entityId, world, new Vec(this.x, this.y, this.z), this.blockPos, this.custom);
+    	GrappleModClient.get().createControl(this.controlId, this.id, this.entityId, world, new Vec(this.x, this.y, this.z), this.blockPos, this.custom);
     }
 }

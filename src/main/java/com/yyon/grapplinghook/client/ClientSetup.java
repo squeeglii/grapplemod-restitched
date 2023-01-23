@@ -87,7 +87,7 @@ public class ClientSetup {
 	    EntityRenderers.register(CommonSetup.grapplehookEntityType.get(), new GrapplehookEntityRenderFactory());
 
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-    		() -> new ConfigScreenHandler.ConfigScreenFactory(((ClientProxy) ClientProxyInterface.proxy)::onConfigScreen));
+    		() -> new ConfigScreenHandler.ConfigScreenFactory(GrappleModClient.get()::onConfigScreen));
 		
 	    this.registerPropertyOverride();
 	    

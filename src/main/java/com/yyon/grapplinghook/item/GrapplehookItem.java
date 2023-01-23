@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.item;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.client.ClientSetup;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
@@ -121,14 +122,14 @@ public class GrapplehookItem extends Item implements KeypressItem {
 		if (player.level.isClientSide) {
 			if (key == KeypressItem.Keys.LAUNCHER) {
 				if (this.getCustomization(stack).enderstaff) {
-					ClientProxyInterface.proxy.launchPlayer(player);
+					GrappleModClient.get().launchPlayer(player);
 				}
 			} else if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
 				CommonSetup.network.sendToServer(new KeypressMessage(key, true));
 			} else if (key == KeypressItem.Keys.ROCKET) {
 				GrappleCustomization custom = this.getCustomization(stack);
 				if (custom.rocket) {
-					ClientProxyInterface.proxy.startRocket(player, custom);
+					GrappleModClient.get().startRocket(player, custom);
 				}
 			}
 		} else {
@@ -419,17 +420,17 @@ public class GrapplehookItem extends Item implements KeypressItem {
 			} else {
 				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc")));
 			}
-			list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindForward) + ", " +
-					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindLeft) + ", " +
-					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindBack) + ", " +
-					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindRight) +
+			list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindForward) + ", " +
+					GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindLeft) + ", " +
+					GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindBack) + ", " +
+					GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindRight) +
 					" " + Component.translatable("grappletooltip.swing.desc")));
 			list.add(Component.literal(ClientSetup.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc")));
 			list.add(Component.literal(ClientSetup.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc")));
-			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindForward) + " / " +
+			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindForward) + " / " +
 					ClientSetup.key_climbup.getTranslatedKeyMessage().getString() + 
 					" " + Component.translatable("grappletooltip.climbup.desc")));
-			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindBack) + " / " +
+			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindBack) + " / " +
 					ClientSetup.key_climbdown.getTranslatedKeyMessage().getString() + 
 					" " + Component.translatable("grappletooltip.climbdown.desc")));
 			if (custom.enderstaff) {
@@ -458,7 +459,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 				list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc")));
 			}
 			if (custom.reelin) {
-				list.add(Component.literal(ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc")));
+				list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc")));
 			}
 		} else {
 			if (Screen.hasControlDown()) {
@@ -572,8 +573,8 @@ public class GrapplehookItem extends Item implements KeypressItem {
 			if (this.allowedIn(tab)) {
 	        	ItemStack stack = new ItemStack(this);
 	            items.add(stack);
-	            if (ClientProxyInterface.proxy != null) {
-	            	ClientProxyInterface.proxy.fillGrappleVariants(tab, items);
+	            if (GrappleModClient.get() != null) {
+	            	GrappleModClient.get().fillGrappleVariants(items);
 	            }
 			}
 	}

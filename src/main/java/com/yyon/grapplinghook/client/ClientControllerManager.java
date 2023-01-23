@@ -149,7 +149,7 @@ public class ClientControllerManager {
 
 			facing.mult_ip(GrappleConfig.getConf().enderstaff.ender_staff_strength);
 			ClientControllerManager.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
-			ClientProxyInterface.proxy.playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
+			GrappleModClient.get().playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
 		}
 	}
 	
@@ -231,13 +231,13 @@ public class ClientControllerManager {
 
 		if(allConditionsMet && !controllers.containsKey(player.getId())) {
 			this.createControl(GrapplemodUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
-			ClientProxyInterface.proxy.playDoubleJumpSound(player);
+			GrappleModClient.get().playDoubleJumpSound();
 		}
 
 		if(allConditionsMet && controllers.get(player.getId()) instanceof AirfrictionController ctrl) {
 			this.alreadyUsedDoubleJump = true;
 			ctrl.doubleJump();
-			ClientProxyInterface.proxy.playDoubleJumpSound(ctrl.entity);
+			GrappleModClient.get().playDoubleJumpSound();
 		}
 		
 		this.prevJumpButton = isJumpButtonDown;

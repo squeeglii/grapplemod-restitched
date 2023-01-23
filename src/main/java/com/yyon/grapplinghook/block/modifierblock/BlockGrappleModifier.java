@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.block.modifierblock;
 
 import com.yyon.grapplinghook.client.ClientProxyInterface;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.item.GrapplehookItem;
@@ -158,7 +159,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 			BlockEntity ent = worldIn.getBlockEntity(pos);
 			TileEntityGrappleModifier tile = (TileEntityGrappleModifier) ent;
 
-			ClientProxyInterface.proxy.openModifierScreen(tile);
+			GrappleModClient.get().openModifierScreen(tile);
 		}
 
 		return InteractionResult.SUCCESS;
