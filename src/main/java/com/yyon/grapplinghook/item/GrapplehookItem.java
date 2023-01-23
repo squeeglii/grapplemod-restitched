@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.item;
 import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.client.ClientSetup;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.keybind.MCKeys;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
@@ -11,7 +12,7 @@ import com.yyon.grapplinghook.network.GrappleDetachMessage;
 import com.yyon.grapplinghook.network.KeypressMessage;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleCustomization;
-import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -316,7 +317,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 		}
 
 		int id = entityLiving.getId();
-		GrapplemodUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level);
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level);
 
 		if (ServerControllerManager.attached.contains(id)) {
 			ServerControllerManager.attached.remove(id);
@@ -336,9 +337,9 @@ public class GrapplehookItem extends Item implements KeypressItem {
 		
 		// remove controller if hook is attached
 		if (getHookEntityRight(entityLiving) == null) {
-			GrapplemodUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level);
 		} else {
-			GrapplemodUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level);
 		}
 		
 		if (ServerControllerManager.attached.contains(id)) {
@@ -359,9 +360,9 @@ public class GrapplehookItem extends Item implements KeypressItem {
 		
 		// remove controller if hook is attached
 		if (getHookEntityLeft(entityLiving) == null) {
-			GrapplemodUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level);
 		} else {
-			GrapplemodUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level);
 		}
 		
 		if (ServerControllerManager.attached.contains(id)) {
@@ -420,17 +421,17 @@ public class GrapplehookItem extends Item implements KeypressItem {
 			} else {
 				list.add(Component.literal(ClientSetup.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc")));
 			}
-			list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindForward) + ", " +
-					GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindLeft) + ", " +
-					GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindBack) + ", " +
-					GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindRight) +
+			list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + ", " +
+					GrappleModClient.get().getKeyname(MCKeys.keyBindLeft) + ", " +
+					GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + ", " +
+					GrappleModClient.get().getKeyname(MCKeys.keyBindRight) +
 					" " + Component.translatable("grappletooltip.swing.desc")));
 			list.add(Component.literal(ClientSetup.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc")));
 			list.add(Component.literal(ClientSetup.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc")));
-			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindForward) + " / " +
+			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + " / " +
 					ClientSetup.key_climbup.getTranslatedKeyMessage().getString() + 
 					" " + Component.translatable("grappletooltip.climbup.desc")));
-			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindBack) + " / " +
+			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + " / " +
 					ClientSetup.key_climbdown.getTranslatedKeyMessage().getString() + 
 					" " + Component.translatable("grappletooltip.climbdown.desc")));
 			if (custom.enderstaff) {
@@ -459,7 +460,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 				list.add(Component.literal(ClientSetup.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc")));
 			}
 			if (custom.reelin) {
-				list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc")));
+				list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc")));
 			}
 		} else {
 			if (Screen.hasControlDown()) {
@@ -517,7 +518,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, Player player) {
 		int id = player.getId();
-		GrapplemodUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level);
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level);
 		
 		if (!player.level.isClientSide) {
 			if (ServerControllerManager.attached.contains(id)) {

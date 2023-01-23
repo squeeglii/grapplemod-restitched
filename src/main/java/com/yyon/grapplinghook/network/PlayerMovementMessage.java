@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.network;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
 
 /*
  * This file is part of GrappleMod.

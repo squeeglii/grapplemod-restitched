@@ -10,7 +10,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.GrappleEndMessage;
 import com.yyon.grapplinghook.network.PlayerMovementMessage;
 import com.yyon.grapplinghook.util.GrappleCustomization;
-import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -99,9 +99,9 @@ public class GrappleController {
 		if (GrappleModClient.get().unregisterController(this.entityId) != null) {
 			this.attached = false;
 			
-			if (this.controllerId != GrapplemodUtils.AIR_FRICTION_ID) {
+			if (this.controllerId != GrappleModUtils.AIR_FRICTION_ID) {
 				CommonSetup.network.sendToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
-				GrappleModClient.get().createControl(GrapplemodUtils.AIR_FRICTION_ID, -1, this.entityId, this.entity.level, new Vec(0,0,0), null, this.custom);
+				GrappleModClient.get().createControl(GrappleModUtils.AIR_FRICTION_ID, -1, this.entityId, this.entity.level, new Vec(0,0,0), null, this.custom);
 			}
 		}
 	}
@@ -838,7 +838,7 @@ public class GrappleController {
 		float entitywidth = this.entity.getBbWidth();
 		
 		for (Vec direction : new Vec[] {tryfirst, trysecond, tryfirst.mult(-1), trysecond.mult(-1)}) {
-			BlockHitResult raytraceresult = GrapplemodUtils.rayTraceBlocks(this.entity.level, Vec.positionVec(this.entity), Vec.positionVec(this.entity).add(direction.changeLen(entitywidth/2 + extra)));
+			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity.level, Vec.positionVec(this.entity), Vec.positionVec(this.entity).add(direction.changeLen(entitywidth/2 + extra)));
 			if (raytraceresult != null) {
 				wallrunRaytraceResult = raytraceresult;
 				return direction;
@@ -887,7 +887,7 @@ public class GrappleController {
 			Vec corner1 = getCorner(i, v1, v2);
 			Vec corner2 = getCorner((i + 1) % 4, v1, v2);
 			
-			BlockHitResult raytraceresult = GrapplemodUtils.rayTraceBlocks(this.entity.level, Vec.positionVec(this.entity).add(corner1), Vec.positionVec(this.entity).add(corner2));
+			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity.level, Vec.positionVec(this.entity).add(corner1), Vec.positionVec(this.entity).add(corner2));
 			if (raytraceresult != null) {
 				return true;
 			}

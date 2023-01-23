@@ -9,7 +9,7 @@ import com.yyon.grapplinghook.network.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleCustomization;
-import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -342,7 +342,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 	        Vec vec3d1 = vec3d.add(Vec.motionVec(this));
 
 			if (movingobjectposition instanceof EntityHitResult && !GrappleConfig.getConf().grapplinghook.other.hookaffectsentities) {
-				onHit(GrapplemodUtils.rayTraceBlocks(this.level, vec3d, vec3d1));
+				onHit(GrappleModUtils.rayTraceBlocks(this.level, vec3d, vec3d1));
 		        return;
 			}
 			
@@ -357,7 +357,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 					Block block = this.level.getBlockState(blockpos).getBlock();
 					if (GrappleConfigUtils.breaksBlock(block)) {
 						this.level.destroyBlock(blockpos, true);
-				        onHit(GrapplemodUtils.rayTraceBlocks(this.level, vec3d, vec3d1));
+				        onHit(GrappleModUtils.rayTraceBlocks(this.level, vec3d, vec3d1));
 				        return;
 					}
 				}
@@ -447,7 +447,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 		this.firstAttach = true;
 		ServerControllerManager.attached.add(this.shootingEntityID);
 		
-		GrapplemodUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level);
+		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level);
 		
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
 		CommonSetup.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(new BlockPos(this.position().x, this.position().y, this.position().z))), msg);
@@ -471,7 +471,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
     }
 	
 	public int getControlId() {
-		return GrapplemodUtils.GRAPPLE_ID;
+		return GrappleModUtils.GRAPPLE_ID;
 	}
 
 	public void setAttachPos(double x, double y, double z) {

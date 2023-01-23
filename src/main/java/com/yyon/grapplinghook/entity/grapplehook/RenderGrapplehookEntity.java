@@ -59,12 +59,6 @@ public class RenderGrapplehookEntity<T extends GrapplehookEntity> extends Entity
 		this.context = context;
 	}
 
-//    public RenderGrapplehookEntity(EntityRenderDispatcher renderManagerIn, Item itemIn)
-//    {
-//        super(renderManagerIn);
-//        this.item = itemIn;
-//    }
-
     /**
      * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
      * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic

@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.common;
 
 import com.yyon.grapplinghook.block.modifierblock.BlockGrappleModifier;
 import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
-import com.yyon.grapplinghook.enchantment.DoublejumpEnchantment;
+import com.yyon.grapplinghook.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.enchantment.SlidingEnchantment;
 import com.yyon.grapplinghook.enchantment.WallrunEnchantment;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
@@ -69,7 +69,7 @@ public class CommonSetup {
     public static RegistryObject<Item> longFallBootsItem = ITEMS.register("longfallboots", ()->new LongFallBoots(ArmorMaterials.DIAMOND, 3));
     
     public static RegistryObject<WallrunEnchantment> wallrunEnchantment = ENCHANTMENTS.register("wallrunenchantment", WallrunEnchantment::new);
-    public static RegistryObject<DoublejumpEnchantment> doubleJumpEnchantment = ENCHANTMENTS.register("doublejumpenchantment", DoublejumpEnchantment::new);
+    public static RegistryObject<DoubleJumpEnchantment> doubleJumpEnchantment = ENCHANTMENTS.register("doublejumpenchantment", DoubleJumpEnchantment::new);
     public static RegistryObject<SlidingEnchantment> slidingEnchantment = ENCHANTMENTS.register("slidingenchantment", SlidingEnchantment::new);
 
 	public static SimpleChannel network;    // used to transmit your network messages

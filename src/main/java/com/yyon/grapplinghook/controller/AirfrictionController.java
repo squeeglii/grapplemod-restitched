@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.controller;
 
-import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.util.GrappleCustomization;

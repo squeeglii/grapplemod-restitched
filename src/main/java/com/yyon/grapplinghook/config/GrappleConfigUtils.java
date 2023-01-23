@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.config;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 
@@ -15,7 +14,7 @@ public class GrappleConfigUtils {
 	private static boolean anyBreakBlocks = false;
 
 	public static HashSet<Block> stringToBlocks(String s) {
-		HashSet<Block> blocks = new HashSet<Block>();
+		HashSet<Block> blocks = new HashSet<>();
 		
 		if (s.equals("") || s.equals("none") || s.equals("any")) {
 			return blocks;

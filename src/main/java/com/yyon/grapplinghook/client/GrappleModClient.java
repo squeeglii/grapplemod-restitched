@@ -4,25 +4,34 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.block.modifierblock.GuiModifier;
 import com.yyon.grapplinghook.block.modifierblock.TileEntityGrappleModifier;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
+import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
+import com.yyon.grapplinghook.controller.AirfrictionController;
+import com.yyon.grapplinghook.controller.ForcefieldController;
 import com.yyon.grapplinghook.controller.GrappleController;
+import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.entity.grapplehook.RenderGrapplehookEntity;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.network.BaseMessageClient;
 import com.yyon.grapplinghook.util.GrappleCustomization;
-import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
@@ -32,11 +41,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +60,24 @@ public class GrappleModClient implements ClientModInitializer {
     private static final ResourceLocation SOUND_DOUBLE_JUMP = new ResourceLocation("grapplemod", "doublejump");
     private static final  ResourceLocation SOUND_SLIDE = new ResourceLocation("grapplemod", "slide");
 
-    private List<ItemStack> grapplingHookVariants = null;
+    private List<ItemStack> grapplingHookVariants;
+
+    private ClientControllerManager clientControllerManager;
 
 
     @Override
     public void onInitializeClient() {
         GrappleModClient.clientInstance = this;
+        this.grapplingHookVariants = null;
+
+        EntityRendererRegistry.register(CommonSetup.grapplehookEntityType.get(), new GrapplehookEntityRenderFactory());
+
+        //TODO: Re-implement configuration with ModMenu
+        // GrappleModClient.get()::onConfigScreen;
+
+        this.registerPropertyOverride();
+
+        this.clientControllerManager = new ClientControllerManager();
     }
 
     public static GrappleModClient get() {
@@ -65,6 +86,23 @@ public class GrappleModClient implements ClientModInitializer {
 
 
 
+    public void registerPropertyOverride() {
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("rocket"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyRocket(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("double"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyDouble(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("motor"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyMotor(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("smart"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertySmart(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("enderstaff"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyEnderstaff(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("magnet"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyMagnet(stack, world, entity) ? 1 : 0);
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("attached"), (ItemPropertyFunction) (stack, world, entity, seed) -> {
+            if (entity == null) return 0;
+            return (ClientControllerManager.controllers.containsKey(entity.getId()) && !(ClientControllerManager.controllers.get(entity.getId()) instanceof AirfrictionController)) ? 1 : 0;
+        });
+        ItemProperties.register(CommonSetup.forcefieldItem.get(), new ResourceLocation("attached"), (ItemPropertyFunction) (stack, world, entity, seed) -> {
+            if (entity == null) return 0;
+            return (ClientControllerManager.controllers.containsKey(entity.getId()) && ClientControllerManager.controllers.get(entity.getId()) instanceof ForcefieldController) ? 1 : 0;
+        });
+        ItemProperties.register(CommonSetup.grapplingHookItem.get(), new ResourceLocation("hook"), (ItemPropertyFunction) (stack, world, entity, seed) -> CommonSetup.grapplingHookItem.get().getPropertyHook(stack, world, entity) ? 1 : 0);
+    }
 
 
     public void startRocket(Player player, GrappleCustomization custom) {
@@ -173,18 +211,18 @@ public class GrappleModClient implements ClientModInitializer {
 
     public boolean isKeyDown(GrappleKeys key) {
         return switch (key) {
-            case key_boththrow -> ClientSetup.key_boththrow.isDown();
-            case key_leftthrow -> ClientSetup.key_leftthrow.isDown();
-            case key_rightthrow -> ClientSetup.key_rightthrow.isDown();
-            case key_motoronoff -> ClientSetup.key_motoronoff.isDown();
-            case key_jumpanddetach -> ClientSetup.key_jumpanddetach.isDown();
-            case key_slow -> ClientSetup.key_slow.isDown();
-            case key_climb -> ClientSetup.key_climb.isDown();
-            case key_climbup -> ClientSetup.key_climbup.isDown();
-            case key_climbdown -> ClientSetup.key_climbdown.isDown();
-            case key_enderlaunch -> ClientSetup.key_enderlaunch.isDown();
-            case key_rocket -> ClientSetup.key_rocket.isDown();
-            case key_slide -> ClientSetup.key_slide.isDown();
+            case key_boththrow -> KeyBinding.key_boththrow.isDown();
+            case key_leftthrow -> KeyBinding.key_leftthrow.isDown();
+            case key_rightthrow -> KeyBinding.key_rightthrow.isDown();
+            case key_motoronoff -> KeyBinding.key_motoronoff.isDown();
+            case key_jumpanddetach -> KeyBinding.key_jumpanddetach.isDown();
+            case key_slow -> KeyBinding.key_slow.isDown();
+            case key_climb -> KeyBinding.key_climb.isDown();
+            case key_climbup -> KeyBinding.key_climbup.isDown();
+            case key_climbdown -> KeyBinding.key_climbdown.isDown();
+            case key_enderlaunch -> KeyBinding.key_enderlaunch.isDown();
+            case key_rocket -> KeyBinding.key_rocket.isDown();
+            case key_slide -> KeyBinding.key_slide.isDown();
         };
     }
 
@@ -193,11 +231,11 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public double getTimeSinceLastRopeJump(Level world) {
-        return GrapplemodUtils.getTime(world) - ClientControllerManager.prevRopeJumpTime;
+        return GrappleModUtils.getTime(world) - ClientControllerManager.prevRopeJumpTime;
     }
 
     public void resetRopeJumpTime(Level world) {
-        ClientControllerManager.prevRopeJumpTime = GrapplemodUtils.getTime(world);
+        ClientControllerManager.prevRopeJumpTime = GrappleModUtils.getTime(world);
     }
 
     public boolean isKeyDown(MCKeys keyEnum) {
@@ -239,4 +277,18 @@ public class GrappleModClient implements ClientModInitializer {
         ClientControllerManager.instance.ticksWallRunning = newWallrunTicks;
     }
 
+
+    public ClientControllerManager getClientControllerManager() {
+        return clientControllerManager;
+    }
+
+    private static class GrapplehookEntityRenderFactory implements EntityRendererProvider<GrapplehookEntity> {
+
+        @Override
+        @NotNull
+        public EntityRenderer<GrapplehookEntity> create(Context manager) {
+            return new RenderGrapplehookEntity<>(manager, CommonSetup.grapplingHookItem.get());
+        }
+
+    }
 }

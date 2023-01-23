@@ -4,7 +4,6 @@ import com.yyon.grapplinghook.server.ServerControllerManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashSet;
 

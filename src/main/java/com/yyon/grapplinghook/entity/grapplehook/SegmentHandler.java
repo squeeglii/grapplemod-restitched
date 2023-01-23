@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.entity.grapplehook;
 
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.network.SegmentMessage;
-import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,7 +10,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.LinkedList;
 
@@ -29,13 +28,13 @@ public class SegmentHandler {
 	final double intoBlock = 0.05;
 	
 	public SegmentHandler(Level w, GrapplehookEntity hookEntity, Vec hookpos, Vec playerpos) {
-		segments = new LinkedList<Vec>();
+		segments = new LinkedList<>();
 		segments.add(hookpos);
 		segments.add(playerpos);
-		segmentBottomSides = new LinkedList<Direction>();
+		segmentBottomSides = new LinkedList<>();
 		segmentBottomSides.add(null);
 		segmentBottomSides.add(null);
-		segmentTopSides = new LinkedList<Direction>();
+		segmentTopSides = new LinkedList<>();
 		segmentTopSides.add(null);
 		segmentTopSides.add(null);
 		this.world = w;
@@ -95,7 +94,7 @@ public class SegmentHandler {
 			}
 		}
 		
-		Vec farthest = segments.get(1);
+		Vec farthest;
 		
 		if (movinghook) {
 			while (true) {
@@ -163,11 +162,11 @@ public class SegmentHandler {
 	}
 	
 	public void updateSegment(Vec top, Vec prevtop, Vec bottom, Vec prevbottom, int index, int numberrecursions) {		
-		BlockHitResult bottomraytraceresult = GrapplemodUtils.rayTraceBlocks(this.world, bottom, top);
+		BlockHitResult bottomraytraceresult = GrappleModUtils.rayTraceBlocks(this.world, bottom, top);
         
         // if rope hit block
         if (bottomraytraceresult != null) {
-        	if (GrapplemodUtils.rayTraceBlocks(this.world, prevbottom, prevtop) != null) {
+        	if (GrappleModUtils.rayTraceBlocks(this.world, prevbottom, prevtop) != null) {
         		return;
         	}
         	
@@ -191,7 +190,7 @@ public class SegmentHandler {
             	}
             	
             	// the corner must be in the line (cornerbound2, cornerbound1)
-            	BlockHitResult cornerraytraceresult = GrapplemodUtils.rayTraceBlocks(this.world, cornerbound2, cornerbound1);
+            	BlockHitResult cornerraytraceresult = GrappleModUtils.rayTraceBlocks(this.world, cornerbound2, cornerbound1);
                 if (cornerraytraceresult != null) {
                 	Vec cornerhitpos = new Vec(cornerraytraceresult.getLocation());
                 	Direction cornerside = cornerraytraceresult.getDirection();

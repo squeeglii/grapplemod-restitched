@@ -7,11 +7,10 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Arrays;
 
-public class GrapplemodUtils {
+public class GrappleModUtils {
 
 	private static int controllerid = 0;
 	public static final int GRAPPLE_ID = controllerid++;
@@ -28,15 +27,11 @@ public class GrapplemodUtils {
 	}
 
 	public static BlockHitResult rayTraceBlocks(Level world, Vec from, Vec to) {
-		HitResult result = world.clip(new ClipContext(from.toVec3d(), to.toVec3d(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
-		if (result != null && result instanceof BlockHitResult) {
-			BlockHitResult blockhit = (BlockHitResult) result;
-			if (blockhit.getType() != HitResult.Type.BLOCK) {
-				return null;
-			}
-			return blockhit;
-		}
-		return null;
+		BlockHitResult result = world.clip(new ClipContext(from.toVec3d(), to.toVec3d(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+
+		return result.getType() == HitResult.Type.BLOCK
+				? result
+				: null;
 	}
 
 	public static long getTime(Level w) {

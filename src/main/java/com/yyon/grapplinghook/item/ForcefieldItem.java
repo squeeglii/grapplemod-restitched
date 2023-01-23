@@ -1,10 +1,10 @@
 package com.yyon.grapplinghook.item;
 
-import com.yyon.grapplinghook.client.ClientProxyInterface;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.keybind.MCKeys;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.controller.GrappleController;
-import com.yyon.grapplinghook.util.GrapplemodUtils;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -28,8 +28,8 @@ public class ForcefieldItem extends Item {
 		if (worldIn.isClientSide) {
 			int playerid = player.getId();
 			GrappleController oldController = GrappleModClient.get().unregisterController(playerid);
-			if (oldController == null || oldController.controllerId == GrapplemodUtils.AIR_FRICTION_ID) {
-				GrappleModClient.get().createControl(GrapplemodUtils.REPEL_ID, -1, playerid, worldIn, new Vec(0,0,0), null, null);
+			if (oldController == null || oldController.controllerId == GrappleModUtils.AIR_FRICTION_ID) {
+				GrappleModClient.get().createControl(GrappleModUtils.REPEL_ID, -1, playerid, worldIn, new Vec(0,0,0), null, null);
 			}
 		}
 	}
@@ -48,13 +48,13 @@ public class ForcefieldItem extends Item {
 		list.add(Component.translatable("grappletooltip.repelleritem.desc"));
 		list.add(Component.translatable("grappletooltip.repelleritem2.desc"));
 		list.add(Component.literal(""));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemon.desc")));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemoff.desc")));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindSneak) + Component.translatable("grappletooltip.repelleritemslow.desc")));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindForward) + ", " +
-				GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindLeft) + ", " +
-				GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindBack) + ", " +
-				GrappleModClient.get().getKeyname(ClientProxyInterface.McKeys.keyBindRight) +
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemon.desc")));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemoff.desc")));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindSneak) + Component.translatable("grappletooltip.repelleritemslow.desc")));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + ", " +
+				GrappleModClient.get().getKeyname(MCKeys.keyBindLeft) + ", " +
+				GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + ", " +
+				GrappleModClient.get().getKeyname(MCKeys.keyBindRight) +
 				" " + Component.translatable("grappletooltip.repelleritemmove.desc")));
 	}
 }
