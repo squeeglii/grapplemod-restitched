@@ -10,12 +10,12 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class TileEntityGrappleModifier extends BlockEntity {
-	public HashMap<GrappleCustomization.upgradeCategories, Boolean> unlockedCategories = new HashMap<GrappleCustomization.upgradeCategories, Boolean>();
+	public HashMap<GrappleCustomization.upgradeCategories, Boolean> unlockedCategories = new HashMap<>();
 	public GrappleCustomization customization;
 
 	public TileEntityGrappleModifier(BlockPos pos, BlockState state) {
@@ -92,7 +92,6 @@ public class TileEntityGrappleModifier extends BlockEntity {
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		CompoundTag nbtTagCompound = new CompoundTag();
 		this.saveAdditional(nbtTagCompound);
-		int tileEntityType = 42;  // arbitrary number; only used for vanilla TileEntities.  You can use it, or not, as you want.
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
@@ -104,6 +103,7 @@ public class TileEntityGrappleModifier extends BlockEntity {
 
 	/* Creates a tag containing all of the TileEntity information, used by vanilla to transmit from server to client */
 	@Override
+	@NotNull
 	public CompoundTag getUpdateTag()
 	{
 		CompoundTag nbtTagCompound = new CompoundTag();

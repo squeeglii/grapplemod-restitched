@@ -27,8 +27,8 @@ public class ForcefieldItem extends Item {
 		if (worldIn.isClientSide) {
 			int playerid = player.getId();
 			GrappleController oldController = ClientProxyInterface.proxy.unregisterController(playerid);
-			if (oldController == null || oldController.controllerId == GrapplemodUtils.AIRID) {
-				ClientProxyInterface.proxy.createControl(GrapplemodUtils.REPELID, -1, playerid, worldIn, new Vec(0,0,0), null, null);
+			if (oldController == null || oldController.controllerId == GrapplemodUtils.AIR_FRICTION_ID) {
+				ClientProxyInterface.proxy.createControl(GrapplemodUtils.REPEL_ID, -1, playerid, worldIn, new Vec(0,0,0), null, null);
 			}
 		}
 	}

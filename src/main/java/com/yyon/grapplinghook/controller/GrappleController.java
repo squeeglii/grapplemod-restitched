@@ -97,9 +97,9 @@ public class GrappleController {
 		if (ClientProxyInterface.proxy.unregisterController(this.entityId) != null) {
 			this.attached = false;
 			
-			if (this.controllerId != GrapplemodUtils.AIRID) {
+			if (this.controllerId != GrapplemodUtils.AIR_FRICTION_ID) {
 				CommonSetup.network.sendToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
-				ClientProxyInterface.proxy.createControl(GrapplemodUtils.AIRID, -1, this.entityId, this.entity.level, new Vec(0,0,0), null, this.custom);
+				ClientProxyInterface.proxy.createControl(GrapplemodUtils.AIR_FRICTION_ID, -1, this.entityId, this.entity.level, new Vec(0,0,0), null, this.custom);
 			}
 		}
 	}

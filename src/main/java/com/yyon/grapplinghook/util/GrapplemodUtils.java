@@ -9,7 +9,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.PacketDistributor;
 
+import java.util.Arrays;
+
 public class GrapplemodUtils {
+
+	private static int controllerid = 0;
+	public static final int GRAPPLE_ID = controllerid++;
+	public static final int REPEL_ID = controllerid++;
+	public static final int AIR_FRICTION_ID = controllerid++;
+
 	public static void sendToCorrectClient(Object message, int playerid, Level w) {
 		Entity entity = w.getEntity(playerid);
 		if (entity instanceof ServerPlayer) {
@@ -35,9 +43,9 @@ public class GrapplemodUtils {
 		return w.getGameTime();
 	}
 
-	private static int controllerid = 0;
-	public static int GRAPPLEID = controllerid++;
-	public static int REPELID = controllerid++;
-	public static int AIRID = controllerid++;
+	public static boolean and(Boolean... conditions) {
+		boolean failed = Arrays.stream(conditions).anyMatch(bool -> !bool);
+		return !failed;
+	}
 
 }

@@ -470,7 +470,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
     }
 	
 	public int getControlId() {
-		return GrapplemodUtils.GRAPPLEID;
+		return GrapplemodUtils.GRAPPLE_ID;
 	}
 
 	public void setAttachPos(double x, double y, double z) {
