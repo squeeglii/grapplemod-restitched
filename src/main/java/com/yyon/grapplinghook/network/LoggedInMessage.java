@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.network;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -63,11 +64,11 @@ public class LoggedInMessage extends BaseMessageClient {
         			Class newClass = field.getType();
         			decodeClass(buf, newClass, newClass.cast(field.get(theObject)));
         		} else {
-        			System.out.println("Unknown Type");
-        			System.out.println(fieldtype.getTypeName());
+        			GrappleMod.LOGGER.warn("Unknown Type");
+        			GrappleMod.LOGGER.warn(fieldtype.getTypeName());
         		}
     		} catch (IllegalAccessException e) {
-    			System.out.println(e);
+    			GrappleMod.LOGGER.warn(e);
     		}
     	}
     }
@@ -105,11 +106,11 @@ public class LoggedInMessage extends BaseMessageClient {
         			Class newClass = field.getType();
         			encodeClass(buf, newClass, newClass.cast(field.get(theObject)));
         		} else {
-        			System.out.println("Unknown Type");
-        			System.out.println(fieldtype.getTypeName());
+        			GrappleMod.LOGGER.warn("Unknown Type");
+        			GrappleMod.LOGGER.warn(fieldtype.getTypeName());
         		}
     		} catch (IllegalAccessException e) {
-    			System.out.println(e);
+    			GrappleMod.LOGGER.warn(e);
     		}
     	}
     }

@@ -33,18 +33,13 @@ public class GrappleMod implements ModInitializer {
     public static final String MODID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public GrappleMod() {
+    @Override
+    public void onInitialize() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         CommonSetup.BLOCKS.register(bus);
         CommonSetup.ITEMS.register(bus);
         CommonSetup.ENTITY_TYPES.register(bus);
         CommonSetup.ENCHANTMENTS.register(bus);
         CommonSetup.BLOCK_ENTITY_TYPES.register(bus);
-
-    }
-
-    @Override
-    public void onInitialize() {
-
     }
 }

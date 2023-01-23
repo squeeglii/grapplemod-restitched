@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
@@ -94,7 +95,7 @@ public class ClientControllerManager {
 				controller.doClientTick();
 
 		} catch (ConcurrentModificationException e) {
-			System.out.println("ConcurrentModificationException caught");
+			GrappleMod.LOGGER.warn("ConcurrentModificationException caught");
 		}
 
 		if (this.rocketFuel > 1) {this.rocketFuel = 1;}
@@ -397,7 +398,7 @@ public class ClientControllerManager {
 		GrappleController controller = controllers.get(id);
 
 		if (controller == null) {
-			Logger.getGlobal().warning("Couldn't find controller");
+			GrappleMod.LOGGER.warn("Couldn't find controller");
 			return;
 		}
 

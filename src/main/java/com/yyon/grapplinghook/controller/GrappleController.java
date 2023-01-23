@@ -509,7 +509,7 @@ public class GrappleController {
 					if (Double.isNaN(newmotion.x) || Double.isNaN(newmotion.y) || Double.isNaN(newmotion.z)) {
 						newmotion = new Vec(0, 0, 0);
 						motion = new Vec(0, 0, 0);
-						System.out.println("error: motion is NaN");
+						GrappleMod.LOGGER.warn("error: motion is NaN");
 					}
 					
 					entity.setDeltaMovement(newmotion.x, newmotion.y, newmotion.z);
@@ -791,7 +791,7 @@ public class GrappleController {
 		if (this.grapplehookEntityIds.contains(hookid)) {
 			this.grapplehookEntityIds.remove(hookid);
 		} else {
-			System.out.println("Error: controller received hook detach, but hook id not in grapplehookEntityIds");
+			GrappleMod.LOGGER.warn("Error: controller received hook detach, but hook id not in grapplehookEntityIds");
 		}
 		
 		GrapplehookEntity hookToRemove = null;
@@ -805,7 +805,7 @@ public class GrappleController {
 		if (hookToRemove != null) {
 			this.grapplehookEntities.remove(hookToRemove);
 		} else {
-			System.out.println("Error: controller received hook detach, but hook entity not in grapplehookEntities");
+			GrappleMod.LOGGER.warn("Error: controller received hook detach, but hook entity not in grapplehookEntities");
 		}
 	}
 	

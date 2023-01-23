@@ -22,7 +22,7 @@ public class GrappleModUtils {
 		if (entity instanceof ServerPlayer) {
 			CommonSetup.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) entity), message);
 		} else {
-			System.out.println("ERROR! couldn't find player");
+			GrappleMod.LOGGER.warn("ERROR! couldn't find player");
 		}
 	}
 

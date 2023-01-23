@@ -122,7 +122,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 	    data.writeBoolean(this.rightHand);
 	    data.writeBoolean(this.isDouble);
 	    if (this.customization == null) {
-	    	System.out.println("error: customization null");
+	    	GrappleMod.LOGGER.warn("error: customization null");
 	    }
 	    this.customization.writeToBuf(data);
     }
@@ -174,7 +174,6 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 			if (this.shootingEntity != null)  {
 				if (!this.attached) {
 					if (this.segmentHandler.hookPastBend(this.r)) {
-						System.out.println("around bend");
 						Vec farthest = this.segmentHandler.getFarthest();
 						this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
 					}
@@ -387,7 +386,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 
 				this.serverAttach(blockpos, vec3, blockhit.getDirection());
 			} else {
-				System.out.println("unknown impact?");
+				GrappleMod.LOGGER.warn("unknown impact?");
 			}
 		}
 	}

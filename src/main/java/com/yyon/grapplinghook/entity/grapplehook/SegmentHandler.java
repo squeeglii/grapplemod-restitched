@@ -197,8 +197,6 @@ public class SegmentHandler {
                 	
                 	if (cornerside == bottomside || 
                 			cornerside.getOpposite() == bottomside) {
-                		// this should not happen
-//                		System.out.println("Warning: corner is same or opposite of bottomside");
                 		continue;
                 	} else {
                 		// add a bend around the corner
@@ -210,13 +208,11 @@ public class SegmentHandler {
                 		// ignore bends that are too close to another bend
                 		if (topropevec.length() < 0.05) {
                 			if (this.segmentBottomSides.get(index - 1) == bottomside && this.segmentTopSides.get(index - 1) == cornerside) {
-//                    			System.out.println("Warning: top bend is too close");
                     			continue;
                 			}
                 		}
                 		if (bottomropevec.length() < 0.05) {
                 			if (this.segmentBottomSides.get(index) == bottomside && this.segmentTopSides.get(index) == cornerside) {
-//                    			System.out.println("Warning: bottom bend is too close");
                     			continue;
                 			}
                 		}
@@ -225,7 +221,6 @@ public class SegmentHandler {
                 		
                 		// if not enough rope length left, undo
                 		if(this.getDistToAnchor() + .2 > this.ropeLen) {
-//                			System.out.println("Warning: not enough length left, removing");
                 			this.removeSegment(index);
                 			continue;
                 		}
@@ -239,7 +234,7 @@ public class SegmentHandler {
                 		if (numberrecursions < 10) {
                     		updateSegment(top, prevtop, bend, prevbend, index, numberrecursions+1);
                 		} else {
-                			System.out.println("Warning: number recursions exceeded");
+                			GrappleMod.LOGGER.warn("Warning: number recursions exceeded");
                 		}
                 		break;
                 	}

@@ -56,7 +56,7 @@ public class PlayerMovementMessage extends BaseMessageServer {
 	    	this.mz = buf.readDouble();
     	} catch (Exception e) {
     		System.out.print("Playermovement error: ");
-    		System.out.println(buf);
+    		GrappleMod.LOGGER.warn(buf);
     	}
     }
 
