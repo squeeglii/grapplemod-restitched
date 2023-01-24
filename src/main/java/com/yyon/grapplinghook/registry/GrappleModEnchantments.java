@@ -43,4 +43,9 @@ public class GrappleModEnchantments {
     public static final EnchantmentEntry<DoubleJumpEnchantment> DOUBLE_JUMP = GrappleModEnchantments.enchantment("doublejumpenchantment", DoubleJumpEnchantment::new);
     public static final EnchantmentEntry<SlidingEnchantment> SLIDING = GrappleModEnchantments.enchantment("slidingenchantment", SlidingEnchantment::new);
 
+    public static class EnchantmentEntry<E extends Enchantment> extends AbstractRegistryReference<E> {
+        protected EnchantmentEntry(ResourceLocation id, Supplier<E> factory) {
+            super(id, factory);
+        }
+    }
 }

@@ -394,7 +394,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 
 	@Override
 	protected Item getDefaultItem() {
-		return GrappleModItems.GRAPPLING_HOOK.getItem();
+		return GrappleModItems.GRAPPLING_HOOK.get();
 	}
 	
 	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit) {

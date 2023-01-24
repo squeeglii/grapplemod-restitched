@@ -117,7 +117,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			GrappleCustomization custom = tile.customization;
-			GrappleModItems.GRAPPLING_HOOK.getItem().setCustomOnServer(helditemstack, custom, playerIn);
+			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom, playerIn);
 
 			playerIn.sendSystemMessage(Component.literal("Applied configuration"));
 
@@ -137,7 +137,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(helditemstack);
 			if (enchantments.getOrDefault(Enchantments.FALL_PROTECTION, -1) >= 4) {
-				ItemStack newitemstack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.getItem());
+				ItemStack newitemstack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.get());
 				EnchantmentHelper.setEnchantments(enchantments, newitemstack);
 				playerIn.setItemInHand(InteractionHand.MAIN_HAND, newitemstack);
 				gaveitem = true;

@@ -5,7 +5,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.yyon.grapplinghook.client.ClientControllerManager;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -45,7 +44,7 @@ public class GrappleCrosshairMixin {
         }
 
         if (grapplehookItemStack != null) {
-            GrappleCustomization custom = GrappleModItems.GRAPPLING_HOOK.getItem().getCustomization(grapplehookItemStack);
+            GrappleCustomization custom = GrappleModItems.GRAPPLING_HOOK.get().getCustomization(grapplehookItemStack);
             double angle = Math.toRadians(custom.angle);
             double verticalAngle = Math.toRadians(custom.verticalthrowangle);
 

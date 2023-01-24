@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.registry.GrappleModItems;
@@ -110,16 +109,16 @@ public class GrappleCustomization {
 		}
 		public Item getItem() {
 			return switch (this) {
-				case ROPE -> GrappleModItems.ROPE_UPGRADE.getItem();
-				case THROW -> GrappleModItems.THROW_UPGRADE.getItem();
-				case MOTOR -> GrappleModItems.MOTOR_UPGRADE.getItem();
-				case SWING -> GrappleModItems.SWING_UPGRADE.getItem();
-				case STAFF -> GrappleModItems.ENDER_STAFF_UPGRADE.getItem();
-				case FORCEFIELD -> GrappleModItems.FORCE_FIELD.getItem();
-				case MAGNET -> GrappleModItems.MAGNET_UPGRADE.getItem();
-				case DOUBLE -> GrappleModItems.DOUBLE_UPGRADE.getItem();
-				case LIMITS -> GrappleModItems.LIMITS_UPGRADE.getItem();
-				case ROCKET -> GrappleModItems.ROCKET_UPGRADE.getItem();
+				case ROPE -> GrappleModItems.ROPE_UPGRADE.get();
+				case THROW -> GrappleModItems.THROW_UPGRADE.get();
+				case MOTOR -> GrappleModItems.MOTOR_UPGRADE.get();
+				case SWING -> GrappleModItems.SWING_UPGRADE.get();
+				case STAFF -> GrappleModItems.ENDER_STAFF_UPGRADE.get();
+				case FORCEFIELD -> GrappleModItems.FORCE_FIELD.get();
+				case MAGNET -> GrappleModItems.MAGNET_UPGRADE.get();
+				case DOUBLE -> GrappleModItems.DOUBLE_UPGRADE.get();
+				case LIMITS -> GrappleModItems.LIMITS_UPGRADE.get();
+				case ROCKET -> GrappleModItems.ROCKET_UPGRADE.get();
 			};
 		}
 	}

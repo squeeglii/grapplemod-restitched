@@ -36,7 +36,7 @@ public final class GrappleModItems {
         for(Map.Entry<ResourceLocation, ItemEntry<?>> def: items.entrySet()) {
             ResourceLocation id = def.getKey();
             ItemEntry<?> data = def.getValue();
-            Item it = data.getItemConfiguration().get();
+            Item it = data.getFactory().get();
 
             data.finalize(Registry.register(BuiltInRegistries.ITEM, id, it));
         }
@@ -61,4 +61,10 @@ public final class GrappleModItems {
 
     public static final ItemEntry<LongFallBoots> LONG_FALL_BOOTS = GrappleModItems.item("longfallboots", () -> new LongFallBoots(ArmorMaterials.DIAMOND, 3));
 
+
+    public static class ItemEntry<I extends Item> extends AbstractRegistryReference<I> {
+        protected ItemEntry(ResourceLocation id, Supplier<I> factory) {
+            super(id, factory);
+        }
+    }
 }
