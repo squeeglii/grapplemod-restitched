@@ -54,9 +54,9 @@ public class LongFallBoots extends ArmorItem {
 			items.add(stack);
 
 			stack = new ItemStack(this);
-			stack.enchant(GrappleModEnchantments.WALL_RUN.getEnchantment(), 1);
-			stack.enchant(GrappleModEnchantments.DOUBLE_JUMP.getEnchantment(), 1);
-			stack.enchant(GrappleModEnchantments.SLIDING.getEnchantment(), 1);
+			stack.enchant(GrappleModEnchantments.WALL_RUN.get(), 1);
+			stack.enchant(GrappleModEnchantments.DOUBLE_JUMP.get(), 1);
+			stack.enchant(GrappleModEnchantments.SLIDING.get(), 1);
 			items.add(stack);
 		}
 	}

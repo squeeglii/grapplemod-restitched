@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +43,8 @@ public class GrappleMod implements ModInitializer {
         GrappleModEntities.registerAllEntities();
         GrappleModEnchantments.registerAllEnchantments();
         GrappleModBlockEntities.registerAllBlockEntities();
+
+        NetworkManager.registerPacketListeners();
     }
 
     public static ResourceLocation id(String id) {
