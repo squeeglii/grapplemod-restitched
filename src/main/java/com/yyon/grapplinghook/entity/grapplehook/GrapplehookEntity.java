@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.config.GrappleConfigUtils;
 import com.yyon.grapplinghook.network.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.GrappleAttachPosMessage;
+import com.yyon.grapplinghook.registry.GrappleModEntities;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -33,11 +34,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PacketDistributor;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 
 /*
@@ -58,6 +55,7 @@ import java.util.HashMap;
  */
 
 public class GrapplehookEntity extends ThrowableItemProjectile implements IEntityAdditionalSpawnData {
+
 	public GrapplehookEntity(EntityType<? extends GrapplehookEntity> type, Level world) {
 		super(type, world);
 
@@ -65,9 +63,8 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 		this.customization = new GrappleCustomization();
 	}
 
-	public GrapplehookEntity(Level world, LivingEntity shooter,
-			boolean righthand, GrappleCustomization customization, boolean isdouble) {
-		super(CommonSetup.grapplehookEntityType.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
+	public GrapplehookEntity(Level world, LivingEntity shooter, boolean righthand, GrappleCustomization customization, boolean isdouble) {
+		super(GrappleModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
 		
 		this.shootingEntity = shooter;
 		this.shootingEntityID = this.shootingEntity.getId();
@@ -115,7 +112,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 	public BlockPos magnetBlock = null;
 	
 	public Vec attach_dir = null;
-	
+
 	@Override
     public void writeSpawnData(FriendlyByteBuf data)
     {

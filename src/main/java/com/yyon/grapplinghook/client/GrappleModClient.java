@@ -15,6 +15,7 @@ import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.network.BaseMessageClient;
+import com.yyon.grapplinghook.registry.GrappleModEntities;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -70,7 +71,8 @@ public class GrappleModClient implements ClientModInitializer {
         GrappleModClient.clientInstance = this;
         this.grapplingHookVariants = null;
 
-        EntityRendererRegistry.register(CommonSetup.grapplehookEntityType.get(), new GrapplehookEntityRenderFactory());
+        //TODO: Handle this with entities how Blocks handle BlockItems in the registry handlers.
+        EntityRendererRegistry.register(GrappleModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 
         //TODO: Re-implement configuration with ModMenu
         // GrappleModClient.get()::onConfigScreen;
