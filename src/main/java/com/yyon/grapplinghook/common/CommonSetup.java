@@ -1,10 +1,7 @@
 package com.yyon.grapplinghook.common;
 
-import com.yyon.grapplinghook.block.modifierblock.BlockGrappleModifier;
+import com.yyon.grapplinghook.block.modifierblock.GrappleModifierBlock;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.enchantment.DoubleJumpEnchantment;
-import com.yyon.grapplinghook.enchantment.SlidingEnchantment;
-import com.yyon.grapplinghook.enchantment.WallrunEnchantment;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.network.*;
 import net.fabricmc.api.EnvType;
@@ -13,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -31,11 +27,6 @@ public class CommonSetup {
 
 	public static SimpleChannel network;    // used to transmit your network messages
 	public static final ResourceLocation simpleChannelRL = new ResourceLocation("grapplemod", "channel");
-
-	public static RegistryObject<Block> grappleModifierBlock = BLOCKS.register("block_grapple_modifier", BlockGrappleModifier::new);
-	public static RegistryObject<BlockItem> grappleModifierBlockItem = ITEMS.register("block_grapple_modifier", ()->new BlockItem(grappleModifierBlock.get(),new Item.Properties().stacksTo(64).tab(tabGrapplemod)));
-	
-
 
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {

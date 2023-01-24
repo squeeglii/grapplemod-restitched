@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.block.modifierblock.GrappleModifierBlock;
 import com.yyon.grapplinghook.item.EnderStaffItem;
 import com.yyon.grapplinghook.item.ForcefieldItem;
 import com.yyon.grapplinghook.item.GrapplehookItem;
@@ -10,6 +11,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 
 import java.util.HashMap;
@@ -24,23 +26,7 @@ public final class GrappleModItems {
         GrappleModItems.items = new HashMap<>();
     }
 
-    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item) {
-        ResourceLocation qualId = GrappleMod.id(id);
-        ItemEntry<I> entry = new ItemEntry<>(qualId, item);
-        GrappleModItems.items.put(qualId, entry);
-        return entry;
-    }
 
-
-    public static void registerAllItems() {
-        for(Map.Entry<ResourceLocation, ItemEntry<?>> def: items.entrySet()) {
-            ResourceLocation id = def.getKey();
-            ItemEntry<?> data = def.getValue();
-            Item it = data.getFactory().get();
-
-            data.finalize(Registry.register(BuiltInRegistries.ITEM, id, it));
-        }
-    }
 
 
     public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new);
@@ -60,6 +46,34 @@ public final class GrappleModItems {
     public static final ItemEntry<RocketUpgradeItem> ROCKET_UPGRADE = GrappleModItems.item("rocketupgradeitem", RocketUpgradeItem::new);
 
     public static final ItemEntry<LongFallBoots> LONG_FALL_BOOTS = GrappleModItems.item("longfallboots", () -> new LongFallBoots(ArmorMaterials.DIAMOND, 3));
+
+
+    public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
+
+
+
+    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item) {
+        ResourceLocation qualId = GrappleMod.id(id);
+        ItemEntry<I> entry = new ItemEntry<>(qualId, item);
+        GrappleModItems.items.put(qualId, entry);
+        return entry;
+    }
+
+    public static <B extends BlockItem> GrappleModBlocks.BlockItemEntry<B> reserve() {
+        return new GrappleModBlocks.BlockItemEntry<>();
+    }
+
+
+    public static void registerAllItems() {
+        for(Map.Entry<ResourceLocation, ItemEntry<?>> def: items.entrySet()) {
+            ResourceLocation id = def.getKey();
+            ItemEntry<?> data = def.getValue();
+            Item it = data.getFactory().get();
+
+            data.finalize(Registry.register(BuiltInRegistries.ITEM, id, it));
+        }
+    }
+
 
 
     public static class ItemEntry<I extends Item> extends AbstractRegistryReference<I> {

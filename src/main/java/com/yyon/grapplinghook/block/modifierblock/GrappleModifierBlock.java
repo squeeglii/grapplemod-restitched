@@ -42,9 +42,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BlockGrappleModifier extends BaseEntityBlock {
+public class GrappleModifierBlock extends BaseEntityBlock {
 
-	public BlockGrappleModifier() {
+	public GrappleModifierBlock() {
 		super(Block.Properties.of(Material.STONE).strength(1.5f));
 	}
 

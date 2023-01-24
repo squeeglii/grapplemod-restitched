@@ -5,6 +5,7 @@ import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.item.KeypressItem;
+import com.yyon.grapplinghook.registry.GrappleModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -93,7 +94,7 @@ public class ClientHookMixin {
             BlockPos pos = bray.getBlockPos();
             BlockState state = player.level.getBlockState(pos);
 
-            return (state.getBlock() == CommonSetup.grappleModifierBlock.get());
+            return (state.getBlock() == GrappleModBlocks.GRAPPLE_MODIFIER.get());
         }
         return false;
     }
