@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.registry.GrappleModBlocks;
 import com.yyon.grapplinghook.registry.GrappleModEnchantments;
 import com.yyon.grapplinghook.registry.GrappleModItems;
@@ -43,7 +44,7 @@ public class GrappleMod implements ModInitializer {
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
         CommonSetup.ENTITY_TYPES.register(bus);
         GrappleModEnchantments.registerAllEnchantments();
-        CommonSetup.BLOCK_ENTITY_TYPES.register(bus);
+        GrappleModBlockEntities.registerAllBlockEntities();
     }
 
     public static ResourceLocation id(String id) {

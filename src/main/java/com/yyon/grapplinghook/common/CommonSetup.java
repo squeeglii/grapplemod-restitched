@@ -47,9 +47,6 @@ public class CommonSetup {
 	}
 	
 
-
-	public static RegistryObject<BlockEntityType<GrappleModifierBlockEntity>> grappleModifierTileEntityType = BLOCK_ENTITY_TYPES.register("block_grapple_modifier",()->BlockEntityType.Builder.of(GrappleModifierBlockEntity::new, grappleModifierBlock.get()).build(null));
-
 	public static RegistryObject<EntityType<GrapplehookEntity>> grapplehookEntityType = ENTITY_TYPES.register("grapplehook", ()->EntityType.Builder.<GrapplehookEntity>of(GrapplehookEntity::new, MobCategory.MISC)
 			.sized(0.25F, 0.25F)
 			.build("grapplemod:grapplehook"));

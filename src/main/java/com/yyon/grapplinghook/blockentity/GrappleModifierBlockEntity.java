@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.blockentity;
 
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.network.GrappleModifierMessage;
+import com.yyon.grapplinghook.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleCustomization.upgradeCategories;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	public GrappleCustomization customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
-		super(CommonSetup.grappleModifierTileEntityType.get(), pos, state);
+		super(GrappleModBlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
 		this.customization = new GrappleCustomization();
 	}
 
