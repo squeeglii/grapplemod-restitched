@@ -28,9 +28,6 @@ public class CommonSetup {
 		}
 	};
 
-    public static RegistryObject<WallrunEnchantment> wallrunEnchantment = ENCHANTMENTS.register("wallrunenchantment", WallrunEnchantment::new);
-    public static RegistryObject<DoubleJumpEnchantment> doubleJumpEnchantment = ENCHANTMENTS.register("doublejumpenchantment", DoubleJumpEnchantment::new);
-    public static RegistryObject<SlidingEnchantment> slidingEnchantment = ENCHANTMENTS.register("slidingenchantment", SlidingEnchantment::new);
 
 	public static SimpleChannel network;    // used to transmit your network messages
 	public static final ResourceLocation simpleChannelRL = new ResourceLocation("grapplemod", "channel");

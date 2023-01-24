@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.item;
 
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
+import com.yyon.grapplinghook.registry.GrappleModEnchantments;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.NonNullList;
@@ -48,15 +49,15 @@ public class LongFallBoots extends ArmorItem {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-			if (this.allowedIn(tab)) {
-	        	ItemStack stack = new ItemStack(this);
-	            items.add(stack);
-	            
-	        	stack = new ItemStack(this);
-	        	stack.enchant(CommonSetup.wallrunEnchantment.get(), 1);
-	        	stack.enchant(CommonSetup.doubleJumpEnchantment.get(), 1);
-	        	stack.enchant(CommonSetup.slidingEnchantment.get(), 1);
-	            items.add(stack);
-			}
+		if (this.allowedIn(tab)) {
+			ItemStack stack = new ItemStack(this);
+			items.add(stack);
+
+			stack = new ItemStack(this);
+			stack.enchant(GrappleModEnchantments.WALL_RUN.getEnchantment(), 1);
+			stack.enchant(GrappleModEnchantments.DOUBLE_JUMP.getEnchantment(), 1);
+			stack.enchant(GrappleModEnchantments.SLIDING.getEnchantment(), 1);
+			items.add(stack);
+		}
 	}
 }

@@ -9,6 +9,6 @@ public interface KeypressItem {
 		LAUNCHER, THROWLEFT, THROWRIGHT, THROWBOTH, ROCKET
 	}
 	
-	public abstract void onCustomKeyDown(ItemStack stack, Player player, Keys key, boolean ismainhand);
-	public abstract void onCustomKeyUp(ItemStack stack, Player player, Keys key, boolean ismainhand);
+	void onCustomKeyDown(ItemStack stack, Player player, Keys key, boolean ismainhand);
+	void onCustomKeyUp(ItemStack stack, Player player, Keys key, boolean ismainhand);
 }

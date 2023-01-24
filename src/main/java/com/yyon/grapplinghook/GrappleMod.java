@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.registry.GrappleModEnchantments;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
@@ -38,9 +39,9 @@ public class GrappleMod implements ModInitializer {
     @Override
     public void onInitialize() {
         CommonSetup.BLOCKS.register(bus);
-        GrappleModItems.registerAllItems();
+        GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
         CommonSetup.ENTITY_TYPES.register(bus);
-        CommonSetup.ENCHANTMENTS.register(bus);
+        GrappleModEnchantments.registerAllEnchantments();
         CommonSetup.BLOCK_ENTITY_TYPES.register(bus);
     }
 

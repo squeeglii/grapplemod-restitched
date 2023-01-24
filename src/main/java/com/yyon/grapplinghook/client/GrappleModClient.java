@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.gui.GrappleModiferGUI;
+import com.yyon.grapplinghook.gui.GrappleModiferBlockGUI;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.KeyBinding;
@@ -31,9 +31,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
@@ -134,7 +132,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public void openModifierScreen(GrappleModifierBlockEntity tile) {
-        Minecraft.getInstance().setScreen(new GrappleModiferGUI(tile));
+        Minecraft.getInstance().setScreen(new GrappleModiferBlockGUI(tile));
     }
 
     public void onMessageReceivedClient(BaseMessageClient msg, NetworkEvent.Context ctx) {

@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.block.modifierblock;
 
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.upgrade.BaseUpgradeItem;

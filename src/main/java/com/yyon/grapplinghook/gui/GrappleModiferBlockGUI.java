@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class GrappleModiferGUI extends Screen {
+public class GrappleModiferBlockGUI extends Screen {
 	private static final ResourceLocation texture = new ResourceLocation("grapplemod", "textures/gui/guimodifier_bg.png");
 
 	int xSize = 221;
@@ -40,7 +40,7 @@ public class GrappleModiferGUI extends Screen {
 
 	GrappleCustomization.upgradeCategories category = null;
 
-	public GrappleModiferGUI(GrappleModifierBlockEntity tile) {
+	public GrappleModiferBlockGUI(GrappleModifierBlockEntity tile) {
 		super(Component.translatable("grapplemodifier.title.desc"));
 
 		this.tile = tile;
