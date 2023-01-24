@@ -22,7 +22,7 @@ public abstract class BasePlayerDamageHandler {
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At("HEAD"), cancellable = true)
     public void handleDamage(DamageSource source, float damage, CallbackInfo ci){
         if(this.isInvulnerableTo(source)) return;
-        if(SharedDamageHandler.handleDeath((Entity) (Object) this)) ci.cancel();
+        if(SharedDamageHandler.handleDamage((Entity) (Object) this, source)) ci.cancel();
     }
 
 }

@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,7 +25,7 @@ public abstract class LivingEntityDamageHandler {
         Entity thiss = (Entity) (Object) this;
 
         if(thiss.isInvulnerableTo(source)) return;
-        if(SharedDamageHandler.handleDeath((Entity) (Object) this)) ci.cancel();
+        if(SharedDamageHandler.handleDamage((Entity) (Object) this, source)) ci.cancel();
     }
 
     @Inject(method = "causeFallDamage(FFLnet/minecraft/world/damagesource/DamageSource;)Z", at = @At("HEAD"), cancellable = true)

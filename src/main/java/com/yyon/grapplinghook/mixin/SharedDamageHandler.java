@@ -15,9 +15,6 @@ import java.util.HashSet;
 
 public class SharedDamageHandler {
 
-    public static final float DAMAGE_CANCELLED = -1f;
-
-
     /** @return true if the death should be cancelled. */
     public static boolean handleDeath(Entity deadEntity) {
         if (!deadEntity.level.isClientSide) {
@@ -43,7 +40,7 @@ public class SharedDamageHandler {
     }
 
     /** @return true if the death should be cancelled. */
-    public boolean handleDamage(Entity damagedEntity, DamageSource source) {
+    public static boolean handleDamage(Entity damagedEntity, DamageSource source) {
         if (damagedEntity instanceof Player player) {
 
             for (ItemStack armor : player.getArmorSlots()) {
