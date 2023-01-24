@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.mixin;
 
 import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.network.LoggedInMessage;
+import com.yyon.grapplinghook.network.clientbound.LoggedInMessage;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;

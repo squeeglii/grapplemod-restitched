@@ -1,6 +1,8 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,7 +74,7 @@ public class PlayerMovementMessage extends BaseMessageServer {
         
     }
 
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(NetworkContext ctx) {
     	final ServerPlayer referencedPlayer = ctx.getSender();
         
 		if(referencedPlayer.getId() == this.entityId) {

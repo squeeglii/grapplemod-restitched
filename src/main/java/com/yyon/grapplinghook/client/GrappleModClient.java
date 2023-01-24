@@ -6,7 +6,6 @@ import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
 import com.yyon.grapplinghook.controller.ForcefieldController;
@@ -14,7 +13,8 @@ import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
 import com.yyon.grapplinghook.item.GrapplehookItem;
-import com.yyon.grapplinghook.network.BaseMessageClient;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.registry.GrappleModEntities;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -137,7 +137,7 @@ public class GrappleModClient implements ClientModInitializer {
         Minecraft.getInstance().setScreen(new GrappleModiferBlockGUI(tile));
     }
 
-    public void onMessageReceivedClient(BaseMessageClient msg, NetworkEvent.Context ctx) {
+    public void onMessageReceivedClient(BaseMessageClient msg, NetworkContext ctx) {
         msg.processMessage(ctx);
     }
 

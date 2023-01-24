@@ -1,7 +1,9 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.GrappleConfig;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.lang.reflect.Field;
@@ -121,7 +123,7 @@ public class LoggedInMessage extends BaseMessageClient {
     }
 
 	@Override
-	public void processMessage(NetworkEvent.Context ctx) {
+	public void processMessage(NetworkContext ctx) {
     	GrappleConfig.setServerOptions(this.conf);
     }
 }

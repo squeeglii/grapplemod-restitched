@@ -1,6 +1,8 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.item.KeypressItem;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -49,7 +51,7 @@ public class KeypressMessage extends BaseMessageServer {
     }
 
 	@Override
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(NetworkContext ctx) {
     	final ServerPlayer player = ctx.getSender();
         
 		if (player != null) {

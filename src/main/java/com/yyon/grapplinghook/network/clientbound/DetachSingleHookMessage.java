@@ -1,13 +1,11 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.clientbound;
 
-import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.client.ClientControllerManager;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-
 
 /*
  * This file is part of GrappleMod.
@@ -26,44 +24,32 @@ import net.minecraft.world.level.Level;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrappleAttachPosMessage extends BaseMessageClient {
+public class DetachSingleHookMessage extends BaseMessageClient {
    
 	public int id;
-	public double x;
-	public double y;
-	public double z;
+	public int hookid;
 
-    public GrappleAttachPosMessage(FriendlyByteBuf buf) {
+    public DetachSingleHookMessage(FriendlyByteBuf buf) {
     	super(buf);
     }
 
-    public GrappleAttachPosMessage(int id, double x, double y, double z) {
+    public DetachSingleHookMessage(int id, int hookid) {
     	this.id = id;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    	this.hookid = hookid;
     }
 
     public void decode(FriendlyByteBuf buf) {
     	this.id = buf.readInt();
-        this.x = buf.readDouble();
-        this.y = buf.readDouble();
-        this.z = buf.readDouble();
+    	this.hookid = buf.readInt();
     }
 
     public void encode(FriendlyByteBuf buf) {
     	buf.writeInt(this.id);
-        buf.writeDouble(this.x);
-        buf.writeDouble(this.y);
-        buf.writeDouble(this.z);
+    	buf.writeInt(this.hookid);
     }
 
     @Environment(EnvType.CLIENT)
-    public void processMessage(NetworkEvent.Context ctx) {
-    	Level world = Minecraft.getInstance().level;
-    	Entity grapple = world.getEntity(this.id);
-    	if (grapple instanceof GrapplehookEntity) {
-        	((GrapplehookEntity) grapple).setAttachPos(this.x, this.y, this.z);
-    	}
+    public void processMessage(NetworkContext ctx) {
+    	ClientControllerManager.receiveGrappleDetachHook(this.id, this.hookid);
     }
 }

@@ -1,6 +1,8 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -44,7 +46,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
     	this.custom.writeToBuf(buf);
     }
 
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(NetworkContext ctx) {
 		Level w = ctx.getSender().level;
 		
 		BlockEntity ent = w.getBlockEntity(this.pos);

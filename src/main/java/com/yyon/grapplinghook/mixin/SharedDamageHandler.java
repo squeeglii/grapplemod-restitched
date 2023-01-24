@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.mixin;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
-import com.yyon.grapplinghook.network.GrappleDetachMessage;
+import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import net.minecraft.world.damagesource.DamageSource;

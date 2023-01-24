@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.entity.grapplehook;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.common.CommonSetup;
-import com.yyon.grapplinghook.network.SegmentMessage;
+import com.yyon.grapplinghook.network.clientbound.SegmentMessage;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;

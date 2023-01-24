@@ -1,7 +1,9 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.SegmentHandler;
+import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -71,7 +73,7 @@ public class SegmentMessage extends BaseMessageClient {
     }
 
     @Environment(EnvType.CLIENT)
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(NetworkContext ctx) {
     	Level world = Minecraft.getInstance().level;
     	Entity grapple = world.getEntity(this.id);
     	if (grapple == null) {
@@ -85,7 +87,6 @@ public class SegmentMessage extends BaseMessageClient {
     		} else {
     			segmenthandler.removeSegment(this.index);
     		}
-    	} else {
     	}
     }
 }

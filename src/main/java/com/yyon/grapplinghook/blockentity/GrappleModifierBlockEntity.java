@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.blockentity;
 
 import com.yyon.grapplinghook.common.CommonSetup;
-import com.yyon.grapplinghook.network.GrappleModifierMessage;
+import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import com.yyon.grapplinghook.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleCustomization.upgradeCategories;

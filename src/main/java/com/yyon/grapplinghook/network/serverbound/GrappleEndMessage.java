@@ -1,5 +1,6 @@
-package com.yyon.grapplinghook.network;
+package com.yyon.grapplinghook.network.serverbound;
 
+import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,7 +42,7 @@ public class GrappleEndMessage extends BaseMessageServer {
     public void decode(FriendlyByteBuf buf) {
     	this.entityId = buf.readInt();
     	int size = buf.readInt();
-    	this.hookEntityIds = new HashSet<Integer>();
+    	this.hookEntityIds = new HashSet<>();
     	for (int i = 0; i < size; i++) {
     		this.hookEntityIds.add(buf.readInt());
     	}
@@ -55,7 +56,7 @@ public class GrappleEndMessage extends BaseMessageServer {
     	}
     }
 
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(NetworkContext ctx) {
 		int id = this.entityId;
 		
 		ServerPlayer player = ctx.getSender();

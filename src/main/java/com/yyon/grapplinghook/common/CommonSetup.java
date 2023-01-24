@@ -1,17 +1,14 @@
 package com.yyon.grapplinghook.common;
 
-import com.yyon.grapplinghook.block.modifierblock.GrappleModifierBlock;
-import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.network.*;
+import com.yyon.grapplinghook.network.clientbound.*;
+import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
+import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
+import com.yyon.grapplinghook.network.serverbound.KeypressMessage;
+import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.Optional;
 
@@ -33,6 +30,7 @@ public class CommonSetup {
 		network = NetworkRegistry.newSimpleChannel(simpleChannelRL, () -> "1.0",
 	            version -> true,
 	            version -> true);
+
 		int id = 0;
 		network.registerMessage(id++, PlayerMovementMessage.class, PlayerMovementMessage::encode, PlayerMovementMessage::new, PlayerMovementMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, GrappleEndMessage.class, GrappleEndMessage::encode, GrappleEndMessage::new, GrappleEndMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_SERVER));
