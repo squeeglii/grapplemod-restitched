@@ -57,7 +57,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesRight = new HashMap<>();
 	
 	public GrapplehookItem() {
-		super(new Item.Properties().stacksTo(1).tab(CommonSetup.tabGrapplemod).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
+		super(new Item.Properties().stacksTo(1).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
 	}
 
 	public boolean hasHookEntity(Entity entity) {
@@ -563,17 +563,6 @@ public class GrapplehookItem extends Item implements KeypressItem {
 
 	public boolean getPropertyMagnet(ItemStack stack, Level world, LivingEntity entity) {
 		return this.getCustomization(stack).attract || this.getCustomization(stack).repel;
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-			if (this.allowedIn(tab)) {
-	        	ItemStack stack = new ItemStack(this);
-	            items.add(stack);
-	            if (GrappleModClient.get() != null) {
-	            	GrappleModClient.get().fillGrappleVariants(items);
-	            }
-			}
 	}
 
 	public boolean getPropertyHook(ItemStack stack, Level world, LivingEntity entity) {

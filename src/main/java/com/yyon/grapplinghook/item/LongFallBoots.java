@@ -1,10 +1,8 @@
 package com.yyon.grapplinghook.item;
 
 import com.yyon.grapplinghook.config.GrappleConfig;
-import com.yyon.grapplinghook.registry.GrappleModEnchantments;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
@@ -32,7 +30,7 @@ import java.util.List;
 public class LongFallBoots extends ArmorItem {
 
 	public LongFallBoots(ArmorMaterials material, int type) {
-	    super(material, EquipmentSlot.FEET, new Item.Properties().stacksTo(1).tab(CommonSetup.tabGrapplemod));
+	    super(material, EquipmentSlot.FEET, new Item.Properties().stacksTo(1));
 	}
 	
 	@Override
@@ -44,19 +42,5 @@ public class LongFallBoots extends ArmorItem {
 			}
 		}
 		list.add(Component.translatable("grappletooltip.longfallboots.desc"));
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-		if (this.allowedIn(tab)) {
-			ItemStack stack = new ItemStack(this);
-			items.add(stack);
-
-			stack = new ItemStack(this);
-			stack.enchant(GrappleModEnchantments.WALL_RUN.get(), 1);
-			stack.enchant(GrappleModEnchantments.DOUBLE_JUMP.get(), 1);
-			stack.enchant(GrappleModEnchantments.SLIDING.get(), 1);
-			items.add(stack);
-		}
 	}
 }
