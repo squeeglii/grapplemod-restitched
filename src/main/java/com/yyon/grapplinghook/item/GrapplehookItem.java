@@ -1,13 +1,11 @@
 package com.yyon.grapplinghook.item;
 
-import com.yyon.grapplinghook.client.ClientProxyInterface;
-import com.yyon.grapplinghook.client.ClientSetup;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
 import com.yyon.grapplinghook.network.serverbound.KeypressMessage;
@@ -32,10 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -127,7 +122,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 					GrappleModClient.get().launchPlayer(player);
 				}
 			} else if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
-				CommonSetup.network.sendToServer(new KeypressMessage(key, true));
+				NetworkManager.packetToServer(new KeypressMessage(key, true));
 			} else if (key == KeypressItem.Keys.ROCKET) {
 				GrappleCustomization custom = this.getCustomization(stack);
 				if (custom.rocket) {
@@ -181,7 +176,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 	public void onCustomKeyUp(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
 		if (player.level.isClientSide) {
 			if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
-				CommonSetup.network.sendToServer(new KeypressMessage(key, false));
+				NetworkManager.packetToServer(new KeypressMessage(key, false));
 			}
 		} else {
 	    	GrappleCustomization custom = this.getCustomization(stack);

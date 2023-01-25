@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.LogicalSide;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.function.Supplier;
@@ -19,6 +20,8 @@ public abstract class BaseMessageServer {
 	public abstract void decode(FriendlyByteBuf buf);
 	
 	public abstract void encode(FriendlyByteBuf buf);
+
+    public abstract ResourceLocation getChannel();
 
     public abstract void processMessage(NetworkContext ctx);
     

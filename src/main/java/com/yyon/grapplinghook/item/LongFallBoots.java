@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.item;
 
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.registry.GrappleModEnchantments;
 import net.fabricmc.api.EnvType;

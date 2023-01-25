@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook;
 
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.registry.*;
 import net.fabricmc.api.ModInitializer;

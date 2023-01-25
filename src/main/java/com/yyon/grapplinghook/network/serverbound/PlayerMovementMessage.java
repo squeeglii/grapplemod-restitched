@@ -5,6 +5,7 @@ import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 /*
@@ -48,6 +49,7 @@ public class PlayerMovementMessage extends BaseMessageServer {
     	this.mz = mz;
     }
 
+	@Override
     public void decode(FriendlyByteBuf buf) {
     	try {
 	    	this.entityId = buf.readInt();
@@ -63,6 +65,7 @@ public class PlayerMovementMessage extends BaseMessageServer {
     	}
     }
 
+	@Override
     public void encode(FriendlyByteBuf buf) {
         buf.writeInt(entityId);
         buf.writeDouble(x);
@@ -74,6 +77,12 @@ public class PlayerMovementMessage extends BaseMessageServer {
         
     }
 
+	@Override
+	public ResourceLocation getChannel() {
+		return GrappleMod.id("player_movement");
+	}
+
+	@Override
     public void processMessage(NetworkContext ctx) {
     	final ServerPlayer referencedPlayer = ctx.getSender();
         

@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.item.upgrade;
 
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

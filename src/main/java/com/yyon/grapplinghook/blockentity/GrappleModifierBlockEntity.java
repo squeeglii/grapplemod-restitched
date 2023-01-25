@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.blockentity;
 
-import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import com.yyon.grapplinghook.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -32,7 +32,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 	public void setCustomizationClient(GrappleCustomization customization) {
 		this.customization = customization;
-		CommonSetup.network.sendToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
+		NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
 		this.sendUpdates();
 	}
 

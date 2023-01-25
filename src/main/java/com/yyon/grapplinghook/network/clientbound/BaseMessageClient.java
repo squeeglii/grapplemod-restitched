@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.network.NetworkContext;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Supplier;
 
@@ -21,6 +22,8 @@ public abstract class BaseMessageClient {
 	public abstract void decode(FriendlyByteBuf buf);
 	
 	public abstract void encode(FriendlyByteBuf buf);
+
+    public abstract ResourceLocation getChannel();
 
     @Environment(EnvType.CLIENT)
     public abstract void processMessage(NetworkContext ctx);

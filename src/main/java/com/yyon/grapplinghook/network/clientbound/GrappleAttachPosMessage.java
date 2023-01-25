@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.network.clientbound;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
@@ -7,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -46,6 +48,7 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
         this.z = z;
     }
 
+    @Override
     public void decode(FriendlyByteBuf buf) {
     	this.id = buf.readInt();
         this.x = buf.readDouble();
@@ -53,6 +56,7 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
         this.z = buf.readDouble();
     }
 
+    @Override
     public void encode(FriendlyByteBuf buf) {
     	buf.writeInt(this.id);
         buf.writeDouble(this.x);
@@ -60,7 +64,13 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
         buf.writeDouble(this.z);
     }
 
+    @Override
+    public ResourceLocation getChannel() {
+        return GrappleMod.id("grapple_attach_pos");
+    }
+
     @Environment(EnvType.CLIENT)
+    @Override
     public void processMessage(NetworkContext ctx) {
     	Level world = Minecraft.getInstance().level;
     	Entity grapple = world.getEntity(this.id);

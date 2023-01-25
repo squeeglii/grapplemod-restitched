@@ -1,9 +1,11 @@
 package com.yyon.grapplinghook.network.serverbound;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.item.KeypressItem;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
@@ -40,15 +42,22 @@ public class KeypressMessage extends BaseMessageServer {
     	this.isDown = isDown;
     }
 
+	@Override
     public void decode(FriendlyByteBuf buf) {
     	this.key = KeypressItem.Keys.values()[buf.readInt()];
     	this.isDown = buf.readBoolean();
     }
 
+	@Override
     public void encode(FriendlyByteBuf buf) {
     	buf.writeInt(this.key.ordinal());
     	buf.writeBoolean(this.isDown);
     }
+
+	@Override
+	public ResourceLocation getChannel() {
+		return GrappleMod.id("keypress");
+	}
 
 	@Override
     public void processMessage(NetworkContext ctx) {

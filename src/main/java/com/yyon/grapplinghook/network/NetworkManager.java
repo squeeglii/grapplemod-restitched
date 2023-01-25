@@ -6,9 +6,11 @@ import com.yyon.grapplinghook.network.serverbound.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.function.Function;
 
@@ -50,11 +52,26 @@ public class NetworkManager {
         return ServerPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateServerPacketHandler(etc));
     }
 
+    public static void packetToServer(BaseMessageServer server) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        server.encode(buf);
+        ClientPlayNetworking.send(server.getChannel(), buf);
+    }
+
+    public static void packetToClient(BaseMessageClient client, ServerPlayer... players) {
+        if(players.length == 0) throw new IllegalArgumentException("Missing any players to send a packet to");
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        client.encode(buf);
+
+        for(ServerPlayer player: players)
+            ServerPlayNetworking.send(player, client.getChannel(), buf);
+    }
+
     public static void registerPacketListeners() {
         NetworkManager.registerClient("detach_single_hook", DetachSingleHookMessage::new);
         NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
         NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);
-        NetworkManager.registerClient("grapple_detatch", GrappleDetachMessage::new);
+        NetworkManager.registerClient("grapple_detach", GrappleDetachMessage::new);
         NetworkManager.registerClient("logged_in", LoggedInMessage::new);
         NetworkManager.registerClient("segment", SegmentMessage::new);
 

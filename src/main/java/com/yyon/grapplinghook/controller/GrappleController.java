@@ -3,10 +3,10 @@ package com.yyon.grapplinghook.controller;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
 import com.yyon.grapplinghook.util.GrappleCustomization;
@@ -100,7 +100,7 @@ public class GrappleController {
 			this.attached = false;
 			
 			if (this.controllerId != GrappleModUtils.AIR_FRICTION_ID) {
-				CommonSetup.network.sendToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
+				NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
 				GrappleModClient.get().createControl(GrappleModUtils.AIR_FRICTION_ID, -1, this.entityId, this.entity.level, new Vec(0,0,0), null, this.custom);
 			}
 		}
@@ -689,7 +689,7 @@ public class GrappleController {
 	}
 	
 	public void updateServerPos() {
-		CommonSetup.network.sendToServer(new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z));
+		NetworkManager.packetToServer(new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z));
 	}
 	
 	// Vector stuff:

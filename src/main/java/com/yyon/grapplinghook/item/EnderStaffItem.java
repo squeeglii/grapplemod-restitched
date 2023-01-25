@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
-import com.yyon.grapplinghook.common.CommonSetup;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;

@@ -1,18 +1,25 @@
 package com.yyon.grapplinghook.entity.grapplehook;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.SegmentMessage;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class SegmentHandler {
 
@@ -158,7 +165,9 @@ public class SegmentHandler {
 		if (!this.world.isClientSide) {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), false, index, new Vec(0, 0, 0), Direction.DOWN, Direction.DOWN);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
-			CommonSetup.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(new BlockPos(playerpoint.x, playerpoint.y, playerpoint.z))), addmessage);
+
+			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers(world, playerpoint));
+
 		}
 	}
 	
@@ -282,7 +291,8 @@ public class SegmentHandler {
 		if (!this.world.isClientSide) {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), true, index, bendpoint, topside, bottomside);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
-			CommonSetup.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(new BlockPos(playerpoint.x, playerpoint.y, playerpoint.z))), addmessage);
+
+			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers(world, playerpoint));
 		}
 	}
 	

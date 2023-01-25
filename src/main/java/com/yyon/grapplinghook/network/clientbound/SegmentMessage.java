@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.network.clientbound;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.SegmentHandler;
 import com.yyon.grapplinghook.network.NetworkContext;
@@ -10,6 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -52,6 +54,7 @@ public class SegmentMessage extends BaseMessageClient {
     	this.bottomFacing = bottomfacing;
     }
 
+	@Override
     public void decode(FriendlyByteBuf buf) {
     	this.id = buf.readInt();
     	this.add = buf.readBoolean();
@@ -61,6 +64,7 @@ public class SegmentMessage extends BaseMessageClient {
     	this.bottomFacing = buf.readEnum(Direction.class);
     }
 
+	@Override
     public void encode(FriendlyByteBuf buf) {
     	buf.writeInt(this.id);
     	buf.writeBoolean(this.add);
@@ -72,7 +76,13 @@ public class SegmentMessage extends BaseMessageClient {
     	buf.writeEnum(this.bottomFacing);
     }
 
+	@Override
+	public ResourceLocation getChannel() {
+		return GrappleMod.id("segment");
+	}
+
     @Environment(EnvType.CLIENT)
+	@Override
     public void processMessage(NetworkContext ctx) {
     	Level world = Minecraft.getInstance().level;
     	Entity grapple = world.getEntity(this.id);

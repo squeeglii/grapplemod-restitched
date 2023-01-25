@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
-import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;

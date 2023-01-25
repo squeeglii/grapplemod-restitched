@@ -1,11 +1,13 @@
 package com.yyon.grapplinghook.network.clientbound;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.ClientControllerManager;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 /*
  * This file is part of GrappleMod.
@@ -36,15 +38,23 @@ public class GrappleDetachMessage extends BaseMessageClient {
     	this.id = id;
     }
 
+    @Override
     public void decode(FriendlyByteBuf buf) {
     	this.id = buf.readInt();
     }
 
+    @Override
     public void encode(FriendlyByteBuf buf) {
     	buf.writeInt(this.id);
     }
 
+    @Override
+    public ResourceLocation getChannel() {
+        return GrappleMod.id("grapple_detach");
+    }
+
     @Environment(EnvType.CLIENT)
+    @Override
     public void processMessage(NetworkContext ctx) {
     	ClientControllerManager.receiveGrappleDetach(this.id);
     }
