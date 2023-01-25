@@ -40,6 +40,10 @@ public class GrappleModBlocks {
         }
     }
 
+    public static HashMap<ResourceLocation, BlockEntry<?>> getBlocks() {
+        return new HashMap<>(GrappleModBlocks.blocks);
+    }
+
     public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks
             .block("block_grapple_modifier", GrappleModifierBlock::new)
             .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))

@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.config;
 
+import com.yyon.grapplinghook.registry.GrappleModBlocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.level.block.Block;
@@ -22,7 +23,7 @@ public class GrappleConfigUtils {
 		
 		String[] blockstr = s.split(",");
 		
-	    for(String str:blockstr){
+	    for(String str: blockstr){
 	    	str = str.trim();
 	    	String modid;
 	    	String name;
@@ -35,7 +36,7 @@ public class GrappleConfigUtils {
 	    		name = str;
 	    	}
 	    	
-	    	Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(modid, name));
+	    	Block b = GrappleModBlocks.getBlocks().get(new ResourceLocation(modid, name)).get();
 	    	
 	    	blocks.add(b);
 	    }
