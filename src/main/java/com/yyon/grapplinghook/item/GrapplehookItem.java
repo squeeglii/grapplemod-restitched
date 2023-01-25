@@ -52,7 +52,7 @@ import java.util.List;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrapplehookItem extends Item implements KeypressItem {
+public class GrapplehookItem extends Item implements KeypressItem, DroppableItem {
 	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesRight = new HashMap<>();
 	
@@ -512,7 +512,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 
 	
 	@Override
-	public boolean onDroppedByPlayer(ItemStack item, Player player) {
+	public void onDroppedByPlayer(ItemStack item, Player player) {
 		int id = player.getId();
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level);
 		
@@ -537,8 +537,6 @@ public class GrapplehookItem extends Item implements KeypressItem {
 				hookRight.removeServer();
 			}
 		}
-		
-		return super.onDroppedByPlayer(item, player);
 	}
 	
 	public boolean getPropertyRocket(ItemStack stack, Level world, LivingEntity entity) {

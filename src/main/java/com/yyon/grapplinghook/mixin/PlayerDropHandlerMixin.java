@@ -1,0 +1,23 @@
+package com.yyon.grapplinghook.mixin;
+
+import com.yyon.grapplinghook.item.DroppableItem;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(Player.class)
+public class PlayerDropHandlerMixin {
+
+    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
+            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/item/ItemEntity;<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V"))
+    public void handleDrop(ItemStack droppedItem, boolean dropAround, boolean includeThrowerName, CallbackInfoReturnable<ItemEntity> cir) {
+        if(droppedItem.getItem() instanceof DroppableItem item) {
+            item.onDroppedByPlayer(droppedItem, (Player) (Object) this);
+        }
+    }
+
+}
