@@ -1,8 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.ClientControllerManager;
-import com.yyon.grapplinghook.client.keybind.KeyBinding;
-import com.yyon.grapplinghook.common.CommonSetup;
+import com.yyon.grapplinghook.client.keybind.ModKeyBindings;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.item.KeypressItem;
 import com.yyon.grapplinghook.registry.GrappleModBlocks;
@@ -23,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public class ClientHookMixin {
 
-    public boolean[] keyPressHistory = { false, false, false, false, false };
+    private static final boolean[] keyPressHistory = new boolean[]{ false, false, false, false, false };
 
 
     @Inject(method = "tick()V", at = @At("TAIL"))
@@ -36,14 +35,14 @@ public class ClientHookMixin {
                 if (Minecraft.getInstance().screen == null) {
                     // keep in same order as enum from KeypressItem
                     boolean[] keys = {
-                            KeyBinding.key_enderlaunch.isDown(), KeyBinding.key_leftthrow.isDown(),
-                            KeyBinding.key_rightthrow.isDown(), KeyBinding.key_boththrow.isDown(),
-                            KeyBinding.key_rocket.isDown()
+                            ModKeyBindings.key_enderlaunch.isDown(), ModKeyBindings.key_leftthrow.isDown(),
+                            ModKeyBindings.key_rightthrow.isDown(), ModKeyBindings.key_boththrow.isDown(),
+                            ModKeyBindings.key_rocket.isDown()
                     };
 
                     for (int i = 0; i < keys.length; i++) {
                         boolean isKeyDown = keys[i];
-                        boolean prevKey = this.keyPressHistory[i];
+                        boolean prevKey = ClientHookMixin.keyPressHistory[i];
 
                         if (isKeyDown != prevKey) {
                             KeypressItem.Keys key = KeypressItem.Keys.values()[i];
@@ -60,14 +59,14 @@ public class ClientHookMixin {
                             }
                         }
 
-                        this.keyPressHistory[i] = isKeyDown;
+                        ClientHookMixin.keyPressHistory[i] = isKeyDown;
                     }
                 }
             }
         }
     }
 
-    @Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V", shift = At.Shift.AFTER))
+    @Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V"))
     public void handleLogOut(Screen pScreen, CallbackInfo ci) {
         GrappleConfig.setServerOptions(null);
     }

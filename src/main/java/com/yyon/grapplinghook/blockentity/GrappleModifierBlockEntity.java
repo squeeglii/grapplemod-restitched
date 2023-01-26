@@ -96,12 +96,6 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-		BlockState blockState = this.level.getBlockState(this.worldPosition);
-		this.load(pkt.getTag());   // read from the nbt in the packet
-	}
-
 	/* Creates a tag containing all of the TileEntity information, used by vanilla to transmit from server to client */
 	@Override
 	@NotNull
@@ -112,8 +106,5 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		return nbtTagCompound;
 	}
 
-	@Override
-	public void handleUpdateTag(CompoundTag tag) {
-		this.load(tag);
-	}
+	//todo: reimplement the loading?
 }

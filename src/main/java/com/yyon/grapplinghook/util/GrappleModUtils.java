@@ -31,8 +31,8 @@ public class GrappleModUtils {
 		}
 	}
 
-	public static BlockHitResult rayTraceBlocks(Level world, Vec from, Vec to) {
-		BlockHitResult result = world.clip(new ClipContext(from.toVec3d(), to.toVec3d(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+	public static BlockHitResult rayTraceBlocks(Entity entity, Level world, Vec from, Vec to) {
+		BlockHitResult result = world.clip(new ClipContext(from.toVec3d(), to.toVec3d(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
 
 		return result.getType() == HitResult.Type.BLOCK
 				? result

@@ -68,6 +68,7 @@ public class NetworkManager {
     }
 
     public static void registerPacketListeners() {
+        NetworkManager.registerClient("add_grapplehook_entity", AddGrappleHookEntityMessage::new);
         NetworkManager.registerClient("detach_single_hook", DetachSingleHookMessage::new);
         NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
         NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);

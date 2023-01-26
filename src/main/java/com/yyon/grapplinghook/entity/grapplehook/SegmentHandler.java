@@ -171,12 +171,12 @@ public class SegmentHandler {
 		}
 	}
 	
-	public void updateSegment(Vec top, Vec prevtop, Vec bottom, Vec prevbottom, int index, int numberrecursions) {		
-		BlockHitResult bottomraytraceresult = GrappleModUtils.rayTraceBlocks(this.world, bottom, top);
+	public void updateSegment(Vec top, Vec prevtop, Vec bottom, Vec prevbottom, int index, int numberrecursions) {
+		BlockHitResult bottomraytraceresult = GrappleModUtils.rayTraceBlocks(this.hookEntity, this.world, bottom, top);
         
         // if rope hit block
         if (bottomraytraceresult != null) {
-        	if (GrappleModUtils.rayTraceBlocks(this.world, prevbottom, prevtop) != null) {
+        	if (GrappleModUtils.rayTraceBlocks(this.hookEntity, this.world, prevbottom, prevtop) != null) {
         		return;
         	}
         	
@@ -200,7 +200,7 @@ public class SegmentHandler {
             	}
             	
             	// the corner must be in the line (cornerbound2, cornerbound1)
-            	BlockHitResult cornerraytraceresult = GrappleModUtils.rayTraceBlocks(this.world, cornerbound2, cornerbound1);
+            	BlockHitResult cornerraytraceresult = GrappleModUtils.rayTraceBlocks(this.hookEntity, this.world, cornerbound2, cornerbound1);
                 if (cornerraytraceresult != null) {
                 	Vec cornerhitpos = new Vec(cornerraytraceresult.getLocation());
                 	Direction cornerside = cornerraytraceresult.getDirection();

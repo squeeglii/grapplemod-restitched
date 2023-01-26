@@ -1,11 +1,11 @@
 package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.gui.GrappleModiferBlockGUI;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
-import com.yyon.grapplinghook.client.keybind.KeyBinding;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
+import com.yyon.grapplinghook.gui.GrappleModiferBlockGUI;
+import com.yyon.grapplinghook.client.keybind.ModKeyBindings;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
 import com.yyon.grapplinghook.controller.ForcefieldController;
@@ -77,7 +77,7 @@ public class GrappleModClient implements ClientModInitializer {
         //TODO: Re-implement configuration with ModMenu
         // GrappleModClient.get()::onConfigScreen;
 
-        this.registerPropertyOverride();
+        ModKeyBindings.registerAll();
 
         this.clientControllerManager = new ClientControllerManager();
     }
@@ -213,18 +213,18 @@ public class GrappleModClient implements ClientModInitializer {
 
     public boolean isKeyDown(GrappleKeys key) {
         return switch (key) {
-            case key_boththrow -> KeyBinding.key_boththrow.isDown();
-            case key_leftthrow -> KeyBinding.key_leftthrow.isDown();
-            case key_rightthrow -> KeyBinding.key_rightthrow.isDown();
-            case key_motoronoff -> KeyBinding.key_motoronoff.isDown();
-            case key_jumpanddetach -> KeyBinding.key_jumpanddetach.isDown();
-            case key_slow -> KeyBinding.key_slow.isDown();
-            case key_climb -> KeyBinding.key_climb.isDown();
-            case key_climbup -> KeyBinding.key_climbup.isDown();
-            case key_climbdown -> KeyBinding.key_climbdown.isDown();
-            case key_enderlaunch -> KeyBinding.key_enderlaunch.isDown();
-            case key_rocket -> KeyBinding.key_rocket.isDown();
-            case key_slide -> KeyBinding.key_slide.isDown();
+            case key_boththrow -> ModKeyBindings.key_boththrow.isDown();
+            case key_leftthrow -> ModKeyBindings.key_leftthrow.isDown();
+            case key_rightthrow -> ModKeyBindings.key_rightthrow.isDown();
+            case key_motoronoff -> ModKeyBindings.key_motoronoff.isDown();
+            case key_jumpanddetach -> ModKeyBindings.key_jumpanddetach.isDown();
+            case key_slow -> ModKeyBindings.key_slow.isDown();
+            case key_climb -> ModKeyBindings.key_climb.isDown();
+            case key_climbup -> ModKeyBindings.key_climbup.isDown();
+            case key_climbdown -> ModKeyBindings.key_climbdown.isDown();
+            case key_enderlaunch -> ModKeyBindings.key_enderlaunch.isDown();
+            case key_rocket -> ModKeyBindings.key_rocket.isDown();
+            case key_slide -> ModKeyBindings.key_slide.isDown();
         };
     }
 

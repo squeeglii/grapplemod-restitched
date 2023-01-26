@@ -18,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -54,7 +55,7 @@ import java.util.HashMap;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrapplehookEntity extends ThrowableItemProjectile implements IEntityAdditionalSpawnData {
+public class GrapplehookEntity extends ThrowableItemProjectile implements IExtendedSpawnPacketEntity {
 
 	public GrapplehookEntity(EntityType<? extends GrapplehookEntity> type, Level world) {
 		super(type, world);
@@ -339,7 +340,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 	        Vec vec3d1 = vec3d.add(Vec.motionVec(this));
 
 			if (movingobjectposition instanceof EntityHitResult && !GrappleConfig.getConf().grapplinghook.other.hookaffectsentities) {
-				onHit(GrappleModUtils.rayTraceBlocks(this.level, vec3d, vec3d1));
+				onHit(GrappleModUtils.rayTraceBlocks(this, this.level, vec3d, vec3d1));
 		        return;
 			}
 			
@@ -354,7 +355,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 					Block block = this.level.getBlockState(blockpos).getBlock();
 					if (GrappleConfigUtils.breaksBlock(block)) {
 						this.level.destroyBlock(blockpos, true);
-				        onHit(GrappleModUtils.rayTraceBlocks(this.level, vec3d, vec3d1));
+				        onHit(GrappleModUtils.rayTraceBlocks(this, this.level, vec3d, vec3d1));
 				        return;
 					}
 				}
@@ -528,10 +529,10 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
     	}
 	}
 
-	@Override
-	public Packet<?> getAddEntityPacket() {
+	/*@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		  return NetworkHooks.getEntitySpawningPacket(this);
-	}
+	}*/
 
 	@Override
 	public ItemStack getItem() {

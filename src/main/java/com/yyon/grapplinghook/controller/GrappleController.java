@@ -838,7 +838,7 @@ public class GrappleController {
 		float entitywidth = this.entity.getBbWidth();
 		
 		for (Vec direction : new Vec[] {tryfirst, trysecond, tryfirst.mult(-1), trysecond.mult(-1)}) {
-			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity.level, Vec.positionVec(this.entity), Vec.positionVec(this.entity).add(direction.changeLen(entitywidth/2 + extra)));
+			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity, this.entity.level, Vec.positionVec(this.entity), Vec.positionVec(this.entity).add(direction.changeLen(entitywidth/2 + extra)));
 			if (raytraceresult != null) {
 				wallrunRaytraceResult = raytraceresult;
 				return direction;
@@ -887,7 +887,7 @@ public class GrappleController {
 			Vec corner1 = getCorner(i, v1, v2);
 			Vec corner2 = getCorner((i + 1) % 4, v1, v2);
 			
-			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity.level, Vec.positionVec(this.entity).add(corner1), Vec.positionVec(this.entity).add(corner2));
+			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity, this.entity.level, Vec.positionVec(this.entity).add(corner1), Vec.positionVec(this.entity).add(corner2));
 			if (raytraceresult != null) {
 				return true;
 			}

@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
+import com.yyon.grapplinghook.util.SharedDamageHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;

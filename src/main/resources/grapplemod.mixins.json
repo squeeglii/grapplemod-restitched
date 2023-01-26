@@ -13,12 +13,12 @@
     "ServerStartMixin"
   ],
   "client": [
-    "client.BlockBreakDetectorMixin",
     "client.CameraSetupHookMixin",
     "client.ClientHookMixin",
     "client.GrappleCrosshairMixin",
     "client.KeybindingHandlerMixin",
-    "client.MovementInputHandlerMixin"
+    "client.MovementInputHandlerMixin",
+    "client.BlockBreakDetectorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

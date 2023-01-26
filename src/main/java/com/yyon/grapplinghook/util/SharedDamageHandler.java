@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.mixin;
+package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.item.GrapplehookItem;
@@ -24,9 +24,13 @@ public class SharedDamageHandler {
             if (isConnected) return false;
 
             HashSet<GrapplehookEntity> grapplehookEntities = ServerControllerManager.allGrapplehookEntities.get(id);
-            for (GrapplehookEntity hookEntity: grapplehookEntities) hookEntity.removeServer();
 
-            grapplehookEntities.clear();
+            if(grapplehookEntities != null) {
+                for (GrapplehookEntity hookEntity : grapplehookEntities)
+                    hookEntity.removeServer();
+
+                grapplehookEntities.clear();
+            }
 
             ServerControllerManager.attached.remove(id);
 
