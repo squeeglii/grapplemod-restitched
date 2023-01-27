@@ -59,6 +59,6 @@ public class EnderStaffItem extends Item {
 		list.add(Component.translatable("grappletooltip.launcheritem.desc"));
 		list.add(Component.literal(""));
 		list.add(Component.translatable("grappletooltip.launcheritemaim.desc"));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc")));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc").getString()));
 	}
 }

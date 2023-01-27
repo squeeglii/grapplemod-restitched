@@ -414,16 +414,16 @@ public class GrappleModiferBlockGUI extends Screen {
 			String desc = Component.translatable(this.customization.getDescription(option)).getString();
 			
 			if (!this.customization.isOptionValid(option)) {
-				desc = Component.translatable("grapplemodifier.incompatability.desc") + "\n" + desc;
+				desc = Component.translatable("grapplemodifier.incompatability.desc").getString() + "\n" + desc;
 				enabled = false;
 			}
 			
 			int level = this.customization.optionEnabled(option);
 			if (this.getLimits() < level) {
 				if (level == 1) {
-					desc = Component.translatable("grapplemodifier.limits.desc") + "\n" + desc;
+					desc = Component.translatable("grapplemodifier.limits.desc").getString() + "\n" + desc;
 				} else {
-					desc = Component.translatable("grapplemodifier.locked.desc") + "\n" + desc;
+					desc = Component.translatable("grapplemodifier.locked.desc").getString() + "\n" + desc;
 				}
 				enabled = false;
 			}

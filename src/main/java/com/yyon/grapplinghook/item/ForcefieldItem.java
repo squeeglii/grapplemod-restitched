@@ -47,13 +47,13 @@ public class ForcefieldItem extends Item {
 		list.add(Component.translatable("grappletooltip.repelleritem.desc"));
 		list.add(Component.translatable("grappletooltip.repelleritem2.desc"));
 		list.add(Component.literal(""));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemon.desc")));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemoff.desc")));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindSneak) + Component.translatable("grappletooltip.repelleritemslow.desc")));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemon.desc").getString()));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemoff.desc").getString()));
+		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindSneak) + Component.translatable("grappletooltip.repelleritemslow.desc").getString()));
 		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindForward) + ", " +
 				GrappleModClient.get().getKeyname(MCKeys.keyBindLeft) + ", " +
 				GrappleModClient.get().getKeyname(MCKeys.keyBindBack) + ", " +
 				GrappleModClient.get().getKeyname(MCKeys.keyBindRight) +
-				" " + Component.translatable("grappletooltip.repelleritemmove.desc")));
+				" " + Component.translatable("grappletooltip.repelleritemmove.desc").getString()));
 	}
 }
