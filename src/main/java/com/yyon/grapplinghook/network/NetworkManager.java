@@ -3,13 +3,10 @@ package com.yyon.grapplinghook.network;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.clientbound.*;
 import com.yyon.grapplinghook.network.serverbound.*;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.function.Function;
@@ -44,12 +41,12 @@ public class NetworkManager {
     }
 
 
-    public static boolean registerClient(String channelId, Function<FriendlyByteBuf, BaseMessageClient> etc) {
-        return ClientPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateClientPacketHandler(etc));
+    public static void registerClient(String channelId, Function<FriendlyByteBuf, BaseMessageClient> etc) {
+        ClientPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateClientPacketHandler(etc));
     }
 
-    public static boolean registerServer(String channelId, Function<FriendlyByteBuf, BaseMessageServer> etc) {
-        return ServerPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateServerPacketHandler(etc));
+    public static void registerServer(String channelId, Function<FriendlyByteBuf, BaseMessageServer> etc) {
+        ServerPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateServerPacketHandler(etc));
     }
 
     public static void packetToServer(BaseMessageServer server) {
@@ -68,7 +65,6 @@ public class NetworkManager {
     }
 
     public static void registerPacketListeners() {
-        NetworkManager.registerClient("add_grapplehook_entity", AddGrappleHookEntityMessage::new);
         NetworkManager.registerClient("detach_single_hook", DetachSingleHookMessage::new);
         NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
         NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);

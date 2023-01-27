@@ -5,6 +5,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.config.GrappleConfigUtils;
 import com.yyon.grapplinghook.network.NetworkManager;
+import com.yyon.grapplinghook.network.clientbound.AddGrappleHookEntityPacket;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.registry.GrappleModEntities;
@@ -35,6 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -529,10 +531,11 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
     	}
 	}
 
-	/*@Override
+	@Override
+	@NotNull
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		  return NetworkHooks.getEntitySpawningPacket(this);
-	}*/
+		  return new AddGrappleHookEntityPacket(this);
+	}
 
 	@Override
 	public ItemStack getItem() {

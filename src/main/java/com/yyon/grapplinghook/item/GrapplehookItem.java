@@ -122,6 +122,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 				}
 			} else if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
 				NetworkManager.packetToServer(new KeypressMessage(key, true));
+
 			} else if (key == KeypressItem.Keys.ROCKET) {
 				GrappleCustomization custom = this.getCustomization(stack);
 				if (custom.rocket) {
@@ -133,6 +134,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 			if (key == KeypressItem.Keys.THROWBOTH || (!custom.doublehook && (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT))) {
 	        	throwBoth(stack, player.level, player, ismainhand);
+
 			} else if (key == KeypressItem.Keys.THROWLEFT) {
 				GrapplehookEntity hookLeft = getHookEntityLeft(player);
 
@@ -151,6 +153,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 				if (threw) {
 			        player.level.playSound((Player) null, player.position().x, player.position().y, player.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (player.getRandom().nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 				}
+
 			} else if (key == KeypressItem.Keys.THROWRIGHT) {
 				GrapplehookEntity hookRight = getHookEntityRight(player);
 
