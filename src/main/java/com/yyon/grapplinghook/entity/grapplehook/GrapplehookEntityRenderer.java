@@ -168,7 +168,6 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 		//TODO:
 		// - fix grapple renderer
 		// - fix keybind conflicts
-		// - fix blockitem for upgrade table
 		// - do some more cleanup
 		// - fix antigrav item not updating its texture on zoomies mode.
 

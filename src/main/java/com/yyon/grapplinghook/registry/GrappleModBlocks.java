@@ -46,7 +46,7 @@ public class GrappleModBlocks {
 
     public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks
             .block("block_grapple_modifier", GrappleModifierBlock::new)
-            //.withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
+            .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 
 
@@ -68,8 +68,7 @@ public class GrappleModBlocks {
         }
 
         public Flow<B> withConfiguredItem(Consumer<GrappleModItems.ItemEntry<BlockItem>> destination, Item.Properties properties) {
-            Block block = context.getFactory().get();
-            return this.withCustomItem(destination, () -> new BlockItem(block, properties));
+            return this.withCustomItem(destination, () -> new BlockItem(context.get(), properties));
         }
 
         public <I extends BlockItem> Flow<B> withCustomItem(Consumer<GrappleModItems.ItemEntry<I>> destination, Supplier<I> factory) {
