@@ -46,6 +46,9 @@ import org.joml.Quaternionf;
 @Environment(EnvType.CLIENT)
 public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends EntityRenderer<T>
 {
+	protected final boolean RENDER_GRAPPLE_HOOK = false;
+
+
     protected final Item item;
     private static final ResourceLocation HOOK_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/hook.png");
     private static final RenderType HOOK_RENDER = RenderType.entityCutoutNoCull(HOOK_TEXTURES, false);
@@ -158,7 +161,16 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 		// draw hook
 		ItemStack stack = this.getStackToRender(hookEntity);
 		BakedModel bakedmodel = context.getItemRenderer().getModel(stack, hookEntity.level, (LivingEntity)null, hookEntity.getId());
-        context.getItemRenderer().render(stack, ItemTransforms.TransformType.NONE, false, matrix, rendertype, p_225623_6_, OverlayTexture.NO_OVERLAY, bakedmodel);
+
+		if(RENDER_GRAPPLE_HOOK)
+			context.getItemRenderer().render(stack, ItemTransforms.TransformType.NONE, false, matrix, rendertype, p_225623_6_, OverlayTexture.NO_OVERLAY, bakedmodel);
+
+		//TODO:
+		// - fix grapple renderer
+		// - fix keybind conflicts
+		// - fix blockitem for upgrade table
+		// - do some more cleanup
+		// - fix antigrav item not updating its texture on zoomies mode.
 
 		// revert transformation
 		matrix.popPose();
