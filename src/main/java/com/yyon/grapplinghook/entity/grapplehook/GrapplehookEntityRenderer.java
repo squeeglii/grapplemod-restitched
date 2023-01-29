@@ -69,7 +69,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
      * double d2, float f, float f1). But JAD is pre 1.5 so doe
      */
     @Override
-    public void render(T hookEntity, float p_225623_2_, float partialTicks, PoseStack matrix, MultiBufferSource rendertype, int p_225623_6_) {
+    public void render(T hookEntity, float entityYaw, float partialTicks, PoseStack matrix, MultiBufferSource rendertype, int packedLight) {
 		if (hookEntity == null || !hookEntity.isAlive()) {
 			return;
 		}
@@ -125,7 +125,6 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
         
 		
 		/** draw hook **/
-		
 		// get direction of rope where hook is attached
 		Vec attach_dir = Vec.motionVec(hookEntity).mult(-1);
 		if (attach_dir.length() == 0) {
@@ -160,10 +159,11 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 		
 		// draw hook
 		ItemStack stack = this.getStackToRender(hookEntity);
-		BakedModel bakedmodel = context.getItemRenderer().getModel(stack, hookEntity.level, (LivingEntity)null, hookEntity.getId());
+		BakedModel bakedmodel = context.getItemRenderer().getModel(stack, hookEntity.level, null, hookEntity.getId());
 
 		if(RENDER_GRAPPLE_HOOK)
-			context.getItemRenderer().render(stack, ItemTransforms.TransformType.NONE, false, matrix, rendertype, p_225623_6_, OverlayTexture.NO_OVERLAY, bakedmodel);
+			context.getItemRenderer()
+					.render(stack, ItemTransforms.TransformType.NONE, false, matrix, rendertype, packedLight, OverlayTexture.NO_OVERLAY, bakedmodel);
 
 		//TODO:
 		// - fix grapple renderer
@@ -233,7 +233,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
         // draw rope
         if (segmenthandler == null) {
         	// if no segmenthandler, straight line from hand to hook
-    		drawSegment(new Vec(0,0,0), getRelativeToEntity(hookEntity, new Vec(hand_position), partialTicks), 1.0F, vertexbuffer, matrix4f1, matrix3f1, p_225623_6_);
+    		drawSegment(new Vec(0,0,0), getRelativeToEntity(hookEntity, new Vec(hand_position), partialTicks), 1.0F, vertexbuffer, matrix4f1, matrix3f1, packedLight);
         } else {
         	for (int i = 0; i < segmenthandler.segments.size() - 1; i++) {
         		Vec from = segmenthandler.segments.get(i);
@@ -254,7 +254,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 //        			taut = hookEntity.taut;
         		}
         		
-        		drawSegment(from, to, taut, vertexbuffer, matrix4f1, matrix3f1, p_225623_6_);
+        		drawSegment(from, to, taut, vertexbuffer, matrix4f1, matrix3f1, packedLight);
         	}
         }
         
@@ -283,7 +283,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
             Vec corner = corners[size];
         	Vec normal = corner.normalize(); //.add(forward.normalize().mult(-1)).normalize();
         	Vec cornerpos = getRelativeToEntity(hookEntity, hand_position, partialTicks).add(corner);
-        	vertexbuffer.vertex(matrix4f1, (float) cornerpos.x, (float) cornerpos.y, (float) cornerpos.z).color(255, 255, 255, 255).uv(uvs[size][0], uvs[size][1]).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_225623_6_).normal(matrix3f1, (float) normal.x, (float) normal.y, (float) normal.z).endVertex();
+        	vertexbuffer.vertex(matrix4f1, (float) cornerpos.x, (float) cornerpos.y, (float) cornerpos.z).color(255, 255, 255, 255).uv(uvs[size][0], uvs[size][1]).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(matrix3f1, (float) normal.x, (float) normal.y, (float) normal.z).endVertex();
         }
         
 
@@ -291,7 +291,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
         
 		
          
-		super.render(hookEntity, p_225623_2_, partialTicks, matrix, rendertype, p_225623_6_);
+		super.render(hookEntity, entityYaw, partialTicks, matrix, rendertype, packedLight);
     }
     
     Vec getRelativeToEntity(GrapplehookEntity hookEntity, Vec inVec, float partialTicks) {
