@@ -400,9 +400,7 @@ public class GrappleModiferBlockGUI extends Screen {
 	
 	@Override
 	public void onClose() {
-//		this.updateOptions();
 		this.tile.setCustomizationClient(customization);
-		
 		super.onClose();
 	}
 	

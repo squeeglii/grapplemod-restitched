@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.network.serverbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -57,12 +56,17 @@ public class GrappleModifierMessage extends BaseMessageServer {
 
 	@Override
     public void processMessage(NetworkContext ctx) {
-		Level w = ctx.getSender().level;
-		
-		BlockEntity ent = w.getBlockEntity(this.pos);
+		// Block Entities must be obtained on the main thread.
+		ctx.getServer().execute(() -> {
+			Level w = ctx.getSender().getLevel();
+			BlockEntity ent = w.getBlockEntity(this.pos);
 
-		if (ent != null && ent instanceof GrappleModifierBlockEntity) {
-			((GrappleModifierBlockEntity) ent).setCustomizationServer(this.custom);
-		}
-    }
+			if (ent instanceof GrappleModifierBlockEntity e) {
+				e.setCustomizationServer(this.custom);
+				return;
+			}
+
+			GrappleMod.LOGGER.warn("Wrong type! is null: %s, pos: %s, isClient: %s".formatted(ent == null, this.pos, ctx.getSender().level.isClientSide));
+		});
+	}
 }

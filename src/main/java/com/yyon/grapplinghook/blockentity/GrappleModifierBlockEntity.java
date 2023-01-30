@@ -7,7 +7,6 @@ import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleCustomization.upgradeCategories;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,25 +23,28 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.customization = new GrappleCustomization();
 	}
 
+	private void triggerUpdate() {
+		if(this.level != null) {
+			BlockState state = this.level.getBlockState(worldPosition);
+			this.level.sendBlockUpdated(worldPosition, state, state, 3);
+			this.setChanged();
+		}
+	}
+
 	public void unlockCategory(upgradeCategories category) {
 		unlockedCategories.put(category, true);
-		this.sendUpdates();
-		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+		this.triggerUpdate();
 	}
 
 	public void setCustomizationClient(GrappleCustomization customization) {
 		this.customization = customization;
 		NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
-		this.sendUpdates();
+		this.triggerUpdate();
 	}
 
 	public void setCustomizationServer(GrappleCustomization customization) {
 		this.customization = customization;
-		this.sendUpdates();
-	}
-
-	private void sendUpdates() {
-		this.setChanged();
+		this.triggerUpdate();
 	}
 
 	public boolean isUnlocked(upgradeCategories category) {
@@ -83,12 +85,6 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.customization.loadNBT(custom);
 	}
 
-
-	// When the world loads from disk, the server needs to send the TileEntity information to the client
-	//  it uses getUpdatePacket(), getUpdateTag(), onDataPacket(), and handleUpdateTag() to do this:
-	//  getUpdatePacket() and onDataPacket() are used for one-at-a-time TileEntity updates
-	//  getUpdateTag() and handleUpdateTag() are used by vanilla to collate together into a single chunk update packet
-	//  Not really required for this example since we only use the timer on the client, but included anyway for illustration
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		CompoundTag nbtTagCompound = new CompoundTag();
@@ -96,15 +92,14 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
+
 	/* Creates a tag containing all of the TileEntity information, used by vanilla to transmit from server to client */
 	@Override
 	@NotNull
-	public CompoundTag getUpdateTag()
-	{
+	public CompoundTag getUpdateTag() {
 		CompoundTag nbtTagCompound = new CompoundTag();
 		this.saveAdditional(nbtTagCompound);
 		return nbtTagCompound;
 	}
 
-	//todo: reimplement the loading?
 }
