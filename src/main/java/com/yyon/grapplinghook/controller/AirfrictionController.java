@@ -26,7 +26,6 @@ import net.minecraft.world.level.Level;
  */
 
 public class AirfrictionController extends GrappleController {
-	public double playerMovementMult = 0.5;
 	
 	public int ignoreGroundCounter = 0;
 	public boolean wasSliding = false;
@@ -41,9 +40,9 @@ public class AirfrictionController extends GrappleController {
 	@Override
 	public void updatePlayerPos() {
 		Entity entity = this.entity;
-		
+
 		if (entity == null) {return;}
-		
+
 		if (entity.getVehicle() != null) {
 			this.unattach();
 			this.updateServerPos();
@@ -51,7 +50,7 @@ public class AirfrictionController extends GrappleController {
 		}
 
 		Vec additionalmotion = new Vec(0,0,0);
-		
+
 		if (GrappleConfig.getConf().other.dont_override_movement_in_air && !entity.isOnGround() && !wasSliding && !wasWallrunning && !wasRocket && !firstTickSinceCreated) {
 			motion = Vec.motionVec(entity);
 			this.unattach();
@@ -60,23 +59,23 @@ public class AirfrictionController extends GrappleController {
 
 		if (this.attached) {
 			boolean issliding = GrappleModClient.get().isSliding(entity, motion);
-			
+
 			if (issliding && !wasSliding) {
 				playSlideSound();
 			}
-			
+
 			if (this.ignoreGroundCounter <= 0) {
-				this.normalGround(issliding);					
+				this.normalGround(issliding);
 				this.normalCollisions(issliding);
 			}
 
 			this.applyAirFriction();
-			
+
 			if (this.entity.isInWater() || this.entity.isInLava()) {
 				this.unattach();
 				return;
 			}
-			
+
 			boolean doesrocket = false;
 			if (this.custom != null) {
 				if (this.custom.rocket) {
@@ -140,32 +139,31 @@ public class AirfrictionController extends GrappleController {
 					motion.z = new_motion_horizontal.z;
 				}
 			}
-			
-			if (entity instanceof LivingEntity) {
-				LivingEntity entityliving = (LivingEntity) entity;
-				if (entityliving.isFallFlying()) {
+
+			if (entity instanceof LivingEntity entityLiving) {
+				if (entityLiving.isFallFlying()) {
 					this.unattach();
 				}
 			}
-			
-			Vec gravity = new Vec(0, -0.05, 0);
+
+			Vec gravity = new Vec(0, -0.10, 0);
 
 			if (!wallrun) {
 				motion.add_ip(gravity);
 			}
 
 			Vec newmotion;
-			
+
 			newmotion = motion.add(additionalmotion);
-			
+
 //			if (wallrun) {
 //				newmotion.add_ip(this.walldirection);
 //			}
 
 			newmotion.setMotion(entity);
-			
+
 			this.updateServerPos();
-			
+
 			if (entity.isOnGround()) {
 				if (!issliding) {
 					if (!wallrun) {
@@ -180,7 +178,7 @@ public class AirfrictionController extends GrappleController {
 				}
 			}
 			if (ignoreGroundCounter > 0) { ignoreGroundCounter--; }
-			
+
 			wasSliding = issliding;
 			wasWallrunning = wallrun;
 			wasRocket = doesrocket;
