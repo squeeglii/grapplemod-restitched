@@ -18,7 +18,6 @@ import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -26,7 +25,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -39,11 +37,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class GrappleModClient implements ClientModInitializer {
@@ -54,21 +49,14 @@ public class GrappleModClient implements ClientModInitializer {
     private static final ResourceLocation SOUND_DOUBLE_JUMP = new ResourceLocation("grapplemod", "doublejump");
     private static final  ResourceLocation SOUND_SLIDE = new ResourceLocation("grapplemod", "slide");
 
-    private List<ItemStack> grapplingHookVariants;
-
     private ClientControllerManager clientControllerManager;
 
 
     @Override
     public void onInitializeClient() {
         GrappleModClient.clientInstance = this;
-        this.grapplingHookVariants = null;
 
-        //TODO: Handle this with entities how Blocks handle BlockItems in the registry handlers.
         EntityRendererRegistry.register(GrappleModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
-
-        //TODO: Re-implement configuration with ModMenu
-        // GrappleModClient.get()::onConfigScreen;
 
         ModKeyBindings.registerAll();
 
@@ -146,10 +134,6 @@ public class GrappleModClient implements ClientModInitializer {
 
     public void playWallrunJumpSound() {
         this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleConfig.getClientConf().sounds.wallrunjump_sound_volume * 0.7F);
-    }
-
-    public Screen onConfigScreen(Screen screen) {
-        return AutoConfig.getConfigScreen(GrappleConfig.class, screen).get();
     }
 
     public void resetLauncherTime(int playerId) {
