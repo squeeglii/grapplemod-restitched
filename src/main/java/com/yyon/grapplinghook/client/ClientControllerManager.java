@@ -233,12 +233,14 @@ public class ClientControllerManager {
 		if(allConditionsMet && !controllers.containsKey(player.getId())) {
 			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
 			GrappleModClient.get().playDoubleJumpSound();
+			GrappleMod.LOGGER.info("Branch 1");
 		}
 
 		if(allConditionsMet && controllers.get(player.getId()) instanceof AirfrictionController ctrl) {
 			this.alreadyUsedDoubleJump = true;
 			ctrl.doubleJump();
 			GrappleModClient.get().playDoubleJumpSound();
+			GrappleMod.LOGGER.info("Branch 2");
 		}
 		
 		this.prevJumpButton = isJumpButtonDown;
@@ -255,7 +257,7 @@ public class ClientControllerManager {
 
 			for (Enchantment enchant : enchantments.keySet()) {
 				if (!(enchant instanceof DoubleJumpEnchantment)) continue;
-				if (enchantments.get(enchant) >= 1) continue;
+				if (enchantments.get(enchant) < 1) continue;
 				return true;
 			}
 		}
@@ -270,7 +272,7 @@ public class ClientControllerManager {
 
 				for (Enchantment enchant : enchantments.keySet()) {
 					if (!(enchant instanceof SlidingEnchantment)) continue;
-					if (enchantments.get(enchant) >= 1) continue;
+					if (enchantments.get(enchant) < 1) continue;
 					return true;
 				}
 			}
