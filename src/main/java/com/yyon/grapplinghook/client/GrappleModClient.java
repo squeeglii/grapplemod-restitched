@@ -80,6 +80,7 @@ public class GrappleModClient implements ClientModInitializer {
         ModKeyBindings.registerAll();
 
         this.clientControllerManager = new ClientControllerManager();
+        this.registerPropertyOverride();
     }
 
     public static GrappleModClient get() {
