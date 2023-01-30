@@ -42,7 +42,7 @@
     "enchantment.doublejumpenchantment": "Двойной прыжок",
     "enchantment.slidingenchantment": "Скольжение",
 
-    "itemGroup.tabGrapplemod": "Grappling Hook Mod",
+    "itemGroup.grapplemod.main": "Grappling Hook Mod",
 
     "grapplecustomization.maxlen": "Длина веревки",
     "grapplecustomization.phaserope": "Фазовая веревка",

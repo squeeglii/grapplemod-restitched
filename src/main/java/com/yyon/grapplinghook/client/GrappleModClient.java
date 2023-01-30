@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.client;
 
-import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
@@ -12,7 +11,6 @@ import com.yyon.grapplinghook.controller.ForcefieldController;
 import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
-import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.registry.GrappleModEntities;
@@ -36,21 +34,16 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class GrappleModClient implements ClientModInitializer {
@@ -153,31 +146,6 @@ public class GrappleModClient implements ClientModInitializer {
 
     public void playWallrunJumpSound() {
         this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleConfig.getClientConf().sounds.wallrunjump_sound_volume * 0.7F);
-    }
-
-    public void fillGrappleVariants(NonNullList<ItemStack> items) {
-        if (!Minecraft.getInstance().isRunning() || Minecraft.getInstance().player == null) return;
-
-
-        if (grapplingHookVariants == null) {
-            grapplingHookVariants = new ArrayList<>();
-
-            RecipeManager recipeManager = Minecraft.getInstance().player.level.getRecipeManager();
-            recipeManager.getRecipeIds().filter(loc -> loc.getNamespace().equals(GrappleMod.MODID)).forEach(loc -> {
-                Optional<? extends Recipe<?>> recipe = recipeManager.byKey(loc);
-                if(recipe.isEmpty()) return;
-
-                ItemStack stack = recipe.get().getResultItem();
-
-                if (!(stack.getItem() instanceof GrapplehookItem)) return;
-                if (GrappleModItems.GRAPPLING_HOOK.get().getCustomization(stack).equals(new GrappleCustomization()))
-                    return;
-
-                grapplingHookVariants.add(stack);
-            });
-        }
-
-        items.addAll(grapplingHookVariants);
     }
 
     public Screen onConfigScreen(Screen screen) {

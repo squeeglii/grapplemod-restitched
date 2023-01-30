@@ -89,7 +89,7 @@ public class GrappleModBlocks {
         private GrappleModItems.ItemEntry<I> source = null;
 
         protected BlockItemEntry() {
-            super(null, () -> null);
+            super(null, () -> null, null);
         }
 
         @Override

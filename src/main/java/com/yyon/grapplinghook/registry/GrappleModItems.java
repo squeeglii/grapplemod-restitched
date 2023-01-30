@@ -1,21 +1,24 @@
 package com.yyon.grapplinghook.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.block.modifierblock.GrappleModifierBlock;
 import com.yyon.grapplinghook.item.EnderStaffItem;
 import com.yyon.grapplinghook.item.ForcefieldItem;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.item.upgrade.*;
+import com.yyon.grapplinghook.util.GrappleCustomization;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.ItemLike;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public final class GrappleModItems {
@@ -25,9 +28,6 @@ public final class GrappleModItems {
     static {
         GrappleModItems.items = new HashMap<>();
     }
-
-
-
 
     public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new);
     public static final ItemEntry<EnderStaffItem> ENDER_STAFF = GrappleModItems.item("launcheritem", EnderStaffItem::new);
@@ -51,10 +51,17 @@ public final class GrappleModItems {
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
 
 
+    private static final CreativeModeTab ITEM_GROUP = FabricItemGroup.builder(GrappleMod.id("main"))
+            .icon(() -> new ItemStack(GRAPPLING_HOOK.get()))
+            .build();
 
     public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item) {
+        return item(id, item, null);
+    }
+
+    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemLike>> tabProvider) {
         ResourceLocation qualId = GrappleMod.id(id);
-        ItemEntry<I> entry = new ItemEntry<>(qualId, item);
+        ItemEntry<I> entry = new ItemEntry<>(qualId, item, tabProvider);
         GrappleModItems.items.put(qualId, entry);
         return entry;
     }
@@ -72,13 +79,40 @@ public final class GrappleModItems {
 
             data.finalize(Registry.register(BuiltInRegistries.ITEM, id, it));
         }
+
+        ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP).register(content ->
+                items.values().forEach(i -> content.accept(i.get()))
+        );
     }
 
 
 
     public static class ItemEntry<I extends Item> extends AbstractRegistryReference<I> {
-        protected ItemEntry(ResourceLocation id, Supplier<I> factory) {
+
+        protected Supplier<List<ItemLike>> tabProvider;
+
+        protected ItemEntry(ResourceLocation id, Supplier<I> factory, Supplier<List<ItemLike>> creativeTabProvider) {
             super(id, factory);
+
+            this.tabProvider = creativeTabProvider == null
+                    ? this.defaultInTab()
+                    : creativeTabProvider;
+        }
+
+        public Supplier<List<ItemLike>> defaultInTab() {
+            return () -> List.of(this.get());
+        }
+
+        public static Supplier<List<ItemLike>> hiddenInTab() {
+            return ArrayList::new;
+        }
+
+        public static Supplier<List<ItemLike>> populateHookVariantsInTab() {
+            return () -> {
+                List<ItemLike> grappleHookVariants = List.of();
+
+                return grappleHookVariants;
+            };
         }
     }
 }
