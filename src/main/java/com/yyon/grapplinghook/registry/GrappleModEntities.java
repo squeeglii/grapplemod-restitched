@@ -4,7 +4,6 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -36,7 +35,7 @@ public class GrappleModEntities {
             EntityEntry<?> data = def.getValue();
             EntityType<?> it = data.getFactory().get();
 
-            data.finalize(Registry.register(BuiltInRegistries.ENTITY_TYPE, id, it));
+            data.finalize(Registry.register(Registry.ENTITY_TYPE, id, it));
         }
     }
 

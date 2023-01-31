@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.registry;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -33,7 +32,7 @@ public class GrappleModBlockEntities {
             BlockEntityEntry<?> data = def.getValue();
             BlockEntityType<?> it = data.getFactory().get();
 
-            data.finalize(Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, it));
+            data.finalize(Registry.register(Registry.BLOCK_ENTITY_TYPE, id, it));
         }
     }
 

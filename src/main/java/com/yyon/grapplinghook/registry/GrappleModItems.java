@@ -6,16 +6,16 @@ import com.yyon.grapplinghook.item.ForcefieldItem;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.item.upgrade.*;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public final class GrappleModItems {
 
@@ -47,7 +47,7 @@ public final class GrappleModItems {
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
 
 
-    private static final CreativeModeTab ITEM_GROUP = FabricItemGroup.builder(GrappleMod.id("main"))
+    private static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.create(GrappleMod.id("main"))
             .icon(() -> new ItemStack(GRAPPLING_HOOK.get()))
             .build();
 
@@ -73,12 +73,16 @@ public final class GrappleModItems {
             ItemEntry<?> data = def.getValue();
             Item it = data.getFactory().get();
 
-            data.finalize(Registry.register(BuiltInRegistries.ITEM, id, it));
+            data.finalize(Registry.register(Registry.ITEM, id, it));
         }
 
-        ItemGroupEvents.modifyEntriesEvent(ITEM_GROUP).register(content ->
-                items.values().forEach(i -> content.accept(i.get()))
-        );
+        NonNullList<ItemStack> tab = NonNullList.create();
+        items.values()
+                .stream()
+                .flatMap(iEntry -> iEntry.getTabProvider().get().stream())
+                .forEach(i -> new ItemStack(i.asItem()));
+
+        ITEM_GROUP.fillItemList(tab);
     }
 
 
@@ -95,6 +99,10 @@ public final class GrappleModItems {
                     : creativeTabProvider;
         }
 
+        public Supplier<List<ItemLike>> getTabProvider() {
+            return tabProvider;
+        }
+
         public Supplier<List<ItemLike>> defaultInTab() {
             return () -> List.of(this.get());
         }
@@ -104,9 +112,11 @@ public final class GrappleModItems {
         }
 
         public static Supplier<List<ItemLike>> populateHookVariantsInTab() {
-            //List<ItemLike> grappleHookVariants = List.of();
-            //return grappleHookVariants;
-            return List::of;
+            return () -> {
+                List<ItemLike> grappleHookVariants = List.of();
+
+                return grappleHookVariants;
+            };
         }
     }
 }
