@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.registry;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.block.modifierblock.GrappleModifierBlock;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -36,7 +35,7 @@ public class GrappleModBlocks {
             BlockEntry<?> data = def.getValue();
             Block it = data.getFactory().get();
 
-            data.finalize(Registry.register(BuiltInRegistries.BLOCK, id, it));
+            data.finalize(Registry.register(Registry.BLOCK, id, it));
         }
     }
 

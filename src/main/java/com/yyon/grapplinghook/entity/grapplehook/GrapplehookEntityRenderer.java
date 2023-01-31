@@ -2,6 +2,9 @@ package com.yyon.grapplinghook.entity.grapplehook;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,9 +25,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 
 /*
@@ -146,11 +146,10 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 		matrix.pushPose();
 		matrix.scale(0.5F, 0.5F, 0.5F);
 
-		Quaternionf base = new Quaternionf();
-		matrix.mulPose(base.rotateAxis((float) -attach_dir.getYaw(), 0, 1, 0));
-		matrix.mulPose(base.rotateAxis((float) attach_dir.getPitch() - 90.0f, 0, 1, 0));
-		matrix.mulPose(base.rotateAxis(45.0f * hand_right, 0, 1, 0));
-		matrix.mulPose(base.rotateAxis(-45.0f, 0, 0, 1));
+		matrix.mulPose(new Quaternion(new Vec(0, 1, 0).toVector3f(), (float) (-attach_dir.getYaw()), true));
+		matrix.mulPose(new Quaternion(new Vec(1, 0, 0).toVector3f(), (float) (attach_dir.getPitch() - 90), true));
+		matrix.mulPose(new Quaternion(new Vec(0, 1, 0).toVector3f(), (float) (45 * hand_right), true));
+		matrix.mulPose(new Quaternion(new Vec(0, 0, 1).toVector3f(), (float) (-45), true));
 		
 		// draw hook
 		ItemStack stack = this.getStackToRender();

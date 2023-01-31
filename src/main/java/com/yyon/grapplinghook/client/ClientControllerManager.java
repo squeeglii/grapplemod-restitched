@@ -468,7 +468,7 @@ public class ClientControllerManager {
 			controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, custom);
 		}
 		
-		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
+		RocketSound sound = new RocketSound(controller, new SoundEvent(GrappleMod.id("rocket")), SoundSource.PLAYERS);
 		Minecraft.getInstance().getSoundManager().play(sound);
 	}
 }

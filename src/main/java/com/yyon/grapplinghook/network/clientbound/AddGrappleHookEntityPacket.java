@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.entity.grapplehook.IExtendedSpawnPacketEntity;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -31,7 +31,7 @@ public class AddGrappleHookEntityPacket implements Packet<ClientGamePacketListen
 
     public AddGrappleHookEntityPacket(GrapplehookEntity e) {
         this.entity = e;
-        this.typeId = BuiltInRegistries.ENTITY_TYPE.getId(e.getType());
+        this.typeId = Registry.ENTITY_TYPE.getId(e.getType());
         this.entityId = e.getId();
         this.uuid = e.getUUID();
         this.posX = e.getX();
@@ -99,7 +99,7 @@ public class AddGrappleHookEntityPacket implements Packet<ClientGamePacketListen
     public void handle(ClientGamePacketListener handler) {
         try
         {
-            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.byId(this.typeId);
+            EntityType<?> type = Registry.ENTITY_TYPE.byId(this.typeId);
             ClientLevel world = Minecraft.getInstance().level;
 
             if (world == null) return;

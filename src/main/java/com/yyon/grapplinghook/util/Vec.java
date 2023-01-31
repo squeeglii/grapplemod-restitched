@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.util;
 
+import com.mojang.math.Vector3f;
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 public class Vec {
 	public double x;
@@ -19,9 +19,9 @@ public class Vec {
 	}
 
 	public Vec(Vector3f vec) {
-		this.x = vec.x;
-		this.y = vec.y;
-		this.z = vec.z;
+		this.x = vec.x();
+		this.y = vec.y();
+		this.z = vec.z();
 
 		this.checkNaN();
 	}

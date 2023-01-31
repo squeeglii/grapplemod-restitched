@@ -81,29 +81,35 @@ public class GrappleModiferBlockGUI extends Screen {
 	public void mainScreen() {
 		clearScreen();
 
-		this.addRenderableWidget(Button.builder(
-								Component.translatable("grapplemodifier.close.desc"),
-								onPress -> onClose())
-						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
-						.build()
-		);
+		this.addRenderableWidget(new Button(
+					this.guiLeft + 10,
+					this.guiTop + this.ySize - 20 - 10,
+					50,
+					20,
+					Component.translatable("grapplemodifier.close.desc"),
+					onPress -> onClose()
+		));
 
-		this.addRenderableWidget(Button.builder(
-						Component.translatable("grapplemodifier.reset.desc"),
-						onPress -> {
-							customization = new GrappleCustomization();
-							mainScreen();
-						})
-				.bounds(this.guiLeft + this.xSize - 50 - 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
-				.build()
-		);
+		this.addRenderableWidget(new Button(
+					this.guiLeft + this.xSize - 50 - 10,
+					this.guiTop + this.ySize - 20 - 10,
+					50,
+					20,
+					Component.translatable("grapplemodifier.reset.desc"),
+					onPress -> {
+						customization = new GrappleCustomization();
+						mainScreen();
+					}
+		));
 
-		this.addRenderableWidget(Button.builder(
-						Component.translatable("grapplemodifier.helpbutton.desc"),
-						onPress -> helpScreen())
-				.bounds(this.guiLeft + 10 + 75, this.guiTop + this.ySize - 20 - 10, 50, 20)
-				.build()
-		);
+		this.addRenderableWidget(new Button(
+					this.guiLeft + 10 + 75,
+					this.guiTop + this.ySize - 20 - 10,
+					50,
+					20,
+					Component.translatable("grapplemodifier.helpbutton.desc"),
+					onPress -> helpScreen()
+		));
 
 		int y = 0;
 		int x = 0;
@@ -115,12 +121,14 @@ public class GrappleModiferBlockGUI extends Screen {
 					x += 1;
 				}
 
-				this.addRenderableWidget(Button.builder(
-									Component.literal(category.getName()),
-									new PressCategory(category))
-								.bounds(this.guiLeft + 10 + 105*x, this.guiTop + 15 + 30 * y, 95, 20)
-								.build()
-				);
+				this.addRenderableWidget(new Button(
+							this.guiLeft + 10 + 105 * x,
+							this.guiTop + 15 + 30 * y,
+							95,
+							20,
+							Component.literal(category.getName()),
+							new PressCategory(category)
+				));
 
 				y += 1;
 			}
@@ -146,11 +154,11 @@ public class GrappleModiferBlockGUI extends Screen {
 	    public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			RenderSystem.setShaderTexture(0,texture);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			this.blit(stack, this.getX(), this.getY(), 0, 0, this.width, this.height);
+			this.blit(stack, this.x, this.y, 0, 0, this.width, this.height);
 	    }
 
 		@Override
-		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+		public void updateNarration(NarrationElementOutput narrationElementOutput) {
 
 		}
 	}
@@ -177,7 +185,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			Minecraft minecraft = Minecraft.getInstance();
 			Font fontRenderer = minecraft.font;
-			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
+			RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
@@ -185,13 +193,13 @@ public class GrappleModiferBlockGUI extends Screen {
 			int colour = this.active ? 16777215 : 10526880;
 			int lineno = 0;
 			for (String s : this.getMessage().getString().split("\n")) {
-				drawString(stack, fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
+				drawString(stack, fontRenderer, Component.literal(s), this.x, this.y + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
 				lineno++;
 			}
 		}
 
 		@Override
-		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+		public void updateNarration(NarrationElementOutput narrationElementOutput) {
 
 		}
 	}
@@ -199,13 +207,14 @@ public class GrappleModiferBlockGUI extends Screen {
 	public void notAllowedScreen(GrappleCustomization.upgradeCategories category) {
 		clearScreen();
 
-		this.addRenderableWidget(
-				Button.builder(
-							Component.translatable("grapplemodifier.back.desc"),
-							new PressBack())
-						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
-						.build()
-		);
+		this.addRenderableWidget(new Button(
+						this.guiLeft + 10,
+						this.guiTop + this.ySize - 20 - 10,
+						50,
+						20,
+						Component.translatable("grapplemodifier.back.desc"),
+						new PressBack()
+		));
 
 		this.category = category;
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock1.desc"), this.guiLeft + 10, this.guiTop + 10));
@@ -219,13 +228,14 @@ public class GrappleModiferBlockGUI extends Screen {
 	public void helpScreen() {
 		clearScreen();
 
-		this.addRenderableWidget(
-				Button.builder(
-								Component.translatable("grapplemodifier.back.desc"),
-								new PressBack())
-						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
-						.build()
-		);
+		this.addRenderableWidget(new Button(
+				this.guiLeft + 10,
+				this.guiTop + this.ySize - 20 - 10,
+				50,
+				20,
+				Component.translatable("grapplemodifier.back.desc"),
+				new PressBack()
+		));
 
 		this.addRenderableWidget(new TextWidget(
 						Component.translatable("grapplemodifier.help.desc"),
@@ -341,13 +351,14 @@ public class GrappleModiferBlockGUI extends Screen {
 	public void showCategoryScreen(GrappleCustomization.upgradeCategories category) {
 		clearScreen();
 
-		this.addRenderableWidget(
-				Button.builder(
-								Component.translatable("grapplemodifier.back.desc"),
-								new PressBack())
-						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
-						.build()
-		);
+		this.addRenderableWidget(new Button(
+				this.guiLeft + 10,
+				this.guiTop + this.ySize - 20 - 10,
+				50,
+				20,
+				Component.translatable("grapplemodifier.back.desc"),
+				new PressBack()
+		));
 
 		this.category = category;
 

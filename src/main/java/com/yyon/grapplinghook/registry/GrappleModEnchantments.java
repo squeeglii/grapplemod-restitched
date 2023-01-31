@@ -5,7 +5,6 @@ import com.yyon.grapplinghook.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.enchantment.SlidingEnchantment;
 import com.yyon.grapplinghook.enchantment.WallrunEnchantment;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -35,7 +34,7 @@ public class GrappleModEnchantments {
             EnchantmentEntry<?> data = def.getValue();
             Enchantment it = data.getFactory().get();
 
-            data.finalize(Registry.register(BuiltInRegistries.ENCHANTMENT, id, it));
+            data.finalize(Registry.register(Registry.ENCHANTMENT, id, it));
         }
     }
 
