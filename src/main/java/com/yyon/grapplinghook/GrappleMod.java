@@ -6,7 +6,10 @@ import com.yyon.grapplinghook.registry.*;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,6 +40,10 @@ import org.apache.logging.log4j.Logger;
 public class GrappleMod implements ModInitializer {
     public static final String MODID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
+
+    public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.create(GrappleMod.id("main"))
+            .icon(() -> new ItemStack(GrappleModItems.GRAPPLING_HOOK.get()))
+            .build();
 
     @Override
     public void onInitialize() {

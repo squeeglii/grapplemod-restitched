@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.item;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.ModKeyBindings;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
@@ -56,7 +57,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesRight = new HashMap<>();
 	
 	public GrapplehookItem() {
-		super(new Item.Properties().stacksTo(1).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
+		super(new Item.Properties().stacksTo(1).tab(GrappleMod.ITEM_GROUP).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
 	}
 
 	public boolean hasHookEntity(Entity entity) {

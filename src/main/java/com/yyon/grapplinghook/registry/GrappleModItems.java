@@ -47,17 +47,9 @@ public final class GrappleModItems {
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
 
 
-    private static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.create(GrappleMod.id("main"))
-            .icon(() -> new ItemStack(GRAPPLING_HOOK.get()))
-            .build();
-
     public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item) {
-        return item(id, item, null);
-    }
-
-    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemLike>> tabProvider) {
         ResourceLocation qualId = GrappleMod.id(id);
-        ItemEntry<I> entry = new ItemEntry<>(qualId, item, tabProvider);
+        ItemEntry<I> entry = new ItemEntry<>(qualId, item);
         GrappleModItems.items.put(qualId, entry);
         return entry;
     }
@@ -75,48 +67,13 @@ public final class GrappleModItems {
 
             data.finalize(Registry.register(Registry.ITEM, id, it));
         }
-
-        NonNullList<ItemStack> tab = NonNullList.create();
-        items.values()
-                .stream()
-                .flatMap(iEntry -> iEntry.getTabProvider().get().stream())
-                .forEach(i -> new ItemStack(i.asItem()));
-
-        ITEM_GROUP.fillItemList(tab);
     }
 
 
 
     public static class ItemEntry<I extends Item> extends AbstractRegistryReference<I> {
-
-        protected Supplier<List<ItemLike>> tabProvider;
-
-        protected ItemEntry(ResourceLocation id, Supplier<I> factory, Supplier<List<ItemLike>> creativeTabProvider) {
+        protected ItemEntry(ResourceLocation id, Supplier<I> factory) {
             super(id, factory);
-
-            this.tabProvider = creativeTabProvider == null
-                    ? this.defaultInTab()
-                    : creativeTabProvider;
-        }
-
-        public Supplier<List<ItemLike>> getTabProvider() {
-            return tabProvider;
-        }
-
-        public Supplier<List<ItemLike>> defaultInTab() {
-            return () -> List.of(this.get());
-        }
-
-        public static Supplier<List<ItemLike>> hiddenInTab() {
-            return ArrayList::new;
-        }
-
-        public static Supplier<List<ItemLike>> populateHookVariantsInTab() {
-            return () -> {
-                List<ItemLike> grappleHookVariants = List.of();
-
-                return grappleHookVariants;
-            };
         }
     }
 }

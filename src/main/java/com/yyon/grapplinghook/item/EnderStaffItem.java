@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.item;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
 import net.fabricmc.api.EnvType;
@@ -36,7 +37,7 @@ import java.util.List;
 public class EnderStaffItem extends Item {
 	
 	public EnderStaffItem() {
-		super(new Item.Properties().stacksTo(1));
+		super(new Item.Properties().tab(GrappleMod.ITEM_GROUP).stacksTo(1));
 	}
 	
 	public void doRightClick(Level worldIn, Player player) {

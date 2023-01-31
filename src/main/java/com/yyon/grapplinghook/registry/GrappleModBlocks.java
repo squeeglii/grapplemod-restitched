@@ -45,7 +45,10 @@ public class GrappleModBlocks {
 
     public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks
             .block("block_grapple_modifier", GrappleModifierBlock::new)
-            .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
+            .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties()
+                    .stacksTo(64)
+                    .tab(GrappleMod.ITEM_GROUP)
+            )
             .define();
 
 
@@ -62,8 +65,8 @@ public class GrappleModBlocks {
             return this.context;
         }
 
-        public Flow<B> withItem(Consumer<GrappleModItems.ItemEntry<BlockItem>>  destination) {
-            return this.withConfiguredItem(destination, new Item.Properties());
+        public Flow<B> withItem(Consumer<GrappleModItems.ItemEntry<BlockItem>> destination) {
+            return this.withConfiguredItem(destination, new Item.Properties().tab(GrappleMod.ITEM_GROUP));
         }
 
         public Flow<B> withConfiguredItem(Consumer<GrappleModItems.ItemEntry<BlockItem>> destination, Item.Properties properties) {
@@ -88,7 +91,7 @@ public class GrappleModBlocks {
         private GrappleModItems.ItemEntry<I> source = null;
 
         protected BlockItemEntry() {
-            super(null, () -> null, null);
+            super(null, () -> null);
         }
 
         @Override

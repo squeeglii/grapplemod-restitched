@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.item;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
 import com.yyon.grapplinghook.controller.GrappleController;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class ForcefieldItem extends Item {
 	public ForcefieldItem() {
-		super(new Item.Properties().stacksTo(1));
+		super(new Item.Properties().tab(GrappleMod.ITEM_GROUP).stacksTo(1));
 	}
 	
 	public void doRightClick(ItemStack stack, Level worldIn, Player player) {
