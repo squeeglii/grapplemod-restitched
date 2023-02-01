@@ -14,9 +14,8 @@
     "main": [ "com.yyon.grapplinghook.GrappleMod" ],
     "modmenu": [ "com.yyon.grapplinghook.client.GrappleModModMenuIntegration" ]
   },
-  "mixins": [
-    "grapplemod.mixins.json"
-  ],
+  "mixins": [ "grapplemod.mixins.json" ],
+  "accessWidener": "grapplemod.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.13",
     "fabric": "*",
