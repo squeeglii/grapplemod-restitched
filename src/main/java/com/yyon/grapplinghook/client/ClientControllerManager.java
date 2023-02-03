@@ -2,7 +2,9 @@ package com.yyon.grapplinghook.client;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.keybind.GrappleModKeyBindings;
@@ -218,15 +220,15 @@ public class ClientControllerManager {
 		
 		boolean isJumpButtonDown = Minecraft.getInstance().options.keyJump.isDown();
 
-		Boolean[] conditions = new Boolean[] {
-				isJumpButtonDown,
-				!prevJumpButton,
-				!player.isInWater(),
-				!player.isInLava(),
-				ticksSinceLastOnGround > 3,
-				this.wearingDoubleJumpEnchant(player),
-				!alreadyUsedDoubleJump
-		};
+		List<Supplier<Boolean>> conditions = List.of(
+				() -> isJumpButtonDown,
+				() -> !prevJumpButton,
+				() -> !player.isInWater(),
+				() -> !player.isInLava(),
+				() -> ticksSinceLastOnGround > 3,
+				() -> this.wearingDoubleJumpEnchant(player),
+				() -> !alreadyUsedDoubleJump
+		);
 
 		boolean allConditionsMet = GrappleModUtils.and(conditions);
 
@@ -304,10 +306,13 @@ public class ClientControllerManager {
 
 
 	public GrappleController createControl(int controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, GrappleCustomization custom) {
-		GrapplehookEntity grapplehookEntity = null;
+		GrapplehookEntity grapplehookEntity;
 		if (world.getEntity(grapplehookEntityId) instanceof GrapplehookEntity g)
 			grapplehookEntity = g;
-		
+		else {
+			grapplehookEntity = null;
+		}
+
 		boolean multi = custom != null && custom.doublehook;
 		
 		GrappleController currentController = controllers.get(playerId);
@@ -322,12 +327,13 @@ public class ClientControllerManager {
 			} else {
 				control = controllers.get(playerId);
 
-				Boolean[] conditions = new Boolean[] {
-						control != null,
-						control.getClass().equals(GrappleController.class),
-						control.custom.doublehook,
-						grapplehookEntity != null
-				};
+				GrappleController finalControl = control;
+				List<Supplier<Boolean>> conditions = List.of(
+						() -> finalControl != null,
+						() -> finalControl.getClass().equals(GrappleController.class),
+						() -> finalControl.custom.doublehook,
+						() -> grapplehookEntity != null
+				);
 
 				if(GrappleModUtils.and(conditions)) {
 					control.addHookEntity(grapplehookEntity);
