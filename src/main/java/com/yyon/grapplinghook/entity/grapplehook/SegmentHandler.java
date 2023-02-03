@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -166,7 +167,7 @@ public class SegmentHandler {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), false, index, new Vec(0, 0, 0), Direction.DOWN, Direction.DOWN);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
 
-			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers(world, playerpoint));
+			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers((ServerLevel) world, playerpoint));
 
 		}
 	}
@@ -292,7 +293,7 @@ public class SegmentHandler {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), true, index, bendpoint, topside, bottomside);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
 
-			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers(world, playerpoint));
+			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers((ServerLevel) world, playerpoint));
 		}
 	}
 	
