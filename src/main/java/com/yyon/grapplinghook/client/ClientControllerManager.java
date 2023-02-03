@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.keybind.ModKeyBindings;
+import com.yyon.grapplinghook.client.keybind.GrappleModKeyBindings;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
 import com.yyon.grapplinghook.controller.ForcefieldController;
@@ -109,7 +109,7 @@ public class ClientControllerManager {
 	}
 
 	public void checkSlide(Player player) {
-		if (ModKeyBindings.key_slide.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
+		if (GrappleModKeyBindings.key_slide.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
 			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
 		}
 	}
@@ -187,7 +187,7 @@ public class ClientControllerManager {
 				for (Enchantment enchant : enchantments.keySet()) {
 					if (!(enchant instanceof WallrunEnchantment)) continue;
 					if (enchantments.get(enchant) < 1) continue;
-					if (ModKeyBindings.key_jumpanddetach.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
+					if (GrappleModKeyBindings.key_jumpanddetach.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
 
 					BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level, Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 					if (rayTraceResult == null) {
@@ -284,7 +284,7 @@ public class ClientControllerManager {
 	public boolean isSliding(Entity entity, Vec motion) {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
-		if (entity.isOnGround() && ModKeyBindings.key_slide.isDown()) {
+		if (entity.isOnGround() && GrappleModKeyBindings.key_slide.isDown()) {
 			if (!ClientControllerManager.isWearingSlidingEnchant(entity)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();

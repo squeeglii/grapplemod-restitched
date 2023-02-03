@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
 import com.yyon.grapplinghook.gui.GrappleModiferBlockGUI;
-import com.yyon.grapplinghook.client.keybind.ModKeyBindings;
+import com.yyon.grapplinghook.client.keybind.GrappleModKeyBindings;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
 import com.yyon.grapplinghook.controller.ForcefieldController;
@@ -14,6 +14,7 @@ import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.registry.GrappleModEntities;
+import com.yyon.grapplinghook.registry.GrappleModEntityRenderLayers;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -58,7 +59,8 @@ public class GrappleModClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(GrappleModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 
-        ModKeyBindings.registerAll();
+        GrappleModKeyBindings.registerAll();
+        GrappleModEntityRenderLayers.registerAll();
 
         this.clientControllerManager = new ClientControllerManager();
         this.registerPropertyOverride();
@@ -166,18 +168,18 @@ public class GrappleModClient implements ClientModInitializer {
 
     public boolean isKeyDown(GrappleKeys key) {
         return switch (key) {
-            case key_boththrow -> ModKeyBindings.key_boththrow.isDown();
-            case key_leftthrow -> ModKeyBindings.key_leftthrow.isDown();
-            case key_rightthrow -> ModKeyBindings.key_rightthrow.isDown();
-            case key_motoronoff -> ModKeyBindings.key_motoronoff.isDown();
-            case key_jumpanddetach -> ModKeyBindings.key_jumpanddetach.isDown();
-            case key_slow -> ModKeyBindings.key_slow.isDown();
-            case key_climb -> ModKeyBindings.key_climb.isDown();
-            case key_climbup -> ModKeyBindings.key_climbup.isDown();
-            case key_climbdown -> ModKeyBindings.key_climbdown.isDown();
-            case key_enderlaunch -> ModKeyBindings.key_enderlaunch.isDown();
-            case key_rocket -> ModKeyBindings.key_rocket.isDown();
-            case key_slide -> ModKeyBindings.key_slide.isDown();
+            case key_boththrow -> GrappleModKeyBindings.key_boththrow.isDown();
+            case key_leftthrow -> GrappleModKeyBindings.key_leftthrow.isDown();
+            case key_rightthrow -> GrappleModKeyBindings.key_rightthrow.isDown();
+            case key_motoronoff -> GrappleModKeyBindings.key_motoronoff.isDown();
+            case key_jumpanddetach -> GrappleModKeyBindings.key_jumpanddetach.isDown();
+            case key_slow -> GrappleModKeyBindings.key_slow.isDown();
+            case key_climb -> GrappleModKeyBindings.key_climb.isDown();
+            case key_climbup -> GrappleModKeyBindings.key_climbup.isDown();
+            case key_climbdown -> GrappleModKeyBindings.key_climbdown.isDown();
+            case key_enderlaunch -> GrappleModKeyBindings.key_enderlaunch.isDown();
+            case key_rocket -> GrappleModKeyBindings.key_rocket.isDown();
+            case key_slide -> GrappleModKeyBindings.key_slide.isDown();
         };
     }
 

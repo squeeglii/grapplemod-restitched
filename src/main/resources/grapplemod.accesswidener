@@ -1,3 +1,4 @@
 accessWidener v2 named
 
 accessible method net/minecraft/client/model/geom/ModelLayers register (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/client/model/geom/ModelLayerLocation;
+accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addLayer (Lnet/minecraft/client/renderer/entity/layers/RenderLayer;)Z

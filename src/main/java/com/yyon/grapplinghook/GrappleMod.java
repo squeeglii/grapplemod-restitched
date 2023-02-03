@@ -53,4 +53,7 @@ public class GrappleMod implements ModInitializer {
     public static ResourceLocation id(String id) {
         return new ResourceLocation(MODID, id);
     }
+    public static ResourceLocation fakeId(String id) {
+        return new ResourceLocation("minecraft", id);
+    }
 }

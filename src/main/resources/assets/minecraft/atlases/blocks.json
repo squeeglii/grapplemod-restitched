@@ -9,6 +9,11 @@
             "type": "directory",
             "source": "items",
             "prefix": "items/"
+        },
+        {
+            "type": "directory",
+            "source": "armor",
+            "prefix": "armor/"
         }
     ]
 }
