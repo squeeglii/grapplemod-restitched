@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.registry;
 
+import com.google.common.collect.ImmutableMap;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.attachable.LongFallBootsLayer;
 import com.yyon.grapplinghook.client.attachable.model.LongFallBootsModel;
@@ -12,10 +13,11 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -56,6 +58,9 @@ public class GrappleModEntityRenderLayers {
     public static final RenderLayerEntry LONG_FALL_BOOTS = GrappleModEntityRenderLayers.layer("long_fall_boots", LongFallBootsLayer::new, LongFallBootsModel::generateLayer);
 
 
+    public static Map<ResourceLocation, RenderLayerEntry> getRenderLayers() {
+        return Collections.unmodifiableMap(renderLayers);
+    }
 
     public static class RenderLayerEntry extends AbstractRegistryReference<LayerDefinition> {
 

@@ -1,10 +1,8 @@
 package com.yyon.grapplinghook.mixin.client.attachable;
 
 import com.yyon.grapplinghook.registry.GrappleModEntityRenderLayers;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.ArmorStandRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -8,19 +8,12 @@ import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.LinkedList;
-import java.util.stream.Collectors;
 
 public class SegmentHandler {
 
@@ -206,10 +199,7 @@ public class SegmentHandler {
                 	Vec cornerhitpos = new Vec(cornerraytraceresult.getLocation());
                 	Direction cornerside = cornerraytraceresult.getDirection();
                 	
-                	if (cornerside == bottomside || 
-                			cornerside.getOpposite() == bottomside) {
-                		continue;
-                	} else {
+                	if (!(cornerside == bottomside || cornerside.getOpposite() == bottomside)) {
                 		// add a bend around the corner
                 		Vec actualcorner = cornerhitpos.add(bottomnormal.changeLen(intoBlock));
                 		Vec bend = actualcorner.add(bottomnormal.changeLen(bendOffset)).add(getNormal(cornerside).changeLen(bendOffset));
@@ -370,7 +360,7 @@ public class SegmentHandler {
 				maxvec.z = segpos.z;
 			}
 		}
-		AABB bb = new AABB(minvec.x, minvec.y, minvec.z, maxvec.x, maxvec.y, maxvec.z);
-		return bb;
+
+		return new AABB(minvec.x, minvec.y, minvec.z, maxvec.x, maxvec.y, maxvec.z);
 	}
 }

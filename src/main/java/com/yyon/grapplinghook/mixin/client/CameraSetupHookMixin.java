@@ -41,8 +41,7 @@ public class CameraSetupHookMixin {
         int targetCameraTilt = 0;
         if (ClientControllerManager.controllers.containsKey(id)) {
             GrappleController controller = ClientControllerManager.controllers.get(id);
-            if (controller instanceof AirfrictionController) {
-                AirfrictionController afcontroller = (AirfrictionController) controller;
+            if (controller instanceof AirfrictionController afcontroller) {
                 if (afcontroller.wasWallrunning) {
                     Vec walldirection = afcontroller.getWallDirection();
                     if (walldirection != null) {

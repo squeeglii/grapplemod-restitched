@@ -31,9 +31,7 @@ public class ServerControllerManager {
 	}
 	
 	public static void receiveGrappleEnd(int id, Level world, HashSet<Integer> hookEntityIds) {
-		if (attached.contains(id)) {
-			attached.remove(id);
-		}
+		attached.remove(id);
 		
 		for (int hookEntityId : hookEntityIds) {
 	      	Entity grapple = world.getEntity(hookEntityId);

@@ -86,9 +86,9 @@ public class GrappleAttachMessage extends BaseMessageClient {
         this.custom.readFromBuf(buf);
         
         int size = buf.readInt();
-        this.segments = new LinkedList<Vec>();
-        this.segmentBottomSides = new LinkedList<Direction>();
-        this.segmentTopSides = new LinkedList<Direction>();
+        this.segments = new LinkedList<>();
+        this.segmentBottomSides = new LinkedList<>();
+        this.segmentTopSides = new LinkedList<>();
 
 		segments.add(new Vec(0, 0, 0));
 		segmentBottomSides.add(null);
@@ -148,7 +148,6 @@ public class GrappleAttachMessage extends BaseMessageClient {
         	
         	Entity player = world.getEntity(this.entityId);
         	segmenthandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(player));
-    	} else {
     	}
     	            	
     	GrappleModClient.get().createControl(this.controlId, this.id, this.entityId, world, new Vec(this.x, this.y, this.z), this.blockPos, this.custom);

@@ -240,7 +240,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	    			Vec pos = Vec.positionVec(this);
 	    			if (magnetBlock == null) {
 		    			if (prevPos != null) {
-			    			HashMap<BlockPos, Boolean> checkedset = new HashMap<BlockPos, Boolean>();
+			    			HashMap<BlockPos, Boolean> checkedset = new HashMap<>();
 			    			Vec vector = pos.sub(prevPos);
 			    			if (vector.length() > 0) {
 				    			Vec normvector = vector.normalize();
@@ -354,21 +354,18 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 			
 			if (blockhit != null) {
 				BlockPos blockpos = blockhit.getBlockPos();
-				if (blockpos != null) {
-					Block block = this.level.getBlockState(blockpos).getBlock();
-					if (GrappleConfigUtils.breaksBlock(block)) {
-						this.level.destroyBlock(blockpos, true);
-				        onHit(GrappleModUtils.rayTraceBlocks(this, this.level, vec3d, vec3d1));
-				        return;
-					}
+				Block block = this.level.getBlockState(blockpos).getBlock();
+				if (GrappleConfigUtils.breaksBlock(block)) {
+					this.level.destroyBlock(blockpos, true);
+					onHit(GrappleModUtils.rayTraceBlocks(this, this.level, vec3d, vec3d1));
+					return;
 				}
 			}
 			
-			if (movingobjectposition instanceof EntityHitResult) {
+			if (movingobjectposition instanceof EntityHitResult entityHit) {
 				// hit entity
-				EntityHitResult entityHit = (EntityHitResult) movingobjectposition;
 				Entity entity = entityHit.getEntity();
-				if (entity == this.shootingEntity || entity == null) {
+				if (entity == this.shootingEntity) {
 					return;
 				}
 				
@@ -380,7 +377,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 				entity.setDeltaMovement(newmotion.toVec3d());
 				
 				this.removeServer();
-				return;
+
 			} else if (blockhit != null) {
 				BlockPos blockpos = blockhit.getBlockPos();
 				
@@ -493,18 +490,16 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
         	for (int y = (int)p.y - radius; y <= (int)p.y + radius; y++) {
             	for (int z = (int)p.z - radius; z <= (int)p.z + radius; z++) {
 			    	BlockPos pos = new BlockPos(x, y, z);
-			    	if (pos != null) {
-				    	if (hasBlock(pos, checkedset)) {
-				    		Vec distvec = new Vec(pos.getX(), pos.getY(), pos.getZ());
-				    		distvec.sub_ip(p);
-				    		double dist = distvec.length();
-				    		if (closestpos == null || dist < closestdist) {
-				    			closestpos = pos;
-				    			closestdist = dist;
-				    		}
-				    	}
-			    	}
-            	}
+					if (hasBlock(pos, checkedset)) {
+						Vec distvec = new Vec(pos.getX(), pos.getY(), pos.getZ());
+						distvec.sub_ip(p);
+						double dist = distvec.length();
+						if (closestpos == null || dist < closestdist) {
+							closestpos = pos;
+							closestdist = dist;
+						}
+					}
+				}
 	    	}
     	}
 		return closestpos;
@@ -519,13 +514,13 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 			if (GrappleConfigUtils.attachesBlock(b)) {
 		    	if (!(blockstate.isAir())) {
 			    	VoxelShape BB = blockstate.getCollisionShape(this.level, pos);
-			    	if (BB != null && !BB.isEmpty()) {
+			    	if (!BB.isEmpty()) {
 			    		isblock = true;
 			    	}
 		    	}
 			}
 			
-	    	checkedset.put(pos, (Boolean) isblock);
+	    	checkedset.put(pos, isblock);
 	    	return isblock;
     	} else {
     		return checkedset.get(pos);

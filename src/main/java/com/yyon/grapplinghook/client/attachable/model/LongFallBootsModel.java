@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.util.model.ModelPath;
 import net.minecraft.client.model.AgeableListModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;

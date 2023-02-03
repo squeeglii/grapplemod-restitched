@@ -6,16 +6,12 @@ import com.yyon.grapplinghook.item.ForcefieldItem;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.item.upgrade.*;
-import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.*;
@@ -108,11 +104,9 @@ public final class GrappleModItems {
         }
 
         public static Supplier<List<ItemLike>> populateHookVariantsInTab() {
-            return () -> {
-                List<ItemLike> grappleHookVariants = List.of();
-
-                return grappleHookVariants;
-            };
+            //List<ItemLike> grappleHookVariants = List.of();
+            //return grappleHookVariants;
+            return List::of;
         }
     }
 }

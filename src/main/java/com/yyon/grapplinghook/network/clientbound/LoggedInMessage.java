@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.network.clientbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -43,27 +42,26 @@ public class LoggedInMessage extends BaseMessageClient {
 
     public <T> void decodeClass(FriendlyByteBuf buf, Class<T> theClass, T theObject) {
     	Field[] fields = theClass.getDeclaredFields();
-    	Arrays.sort(fields, new Comparator<Field>() {
-    	    @Override
-    	    public int compare(Field o1, Field o2) {
-    	        return o1.getName().compareTo(o2.getName());
-    	    }
-    	});
+    	Arrays.sort(fields, Comparator.comparing(Field::getName));
     	
     	for (Field field : fields) {
     		Type fieldtype = field.getGenericType();
     		try {
         		if (fieldtype.getTypeName().equals("int")) {
         			field.setInt(theObject, buf.readInt());
+
         		} else if (fieldtype.getTypeName().equals("double")) {
         			field.setDouble(theObject, buf.readDouble());
+
         		} else if (fieldtype.getTypeName().equals("boolean")) {
         			field.setBoolean(theObject, buf.readBoolean());
+
         		} else if (fieldtype.getTypeName().equals("java.lang.String")) {
         			int len = buf.readInt();
         			CharSequence charseq = buf.readCharSequence(len, Charset.defaultCharset());
         			field.set(theObject, charseq.toString());
-        		} else if (field.getType() != null && Object.class.isAssignableFrom(field.getType())) {
+
+        		} else if (Object.class.isAssignableFrom(field.getType())) {
         			Class newClass = field.getType();
         			decodeClass(buf, newClass, newClass.cast(field.get(theObject)));
         		} else {
@@ -86,12 +84,7 @@ public class LoggedInMessage extends BaseMessageClient {
 
     public <T> void encodeClass(FriendlyByteBuf buf, Class<T> theClass, T theObject) {
     	Field[] fields = theClass.getDeclaredFields();
-    	Arrays.sort(fields, new Comparator<Field>() {
-    	    @Override
-    	    public int compare(Field o1, Field o2) {
-    	        return o1.getName().compareTo(o2.getName());
-    	    }
-    	});
+    	Arrays.sort(fields, Comparator.comparing(Field::getName));
     	
     	for (Field field : fields) {
     		Type fieldtype = field.getGenericType();
@@ -106,7 +99,7 @@ public class LoggedInMessage extends BaseMessageClient {
         			String str = (String) field.get(theObject);
         			buf.writeInt(str.length());
         			buf.writeCharSequence(str.subSequence(0, str.length()), Charset.defaultCharset());
-        		} else if (field.getType() != null && Object.class.isAssignableFrom(field.getType())) {
+        		} else if (Object.class.isAssignableFrom(field.getType())) {
         			Class newClass = field.getType();
         			encodeClass(buf, newClass, newClass.cast(field.get(theObject)));
         		} else {

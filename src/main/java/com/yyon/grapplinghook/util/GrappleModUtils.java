@@ -5,7 +5,6 @@ import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -47,6 +46,7 @@ public class GrappleModUtils {
 		return w.getGameTime();
 	}
 
+	@SafeVarargs
 	public static boolean and(Supplier<Boolean>... conditions) {
 		boolean failed = Arrays.stream(conditions).anyMatch(bool -> !bool.get());
 		return !failed;

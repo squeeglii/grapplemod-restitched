@@ -80,7 +80,7 @@ public class GrappleCustomization {
 		LIMITS ("limits"),
 		ROCKET ("rocket");
 		
-		private String nameUnlocalized;
+		private final String nameUnlocalized;
 		upgradeCategories(String name) {
 			this.nameUnlocalized = name;
 		}
@@ -140,44 +140,49 @@ public class GrappleCustomization {
 	}
 	
 	public GrappleConfig.Config.GrapplingHook.Custom.BooleanCustomizationOption getBooleanConfig(String option) {
-		if (option.equals("phaserope")) {return GrappleConfig.getConf().grapplinghook.custom.rope.phaserope;}
-		else if (option.equals("motor")) {return GrappleConfig.getConf().grapplinghook.custom.motor.motor;}
-		else if (option.equals("motorwhencrouching")) {return GrappleConfig.getConf().grapplinghook.custom.motor.motorwhencrouching;}
-		else if (option.equals("motorwhennotcrouching")) {return GrappleConfig.getConf().grapplinghook.custom.motor.motorwhennotcrouching;}
-		else if (option.equals("smartmotor")) {return GrappleConfig.getConf().grapplinghook.custom.motor.smartmotor;}
-		else if (option.equals("enderstaff")) {return GrappleConfig.getConf().grapplinghook.custom.enderstaff.enderstaff;}
-		else if (option.equals("repel")) {return GrappleConfig.getConf().grapplinghook.custom.forcefield.repel;}
-		else if (option.equals("attract")) {return GrappleConfig.getConf().grapplinghook.custom.magnet.attract;}
-		else if (option.equals("doublehook")) {return GrappleConfig.getConf().grapplinghook.custom.doublehook.doublehook;}
-		else if (option.equals("smartdoublemotor")) {return GrappleConfig.getConf().grapplinghook.custom.doublehook.smartdoublemotor;}
-		else if (option.equals("motordampener")) {return GrappleConfig.getConf().grapplinghook.custom.motor.motordampener;}
-		else if (option.equals("reelin")) {return GrappleConfig.getConf().grapplinghook.custom.hookthrower.reelin;}
-		else if (option.equals("pullbackwards")) {return GrappleConfig.getConf().grapplinghook.custom.motor.pullbackwards;}
-		else if (option.equals("oneropepull")) {return GrappleConfig.getConf().grapplinghook.custom.doublehook.oneropepull;}
-		else if (option.equals("sticky")) {return GrappleConfig.getConf().grapplinghook.custom.rope.sticky;}
-		else if (option.equals("detachonkeyrelease")) {return GrappleConfig.getConf().grapplinghook.custom.hookthrower.detachonkeyrelease;}
-		else if (option.equals("rocket")) {return GrappleConfig.getConf().grapplinghook.custom.rocket.rocketenabled;}
-		return null;
+		return switch (option) {
+			case "phaserope" -> GrappleConfig.getConf().grapplinghook.custom.rope.phaserope;
+			case "motor" -> GrappleConfig.getConf().grapplinghook.custom.motor.motor;
+			case "motorwhencrouching" -> GrappleConfig.getConf().grapplinghook.custom.motor.motorwhencrouching;
+			case "motorwhennotcrouching" -> GrappleConfig.getConf().grapplinghook.custom.motor.motorwhennotcrouching;
+			case "smartmotor" -> GrappleConfig.getConf().grapplinghook.custom.motor.smartmotor;
+			case "enderstaff" -> GrappleConfig.getConf().grapplinghook.custom.enderstaff.enderstaff;
+			case "repel" -> GrappleConfig.getConf().grapplinghook.custom.forcefield.repel;
+			case "attract" -> GrappleConfig.getConf().grapplinghook.custom.magnet.attract;
+			case "doublehook" -> GrappleConfig.getConf().grapplinghook.custom.doublehook.doublehook;
+			case "smartdoublemotor" -> GrappleConfig.getConf().grapplinghook.custom.doublehook.smartdoublemotor;
+			case "motordampener" -> GrappleConfig.getConf().grapplinghook.custom.motor.motordampener;
+			case "reelin" -> GrappleConfig.getConf().grapplinghook.custom.hookthrower.reelin;
+			case "pullbackwards" -> GrappleConfig.getConf().grapplinghook.custom.motor.pullbackwards;
+			case "oneropepull" -> GrappleConfig.getConf().grapplinghook.custom.doublehook.oneropepull;
+			case "sticky" -> GrappleConfig.getConf().grapplinghook.custom.rope.sticky;
+			case "detachonkeyrelease" -> GrappleConfig.getConf().grapplinghook.custom.hookthrower.detachonkeyrelease;
+			case "rocket" -> GrappleConfig.getConf().grapplinghook.custom.rocket.rocketenabled;
+			default -> null;
+		};
 	}
 
 	public GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption getDoubleConfig(String option) {
-		if (option.equals("maxlen")) {return GrappleConfig.getConf().grapplinghook.custom.rope.maxlen;}
-		else if (option.equals("hookgravity")) {return GrappleConfig.getConf().grapplinghook.custom.hookthrower.hookgravity;}
-		else if (option.equals("throwspeed")) {return GrappleConfig.getConf().grapplinghook.custom.hookthrower.throwspeed;}
-		else if (option.equals("motormaxspeed")) {return GrappleConfig.getConf().grapplinghook.custom.motor.motormaxspeed;}
-		else if (option.equals("motoracceleration")) {return GrappleConfig.getConf().grapplinghook.custom.motor.motoracceleration;}
-		else if (option.equals("playermovementmult")) {return GrappleConfig.getConf().grapplinghook.custom.swing.playermovementmult;}
-		else if (option.equals("repelforce")) {return GrappleConfig.getConf().grapplinghook.custom.forcefield.repelforce;}
-		else if (option.equals("attractradius")) {return GrappleConfig.getConf().grapplinghook.custom.magnet.attractradius;}
-		else if (option.equals("angle")) {return GrappleConfig.getConf().grapplinghook.custom.doublehook.angle;}
-		else if (option.equals("sneakingangle")) {return GrappleConfig.getConf().grapplinghook.custom.doublehook.sneakingangle;}
-		else if (option.equals("verticalthrowangle")) {return GrappleConfig.getConf().grapplinghook.custom.hookthrower.verticalthrowangle;}
-		else if (option.equals("sneakingverticalthrowangle")) {return GrappleConfig.getConf().grapplinghook.custom.hookthrower.sneakingverticalthrowangle;}
-		else if (option.equals("rocket_force")) {return GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_force;}
-		else if (option.equals("rocket_active_time")) {return GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_active_time;}
-		else if (option.equals("rocket_refuel_ratio")) {return GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_refuel_ratio;}
-		else if (option.equals("rocket_vertical_angle")) {return GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_vertical_angle;}
-		return null;
+		return switch (option) {
+			case "maxlen" -> GrappleConfig.getConf().grapplinghook.custom.rope.maxlen;
+			case "hookgravity" -> GrappleConfig.getConf().grapplinghook.custom.hookthrower.hookgravity;
+			case "throwspeed" -> GrappleConfig.getConf().grapplinghook.custom.hookthrower.throwspeed;
+			case "motormaxspeed" -> GrappleConfig.getConf().grapplinghook.custom.motor.motormaxspeed;
+			case "motoracceleration" -> GrappleConfig.getConf().grapplinghook.custom.motor.motoracceleration;
+			case "playermovementmult" -> GrappleConfig.getConf().grapplinghook.custom.swing.playermovementmult;
+			case "repelforce" -> GrappleConfig.getConf().grapplinghook.custom.forcefield.repelforce;
+			case "attractradius" -> GrappleConfig.getConf().grapplinghook.custom.magnet.attractradius;
+			case "angle" -> GrappleConfig.getConf().grapplinghook.custom.doublehook.angle;
+			case "sneakingangle" -> GrappleConfig.getConf().grapplinghook.custom.doublehook.sneakingangle;
+			case "verticalthrowangle" -> GrappleConfig.getConf().grapplinghook.custom.hookthrower.verticalthrowangle;
+			case "sneakingverticalthrowangle" ->
+					GrappleConfig.getConf().grapplinghook.custom.hookthrower.sneakingverticalthrowangle;
+			case "rocket_force" -> GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_force;
+			case "rocket_active_time" -> GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_active_time;
+			case "rocket_refuel_ratio" -> GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_refuel_ratio;
+			case "rocket_vertical_angle" -> GrappleConfig.getConf().grapplinghook.custom.rocket.rocket_vertical_angle;
+			default -> null;
+		};
 	}
 
 	public CompoundTag writeNBT() {
@@ -213,87 +218,99 @@ public class GrappleCustomization {
 	}
 	
 	public void setBoolean(String option, boolean bool) {
-		if (option.equals("phaserope")) {this.phaserope = bool;}
-		else if (option.equals("motor")) {this.motor = bool;}
-		else if (option.equals("motorwhencrouching")) {this.motorwhencrouching = bool;}
-		else if (option.equals("motorwhennotcrouching")) {this.motorwhennotcrouching = bool;}
-		else if (option.equals("smartmotor")) {this.smartmotor = bool;}
-		else if (option.equals("enderstaff")) {this.enderstaff = bool;}
-		else if (option.equals("repel")) {this.repel = bool;}
-		else if (option.equals("attract")) {this.attract = bool;}
-		else if (option.equals("doublehook")) {this.doublehook = bool;}
-		else if (option.equals("smartdoublemotor")) {this.smartdoublemotor = bool;}
-		else if (option.equals("motordampener")) {this.motordampener = bool;}
-		else if (option.equals("reelin")) {this.reelin = bool;}
-		else if (option.equals("pullbackwards")) {this.pullbackwards = bool;}
-		else if (option.equals("oneropepull")) {this.oneropepull = bool;}
-		else if (option.equals("sticky")) {this.sticky = bool;}
-		else if (option.equals("detachonkeyrelease")) {this.detachonkeyrelease = bool;}
-		else if (option.equals("rocket")) {this.rocket = bool;}
-		else {GrappleMod.LOGGER.warn("Option doesn't exist: " + option);}
+		switch (option) {
+			case "phaserope" -> this.phaserope = bool;
+			case "motor" -> this.motor = bool;
+			case "motorwhencrouching" -> this.motorwhencrouching = bool;
+			case "motorwhennotcrouching" -> this.motorwhennotcrouching = bool;
+			case "smartmotor" -> this.smartmotor = bool;
+			case "enderstaff" -> this.enderstaff = bool;
+			case "repel" -> this.repel = bool;
+			case "attract" -> this.attract = bool;
+			case "doublehook" -> this.doublehook = bool;
+			case "smartdoublemotor" -> this.smartdoublemotor = bool;
+			case "motordampener" -> this.motordampener = bool;
+			case "reelin" -> this.reelin = bool;
+			case "pullbackwards" -> this.pullbackwards = bool;
+			case "oneropepull" -> this.oneropepull = bool;
+			case "sticky" -> this.sticky = bool;
+			case "detachonkeyrelease" -> this.detachonkeyrelease = bool;
+			case "rocket" -> this.rocket = bool;
+			default -> GrappleMod.LOGGER.warn("Option doesn't exist: " + option);
+		}
 	}
 	
 	public boolean getBoolean(String option) {
-		if (option.equals("phaserope")) {return this.phaserope;}
-		else if (option.equals("motor")) {return this.motor;}
-		else if (option.equals("motorwhencrouching")) {return this.motorwhencrouching;}
-		else if (option.equals("motorwhennotcrouching")) {return this.motorwhennotcrouching;}
-		else if (option.equals("smartmotor")) {return this.smartmotor;}
-		else if (option.equals("enderstaff")) {return this.enderstaff;}
-		else if (option.equals("repel")) {return this.repel;}
-		else if (option.equals("attract")) {return this.attract;}
-		else if (option.equals("doublehook")) {return this.doublehook;}
-		else if (option.equals("smartdoublemotor")) {return this.smartdoublemotor;}
-		else if (option.equals("motordampener")) {return this.motordampener;}
-		else if (option.equals("reelin")) {return this.reelin;}
-		else if (option.equals("pullbackwards")) {return this.pullbackwards;}
-		else if (option.equals("oneropepull")) {return this.oneropepull;}
-		else if (option.equals("sticky")) {return this.sticky;}
-		else if (option.equals("detachonkeyrelease")) {return this.detachonkeyrelease;}
-		else if (option.equals("rocket")) {return this.rocket;}
-		GrappleMod.LOGGER.warn("Option doesn't exist: " + option);
-		return false;
+		return switch (option) {
+			case "phaserope" -> this.phaserope;
+			case "motor" -> this.motor;
+			case "motorwhencrouching" -> this.motorwhencrouching;
+			case "motorwhennotcrouching" -> this.motorwhennotcrouching;
+			case "smartmotor" -> this.smartmotor;
+			case "enderstaff" -> this.enderstaff;
+			case "repel" -> this.repel;
+			case "attract" -> this.attract;
+			case "doublehook" -> this.doublehook;
+			case "smartdoublemotor" -> this.smartdoublemotor;
+			case "motordampener" -> this.motordampener;
+			case "reelin" -> this.reelin;
+			case "pullbackwards" -> this.pullbackwards;
+			case "oneropepull" -> this.oneropepull;
+			case "sticky" -> this.sticky;
+			case "detachonkeyrelease" -> this.detachonkeyrelease;
+			case "rocket" -> this.rocket;
+			default -> {
+				GrappleMod.LOGGER.warn("Option doesn't exist: " + option);
+				yield false;
+			}
+		};
 	}
 	
 	public void setDouble(String option, double d) {
-		if (option.equals("maxlen")) {this.maxlen = d;}
-		else if (option.equals("hookgravity")) {this.hookgravity = d;}
-		else if (option.equals("throwspeed")) {this.throwspeed = d;}
-		else if (option.equals("motormaxspeed")) {this.motormaxspeed = d;}
-		else if (option.equals("motoracceleration")) {this.motoracceleration = d;}
-		else if (option.equals("playermovementmult")) {this.playermovementmult = d;}
-		else if (option.equals("repelforce")) {this.repelforce = d;}
-		else if (option.equals("attractradius")) {this.attractradius = d;}
-		else if (option.equals("angle")) {this.angle = d;}
-		else if (option.equals("sneakingangle")) {this.sneakingangle = d;}
-		else if (option.equals("verticalthrowangle")) {this.verticalthrowangle = d;}
-		else if (option.equals("sneakingverticalthrowangle")) {this.sneakingverticalthrowangle = d;}
-		else if (option.equals("rocket_force")) {this.rocket_force = d;}
-		else if (option.equals("rocket_active_time")) {this.rocket_active_time = d;}
-		else if (option.equals("rocket_refuel_ratio")) {this.rocket_refuel_ratio = d;}
-		else if (option.equals("rocket_vertical_angle")) {this.rocket_vertical_angle = d;}
-		else {GrappleMod.LOGGER.warn("Option doesn't exist: " + option);}
+		switch (option) {
+			case "maxlen" -> this.maxlen = d;
+			case "hookgravity" -> this.hookgravity = d;
+			case "throwspeed" -> this.throwspeed = d;
+			case "motormaxspeed" -> this.motormaxspeed = d;
+			case "motoracceleration" -> this.motoracceleration = d;
+			case "playermovementmult" -> this.playermovementmult = d;
+			case "repelforce" -> this.repelforce = d;
+			case "attractradius" -> this.attractradius = d;
+			case "angle" -> this.angle = d;
+			case "sneakingangle" -> this.sneakingangle = d;
+			case "verticalthrowangle" -> this.verticalthrowangle = d;
+			case "sneakingverticalthrowangle" -> this.sneakingverticalthrowangle = d;
+			case "rocket_force" -> this.rocket_force = d;
+			case "rocket_active_time" -> this.rocket_active_time = d;
+			case "rocket_refuel_ratio" -> this.rocket_refuel_ratio = d;
+			case "rocket_vertical_angle" -> this.rocket_vertical_angle = d;
+			default -> GrappleMod.LOGGER.warn("Option doesn't exist: " + option);
+		}
 	}
 	
 	public double getDouble(String option) {
-		if (option.equals("maxlen")) {return maxlen;}
-		else if (option.equals("hookgravity")) {return hookgravity;}
-		else if (option.equals("throwspeed")) {return throwspeed;}
-		else if (option.equals("motormaxspeed")) {return motormaxspeed;}
-		else if (option.equals("motoracceleration")) {return motoracceleration;}
-		else if (option.equals("playermovementmult")) {return playermovementmult;}
-		else if (option.equals("repelforce")) {return repelforce;}
-		else if (option.equals("attractradius")) {return attractradius;}
-		else if (option.equals("angle")) {return angle;}
-		else if (option.equals("sneakingangle")) {return sneakingangle;}
-		else if (option.equals("verticalthrowangle")) {return verticalthrowangle;}
-		else if (option.equals("sneakingverticalthrowangle")) {return sneakingverticalthrowangle;}
-		else if (option.equals("rocket_force")) {return this.rocket_force;}
-		else if (option.equals("rocket_active_time")) {return rocket_active_time;}
-		else if (option.equals("rocket_refuel_ratio")) {return rocket_refuel_ratio;}
-		else if (option.equals("rocket_vertical_angle")) {return rocket_vertical_angle;}
-		GrappleMod.LOGGER.warn("Option doesn't exist: " + option);
-		return 0;
+		return switch (option) {
+			case "maxlen" -> this.maxlen;
+			case "hookgravity" -> this.hookgravity;
+			case "throwspeed" -> this.throwspeed;
+			case "motormaxspeed" -> this.motormaxspeed;
+			case "motoracceleration" -> this.motoracceleration;
+			case "playermovementmult" -> this.playermovementmult;
+			case "repelforce" -> this.repelforce;
+			case "attractradius" -> this.attractradius;
+			case "angle" -> this.angle;
+			case "sneakingangle" -> this.sneakingangle;
+			case "verticalthrowangle" -> this.verticalthrowangle;
+			case "sneakingverticalthrowangle" -> this.sneakingverticalthrowangle;
+			case "rocket_force" -> this.rocket_force;
+			case "rocket_active_time" -> this.rocket_active_time;
+			case "rocket_refuel_ratio" -> this.rocket_refuel_ratio;
+			case "rocket_vertical_angle" -> this.rocket_vertical_angle;
+			default -> {
+				GrappleMod.LOGGER.warn("Option doesn't exist: " + option);
+				yield 0.0D;
+			}
+		};
 	}
 	
 	public long getChecksum() {
@@ -342,35 +359,37 @@ public class GrappleCustomization {
 	}
 	
 	public boolean isOptionValid(String option) {
-		if (option == "motormaxspeed" || option == "motoracceleration" || option == "motorwhencrouching" || option == "motorwhennotcrouching" || option == "smartmotor" || option == "motordampener" || option == "pullbackwards") {
+		if(option == null) return false;
+
+		if (option.equals("motormaxspeed") || option.equals("motoracceleration") || option.equals("motorwhencrouching") || option.equals("motorwhennotcrouching") || option.equals("smartmotor") || option.equals("motordampener") || option.equals("pullbackwards")) {
 			return this.motor;
 		}
 		
-		if (option == "sticky") {
+		if (option.equals("sticky")) {
 			return !this.phaserope;
 		}
 		
-		else if (option == "sneakingangle") {
+		else if (option.equals("sneakingangle")) {
 			return this.doublehook && !this.reelin;
 		}
 		
-		else if (option == "repelforce") {
+		else if (option.equals("repelforce")) {
 			return this.repel;
 		}
 		
-		else if (option == "attractradius") {
+		else if (option.equals("attractradius")) {
 			return this.attract;
 		}
 		
-		else if (option == "angle") {
+		else if (option.equals("angle")) {
 			return this.doublehook;
 		}
 		
-		else if (option == "smartdoublemotor" || option == "oneropepull") {
+		else if (option.equals("smartdoublemotor") || option.equals("oneropepull")) {
 			return this.doublehook && this.motor;
 		}
 		
-		else if (option == "rocket_active_time" || option == "rocket_refuel_ratio" || option == "rocket_force" || option == "rocket_vertical_angle") {
+		else if (option.equals("rocket_active_time") || option.equals("rocket_refuel_ratio") || option.equals("rocket_force") || option.equals("rocket_vertical_angle")) {
 			return this.rocket;
 		}
 		
