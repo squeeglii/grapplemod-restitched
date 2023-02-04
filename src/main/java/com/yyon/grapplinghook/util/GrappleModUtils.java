@@ -13,7 +13,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;

@@ -3,14 +3,13 @@ package com.yyon.grapplinghook.network.clientbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.network.NetworkContext;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 /*
  * This file is part of GrappleMod.

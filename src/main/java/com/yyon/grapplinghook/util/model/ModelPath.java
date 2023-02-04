@@ -1,11 +1,10 @@
 package com.yyon.grapplinghook.util.model;
 
+import java.util.*;
+import java.util.function.Supplier;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-
-import java.util.*;
-import java.util.function.Supplier;
 
 public class ModelPath {
 

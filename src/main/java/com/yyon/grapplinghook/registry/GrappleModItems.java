@@ -7,12 +7,9 @@ import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.item.upgrade.*;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.ItemLike;
-
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;

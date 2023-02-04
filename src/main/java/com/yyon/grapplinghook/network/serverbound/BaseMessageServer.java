@@ -3,11 +3,10 @@ package com.yyon.grapplinghook.network.serverbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.LogicalSide;
 import com.yyon.grapplinghook.network.NetworkContext;
+import java.util.function.Supplier;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.function.Supplier;
 
 public abstract class BaseMessageServer {
 	public BaseMessageServer(FriendlyByteBuf buf) {

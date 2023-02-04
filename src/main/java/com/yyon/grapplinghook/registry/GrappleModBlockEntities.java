@@ -2,13 +2,12 @@ package com.yyon.grapplinghook.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class GrappleModBlockEntities {
 

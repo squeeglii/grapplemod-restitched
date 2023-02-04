@@ -136,7 +136,7 @@ public class GrappleConfig implements ConfigData {
 				
 				@ConfigEntry.Gui.CollapsibleObject
 				@Tooltip
-				public EnderStaff enderstaff = new EnderStaff();
+				public com.yyon.grapplinghook.config.GrappleConfig.Config.GrapplingHook.Custom.EnderStaff enderstaff = new com.yyon.grapplinghook.config.GrappleConfig.Config.GrapplingHook.Custom.EnderStaff();
 				public static class EnderStaff {
 					@ConfigEntry.Gui.CollapsibleObject
 					@Tooltip
@@ -225,7 +225,7 @@ public class GrappleConfig implements ConfigData {
 			
 			@ConfigEntry.Gui.CollapsibleObject
 			@Tooltip
-			public Other other = new Other();
+			public com.yyon.grapplinghook.config.GrappleConfig.Config.GrapplingHook.Other other = new com.yyon.grapplinghook.config.GrappleConfig.Config.GrapplingHook.Other();
 			public static class Other {
 				@Tooltip
 				public boolean hookaffectsentities = true;
@@ -339,10 +339,10 @@ public class GrappleConfig implements ConfigData {
 	
     @ConfigEntry.Gui.CollapsibleObject
     @Tooltip
-	public Config options = new Config(); // local options
+	public com.yyon.grapplinghook.config.GrappleConfig.Config options = new com.yyon.grapplinghook.config.GrappleConfig.Config(); // local options
 	
     @ConfigEntry.Gui.Excluded
-	private static Config serverOptions = null;
+	private static com.yyon.grapplinghook.config.GrappleConfig.Config serverOptions = null;
 	
 	public static class ClientConfig {
 		@ConfigEntry.Gui.CollapsibleObject
@@ -380,7 +380,7 @@ public class GrappleConfig implements ConfigData {
 	@Tooltip
 	public ClientConfig clientOptions = new ClientConfig(); // client-only options, don't need to sync with server
 
-	public static Config getConf() {
+	public static com.yyon.grapplinghook.config.GrappleConfig.Config getConf() {
 		if (serverOptions == null) {
 			return AutoConfig.getConfigHolder(GrappleConfig.class).getConfig().options;
 		} else {
@@ -388,7 +388,7 @@ public class GrappleConfig implements ConfigData {
 		}
 	}
 	
-	public static void setServerOptions(Config newserveroptions) {
+	public static void setServerOptions(com.yyon.grapplinghook.config.GrappleConfig.Config newserveroptions) {
 		serverOptions = newserveroptions;
 	}
 	

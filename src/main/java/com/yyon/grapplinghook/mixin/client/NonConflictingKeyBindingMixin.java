@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.mixin.client;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.KeyMapping;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import net.minecraft.client.KeyMapping;
 
 // Trying to avoid overwites and collisions by just making a new system
 // entirely and forwarding things to that.

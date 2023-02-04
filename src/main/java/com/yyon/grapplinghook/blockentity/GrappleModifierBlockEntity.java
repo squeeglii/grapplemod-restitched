@@ -5,14 +5,14 @@ import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import com.yyon.grapplinghook.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleCustomization.upgradeCategories;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
 	public HashMap<GrappleCustomization.upgradeCategories, Boolean> unlockedCategories = new HashMap<>();

@@ -14,6 +14,9 @@ import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -37,9 +40,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 /*
  * This file is part of GrappleMod.

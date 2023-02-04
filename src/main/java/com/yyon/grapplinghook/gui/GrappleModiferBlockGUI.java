@@ -4,6 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractSliderButton;
@@ -17,10 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
 
 public class GrappleModiferBlockGUI extends Screen {
 	private static final ResourceLocation texture = new ResourceLocation("grapplemod", "textures/gui/guimodifier_bg.png");
@@ -87,7 +86,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					50,
 					20,
 					Component.translatable("grapplemodifier.close.desc"),
-					onPress -> onClose()
+					onPress -> close()
 		));
 
 		this.addRenderableWidget(new Button(
@@ -275,7 +274,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					lines.add(Component.literal(line));
 
 
-				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
+				renderToolTip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}
@@ -327,7 +326,7 @@ public class GrappleModiferBlockGUI extends Screen {
 				for (String line : tooltiptext.split("\n")) {
 					lines.add(Component.literal(line));
 				}
-				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
+				renderToolTip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}

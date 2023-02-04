@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.network.clientbound;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.IExtendedSpawnPacketEntity;
 import io.netty.buffer.Unpooled;
+import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
@@ -13,8 +14,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.UUID;
 
 public class AddGrappleHookEntityPacket implements Packet<ClientGamePacketListener> {
 
@@ -40,7 +39,7 @@ public class AddGrappleHookEntityPacket implements Packet<ClientGamePacketListen
         this.pitch = (byte) Mth.floor(e.getXRot() * 256.0F / 360.0F);
         this.yaw = (byte) Mth.floor(e.getYRot() * 256.0F / 360.0F);
         this.headYaw = (byte) (e.getYHeadRot() * 256.0F / 360.0F);
-        Vec3 vec3d = e.getDeltaMovement();
+        Vec3 vec3d = e.getVelocity();
         double d1 = Mth.clamp(vec3d.x, -3.9D, 3.9D);
         double d2 = Mth.clamp(vec3d.y, -3.9D, 3.9D);
         double d3 = Mth.clamp(vec3d.z, -3.9D, 3.9D);

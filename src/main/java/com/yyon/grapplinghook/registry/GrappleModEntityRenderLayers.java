@@ -5,6 +5,11 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.attachable.LongFallBootsLayer;
 import com.yyon.grapplinghook.client.attachable.model.LongFallBootsModel;
 import com.yyon.grapplinghook.util.BiParamFunction;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -14,12 +19,6 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 // This doesn't use a Built-In registry but follows a style similar to one as
 // model locations need registering.

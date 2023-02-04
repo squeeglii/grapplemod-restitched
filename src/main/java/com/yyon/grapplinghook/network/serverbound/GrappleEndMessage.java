@@ -3,12 +3,11 @@ package com.yyon.grapplinghook.network.serverbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.server.ServerControllerManager;
+import java.util.HashSet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-
-import java.util.HashSet;
 
 /*
  * This file is part of GrappleMod.

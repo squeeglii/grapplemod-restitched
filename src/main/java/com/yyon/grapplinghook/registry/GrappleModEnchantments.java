@@ -4,13 +4,12 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.enchantment.SlidingEnchantment;
 import com.yyon.grapplinghook.enchantment.WallrunEnchantment;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.enchantment.Enchantment;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public class GrappleModEnchantments {
 

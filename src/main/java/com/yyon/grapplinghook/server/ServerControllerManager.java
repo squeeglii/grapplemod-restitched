@@ -1,11 +1,10 @@
 package com.yyon.grapplinghook.server;
 
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-
 import java.util.HashMap;
 import java.util.HashSet;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 public class ServerControllerManager {
 	public static HashSet<Integer> attached = new HashSet<>(); // server side

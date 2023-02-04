@@ -1,8 +1,7 @@
 package com.yyon.grapplinghook.registry;
 
-import net.minecraft.resources.ResourceLocation;
-
 import java.util.function.Supplier;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class AbstractRegistryReference<T> {
 

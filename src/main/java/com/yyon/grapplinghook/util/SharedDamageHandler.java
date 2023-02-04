@@ -6,12 +6,11 @@ import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleModUtils;
+import java.util.HashSet;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.HashSet;
 
 public class SharedDamageHandler {
 

@@ -9,6 +9,13 @@ import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.Check;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +34,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,12 +41,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class GrappleModifierBlock extends BaseEntityBlock {
 
@@ -94,7 +94,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			if (tile.isUnlocked(category)) {
-				playerIn.sendSystemMessage(Component.literal("Already has upgrade: " + category.getName()));
+				playerIn.sendMessage(Component.literal("Already has upgrade: " + category.getName()));
 
 			} else {
 				if (!playerIn.isCreative())
@@ -102,7 +102,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 				tile.unlockCategory(category);
 
-				playerIn.sendSystemMessage(Component.literal("Applied upgrade: " + category.getName()));
+				playerIn.sendMessage(Component.literal("Applied upgrade: " + category.getName()));
 			}
 
 
@@ -119,11 +119,11 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			GrappleCustomization custom = tile.customization;
 			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom, playerIn);
 
-			playerIn.sendSystemMessage(Component.literal("Applied configuration"));
+			playerIn.sendMessage(Component.literal("Applied configuration"));
 
 		} else if (helditem == Items.DIAMOND_BOOTS) {
 			if (worldIn.isClientSide) {
-				playerIn.sendSystemMessage(Component.literal("You are now permitted to make Long Fall Boots here.").withStyle(ChatFormatting.RED));
+				playerIn.sendMessage(Component.literal("You are now permitted to make Long Fall Boots here.").formatted(ChatFormatting.RED));
 				return InteractionResult.PASS;
 			}
 
@@ -145,7 +145,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 
 			if (!gaveitem) {
-				playerIn.sendSystemMessage(Component.literal("Right click with diamond boots enchanted with feather falling IV to get long fall boots"));
+				playerIn.sendMessage(Component.literal("Right click with diamond boots enchanted with feather falling IV to get long fall boots"));
 			}
 
 
