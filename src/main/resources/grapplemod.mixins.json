@@ -8,6 +8,7 @@
     "BlockBreakDetectorMixin",
     "LivingEntityDamageHandlerMixin",
     "PlayerDropHandlerMixin",
+    "SendExtraEntityDataMixin",
     "ServerConfigSyncMixin",
     "ServerPlayerDeathHandlerMixin",
     "ServerStartMixin"
