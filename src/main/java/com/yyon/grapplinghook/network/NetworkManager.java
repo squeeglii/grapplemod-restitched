@@ -55,7 +55,11 @@ public class NetworkManager {
     }
 
     public static void packetToClient(BaseMessageClient client, ServerPlayer... players) {
-        if(players.length == 0) throw new IllegalArgumentException("Missing any players to send a packet to");
+        if(players.length == 0) {
+            GrappleMod.LOGGER.warn("Missing any players to send a packet to!");
+            return;
+        }
+
         FriendlyByteBuf buf = PacketByteBufs.create();
         client.encode(buf);
 
@@ -63,14 +67,16 @@ public class NetworkManager {
             ServerPlayNetworking.send(player, client.getChannel(), buf);
     }
 
-    public static void registerPacketListeners() {
+    public static void registerClientPacketListeners() {
         NetworkManager.registerClient("detach_single_hook", DetachSingleHookMessage::new);
         NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
         NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);
         NetworkManager.registerClient("grapple_detach", GrappleDetachMessage::new);
         NetworkManager.registerClient("logged_in", LoggedInMessage::new);
         NetworkManager.registerClient("segment", SegmentMessage::new);
+    }
 
+    public static void registerPacketListeners() {
         NetworkManager.registerServer("grapple_end", GrappleEndMessage::new);
         NetworkManager.registerServer("grapple_modifier", GrappleModifierMessage::new);
         NetworkManager.registerServer("keypress", KeypressMessage::new);
