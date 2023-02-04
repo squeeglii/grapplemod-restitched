@@ -17,6 +17,8 @@ import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +42,7 @@ public class GrappleModiferBlockGUI extends Screen {
 	GrappleCustomization.upgradeCategories category = null;
 
 	public GrappleModiferBlockGUI(GrappleModifierBlockEntity tile) {
-		super(Component.translatable("grapplemodifier.title.desc"));
+		super(new TranslatableComponent("grapplemodifier.title.desc"));
 
 		this.tile = tile;
 		customization = tile.customization;
@@ -85,7 +87,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					this.guiTop + this.ySize - 20 - 10,
 					50,
 					20,
-					Component.translatable("grapplemodifier.close.desc"),
+					new TranslatableComponent("grapplemodifier.close.desc"),
 					onPress -> close()
 		));
 
@@ -94,7 +96,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					this.guiTop + this.ySize - 20 - 10,
 					50,
 					20,
-					Component.translatable("grapplemodifier.reset.desc"),
+					new TranslatableComponent("grapplemodifier.reset.desc"),
 					onPress -> {
 						customization = new GrappleCustomization();
 						mainScreen();
@@ -106,7 +108,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					this.guiTop + this.ySize - 20 - 10,
 					50,
 					20,
-					Component.translatable("grapplemodifier.helpbutton.desc"),
+					new TranslatableComponent("grapplemodifier.helpbutton.desc"),
 					onPress -> helpScreen()
 		));
 
@@ -125,7 +127,7 @@ public class GrappleModiferBlockGUI extends Screen {
 							this.guiTop + 15 + 30 * y,
 							95,
 							20,
-							Component.literal(category.getName()),
+							new TextComponent(category.getName()),
 							new PressCategory(category)
 				));
 
@@ -134,7 +136,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 
 		this.addRenderableWidget(new TextWidget(
-				Component.translatable("grapplemodifier.apply.desc"),
+				new TranslatableComponent("grapplemodifier.apply.desc"),
 				this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10 - 10
 		));
 	}
@@ -147,7 +149,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 		
 		public BackgroundWidget(int x, int y, int w, int h) {
-			this(x, y, w, h, Component.literal(""));
+			this(x, y, w, h, new TextComponent(""));
 		}
 		
 	    public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
@@ -192,7 +194,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			int colour = this.active ? 16777215 : 10526880;
 			int lineno = 0;
 			for (String s : this.getMessage().getString().split("\n")) {
-				drawString(stack, fontRenderer, Component.literal(s), this.x, this.y + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
+				drawString(stack, fontRenderer, new TextComponent(s), this.x, this.y + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
 				lineno++;
 			}
 		}
@@ -211,17 +213,17 @@ public class GrappleModiferBlockGUI extends Screen {
 						this.guiTop + this.ySize - 20 - 10,
 						50,
 						20,
-						Component.translatable("grapplemodifier.back.desc"),
+						new TranslatableComponent("grapplemodifier.back.desc"),
 						new PressBack()
 		));
 
 		this.category = category;
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock1.desc"), this.guiLeft + 10, this.guiTop + 10));
-		this.addRenderableWidget(new TextWidget(Component.literal(this.category.getName()), this.guiLeft + 10, this.guiTop + 25));
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock2.desc"), this.guiLeft + 10, this.guiTop + 40));
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock3.desc"), this.guiLeft + 10, this.guiTop + 55));
+		this.addRenderableWidget(new TextWidget(new TranslatableComponent("grapplemodifier.unlock1.desc"), this.guiLeft + 10, this.guiTop + 10));
+		this.addRenderableWidget(new TextWidget(new TextComponent(this.category.getName()), this.guiLeft + 10, this.guiTop + 25));
+		this.addRenderableWidget(new TextWidget(new TranslatableComponent("grapplemodifier.unlock2.desc"), this.guiLeft + 10, this.guiTop + 40));
+		this.addRenderableWidget(new TextWidget(new TranslatableComponent("grapplemodifier.unlock3.desc"), this.guiLeft + 10, this.guiTop + 55));
 		this.addRenderableWidget(new TextWidget(new ItemStack(this.category.getItem()).getDisplayName(), this.guiLeft + 10, this.guiTop + 70));
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock4.desc"), this.guiLeft + 10, this.guiTop + 85));
+		this.addRenderableWidget(new TextWidget(new TranslatableComponent("grapplemodifier.unlock4.desc"), this.guiLeft + 10, this.guiTop + 85));
 	}
 
 	public void helpScreen() {
@@ -232,12 +234,12 @@ public class GrappleModiferBlockGUI extends Screen {
 				this.guiTop + this.ySize - 20 - 10,
 				50,
 				20,
-				Component.translatable("grapplemodifier.back.desc"),
+				new TranslatableComponent("grapplemodifier.back.desc"),
 				new PressBack()
 		));
 
 		this.addRenderableWidget(new TextWidget(
-						Component.translatable("grapplemodifier.help.desc"),
+						new TranslatableComponent("grapplemodifier.help.desc"),
 						this.guiLeft + 10, this.guiTop + 10
 		));
 		
@@ -271,7 +273,7 @@ public class GrappleModiferBlockGUI extends Screen {
 				ArrayList<Component> lines = new ArrayList<>();
 
 				for (String line : tooltipText.split("\n"))
-					lines.add(Component.literal(line));
+					lines.add(new TextComponent(line));
 
 
 				renderToolTip(stack, lines, Optional.empty(), mouseX, mouseY);
@@ -280,9 +282,9 @@ public class GrappleModiferBlockGUI extends Screen {
 	}
 
 	public void addCheckbox(String option) {
-		String text = Component.translatable(this.customization.getName(option)).getString();
-		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		GuiCheckbox checkbox = new GuiCheckbox(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, Component.literal(text), customization.getBoolean(option), option, Component.literal(desc));
+		String text = new TranslatableComponent(this.customization.getName(option)).getString();
+		String desc = new TranslatableComponent(this.customization.getDescription(option)).getString();
+		GuiCheckbox checkbox = new GuiCheckbox(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, new TextComponent(text), customization.getBoolean(option), option, new TextComponent(desc));
 		posy += 22;
 		this.addRenderableWidget(checkbox);
 		options.put(checkbox, option);
@@ -306,7 +308,7 @@ public class GrappleModiferBlockGUI extends Screen {
 
 		@Override
 		protected void updateMessage() {
-			this.setMessage(Component.literal(text + ": " + String.format("%.1f", this.val)));
+			this.setMessage(new TextComponent(text + ": " + String.format("%.1f", this.val)));
 		}
 
 		@Override
@@ -324,7 +326,7 @@ public class GrappleModiferBlockGUI extends Screen {
 				String tooltiptext = tooltip.getString();
 				ArrayList<Component> lines = new ArrayList<>();
 				for (String line : tooltiptext.split("\n")) {
-					lines.add(Component.literal(line));
+					lines.add(new TextComponent(line));
 				}
 				renderToolTip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
@@ -338,9 +340,9 @@ public class GrappleModiferBlockGUI extends Screen {
 		double max = customization.getMax(option, this.getLimits());
 		double min = customization.getMin(option, this.getLimits());
 		
-		String text = Component.translatable(this.customization.getName(option)).getString();
-		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		GuiSlider slider = new GuiSlider(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, Component.literal(text), min, max, d, option, Component.literal(desc));
+		String text = new TranslatableComponent(this.customization.getName(option)).getString();
+		String desc = new TranslatableComponent(this.customization.getDescription(option)).getString();
+		GuiSlider slider = new GuiSlider(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, new TextComponent(text), min, max, d, option, new TextComponent(desc));
 		
 		posy += 22;
 		this.addRenderableWidget(slider);
@@ -355,7 +357,7 @@ public class GrappleModiferBlockGUI extends Screen {
 				this.guiTop + this.ySize - 20 - 10,
 				50,
 				20,
-				Component.translatable("grapplemodifier.back.desc"),
+				new TranslatableComponent("grapplemodifier.back.desc"),
 				new PressBack()
 		));
 
@@ -419,19 +421,19 @@ public class GrappleModiferBlockGUI extends Screen {
 			String option = this.options.get(b);
 			boolean enabled = true;
 			
-			String desc = Component.translatable(this.customization.getDescription(option)).getString();
+			String desc = new TranslatableComponent(this.customization.getDescription(option)).getString();
 			
 			if (!this.customization.isOptionValid(option)) {
-				desc = Component.translatable("grapplemodifier.incompatability.desc").getString() + "\n" + desc;
+				desc = new TranslatableComponent("grapplemodifier.incompatability.desc").getString() + "\n" + desc;
 				enabled = false;
 			}
 			
 			int level = this.customization.optionEnabled(option);
 			if (this.getLimits() < level) {
 				if (level == 1) {
-					desc = Component.translatable("grapplemodifier.limits.desc").getString() + "\n" + desc;
+					desc = new TranslatableComponent("grapplemodifier.limits.desc").getString() + "\n" + desc;
 				} else {
-					desc = Component.translatable("grapplemodifier.locked.desc").getString() + "\n" + desc;
+					desc = new TranslatableComponent("grapplemodifier.locked.desc").getString() + "\n" + desc;
 				}
 				enabled = false;
 			}
@@ -439,11 +441,11 @@ public class GrappleModiferBlockGUI extends Screen {
 			b.active = enabled;
 
 			if (b instanceof GuiSlider) {
-				((GuiSlider) b).tooltip = Component.literal(desc);
+				((GuiSlider) b).tooltip = new TextComponent(desc);
 				b.setAlpha(enabled ? 1.0F : 0.5F);
 			}
 			if (b instanceof GuiCheckbox) {
-				((GuiCheckbox) b).tooltip = Component.literal(desc);
+				((GuiCheckbox) b).tooltip = new TextComponent(desc);
 				b.setAlpha(enabled ? 1.0F : 0.5F);
 			}
 		}

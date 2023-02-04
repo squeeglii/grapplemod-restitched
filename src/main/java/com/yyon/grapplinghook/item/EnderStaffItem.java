@@ -6,6 +6,8 @@ import com.yyon.grapplinghook.client.keybind.MCKeys;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -57,9 +59,9 @@ public class EnderStaffItem extends Item {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		list.add(Component.translatable("grappletooltip.launcheritem.desc"));
-		list.add(Component.literal(""));
-		list.add(Component.translatable("grappletooltip.launcheritemaim.desc"));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc").getString()));
+		list.add(new TranslatableComponent("grappletooltip.launcheritem.desc"));
+		list.add(new TextComponent(""));
+		list.add(new TranslatableComponent("grappletooltip.launcheritemaim.desc"));
+		list.add(new TextComponent(GrappleModClient.get().getKeyname(MCKeys.keyBindUseItem) + new TranslatableComponent("grappletooltip.launcheritemcontrols.desc").getString()));
 	}
 }

@@ -9,6 +9,7 @@ import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.Check;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +95,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			if (tile.isUnlocked(category)) {
-				playerIn.sendMessage(Component.literal("Already has upgrade: " + category.getName()));
+				playerIn.displayClientMessage(new TextComponent("Already has upgrade: " + category.getName()), false);
 
 			} else {
 				if (!playerIn.isCreative())
@@ -102,7 +103,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 				tile.unlockCategory(category);
 
-				playerIn.sendMessage(Component.literal("Applied upgrade: " + category.getName()));
+				playerIn.displayClientMessage(new TextComponent("Applied upgrade: " + category.getName()), false);
 			}
 
 
@@ -119,11 +120,11 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			GrappleCustomization custom = tile.customization;
 			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom, playerIn);
 
-			playerIn.sendMessage(Component.literal("Applied configuration"));
+			playerIn.displayClientMessage(new TextComponent("Applied configuration"), false);
 
 		} else if (helditem == Items.DIAMOND_BOOTS) {
 			if (worldIn.isClientSide) {
-				playerIn.sendMessage(Component.literal("You are now permitted to make Long Fall Boots here.").formatted(ChatFormatting.RED));
+				playerIn.displayClientMessage(new TextComponent("You are now permitted to make Long Fall Boots here.").withStyle(ChatFormatting.RED), false);
 				return InteractionResult.PASS;
 			}
 
@@ -145,7 +146,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 
 			if (!gaveitem) {
-				playerIn.sendMessage(Component.literal("Right click with diamond boots enchanted with feather falling IV to get long fall boots"));
+				playerIn.displayClientMessage(new TextComponent("Right click with diamond boots enchanted with feather falling IV to get long fall boots"), false);
 			}
 
 

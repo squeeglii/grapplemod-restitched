@@ -10,6 +10,7 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 
 public class GrappleCustomization {
@@ -86,7 +87,7 @@ public class GrappleCustomization {
 		
 		public String getName() {
 			if (GrappleModClient.get() != null) {
-				return Component.translatable("grapplemod.upgradecategories." + this.nameUnlocalized).getString();
+				return new TranslatableComponent("grapplemod.upgradecategories." + this.nameUnlocalized).getString();
 			} else {
 				return nameUnlocalized;
 			}

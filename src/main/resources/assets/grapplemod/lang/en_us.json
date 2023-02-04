@@ -224,6 +224,7 @@
 	"grappletooltip.reelin.desc": "- Reel in hook (if hook is not attached to surface)",
 	"grappletooltip.negate.desc": "No",
 
+    "grapplemodifier.title.desc": "Grapple Hook Modifier",
     "grapplemodifier.close.desc": "Close",
     "grapplemodifier.reset.desc": "Reset",
     "grapplemodifier.back.desc": "Back",
