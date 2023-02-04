@@ -63,9 +63,6 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 
 		this.segmentHandler = new SegmentHandler(this.level, this, Vec.positionVec(this), Vec.positionVec(this));
 		this.customization = new GrappleCustomization();
-		if(this.level.isClientSide) {
-			GrappleMod.LOGGER.info("Client Spawn!");
-		}
 	}
 
 	public GrapplehookEntity(Level world, LivingEntity shooter, boolean righthand, GrappleCustomization customization, boolean isdouble) {
@@ -84,10 +81,6 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 		this.r = customization.maxlen;
 		
 		this.rightHand = righthand;
-
-		if(this.level.isClientSide) {
-			GrappleMod.LOGGER.info("Client Spawn!");
-		}
 	}
 
 	public Entity shootingEntity = null;
