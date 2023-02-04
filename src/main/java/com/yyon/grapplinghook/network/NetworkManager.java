@@ -69,6 +69,7 @@ public class NetworkManager {
     }
 
     public static void registerClientPacketListeners() {
+        NetworkManager.registerClient("data", AddExtraDataMessage::new);
         NetworkManager.registerClient("detach_single_hook", DetachSingleHookMessage::new);
         NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
         NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);

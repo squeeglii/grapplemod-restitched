@@ -5,7 +5,6 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.config.GrappleConfigUtils;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.AddGrappleHookEntityPacket;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.registry.GrappleModEntities;
@@ -14,12 +13,14 @@ import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+
+import java.util.HashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -37,9 +38,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 /*
  * This file is part of GrappleMod.
@@ -118,8 +116,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	public Vec attach_dir = null;
 
 	@Override
-    public void writeSpawnData(FriendlyByteBuf data)
-    {
+    public void writeSpawnData(FriendlyByteBuf data) {
 	    data.writeInt(this.shootingEntity != null ? this.shootingEntity.getId() : 0);
 	    data.writeBoolean(this.rightHand);
 	    data.writeBoolean(this.isDouble);
@@ -130,8 +127,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
     }
 	
 	@Override
-    public void readSpawnData(FriendlyByteBuf data)
-    {
+    public void readSpawnData(FriendlyByteBuf data) {
     	this.shootingEntityID = data.readInt();
 	    this.shootingEntity = this.level.getEntity(this.shootingEntityID);
 	    this.rightHand = data.readBoolean();
@@ -528,13 +524,12 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	}
 
 	@Override
-	@NotNull
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		  return new AddGrappleHookEntityPacket(this);
+	public ItemStack getItem() {
+		return new ItemStack(this.getDefaultItem());
 	}
 
 	@Override
-	public ItemStack getItem() {
-		return new ItemStack(this.getDefaultItem());
+	public Packet<?> getAddEntityPacket() {
+		return new ClientboundAddEntityPacket(this);
 	}
 }
