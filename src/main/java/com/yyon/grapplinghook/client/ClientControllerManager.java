@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.RandomSource;
 import net.minecraft.world.phys.BlockHitResult;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.keybind.GrappleModKeyBindings;
@@ -417,7 +416,7 @@ public class ClientControllerManager {
 		public float changeSpeed;
 
 		protected RocketSound(GrappleController controller, SoundEvent soundEvent, SoundSource soundSource) {
-			super(soundEvent, soundSource, RandomSource.create());
+			super(soundEvent, soundSource);
 			this.looping = true;
 			this.controller = controller;
 			controller.rocket_key = true;

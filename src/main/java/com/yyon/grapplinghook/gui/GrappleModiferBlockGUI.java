@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -88,7 +89,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					50,
 					20,
 					new TranslatableComponent("grapplemodifier.close.desc"),
-					onPress -> close()
+					onPress -> onClose()
 		));
 
 		this.addRenderableWidget(new Button(
@@ -276,7 +277,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					lines.add(new TextComponent(line));
 
 
-				renderToolTip(stack, lines, Optional.empty(), mouseX, mouseY);
+				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}
@@ -324,11 +325,11 @@ public class GrappleModiferBlockGUI extends Screen {
 			
 			if (this.isHovered) {
 				String tooltiptext = tooltip.getString();
-				ArrayList<Component> lines = new ArrayList<>();
+				List<Component> lines = new ArrayList<>();
 				for (String line : tooltiptext.split("\n")) {
 					lines.add(new TextComponent(line));
 				}
-				renderToolTip(stack, lines, Optional.empty(), mouseX, mouseY);
+				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}

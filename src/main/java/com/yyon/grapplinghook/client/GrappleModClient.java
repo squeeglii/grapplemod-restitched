@@ -38,7 +38,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
@@ -223,7 +222,7 @@ public class GrappleModClient implements ClientModInitializer {
         Player player = Minecraft.getInstance().player;
         if(player == null) return;
 
-        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(loc, SoundSource.PLAYERS, volume, 1.0F, RandomSource.create(),false, 0, SoundInstance.Attenuation.NONE, player.getX(), player.getY(), player.getZ(), false));
+        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(loc, SoundSource.PLAYERS, volume, 1.0F, false, 0, SoundInstance.Attenuation.NONE, player.getX(), player.getY(), player.getZ(), false));
     }
 
     public int getWallrunTicks() {

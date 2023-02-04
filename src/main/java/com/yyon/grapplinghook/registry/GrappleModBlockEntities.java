@@ -5,6 +5,8 @@ import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -36,9 +38,9 @@ public class GrappleModBlockEntities {
     }
 
     public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = GrappleModBlockEntities
-            .blockEntity("block_grapple_modifier",() -> BlockEntityType.Builder
-                    .of(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
-                    .build(null));
+            .blockEntity("block_grapple_modifier",() -> FabricBlockEntityTypeBuilder
+                    .create(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
+                    .build());
 
 
     public static class BlockEntityEntry<T extends BlockEntityType<?>> extends AbstractRegistryReference<T> {

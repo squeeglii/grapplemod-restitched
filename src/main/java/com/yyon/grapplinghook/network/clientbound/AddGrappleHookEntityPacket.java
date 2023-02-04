@@ -39,7 +39,7 @@ public class AddGrappleHookEntityPacket implements Packet<ClientGamePacketListen
         this.pitch = (byte) Mth.floor(e.getXRot() * 256.0F / 360.0F);
         this.yaw = (byte) Mth.floor(e.getYRot() * 256.0F / 360.0F);
         this.headYaw = (byte) (e.getYHeadRot() * 256.0F / 360.0F);
-        Vec3 vec3d = e.getVelocity();
+        Vec3 vec3d = e.getDeltaMovement();
         double d1 = Mth.clamp(vec3d.x, -3.9D, 3.9D);
         double d2 = Mth.clamp(vec3d.y, -3.9D, 3.9D);
         double d3 = Mth.clamp(vec3d.z, -3.9D, 3.9D);
@@ -112,7 +112,8 @@ public class AddGrappleHookEntityPacket implements Packet<ClientGamePacketListen
              * Sets the postiion on the client, Mirrors what
              * Entity#recreateFromPacket and LivingEntity#recreateFromPacket does.
              */
-            e.syncPacketPositionCodec(this.posX, this.posY, this.posZ);
+
+            e.setPacketCoordinates(this.posX, this.posY, this.posZ);
             e.absMoveTo(this.posX, this.posY, this.posZ, (this.yaw * 360) / 256.0F, (this.pitch * 360) / 256.0F);
             e.setYHeadRot((this.headYaw * 360) / 256.0F);
             e.setYBodyRot((this.headYaw * 360) / 256.0F);
