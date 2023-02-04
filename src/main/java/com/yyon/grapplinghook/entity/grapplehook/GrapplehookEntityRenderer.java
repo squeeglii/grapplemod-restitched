@@ -93,7 +93,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 			// if first person
 			
 			// base hand offset (no swing, when facing +Z)
-			double d7 = this.entityRenderDispatcher.options.fov().get();
+			double d7 = this.entityRenderDispatcher.options.fov;
 			d7 = d7 / 100.0D;
 			hand_offset = new Vec((double) hand_right * -0.46D * d7, -0.18D * d7, 0.38D)
 					.rotatePitch(-f1 * 0.7F) // swing

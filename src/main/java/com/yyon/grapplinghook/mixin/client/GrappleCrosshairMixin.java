@@ -59,7 +59,7 @@ public class GrappleCrosshairMixin {
             int w = resolution.getGuiScaledWidth();
             int h = resolution.getGuiScaledHeight();
 
-            double fov = Math.toRadians(this.minecraft.options.fov().get());
+            double fov = Math.toRadians(this.minecraft.options.fov);
             fov *= player.getFieldOfViewModifier();
             double l = ((double) h/2) / Math.tan(fov/2);
 
@@ -115,6 +115,6 @@ public class GrappleCrosshairMixin {
         bufferbuilder.vertex(x + width, y, Z_LEVEL).color(g, g, g, a).endVertex();
         bufferbuilder.vertex(x, y, Z_LEVEL).color(g, g, g, a).endVertex();
 
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferUploader.end(bufferbuilder);
     }
 }
