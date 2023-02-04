@@ -12,6 +12,7 @@ import com.yyon.grapplinghook.controller.GrappleController;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
 import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntityRenderer;
 import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.registry.GrappleModEntities;
 import com.yyon.grapplinghook.registry.GrappleModEntityRenderLayers;
@@ -61,6 +62,8 @@ public class GrappleModClient implements ClientModInitializer {
 
         GrappleModKeyBindings.registerAll();
         GrappleModEntityRenderLayers.registerAll();
+
+        NetworkManager.registerClientPacketListeners();
 
         this.clientControllerManager = new ClientControllerManager();
         this.registerPropertyOverride();
