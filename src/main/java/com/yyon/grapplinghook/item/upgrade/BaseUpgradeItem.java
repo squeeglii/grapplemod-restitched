@@ -5,10 +5,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class BaseUpgradeItem extends Item {
-	public GrappleCustomization.upgradeCategories category = null;
+	public GrappleCustomization.UpgradeCategories category = null;
 	boolean craftingRemaining = false;
 
-	public BaseUpgradeItem(int maxStackSize, GrappleCustomization.upgradeCategories theCategory) {
+	public BaseUpgradeItem(int maxStackSize, GrappleCustomization.UpgradeCategories theCategory) {
 		super(new Item.Properties().stacksTo(maxStackSize));
 		
 		this.category = theCategory;
