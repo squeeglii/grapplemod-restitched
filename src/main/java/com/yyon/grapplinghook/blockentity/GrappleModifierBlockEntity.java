@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import com.yyon.grapplinghook.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.util.GrappleCustomization;
-import com.yyon.grapplinghook.util.GrappleCustomization.upgradeCategories;
+import com.yyon.grapplinghook.util.GrappleCustomization.UpgradeCategories;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		}
 	}
 
-	public void unlockCategory(upgradeCategories category) {
+	public void unlockCategory(UpgradeCategories category) {
 		unlockedCategories.put(category, true);
 		this.triggerUpdate();
 	}
@@ -47,7 +47,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.triggerUpdate();
 	}
 
-	public boolean isUnlocked(upgradeCategories category) {
+	public boolean isUnlocked(UpgradeCategories category) {
 		return this.unlockedCategories.containsKey(category) && this.unlockedCategories.get(category);
 	}
 
@@ -57,7 +57,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 		CompoundTag unlockedNBT = nbtTagCompound.getCompound("unlocked");
 
-		for (GrappleCustomization.upgradeCategories category : GrappleCustomization.upgradeCategories.values()) {
+		for (UpgradeCategories category : UpgradeCategories.values()) {
 			String num = String.valueOf(category.toInt());
 			boolean unlocked = this.isUnlocked(category);
 
@@ -74,7 +74,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 		CompoundTag unlockedNBT = parentNBTTagCompound.getCompound("unlocked");
 
-		for (GrappleCustomization.upgradeCategories category : GrappleCustomization.upgradeCategories.values()) {
+		for (UpgradeCategories category : UpgradeCategories.values()) {
 			String num = String.valueOf(category.toInt());
 			boolean unlocked = unlockedNBT.getBoolean(num);
 

@@ -65,7 +65,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		if (!(ent instanceof GrappleModifierBlockEntity tile)) return drops;
 
-		for (GrappleCustomization.upgradeCategories category : GrappleCustomization.upgradeCategories.values()) {
+		for (GrappleCustomization.UpgradeCategories category : GrappleCustomization.UpgradeCategories.values()) {
 			if (tile.unlockedCategories.containsKey(category) && tile.unlockedCategories.get(category)) {
 				drops.add(new ItemStack(category.getItem()));
 			}
@@ -90,7 +90,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			if (Check.missingTileEntity(tile, playerIn, worldIn, pos))
 				return InteractionResult.FAIL;
 
-			GrappleCustomization.upgradeCategories category = upgradeItem.category;
+			GrappleCustomization.UpgradeCategories category = upgradeItem.category;
 			if (category == null)
 				return InteractionResult.FAIL;
 

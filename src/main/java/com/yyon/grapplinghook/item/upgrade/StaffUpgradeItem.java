@@ -4,6 +4,6 @@ import com.yyon.grapplinghook.util.GrappleCustomization;
 
 public class StaffUpgradeItem extends BaseUpgradeItem {
 	public StaffUpgradeItem() {
-		super(1, GrappleCustomization.upgradeCategories.STAFF);
+		super(1, GrappleCustomization.UpgradeCategories.STAFF);
 	}
 }

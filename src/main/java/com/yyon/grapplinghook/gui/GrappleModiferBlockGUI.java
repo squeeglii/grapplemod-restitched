@@ -40,7 +40,7 @@ public class GrappleModiferBlockGUI extends Screen {
 	GrappleModifierBlockEntity tile;
 	GrappleCustomization customization;
 
-	GrappleCustomization.upgradeCategories category = null;
+	GrappleCustomization.UpgradeCategories category = null;
 
 	public GrappleModiferBlockGUI(GrappleModifierBlockEntity tile) {
 		super(new TranslatableComponent("grapplemodifier.title.desc"));
@@ -58,8 +58,8 @@ public class GrappleModiferBlockGUI extends Screen {
 	}
 	
 	class PressCategory implements OnPress {
-		GrappleCustomization.upgradeCategories category;
-		public PressCategory(GrappleCustomization.upgradeCategories category) {
+		GrappleCustomization.UpgradeCategories category;
+		public PressCategory(GrappleCustomization.UpgradeCategories category) {
 			this.category = category;
 		}
 		
@@ -115,10 +115,10 @@ public class GrappleModiferBlockGUI extends Screen {
 
 		int y = 0;
 		int x = 0;
-		for (int i = 0; i < GrappleCustomization.upgradeCategories.size(); i++) {
-			GrappleCustomization.upgradeCategories category = GrappleCustomization.upgradeCategories.fromInt(i);
-			if (category != GrappleCustomization.upgradeCategories.LIMITS) {
-				if (i == GrappleCustomization.upgradeCategories.size()/2) {
+		for (int i = 0; i < GrappleCustomization.UpgradeCategories.size(); i++) {
+			GrappleCustomization.UpgradeCategories category = GrappleCustomization.UpgradeCategories.fromInt(i);
+			if (category != GrappleCustomization.UpgradeCategories.LIMITS) {
+				if (i == GrappleCustomization.UpgradeCategories.size()/2) {
 					y = 0;
 					x += 1;
 				}
@@ -206,7 +206,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 	}
 
-	public void notAllowedScreen(GrappleCustomization.upgradeCategories category) {
+	public void notAllowedScreen(GrappleCustomization.UpgradeCategories category) {
 		clearScreen();
 
 		this.addRenderableWidget(new Button(
@@ -350,7 +350,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		options.put(slider, option);
 	}
 
-	public void showCategoryScreen(GrappleCustomization.upgradeCategories category) {
+	public void showCategoryScreen(GrappleCustomization.UpgradeCategories category) {
 		clearScreen();
 
 		this.addRenderableWidget(new Button(
@@ -364,18 +364,18 @@ public class GrappleModiferBlockGUI extends Screen {
 
 		this.category = category;
 
-		if (category == GrappleCustomization.upgradeCategories.ROPE) {
+		if (category == GrappleCustomization.UpgradeCategories.ROPE) {
 			addSlider("maxlen");
 			addCheckbox("phaserope");
 			addCheckbox("sticky");
-		} else if (category == GrappleCustomization.upgradeCategories.THROW) {
+		} else if (category == GrappleCustomization.UpgradeCategories.THROW) {
 			addSlider("hookgravity");
 			addSlider("throwspeed");
 			addCheckbox("reelin");
 			addSlider("verticalthrowangle");
 			addSlider("sneakingverticalthrowangle");
 			addCheckbox("detachonkeyrelease");
-		} else if (category == GrappleCustomization.upgradeCategories.MOTOR) {
+		} else if (category == GrappleCustomization.UpgradeCategories.MOTOR) {
 			addCheckbox("motor");
 			addSlider("motormaxspeed");
 			addSlider("motoracceleration");
@@ -384,23 +384,23 @@ public class GrappleModiferBlockGUI extends Screen {
 			addCheckbox("smartmotor");
 			addCheckbox("motordampener");
 			addCheckbox("pullbackwards");
-		} else if (category == GrappleCustomization.upgradeCategories.SWING) {
+		} else if (category == GrappleCustomization.UpgradeCategories.SWING) {
 			addSlider("playermovementmult");
-		} else if (category == GrappleCustomization.upgradeCategories.STAFF) {
+		} else if (category == GrappleCustomization.UpgradeCategories.STAFF) {
 			addCheckbox("enderstaff");
-		} else if (category == GrappleCustomization.upgradeCategories.FORCEFIELD) {
+		} else if (category == GrappleCustomization.UpgradeCategories.FORCEFIELD) {
 			addCheckbox("repel");
 			addSlider("repelforce");
-		} else if (category == GrappleCustomization.upgradeCategories.MAGNET) {
+		} else if (category == GrappleCustomization.UpgradeCategories.MAGNET) {
 			addCheckbox("attract");
 			addSlider("attractradius");
-		} else if (category == GrappleCustomization.upgradeCategories.DOUBLE) {
+		} else if (category == GrappleCustomization.UpgradeCategories.DOUBLE) {
 			addCheckbox("doublehook");
 			addCheckbox("smartdoublemotor");
 			addSlider("angle");
 			addSlider("sneakingangle");
 			addCheckbox("oneropepull");
-		} else if (category == GrappleCustomization.upgradeCategories.ROCKET) {
+		} else if (category == GrappleCustomization.UpgradeCategories.ROCKET) {
 			addCheckbox("rocket");
 			addSlider("rocket_force");
 			addSlider("rocket_active_time");
@@ -453,7 +453,7 @@ public class GrappleModiferBlockGUI extends Screen {
 	}
 	
 	public int getLimits() {
-		if (this.tile.isUnlocked(GrappleCustomization.upgradeCategories.LIMITS) || Minecraft.getInstance().player.isCreative()) {
+		if (this.tile.isUnlocked(GrappleCustomization.UpgradeCategories.LIMITS) || Minecraft.getInstance().player.isCreative()) {
 			return 1;
 		}
 		return 0;

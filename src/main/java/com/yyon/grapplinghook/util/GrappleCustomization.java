@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.util;
 
-import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.GrappleModClientCheck;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.GrappleMod;
@@ -69,7 +68,7 @@ public class GrappleCustomization {
 	public double rocket_refuel_ratio;
 	public double rocket_vertical_angle;
 	
-	public enum upgradeCategories {
+	public enum UpgradeCategories {
 		ROPE ("rope"), 
 		THROW ("throw"), 
 		MOTOR ("motor"), 
@@ -82,7 +81,7 @@ public class GrappleCustomization {
 		ROCKET ("rocket");
 		
 		private final String nameUnlocalized;
-		upgradeCategories(String name) {
+		UpgradeCategories(String name) {
 			this.nameUnlocalized = name;
 		}
 		
@@ -94,19 +93,19 @@ public class GrappleCustomization {
 			}
 		}
 		
-		public static upgradeCategories fromInt(int i) {
-			return upgradeCategories.values()[i];
+		public static UpgradeCategories fromInt(int i) {
+			return UpgradeCategories.values()[i];
 		}
 		public int toInt() {
 			for (int i = 0; i < size(); i++) {
-				if (upgradeCategories.values()[i] == this) {
+				if (UpgradeCategories.values()[i] == this) {
 					return i;
 				}
 			}
 			return -1;
 		}
 		public static int size() {
-			return upgradeCategories.values().length;
+			return UpgradeCategories.values().length;
 		}
 		public Item getItem() {
 			return switch (this) {
