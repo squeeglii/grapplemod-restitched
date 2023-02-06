@@ -67,13 +67,11 @@ public class GrappleEndMessage extends BaseMessageServer {
 	@Override
     public void processMessage(NetworkContext ctx) {
 		int id = this.entityId;
-		
 		ServerPlayer player = ctx.getSender();
-		if (player == null) {
-			return;
-		}
-		Level w = player.level;
-		
-		ServerControllerManager.receiveGrappleEnd(id, w, this.hookEntityIds);
+
+		ctx.getServer().execute(() -> {
+			if (player == null) return;
+			ServerControllerManager.receiveGrappleEnd(id, player.level, this.hookEntityIds);
+		});
     }
 }

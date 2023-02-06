@@ -85,22 +85,24 @@ public class PlayerMovementMessage extends BaseMessageServer {
 	@Override
     public void processMessage(NetworkContext ctx) {
     	final ServerPlayer referencedPlayer = ctx.getSender();
-        
-		if(referencedPlayer.getId() == this.entityId) {
-			new Vec(this.x, this.y, this.z).setPos(referencedPlayer);
-			new Vec(this.mx, this.my, this.mz).setMotion(referencedPlayer);
 
-			referencedPlayer.connection.resetPosition();
-			
-			if (!referencedPlayer.isOnGround()) {
-				if (this.my >= 0) {
-					referencedPlayer.fallDistance = 0;
-				} else {
-					double gravity = 0.05 * 2;
-					// d = v^2 / 2g
-					referencedPlayer.fallDistance = (float) (Math.pow(this.my, 2) / (2 * gravity));
+		ctx.getServer().execute(() -> {
+			if(referencedPlayer.getId() == this.entityId) {
+				new Vec(this.x, this.y, this.z).setPos(referencedPlayer);
+				new Vec(this.mx, this.my, this.mz).setMotion(referencedPlayer);
+
+				referencedPlayer.connection.resetPosition();
+
+				if (!referencedPlayer.isOnGround()) {
+					if (this.my >= 0) {
+						referencedPlayer.fallDistance = 0;
+					} else {
+						double gravity = 0.05 * 2;
+						// d = v^2 / 2g
+						referencedPlayer.fallDistance = (float) (Math.pow(this.my, 2) / (2 * gravity));
+					}
 				}
 			}
-		}
+		});
     }
 }
