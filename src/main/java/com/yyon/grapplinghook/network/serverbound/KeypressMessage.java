@@ -62,27 +62,30 @@ public class KeypressMessage extends BaseMessageServer {
 	@Override
     public void processMessage(NetworkContext ctx) {
     	final ServerPlayer player = ctx.getSender();
-        
-		if (player != null) {
-			ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-			if (stack.getItem() instanceof KeypressItem keypressItem) {
-				if (isDown) {
-					keypressItem.onCustomKeyDown(stack, player, key, true);
-				} else {
-					keypressItem.onCustomKeyUp(stack, player, key, true);
+
+		ctx.getServer().execute(() -> {
+			if (player != null) {
+				ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+				if (stack.getItem() instanceof KeypressItem keypressItem) {
+					if (isDown) {
+						keypressItem.onCustomKeyDown(stack, player, key, true);
+					} else {
+						keypressItem.onCustomKeyUp(stack, player, key, true);
+					}
+
+					return;
 				}
 
-				return;
-			}
-
-			stack = player.getItemInHand(InteractionHand.OFF_HAND);
-			if (stack.getItem() instanceof KeypressItem keypressItem) {
-				if (isDown) {
-					keypressItem.onCustomKeyDown(stack, player, key, false);
-				} else {
-					keypressItem.onCustomKeyUp(stack, player, key, false);
+				stack = player.getItemInHand(InteractionHand.OFF_HAND);
+				if (stack.getItem() instanceof KeypressItem keypressItem) {
+					if (isDown) {
+						keypressItem.onCustomKeyDown(stack, player, key, false);
+					} else {
+						keypressItem.onCustomKeyUp(stack, player, key, false);
+					}
 				}
 			}
-		}
+		});
+
 	}
 }
