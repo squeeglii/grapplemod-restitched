@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.GrappleModClientCheck;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.registry.GrappleModItems;
@@ -86,7 +87,7 @@ public class GrappleCustomization {
 		}
 		
 		public String getName() {
-			if (GrappleModClient.get() != null) {
+			if (GrappleModClientCheck.isClientLoaded()) {
 				return new TranslatableComponent("grapplemod.upgradecategories." + this.nameUnlocalized).getString();
 			} else {
 				return nameUnlocalized;
