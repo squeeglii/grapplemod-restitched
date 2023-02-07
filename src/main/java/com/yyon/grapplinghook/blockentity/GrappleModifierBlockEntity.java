@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
-	public HashMap<GrappleCustomization.upgradeCategories, Boolean> unlockedCategories = new HashMap<>();
+	public HashMap<GrappleCustomization.UpgradeCategories, Boolean> unlockedCategories = new HashMap<>();
 	public GrappleCustomization customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
