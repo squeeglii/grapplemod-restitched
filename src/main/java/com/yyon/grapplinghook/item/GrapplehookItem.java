@@ -494,7 +494,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		}
 	}
 
-	public void setCustomOnServer(ItemStack helditemstack, GrappleCustomization custom, Player player) {
+	public void setCustomOnServer(ItemStack helditemstack, GrappleCustomization custom) {
 		CompoundTag tag = helditemstack.getOrCreateTag();
 		CompoundTag nbt = custom.writeNBT();
 		

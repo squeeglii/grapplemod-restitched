@@ -117,7 +117,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			GrappleCustomization custom = tile.customization;
-			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom, playerIn);
+			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom);
 
 			playerIn.sendSystemMessage(Component.literal("Applied configuration"));
 
