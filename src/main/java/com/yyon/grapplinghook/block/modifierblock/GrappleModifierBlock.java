@@ -76,7 +76,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
     @Override
 	@NotNull
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult raytraceresult) {
-		ItemStack helditemstack = playerIn.getItemInHand(InteractionHand.MAIN_HAND);
+		ItemStack helditemstack = playerIn.getItemInHand(hand);
 		Item helditem = helditemstack.getItem();
 
 		if (helditem instanceof BaseUpgradeItem upgradeItem) {
@@ -123,7 +123,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		} else if (helditem == Items.DIAMOND_BOOTS) {
 			if (worldIn.isClientSide) {
-				playerIn.sendSystemMessage(Component.literal("You are now permitted to make Long Fall Boots here.").withStyle(ChatFormatting.RED));
+				playerIn.sendSystemMessage(Component.literal("You are not permitted to make Long Fall Boots here.").withStyle(ChatFormatting.RED));
 				return InteractionResult.PASS;
 			}
 
@@ -153,7 +153,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			this.easterEgg(worldIn, pos, playerIn);
 
 		} else {
-			if (!worldIn.isClientSide)
+			if ((!worldIn.isClientSide) || hand != InteractionHand.MAIN_HAND)
 				return InteractionResult.PASS;
 
 			BlockEntity ent = worldIn.getBlockEntity(pos);
