@@ -9,7 +9,7 @@ import java.util.*;
 // These mimic the old recipes, automatically checking if a given template is valid.
 public class GrappleHookTemplate {
 
-    private static final Map<String, GrappleHookTemplate> defaultTemplates = new HashMap<>();
+    private static final Map<String, GrappleHookTemplate> defaultTemplates = new LinkedHashMap<>();
 
     private static GrappleHookTemplate register(GrappleHookTemplate template) {
         GrappleHookTemplate.defaultTemplates
@@ -28,6 +28,51 @@ public class GrappleHookTemplate {
     public static Collection<GrappleHookTemplate> getTemplates() {
         return Collections.unmodifiableCollection(defaultTemplates.values());
     }
+
+
+    public static final GrappleHookTemplate ENDER_HOOK = register(new GrappleHookTemplate(
+            "ender_hook",
+            property("throwspeed", 3.5d),
+            property("maxlen", 60.0d),
+
+            property("enderstaff", true)
+    ));
+
+    public static final GrappleHookTemplate MOTOR_HOOK = register(new GrappleHookTemplate(
+            "motor_hook",
+            property("throwspeed", 3.5d),
+            property("maxlen", 60.0d),
+
+            property("motor", true),
+            property("playermovementmult", 2.0d)
+    ));
+
+    public static final GrappleHookTemplate SMART_HOOK = register(new GrappleHookTemplate(
+            "smart_hook",
+            property("throwspeed", 3.5d),
+            property("maxlen", 60.0d),
+
+            property("motor", true),
+            property("smartmotor", true),
+            property("playermovementmult", 2.0d)
+    ));
+
+    public static final GrappleHookTemplate MAGNET_HOOK = register(new GrappleHookTemplate(
+            "magnet_hook",
+            property("throwspeed", 3.5d),
+            property("maxlen", 60.0d),
+
+            property("attract", true),
+            property("repel", true)
+    ));
+
+    public static final GrappleHookTemplate ROCKET_HOOK = register(new GrappleHookTemplate(
+            "rocket_hook",
+            property("throwspeed", 3.5d),
+            property("maxlen", 60.0d),
+
+            property("rocket", true)
+    ));
 
     public static final GrappleHookTemplate DOUBLE_MOTOR_HOOK = register(new GrappleHookTemplate(
             "double_motor_hook",
@@ -54,7 +99,33 @@ public class GrappleHookTemplate {
             property("playermovementmult", 2.0d)
     ));
 
+    public static final GrappleHookTemplate DOUBLE_ROCKET_MOTOR_HOOK = register(new GrappleHookTemplate(
+            "double_rocket_motor_hook",
+            property("maxlen", 60.0d),
 
+            property("doublehook", true),
+            property("motor", true),
+            property("motormaxspeed", 10.0d),
+            property("sticky", true),
+
+            property("hookgravity", 50.0d),
+            property("verticalthrowangle", 30.0d),
+            property("sneakingverticalthrowangle", 25.0d),
+            property("reelin", false),
+
+            property("motorwhencrouching", true),
+            property("smartdoublemotor", true),
+
+            property("angle", 25.0d),
+            property("sneakingangle", 0.0d),
+
+            property("rocket", true),
+            property("rocket_vertical_angle", 30.0d),
+
+            property("throwspeed", 20.0d),
+
+            property("playermovementmult", 2.0d)
+    ));
 
 
     private final String identifier;
