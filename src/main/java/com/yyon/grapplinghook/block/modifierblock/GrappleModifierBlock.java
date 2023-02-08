@@ -98,7 +98,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 			} else {
 				if (!playerIn.isCreative())
-					playerIn.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+					playerIn.setItemInHand(hand, ItemStack.EMPTY);
 
 				tile.unlockCategory(category);
 
@@ -139,7 +139,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			if (enchantments.getOrDefault(Enchantments.FALL_PROTECTION, -1) >= 4) {
 				ItemStack newitemstack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.get());
 				EnchantmentHelper.setEnchantments(enchantments, newitemstack);
-				playerIn.setItemInHand(InteractionHand.MAIN_HAND, newitemstack);
+				playerIn.setItemInHand(hand, newitemstack);
 				gaveitem = true;
 			}
 
