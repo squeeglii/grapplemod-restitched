@@ -45,13 +45,11 @@ public class GrappleMod implements ModInitializer {
         ConfigHolder<?> cfg = AutoConfig.register(GrappleConfig.class, GsonConfigSerializer::new);
         cfg.registerSaveListener((holder, config) -> {
             GrappleModItems.invalidateCreativeTabCache();
-            GrappleMod.LOGGER.info("CFG ACTION");
             return InteractionResult.SUCCESS;
         });
 
         cfg.registerLoadListener((holder, config) -> {
             GrappleModItems.invalidateCreativeTabCache();
-            GrappleMod.LOGGER.info("CFG ACTION");
             return InteractionResult.SUCCESS;
         });
 
