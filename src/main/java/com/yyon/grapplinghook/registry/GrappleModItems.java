@@ -25,6 +25,7 @@ public final class GrappleModItems {
     private static HashMap<ResourceLocation, ItemEntry<?>> items;
 
     private static List<ItemStack> creativeMenuCache;
+    private static boolean regenerateCreativeCache;
 
     static {
         GrappleModItems.items = new HashMap<>();
@@ -56,7 +57,8 @@ public final class GrappleModItems {
     private static final CreativeModeTab.DisplayItemsGenerator MOD_TAB_GENERATOR = (featureFlagSet, output, bl) -> {
         if(Minecraft.getInstance().player == null) return;
 
-        if(creativeMenuCache == null) {
+        if(creativeMenuCache == null || regenerateCreativeCache) {
+            GrappleModItems.regenerateCreativeCache = false;
             creativeMenuCache = itemsInRegistryOrder.stream()
                     .map(id -> items.get(id))
                     .map(ItemEntry::getTabProvider)
@@ -91,6 +93,10 @@ public final class GrappleModItems {
 
     public static <B extends BlockItem> GrappleModBlocks.BlockItemEntry<B> reserve() {
         return new GrappleModBlocks.BlockItemEntry<>();
+    }
+
+    public static void invalidateCreativeTabCache() {
+        GrappleModItems.regenerateCreativeCache = true;
     }
 
 
