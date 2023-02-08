@@ -1,19 +1,17 @@
 package com.yyon.grapplinghook.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.config.GrappleHookTemplate;
 import com.yyon.grapplinghook.item.EnderStaffItem;
 import com.yyon.grapplinghook.item.ForcefieldItem;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.item.upgrade.*;
-import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -25,7 +23,7 @@ public final class GrappleModItems {
     private static HashMap<ResourceLocation, ItemEntry<?>> items;
 
     private static List<ItemStack> creativeMenuCache;
-    private static boolean regenerateCreativeCache;
+    private static boolean creativeCacheInvalid;
 
     static {
         GrappleModItems.items = new HashMap<>();
@@ -55,10 +53,9 @@ public final class GrappleModItems {
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
 
     private static final CreativeModeTab.DisplayItemsGenerator MOD_TAB_GENERATOR = (featureFlagSet, output, bl) -> {
-        if(Minecraft.getInstance().player == null) return;
 
-        if(creativeMenuCache == null || regenerateCreativeCache) {
-            GrappleModItems.regenerateCreativeCache = false;
+        if(creativeMenuCache == null || creativeCacheInvalid) {
+            GrappleModItems.creativeCacheInvalid = false;
             creativeMenuCache = itemsInRegistryOrder.stream()
                     .map(id -> items.get(id))
                     .map(ItemEntry::getTabProvider)
@@ -96,9 +93,12 @@ public final class GrappleModItems {
     }
 
     public static void invalidateCreativeTabCache() {
-        GrappleModItems.regenerateCreativeCache = true;
+        GrappleModItems.creativeCacheInvalid = true;
     }
 
+    public static boolean isCreativeCacheInvalid() {
+        return GrappleModItems.creativeCacheInvalid;
+    }
 
     public static void registerAllItems() {
         for(Map.Entry<ResourceLocation, ItemEntry<?>> def: items.entrySet()) {
@@ -141,7 +141,10 @@ public final class GrappleModItems {
                 ArrayList<ItemStack> grappleHookVariants = new ArrayList<>();
                 grappleHookVariants.add(GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance());
 
-                //TODO: Recipie NBT is not supported
+                GrappleHookTemplate.getTemplates().stream()
+                        .filter(GrappleHookTemplate::isEnabled)
+                        .map(GrappleHookTemplate::getAsStack)
+                        .forEachOrdered(grappleHookVariants::add);
 
                 return grappleHookVariants;
             };

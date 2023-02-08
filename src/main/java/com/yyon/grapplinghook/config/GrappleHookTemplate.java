@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.config;
 
-import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.world.item.ItemStack;
@@ -73,7 +72,7 @@ public class GrappleHookTemplate {
     public boolean isEnabled() {
         return properties.stream()
                 .map(AbstractProperty::getId)
-                .noneMatch(p -> GrappleCustomization.optionEnabledInConfig(p) <= 0);
+                .noneMatch(p -> GrappleCustomization.optionEnabledInConfig(p) >= 2); // 2 = Disabled Fully.
     }
 
     public GrappleCustomization getCustomizations() {

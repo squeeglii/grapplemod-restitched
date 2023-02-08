@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.config;
 
-import com.yyon.grapplinghook.registry.GrappleModItems;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -11,11 +10,6 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "grapplemod")
 public class GrappleConfig implements ConfigData {
-
-	@Override
-	public void validatePostLoad() {
-		GrappleModItems.invalidateCreativeTabCache();
-	}
 
 	public static class Config {
 		@ConfigEntry.Gui.CollapsibleObject

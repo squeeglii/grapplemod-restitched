@@ -11,7 +11,8 @@
     "SendExtraEntityDataMixin",
     "ServerConfigSyncMixin",
     "ServerPlayerDeathHandlerMixin",
-    "ServerStartMixin"
+    "ServerStartMixin",
+    "CreativeTabForceUpdateMixin"
   ],
   "client": [
     "client.BlockBreakDetectorMixin",
