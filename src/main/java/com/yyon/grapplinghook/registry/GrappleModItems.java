@@ -1,28 +1,40 @@
 package com.yyon.grapplinghook.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.config.GrappleHookTemplate;
 import com.yyon.grapplinghook.item.EnderStaffItem;
 import com.yyon.grapplinghook.item.ForcefieldItem;
 import com.yyon.grapplinghook.item.GrapplehookItem;
 import com.yyon.grapplinghook.item.LongFallBoots;
 import com.yyon.grapplinghook.item.upgrade.*;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import com.yyon.grapplinghook.util.GrappleCustomization;
+import net.minecraft.core.NonNullList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class GrappleModItems {
 
+    private static ArrayList<ResourceLocation> itemsInRegistryOrder;
     private static HashMap<ResourceLocation, ItemEntry<?>> items;
+
+    private static List<ItemStack> creativeMenuCache;
+    private static boolean creativeCacheInvalid;
 
     static {
         GrappleModItems.items = new HashMap<>();
+        GrappleModItems.itemsInRegistryOrder = new ArrayList<>();
+        GrappleModItems.creativeMenuCache = null;
     }
 
-    public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new);
+    public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new, ItemEntry.populateHookVariantsInTab());
     public static final ItemEntry<EnderStaffItem> ENDER_STAFF = GrappleModItems.item("launcheritem", EnderStaffItem::new);
     public static final ItemEntry<ForcefieldItem> FORCE_FIELD = GrappleModItems.item("repeller", ForcefieldItem::new);
 
@@ -43,11 +55,39 @@ public final class GrappleModItems {
 
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
 
+    private static final Consumer<List<ItemStack>> MOD_TAB_GENERATOR = output -> {
+
+        if(creativeMenuCache == null || creativeCacheInvalid) {
+            GrappleModItems.creativeCacheInvalid = false;
+            creativeMenuCache = itemsInRegistryOrder.stream()
+                    .map(id -> items.get(id))
+                    .map(ItemEntry::getTabProvider)
+                    .map(Supplier::get)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        }
+
+        output.addAll(creativeMenuCache);
+    };
+
+    private static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.create(GrappleMod.id("main"))
+            .icon(() -> new ItemStack(GRAPPLING_HOOK.get()))
+            .appendItems(MOD_TAB_GENERATOR)
+            .build();
 
     public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item) {
+        return item(id, item, null);
+    }
+
+    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemStack>> tabProvider) {
         ResourceLocation qualId = GrappleMod.id(id);
-        ItemEntry<I> entry = new ItemEntry<>(qualId, item);
+        ItemEntry<I> entry = new ItemEntry<>(qualId, item, tabProvider);
+
+        if(GrappleModItems.items.containsKey(qualId))
+            throw new IllegalStateException("Duplicate item registered");
+
         GrappleModItems.items.put(qualId, entry);
+        GrappleModItems.itemsInRegistryOrder.add(qualId);
         return entry;
     }
 
@@ -55,6 +95,13 @@ public final class GrappleModItems {
         return new GrappleModBlocks.BlockItemEntry<>();
     }
 
+    public static void invalidateCreativeTabCache() {
+        GrappleModItems.creativeCacheInvalid = true;
+    }
+
+    public static boolean isCreativeCacheInvalid() {
+        return GrappleModItems.creativeCacheInvalid;
+    }
 
     public static void registerAllItems() {
         for(Map.Entry<ResourceLocation, ItemEntry<?>> def: items.entrySet()) {
@@ -69,8 +116,41 @@ public final class GrappleModItems {
 
 
     public static class ItemEntry<I extends Item> extends AbstractRegistryReference<I> {
-        protected ItemEntry(ResourceLocation id, Supplier<I> factory) {
+
+        protected Supplier<List<ItemStack>> tabProvider;
+
+        protected ItemEntry(ResourceLocation id, Supplier<I> factory, Supplier<List<ItemStack>> creativeTabProvider) {
             super(id, factory);
+
+            this.tabProvider = creativeTabProvider == null
+                    ? this.defaultInTab()
+                    : creativeTabProvider;
+        }
+
+        public Supplier<List<ItemStack>> getTabProvider() {
+            return tabProvider;
+        }
+
+        private Supplier<List<ItemStack>> defaultInTab() {
+            return () -> List.of(this.get().getDefaultInstance());
+        }
+
+        private static Supplier<List<ItemStack>> hiddenInTab() {
+            return ArrayList::new;
+        }
+
+        private static Supplier<List<ItemStack>> populateHookVariantsInTab() {
+            return () -> {
+                ArrayList<ItemStack> grappleHookVariants = new ArrayList<>();
+                grappleHookVariants.add(GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance());
+
+                GrappleHookTemplate.getTemplates().stream()
+                        .filter(GrappleHookTemplate::isEnabled)
+                        .map(GrappleHookTemplate::getAsStack)
+                        .forEachOrdered(grappleHookVariants::add);
+
+                return grappleHookVariants;
+            };
         }
     }
 }

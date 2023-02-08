@@ -4,12 +4,11 @@ import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.registry.*;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,13 +40,19 @@ public class GrappleMod implements ModInitializer {
     public static final String MODID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.create(GrappleMod.id("main"))
-            .icon(() -> new ItemStack(GrappleModItems.GRAPPLING_HOOK.get()))
-            .build();
-
     @Override
     public void onInitialize() {
-        AutoConfig.register(GrappleConfig.class, GsonConfigSerializer::new);
+        ConfigHolder<?> cfg = AutoConfig.register(GrappleConfig.class, GsonConfigSerializer::new);
+        cfg.registerSaveListener((holder, config) -> {
+            GrappleModItems.invalidateCreativeTabCache();
+            return InteractionResult.SUCCESS;
+        });
+
+        cfg.registerLoadListener((holder, config) -> {
+            GrappleModItems.invalidateCreativeTabCache();
+            return InteractionResult.SUCCESS;
+        });
+
         GrappleModBlocks.registerAllBlocks();
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
         GrappleModEntities.registerAllEntities();

@@ -338,8 +338,8 @@ public class GrappleModiferBlockGUI extends Screen {
 		double d = customization.getDouble(option);
 		d = Math.floor(d * 10 + 0.5) / 10;
 		
-		double max = customization.getMax(option, this.getLimits());
-		double min = customization.getMin(option, this.getLimits());
+		double max = GrappleCustomization.getMaxFromConfig(option, this.getLimits());
+		double min = GrappleCustomization.getMinFromConfig(option, this.getLimits());
 		
 		String text = new TranslatableComponent(this.customization.getName(option)).getString();
 		String desc = new TranslatableComponent(this.customization.getDescription(option)).getString();
@@ -429,7 +429,7 @@ public class GrappleModiferBlockGUI extends Screen {
 				enabled = false;
 			}
 			
-			int level = this.customization.optionEnabled(option);
+			int level = GrappleCustomization.optionEnabledInConfig(option);
 			if (this.getLimits() < level) {
 				if (level == 1) {
 					desc = new TranslatableComponent("grapplemodifier.limits.desc").getString() + "\n" + desc;

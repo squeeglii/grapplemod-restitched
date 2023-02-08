@@ -47,6 +47,7 @@
     "enchantment.grapplemod.slidingenchantment": "Sliding",
 
     "itemGroup.tabGrapplemod": "Grappling Hook Mod",
+    "text.autoconfig.grapplemod.title": "Grappling Hook Mod Config",
 
     "grapplecustomization.maxlen": "Rope Length",
     "grapplecustomization.phaserope": "Phase Rope",

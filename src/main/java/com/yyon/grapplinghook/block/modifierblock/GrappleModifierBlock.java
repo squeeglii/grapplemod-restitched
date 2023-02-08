@@ -10,13 +10,6 @@ import com.yyon.grapplinghook.util.Check;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -35,6 +28,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,6 +36,12 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class GrappleModifierBlock extends BaseEntityBlock {
 
@@ -77,7 +77,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
     @Override
 	@NotNull
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult raytraceresult) {
-		ItemStack helditemstack = playerIn.getItemInHand(InteractionHand.MAIN_HAND);
+		ItemStack helditemstack = playerIn.getItemInHand(hand);
 		Item helditem = helditemstack.getItem();
 
 		if (helditem instanceof BaseUpgradeItem upgradeItem) {
@@ -99,7 +99,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 			} else {
 				if (!playerIn.isCreative())
-					playerIn.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+					playerIn.setItemInHand(hand, ItemStack.EMPTY);
 
 				tile.unlockCategory(category);
 
@@ -118,13 +118,13 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			GrappleCustomization custom = tile.customization;
-			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom, playerIn);
+			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom);
 
 			playerIn.displayClientMessage(new TextComponent("Applied configuration"), false);
 
 		} else if (helditem == Items.DIAMOND_BOOTS) {
 			if (worldIn.isClientSide) {
-				playerIn.displayClientMessage(new TextComponent("You are now permitted to make Long Fall Boots here.").withStyle(ChatFormatting.RED), false);
+				playerIn.displayClientMessage(new TextComponent("You are not permitted to make Long Fall Boots here.").withStyle(ChatFormatting.RED), false);
 				return InteractionResult.PASS;
 			}
 
@@ -140,7 +140,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			if (enchantments.getOrDefault(Enchantments.FALL_PROTECTION, -1) >= 4) {
 				ItemStack newitemstack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.get());
 				EnchantmentHelper.setEnchantments(enchantments, newitemstack);
-				playerIn.setItemInHand(InteractionHand.MAIN_HAND, newitemstack);
+				playerIn.setItemInHand(hand, newitemstack);
 				gaveitem = true;
 			}
 
@@ -154,7 +154,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			this.easterEgg(worldIn, pos, playerIn);
 
 		} else {
-			if (!worldIn.isClientSide)
+			if ((!worldIn.isClientSide) || hand != InteractionHand.MAIN_HAND)
 				return InteractionResult.PASS;
 
 			BlockEntity ent = worldIn.getBlockEntity(pos);

@@ -139,7 +139,7 @@ public class GrappleCustomization {
 		}
 	}
 	
-	public GrappleConfig.Config.GrapplingHook.Custom.BooleanCustomizationOption getBooleanConfig(String option) {
+	public static GrappleConfig.Config.GrapplingHook.Custom.BooleanCustomizationOption getBooleanConfig(String option) {
 		return switch (option) {
 			case "phaserope" -> GrappleConfig.getConf().grapplinghook.custom.rope.phaserope;
 			case "motor" -> GrappleConfig.getConf().grapplinghook.custom.motor.motor;
@@ -162,7 +162,7 @@ public class GrappleCustomization {
 		};
 	}
 
-	public GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption getDoubleConfig(String option) {
+	public static GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption getDoubleConfig(String option) {
 		return switch (option) {
 			case "maxlen" -> GrappleConfig.getConf().grapplinghook.custom.rope.maxlen;
 			case "hookgravity" -> GrappleConfig.getConf().grapplinghook.custom.hookthrower.hookgravity;
@@ -396,22 +396,22 @@ public class GrappleCustomization {
 		return true;
 	}
 	
-	public double getMax(String option, int upgrade) {
-		GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption configoption = this.getDoubleConfig(option);
+	public static double getMaxFromConfig(String option, int upgrade) {
+		GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption configoption = getDoubleConfig(option);
 		return upgrade == 1 ? configoption.max_upgraded : configoption.max;
 	}
 	
-	public double getMin(String option, int upgrade) {
-		GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption configoption = this.getDoubleConfig(option);
+	public static double getMinFromConfig(String option, int upgrade) {
+		GrappleConfig.Config.GrapplingHook.Custom.DoubleCustomizationOption configoption = getDoubleConfig(option);
 		return upgrade == 1 ? configoption.min_upgraded : configoption.min;
 	}
 	
-	public int optionEnabled(String option) {
-		GrappleConfig.Config.GrapplingHook.Custom.BooleanCustomizationOption configoption = this.getBooleanConfig(option);
+	public static int optionEnabledInConfig(String option) {
+		GrappleConfig.Config.GrapplingHook.Custom.BooleanCustomizationOption configoption = getBooleanConfig(option);
 		if (configoption != null) {
 			return configoption.enabled;
 		}
-		return this.getDoubleConfig(option).enabled;
+		return getDoubleConfig(option).enabled;
 	}
 	
 	public boolean equals(GrappleCustomization other) {
