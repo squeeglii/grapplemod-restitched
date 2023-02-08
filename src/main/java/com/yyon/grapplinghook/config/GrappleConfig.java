@@ -10,6 +10,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "grapplemod")
 public class GrappleConfig implements ConfigData {
+
 	public static class Config {
 		@ConfigEntry.Gui.CollapsibleObject
 		@Tooltip

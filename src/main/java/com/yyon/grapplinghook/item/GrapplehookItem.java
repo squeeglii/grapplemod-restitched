@@ -57,7 +57,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public static HashMap<Entity, GrapplehookEntity> grapplehookEntitiesRight = new HashMap<>();
 	
 	public GrapplehookItem() {
-		super(new Item.Properties().stacksTo(1).tab(GrappleMod.ITEM_GROUP).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
+		super(new Item.Properties().stacksTo(1).durability(GrappleConfig.getConf().grapplinghook.other.default_durability));
 	}
 
 	public boolean hasHookEntity(Entity entity) {
@@ -495,7 +495,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		}
 	}
 
-	public void setCustomOnServer(ItemStack helditemstack, GrappleCustomization custom, Player player) {
+	public void setCustomOnServer(ItemStack helditemstack, GrappleCustomization custom) {
 		CompoundTag tag = helditemstack.getOrCreateTag();
 		CompoundTag nbt = custom.writeNBT();
 		

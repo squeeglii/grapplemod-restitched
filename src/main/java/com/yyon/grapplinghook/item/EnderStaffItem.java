@@ -37,7 +37,7 @@ import java.util.List;
 public class EnderStaffItem extends Item {
 	
 	public EnderStaffItem() {
-		super(new Item.Properties().tab(GrappleMod.ITEM_GROUP).stacksTo(1));
+		super(new Item.Properties().stacksTo(1));
 	}
 	
 	public void doRightClick(Level worldIn, Player player) {
