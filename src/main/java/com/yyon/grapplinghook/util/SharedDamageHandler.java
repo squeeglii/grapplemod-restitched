@@ -37,7 +37,8 @@ public class SharedDamageHandler {
             GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
             GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
 
-            GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level);
+            if(deadEntity instanceof Player)
+                GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level);
         }
 
         return false;

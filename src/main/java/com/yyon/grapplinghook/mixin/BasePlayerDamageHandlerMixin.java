@@ -15,11 +15,6 @@ public abstract class BasePlayerDamageHandlerMixin {
 
     @Shadow public abstract boolean isInvulnerableTo(DamageSource source);
 
-    @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At("HEAD"), cancellable = true)
-    public void handleDeath(DamageSource source, CallbackInfo ci){
-        if(SharedDamageHandler.handleDeath((Entity) (Object) this)) ci.cancel();
-    }
-
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At("HEAD"), cancellable = true)
     public void handleDamage(DamageSource source, float damage, CallbackInfo ci){
         if(this.isInvulnerableTo(source)) return;
