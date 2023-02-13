@@ -104,10 +104,10 @@ public class GrappleCrosshairMixin {
         RenderSystem.defaultBlendFunc();
     }
 
-    public void drawRect(int x, int y, int width, int height, int g, int a)
-    {
+    public void drawRect(int x, int y, int width, int height, int g, int a) {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferbuilder = tesselator.getBuilder();
 
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         bufferbuilder.vertex(x, y + height, Z_LEVEL).color(g, g, g, a).endVertex();
@@ -115,6 +115,6 @@ public class GrappleCrosshairMixin {
         bufferbuilder.vertex(x + width, y, Z_LEVEL).color(g, g, g, a).endVertex();
         bufferbuilder.vertex(x, y, Z_LEVEL).color(g, g, g, a).endVertex();
 
-        BufferUploader.end(bufferbuilder);
+        Tesselator.getInstance().end();
     }
 }
