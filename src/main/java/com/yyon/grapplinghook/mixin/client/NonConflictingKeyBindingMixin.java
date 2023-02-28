@@ -113,7 +113,7 @@ public abstract class NonConflictingKeyBindingMixin {
 
         KeyMapping oldMap = MAP.get(oldKey);
 
-        if(this.getName().equals(oldMap.getName())) {
+        if(oldMap != null && this.getName().equals(oldMap.getName())) {
             MAP.remove(oldKey);
         }
     }
