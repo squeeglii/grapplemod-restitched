@@ -66,7 +66,7 @@ public class GrappleModUtils {
 		return PlayerLookup.tracking(level, chunk).toArray(new ServerPlayer[0]);
 	}
 
-	public static void registerPack(String id, Component displayName, ModContainer container, ResourcePackActivationType activationType) {
+	public static void registerPack(String id, String displayName, ModContainer container, ResourcePackActivationType activationType) {
 		ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(GrappleMod.MODID, id), container, displayName, activationType);
 	}
 
