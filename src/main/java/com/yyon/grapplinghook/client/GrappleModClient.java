@@ -113,7 +113,7 @@ public class GrappleModClient implements ClientModInitializer {
 
         ModContainer container = cont.get();
 
-        GrappleModUtils.registerPack("original_textures", Component.translatable("pack.grapplemod.original"), container, ResourcePackActivationType.NORMAL);
+        GrappleModUtils.registerPack("original_textures", "Classic Textures", container, ResourcePackActivationType.NORMAL);
     }
 
 
