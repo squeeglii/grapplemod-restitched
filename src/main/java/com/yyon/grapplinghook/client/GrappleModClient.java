@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.client;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
@@ -24,6 +25,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -34,6 +39,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -41,6 +47,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class GrappleModClient implements ClientModInitializer {
@@ -68,6 +76,7 @@ public class GrappleModClient implements ClientModInitializer {
 
         this.clientControllerManager = new ClientControllerManager();
         this.registerPropertyOverride();
+        this.registerResourcePacks();
     }
 
     public static GrappleModClient get() {
@@ -92,6 +101,19 @@ public class GrappleModClient implements ClientModInitializer {
             return (ClientControllerManager.controllers.containsKey(entity.getId()) && ClientControllerManager.controllers.get(entity.getId()) instanceof ForcefieldController) ? 1 : 0;
         });
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("hook"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.get().getPropertyHook(stack, world, entity) ? 1 : 0);
+    }
+
+    public void registerResourcePacks() {
+        Optional<ModContainer> cont = FabricLoader.getInstance().getModContainer(GrappleMod.MODID);
+
+        if(cont.isEmpty()) {
+            GrappleMod.LOGGER.error("Unable to register resource packs! This mod technically doesn't exist!!");
+            return;
+        }
+
+        ModContainer container = cont.get();
+
+        GrappleModUtils.registerPack("original_textures", Component.translatable("pack.grapplemod.original"), container, ResourcePackActivationType.NORMAL);
     }
 
 

@@ -520,5 +520,6 @@
     "grapplemod.upgradecategories.limits": "Limits",
     "grapplemod.upgradecategories.rocket": "Rocket",
     
-    "grapplemod.jei_modifier_text": "Add upgrade(s), open\ninterface to customize,\nthen apply to hook"
+    "grapplemod.jei_modifier_text": "Add upgrade(s), open\ninterface to customize,\nthen apply to hook",
+    "pack.grapplemod.original": "Classic Textures"
 }
