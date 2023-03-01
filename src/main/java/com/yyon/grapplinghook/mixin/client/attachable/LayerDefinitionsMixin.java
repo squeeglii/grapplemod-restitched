@@ -30,11 +30,15 @@ public class LayerDefinitionsMixin {
     //    builderRef = builder;
     //}
 
-    @Inject(method = "createRoots()Ljava/util/Map;", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;", ordinal = 1))
+    @Inject(method = "createRoots()Ljava/util/Map;",
+            remap = false,
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;",
+                    ordinal = 1
+            ))
     private static void insertLayers(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {
         GrappleModEntityRenderLayers.RenderLayerEntry longFallBoots = GrappleModEntityRenderLayers.LONG_FALL_BOOTS;
-
-        GrappleMod.LOGGER.info("Location: %s, Layer def: %s".formatted(longFallBoots.getLocation(), longFallBoots.get()));
 
         builderRef.put(longFallBoots.getLocation(), longFallBoots.get());
     }
