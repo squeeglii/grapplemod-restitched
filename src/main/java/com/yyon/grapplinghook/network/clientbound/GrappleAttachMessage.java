@@ -137,16 +137,28 @@ public class GrappleAttachMessage extends BaseMessageClient {
     @Override
     public void processMessage(NetworkContext ctx) {
 		Level world = Minecraft.getInstance().level;
-    	Entity grapple = world.getEntity(this.id);
-    	if (grapple instanceof GrapplehookEntity) {
-        	((GrapplehookEntity) grapple).clientAttach(this.x, this.y, this.z);
-        	SegmentHandler segmenthandler = ((GrapplehookEntity) grapple).segmentHandler;
+
+        if(world == null) {
+            GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttach)");
+            return;
+        }
+
+    	if (world.getEntity(this.id) instanceof GrapplehookEntity grapple) {
+
+        	grapple.clientAttach(this.x, this.y, this.z);
+        	SegmentHandler segmenthandler = grapple.segmentHandler;
         	segmenthandler.segments = this.segments;
         	segmenthandler.segmentBottomSides = this.segmentBottomSides;
         	segmenthandler.segmentTopSides = this.segmentTopSides;
         	
-        	Entity player = world.getEntity(this.entityId);
-        	segmenthandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(player));
+        	Entity holder = world.getEntity(this.entityId);
+
+            if(holder == null) {
+                GrappleMod.LOGGER.warn("Network Message received in invalid context (Holder does not exist | GrappleAttach)");
+                return;
+            }
+
+        	segmenthandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
     	}
     	            	
     	GrappleModClient.get().createControl(this.controlId, this.id, this.entityId, world, new Vec(this.x, this.y, this.z), this.blockPos, this.custom);

@@ -73,9 +73,14 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
     @Override
     public void processMessage(NetworkContext ctx) {
     	Level world = Minecraft.getInstance().level;
-    	Entity grapple = world.getEntity(this.id);
-    	if (grapple instanceof GrapplehookEntity) {
-        	((GrapplehookEntity) grapple).setAttachPos(this.x, this.y, this.z);
-    	}
+
+        if(world == null) {
+            GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttachPos)");
+            return;
+        }
+
+    	if (world.getEntity(this.id) instanceof GrapplehookEntity grapple) {
+        	grapple.setAttachPos(this.x, this.y, this.z);
+        }
     }
 }
