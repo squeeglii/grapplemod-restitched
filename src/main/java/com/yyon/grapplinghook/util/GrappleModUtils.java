@@ -4,7 +4,12 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -59,6 +64,10 @@ public class GrappleModUtils {
 	public static synchronized ServerPlayer[] getChunkPlayers(ServerLevel level, Vec point) {
 		ChunkPos chunk = level.getChunkAt(new BlockPos(point.x, point.y, point.z)).getPos();
 		return PlayerLookup.tracking(level, chunk).toArray(new ServerPlayer[0]);
+	}
+
+	public static void registerPack(String id, Component displayName, ModContainer container, ResourcePackActivationType activationType) {
+		ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(GrappleMod.MODID, id), container, displayName, activationType);
 	}
 
 }
