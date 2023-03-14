@@ -143,7 +143,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			this(x, y, w, h, Component.literal(""));
 		}
 		
-	    public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+	    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			RenderSystem.setShaderTexture(0,texture);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			this.blit(stack, this.getX(), this.getY(), 0, 0, this.width, this.height);
@@ -174,7 +174,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			this(x, y, 50, 15 * text.getString().split("\n").length + 5, text);
 		}
 		
-		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			Minecraft minecraft = Minecraft.getInstance();
 			Font fontRenderer = minecraft.font;
 			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
@@ -254,8 +254,8 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 		
 		@Override
-		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-			super.renderButton(stack, mouseX, mouseY, partialTick);
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			super.renderWidget(stack, mouseX, mouseY, partialTick);
 			
 			if (this.isHovered) {
 				String tooltipText = tooltip.getString();
@@ -308,8 +308,8 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 		
 		@Override
-		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-			super.renderButton(stack, mouseX, mouseY, partialTick);
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			super.renderWidget(stack, mouseX, mouseY, partialTick);
 			
 			if (this.isHovered) {
 				String tooltiptext = tooltip.getString();

@@ -1,21 +1,21 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.registry.GrappleModItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.CreativeModeTab;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(CreativeModeTabs.class)
+@Mixin(CreativeModeTab.ItemDisplayParameters.class)
 public class CreativeTabForceUpdateMixin {
 
-    @Inject(method = "wouldRebuildSameContents(Lnet/minecraft/world/flag/FeatureFlagSet;Z)Z", at = @At("RETURN"), cancellable = true)
-    private static void checkGrappleTabCondition(FeatureFlagSet enabledFeatures, boolean displayOperatorCreativeTab, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "needsUpdate(Lnet/minecraft/world/flag/FeatureFlagSet;ZLnet/minecraft/core/HolderLookup$Provider;)Z", at = @At("RETURN"), cancellable = true)
+    private static void checkGrappleTabCondition(FeatureFlagSet featureFlagSet, boolean bl, HolderLookup.Provider provider, CallbackInfoReturnable<Boolean> cir) {
         if(GrappleModItems.isCreativeCacheInvalid())
-            cir.setReturnValue(false);
+            cir.setReturnValue(true);
     }
 
 }
