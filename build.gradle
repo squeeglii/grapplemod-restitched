@@ -4,7 +4,11 @@ plugins {
 }
 
 group = project.maven_group
-version = "indev"
+
+String targetVersion = project.properties["mod_version"] == null || project.properties["mod_version"].toString().length() == 0
+        ? "-indev"
+        :"-v" + project.properties["mod_version"].toString()
+project.setVersion(project.properties["minecraft_version"] + targetVersion)
 
 loom {
     accessWidenerPath = file("src/main/resources/grapplemod.accesswidener")
@@ -81,12 +85,7 @@ java {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
 
-    String targetVersion = project.mod_version == null || project.mod_version.length() == 0
-            ? "-indev"
-            :"-v" + project.mod_version
-
     archivesBaseName = project.archives_base_name
-    project.setVersion(project.minecraft_version + targetVersion)
 
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.

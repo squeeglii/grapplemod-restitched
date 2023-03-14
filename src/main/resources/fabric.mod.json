@@ -23,6 +23,6 @@
     "cloth-config": ">=${clothconfig_version}"
   },
   "recommends": {
-    "modmenu": ">={modmenu_version}"
+    "modmenu": ">=${modmenu_version}"
   }
 }

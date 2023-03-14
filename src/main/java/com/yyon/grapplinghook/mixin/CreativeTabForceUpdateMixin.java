@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class CreativeTabForceUpdateMixin {
 
     @Inject(method = "needsUpdate(Lnet/minecraft/world/flag/FeatureFlagSet;ZLnet/minecraft/core/HolderLookup$Provider;)Z", at = @At("RETURN"), cancellable = true)
-    private static void checkGrappleTabCondition(FeatureFlagSet featureFlagSet, boolean bl, HolderLookup.Provider provider, CallbackInfoReturnable<Boolean> cir) {
+    private void checkGrappleTabCondition(FeatureFlagSet featureFlagSet, boolean bl, HolderLookup.Provider provider, CallbackInfoReturnable<Boolean> cir) {
         if(GrappleModItems.isCreativeCacheInvalid())
             cir.setReturnValue(true);
     }
