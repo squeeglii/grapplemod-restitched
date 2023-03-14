@@ -17,12 +17,12 @@
   "mixins": [ "grapplemod.mixins.json" ],
   "accessWidener": "grapplemod.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.13",
+    "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "1.19.3",
-    "cloth-config": ">=9.0.94"
+    "minecraft": "${snapshot_version_workaround}",
+    "cloth-config": ">=${clothconfig_version}"
   },
   "recommends": {
-    "modmenu": ">=5.0.0"
+    "modmenu": ">={modmenu_version}"
   }
 }

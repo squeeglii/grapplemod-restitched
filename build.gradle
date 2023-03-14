@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-version = project.mod_version
 group = project.maven_group
+version = "indev"
 
 loom {
     accessWidenerPath = file("src/main/resources/grapplemod.accesswidener")
@@ -46,8 +46,20 @@ processResources {
     inputs.property "version", project.version
     filteringCharset "UTF-8"
 
+    // Trying to update to 1.19.4-rc3 was problematic because the mappings had
+    // a slightly different version to the dependency (rc3 vs rc.3)
+
+    // This just adds a workaround so the dependency version can be ignored when
+    // developing for a snapshot.
+    HashMap modifiedSrc = new HashMap<>(project.properties)
+    modifiedSrc.put("snapshot_version_workaround",
+            project.properties["fix_it_not_launching_for_snapshots"] == "yes"
+            ? "*"
+            : project.properties["minecraft_version"]
+    )
+
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand modifiedSrc
     }
 }
 
@@ -68,7 +80,14 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
+
+    String targetVersion = project.mod_version == null || project.mod_version.length() == 0
+            ? "-indev"
+            :"-v" + project.mod_version
+
     archivesBaseName = project.archives_base_name
+    project.setVersion(project.minecraft_version + targetVersion)
+
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.
     // If you remove this line, sources will not be generated.
