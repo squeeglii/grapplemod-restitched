@@ -271,7 +271,7 @@ public class SegmentHandler {
 		Vec bendpos = this.segments.get(index);
 		bendpos.add_ip(this.getNormal(this.segmentBottomSides.get(index)).changeLen(-this.intoBlock * 2));
 		bendpos.add_ip(this.getNormal(this.segmentTopSides.get(index)).changeLen(-this.intoBlock * 2));
-		return new BlockPos(bendpos.x, bendpos.y, bendpos.z);
+		return BlockPos.containing(bendpos.toVec3d());
 	}
 	
 	public void actuallyAddSegment(int index, Vec bendpoint, Direction bottomside, Direction topside) {

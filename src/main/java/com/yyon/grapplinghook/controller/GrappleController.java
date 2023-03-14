@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3d;
 
 import java.util.HashSet;
 
@@ -574,7 +575,7 @@ public class GrappleController {
 	
 	public boolean tryStepUp(Vec collisionmotion) {
 		if (collisionmotion.length() == 0) {return false;}
-		Vec moveoffset = collisionmotion.changeLen(0.05).add(0, entity.maxUpStep+0.01, 0);
+		Vec moveoffset = collisionmotion.changeLen(0.05).add(0, entity.maxUpStep() + 0.01, 0);
 		Iterable<VoxelShape> collisions = this.entity.level.getCollisions(this.entity, this.entity.getBoundingBox().move(moveoffset.x, moveoffset.y, moveoffset.z));
 		if (!collisions.iterator().hasNext()) {
 			if (!this.entity.isOnGround()) {
@@ -732,9 +733,11 @@ public class GrappleController {
     	
     	double t = (1.0 + Math.sqrt(5.0)) / 2.0;
     	
-		BlockPos pos = new BlockPos(Math.floor(p.x), Math.floor(p.y), Math.floor(p.z));
+		BlockPos pos = BlockPos.containing(p.x, p.y, p.z);
+
 		if (hasBlock(pos, w)) {
 			v.add_ip(0, 1, 0);
+
 		} else {
 	    	v.add_ip(vecDist(p, new Vec(-1,  t,  0), w));
 	    	v.add_ip(vecDist(p, new Vec( 1,  t,  0), w));
@@ -761,7 +764,7 @@ public class GrappleController {
     public Vec vecDist(Vec p, Vec v, Level w) {
     	for (double i = 0.5; i < 10; i += 0.5) {
     		Vec v2 = v.changeLen(i);
-    		BlockPos pos = new BlockPos(Math.floor(p.x + v2.x), Math.floor(p.y + v2.y), Math.floor(p.z + v2.z));
+    		BlockPos pos = BlockPos.containing(p.x + v2.x, p.y + v2.y, p.z + v2.z);
     		if (hasBlock(pos, w)) {
     			Vec v3 = new Vec(pos.getX() + 0.5 - p.x, pos.getY() + 0.5 - p.y, pos.getZ() + 0.5 - p.z);
     			v3.changeLen_ip(-1 / Math.pow(v3.length(), 2));

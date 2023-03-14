@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
 import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +51,7 @@ public class SharedDamageHandler {
 
             for (ItemStack armor : player.getArmorSlots()) {
                 if (armor != null && armor.getItem() instanceof LongFallBoots) continue;
-                if (source == DamageSource.FLY_INTO_WALL) return true;
+                if (source.is(DamageTypes.FLY_INTO_WALL)) return true;
             }
         }
 

@@ -63,7 +63,7 @@ public class GrappleModUtils {
 	}
 
 	public static synchronized ServerPlayer[] getChunkPlayers(ServerLevel level, Vec point) {
-		ChunkPos chunk = level.getChunkAt(new BlockPos(point.x, point.y, point.z)).getPos();
+		ChunkPos chunk = level.getChunkAt(BlockPos.containing(point.toVec3d())).getPos();
 		return PlayerLookup.tracking(level, chunk).toArray(new ServerPlayer[0]);
 	}
 
