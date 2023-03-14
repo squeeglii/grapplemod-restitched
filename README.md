@@ -1,8 +1,8 @@
 # GrappleMod: Restitched
 
-[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.19.3-blue?style=flat-square)](https://www.minecraft.net/en-us)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.19.4-blue?style=flat-square)](https://www.minecraft.net/en-us)
 [![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.13-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
-[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v9.0.94-mint?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)
+[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v10.0.95-mint?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/cloth-config)
 
 [![GPL-3.0](https://img.shields.io/badge/License-GNU_GPL_3.0-mint?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
