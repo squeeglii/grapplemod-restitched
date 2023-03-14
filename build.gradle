@@ -24,15 +24,15 @@ repositories {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.19.3:2022.12.18@zip")
-    }
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
+        if(project.parchment_version != "")
+            parchment("org.parchmentmc.data:${project.parchment_version}@zip")
+    }
+
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
