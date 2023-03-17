@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.client.mixin;
+package com.yyon.grapplinghook.mixin.client;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.InputConstants;
