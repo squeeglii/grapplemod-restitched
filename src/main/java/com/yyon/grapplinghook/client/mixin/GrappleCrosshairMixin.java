@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.mixin.client;
+package com.yyon.grapplinghook.client.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
