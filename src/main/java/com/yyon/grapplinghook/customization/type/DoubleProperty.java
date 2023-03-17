@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.customization.CustomizationRendererProvider;
 
 public class DoubleProperty extends CustomizationProperty<Double> {
 
-    public DoubleProperty(double defaultValue, double max, double min) {
+    public DoubleProperty(double defaultValue, double min, double max) {
         super(defaultValue);
     }
 
