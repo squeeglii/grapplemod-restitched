@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.entity.grapplehook.IExtendedSpawnPacketEntity;
+import com.yyon.grapplinghook.content.entity.grapplinghook.IExtendedSpawnPacketEntity;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.AddExtraDataMessage;
 import net.minecraft.server.level.ServerEntity;

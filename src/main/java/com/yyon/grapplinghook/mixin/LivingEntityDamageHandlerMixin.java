@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.item.LongFallBoots;
+import com.yyon.grapplinghook.content.item.LongFallBootsItem;
 import com.yyon.grapplinghook.util.SharedDamageHandler;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -36,7 +36,7 @@ public abstract class LivingEntityDamageHandlerMixin {
 
             for (ItemStack armorStack : player.getArmorSlots()) {
                 if(armorStack == null) continue;
-                if(armorStack.getItem() instanceof LongFallBoots)
+                if(armorStack.getItem() instanceof LongFallBootsItem)
                     cir.setReturnValue(false);
             }
         }

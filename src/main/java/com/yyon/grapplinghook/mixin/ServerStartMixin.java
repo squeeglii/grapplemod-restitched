@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.config.GrappleConfig;
+import com.yyon.grapplinghook.config.GrappleModConfig;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +20,7 @@ public abstract class ServerStartMixin {
                     shift = At.Shift.BEFORE
             ))
     public void onServerStart(CallbackInfo ci) {
-        if (GrappleConfig.getConf().other.override_allowflight) {
+        if (GrappleModConfig.getConf().other.override_allowflight) {
             this.setFlightAllowed(true);
         }
     }

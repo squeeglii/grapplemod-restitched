@@ -1,10 +1,9 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.entity.grapplehook.SegmentHandler;
+import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -90,8 +89,8 @@ public class SegmentMessage extends BaseMessageClient {
     		return;
     	}
     	
-    	if (grapple instanceof GrapplehookEntity) {
-    		SegmentHandler segmenthandler = ((GrapplehookEntity) grapple).segmentHandler;
+    	if (grapple instanceof GrapplinghookEntity) {
+    		RopeSegmentHandler segmenthandler = ((GrapplinghookEntity) grapple).segmentHandler;
     		if (this.add) {
     			segmenthandler.actuallyAddSegment(this.index, this.pos, this.bottomFacing, this.topFacing);
     		} else {

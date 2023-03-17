@@ -1,15 +1,13 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
+import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 
@@ -79,7 +77,7 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
             return;
         }
 
-    	if (world.getEntity(this.id) instanceof GrapplehookEntity grapple) {
+    	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
         	grapple.setAttachPos(this.x, this.y, this.z);
         }
     }

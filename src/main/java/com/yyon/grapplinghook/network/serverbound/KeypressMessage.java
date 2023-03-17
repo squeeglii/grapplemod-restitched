@@ -1,14 +1,12 @@
 package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.item.KeypressItem;
+import com.yyon.grapplinghook.content.item.type.KeypressItem;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /*

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.item.DroppableItem;
+import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

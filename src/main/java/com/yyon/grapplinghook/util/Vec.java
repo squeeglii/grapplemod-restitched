@@ -50,11 +50,7 @@ public class Vec {
 	public Vec3 toVec3d() {
 		return new Vec3(this.x, this.y, this.z);
 	}
-	
-	public Vector3f toVector3f() {
-		return new Vector3f((float) this.x, (float) this.y, (float) this.z);
-	}
-	
+
 	public static Vec positionVec(Entity e) {
 		return new Vec(e.position());
 	}

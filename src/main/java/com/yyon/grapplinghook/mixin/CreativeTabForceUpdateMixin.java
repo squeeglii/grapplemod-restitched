@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;

@@ -1,11 +1,10 @@
 package com.yyon.grapplinghook.util;
 
-import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.item.GrapplehookItem;
-import com.yyon.grapplinghook.item.LongFallBoots;
+import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.content.item.GrapplehookItem;
+import com.yyon.grapplinghook.content.item.LongFallBootsItem;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
-import com.yyon.grapplinghook.server.ServerControllerManager;
-import com.yyon.grapplinghook.util.GrappleModUtils;
+import com.yyon.grapplinghook.physics.PhysicsContextTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -20,20 +19,20 @@ public class SharedDamageHandler {
     public static boolean handleDeath(Entity deadEntity) {
         if (!deadEntity.level().isClientSide) {
             int id = deadEntity.getId();
-            boolean isConnected = ServerControllerManager.allGrapplehookEntities.containsKey(id);
+            boolean isConnected = PhysicsContextTracker.allGrapplehookEntities.containsKey(id);
 
             if (isConnected) return false;
 
-            HashSet<GrapplehookEntity> grapplehookEntities = ServerControllerManager.allGrapplehookEntities.get(id);
+            HashSet<GrapplinghookEntity> grapplehookEntities = PhysicsContextTracker.allGrapplehookEntities.get(id);
 
             if(grapplehookEntities != null) {
-                for (GrapplehookEntity hookEntity : grapplehookEntities)
+                for (GrapplinghookEntity hookEntity : grapplehookEntities)
                     hookEntity.removeServer();
 
                 grapplehookEntities.clear();
             }
 
-            ServerControllerManager.attached.remove(id);
+            PhysicsContextTracker.attached.remove(id);
 
             GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
             GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
@@ -50,7 +49,7 @@ public class SharedDamageHandler {
         if (damagedEntity instanceof Player player) {
 
             for (ItemStack armor : player.getArmorSlots()) {
-                if (armor != null && armor.getItem() instanceof LongFallBoots) continue;
+                if (armor != null && armor.getItem() instanceof LongFallBootsItem) continue;
                 if (source.is(DamageTypes.FLY_INTO_WALL)) return true;
             }
         }

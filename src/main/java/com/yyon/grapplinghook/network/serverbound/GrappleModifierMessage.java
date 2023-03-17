@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
+import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.util.GrappleCustomization;
+import com.yyon.grapplinghook.customization.GrappleCustomization;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

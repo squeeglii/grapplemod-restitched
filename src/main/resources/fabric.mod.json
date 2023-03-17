@@ -12,7 +12,9 @@
   "entrypoints": {
     "client": [ "com.yyon.grapplinghook.client.GrappleModClient" ],
     "main": [ "com.yyon.grapplinghook.GrappleMod" ],
-    "modmenu": [ "com.yyon.grapplinghook.client.GrappleModModMenuIntegration" ]
+    "modmenu": [
+      "com.yyon.grapplinghook.client.integration.ModMenuIntegration"
+    ]
   },
   "mixins": [ "grapplemod.mixins.json" ],
   "accessWidener": "grapplemod.accesswidener",

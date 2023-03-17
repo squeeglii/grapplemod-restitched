@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.client.gui;
 
 import com.yyon.grapplinghook.client.gui.widget.*;
-import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.util.GrappleCustomization;
+import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
+import com.yyon.grapplinghook.customization.GrappleCustomization;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -28,7 +28,7 @@ public class GrappleModifierBlockGUI extends Screen {
 
 	private HashMap<AbstractWidget, String> options;
 	private GrappleCustomization customization;
-	private GrappleCustomization.UpgradeCategories currentActiveCategory = null;
+	private GrappleCustomization.UpgradeCategory currentActiveCategory = null;
 
 	public GrappleModifierBlockGUI(GrappleModifierBlockEntity tileent) {
 		super(Component.translatable("grapplemodifier.title.desc"));
@@ -108,11 +108,11 @@ public class GrappleModifierBlockGUI extends Screen {
 
 		int y = 0;
 		int x = 0;
-		for (int i = 0; i < GrappleCustomization.UpgradeCategories.size(); i++) {
-			GrappleCustomization.UpgradeCategories category = GrappleCustomization.UpgradeCategories.fromInt(i);
-			if (category == GrappleCustomization.UpgradeCategories.LIMITS) continue;
+		for (int i = 0; i < GrappleCustomization.UpgradeCategory.size(); i++) {
+			GrappleCustomization.UpgradeCategory category = GrappleCustomization.UpgradeCategory.fromInt(i);
+			if (category == GrappleCustomization.UpgradeCategory.LIMITS) continue;
 
-			if (i == GrappleCustomization.UpgradeCategories.size() / 2) {
+			if (i == GrappleCustomization.UpgradeCategory.size() / 2) {
 				y = 0;
 				x += 1;
 			}
@@ -138,7 +138,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.addRenderableWidget(new BackgroundWidget(this.guiLeft, this.guiTop, FULL_SIZE_X, FULL_SIZE_Y));
 	}
 
-	public void showNotAllowedScreenLayout(GrappleCustomization.UpgradeCategories category) {
+	public void showNotAllowedScreenLayout(GrappleCustomization.UpgradeCategory category) {
 		this.resetScreenLayout();
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapplemodifier.back.desc"), actionGoBack)
@@ -170,7 +170,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.help.desc"), this.guiLeft + 10, this.guiTop + 10));
 	}
 
-	public void showCategoryScreen(GrappleCustomization.UpgradeCategories category) {
+	public void showCategoryScreen(GrappleCustomization.UpgradeCategory category) {
 		this.resetScreenLayout();
 
 		this.addRenderableWidget(
@@ -282,7 +282,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	
 	public int getLimits() {
 		if(Minecraft.getInstance().player == null) return 0;
-		return this.blockEntity.isUnlocked(GrappleCustomization.UpgradeCategories.LIMITS) || Minecraft.getInstance().player.isCreative()
+		return this.blockEntity.isUnlocked(GrappleCustomization.UpgradeCategory.LIMITS) || Minecraft.getInstance().player.isCreative()
 				? 1
 				: 0;
 	}
@@ -296,7 +296,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		return this.guiTop + this.widgetPosYIncrementor - 22;
 	}
 
-	protected OnPress createCategoryActionHandler(GrappleCustomization.UpgradeCategories category) {
+	protected OnPress createCategoryActionHandler(GrappleCustomization.UpgradeCategory category) {
 		return button -> {
 			if(Minecraft.getInstance().player == null) return;
 

@@ -2,11 +2,10 @@ package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.entity.grapplehook.GrapplehookEntity;
-import com.yyon.grapplinghook.entity.grapplehook.SegmentHandler;
+import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
-import com.yyon.grapplinghook.util.GrappleCustomization;
+import com.yyon.grapplinghook.customization.GrappleCustomization;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -144,10 +143,10 @@ public class GrappleAttachMessage extends BaseMessageClient {
             return;
         }
 
-    	if (world.getEntity(this.id) instanceof GrapplehookEntity grapple) {
+    	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
 
         	grapple.clientAttach(this.x, this.y, this.z);
-        	SegmentHandler segmenthandler = grapple.segmentHandler;
+        	RopeSegmentHandler segmenthandler = grapple.segmentHandler;
         	segmenthandler.segments = this.segments;
         	segmenthandler.segmentBottomSides = this.segmentBottomSides;
         	segmenthandler.segmentTopSides = this.segmentTopSides;

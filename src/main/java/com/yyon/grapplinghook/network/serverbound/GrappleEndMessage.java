@@ -2,11 +2,10 @@ package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.server.ServerControllerManager;
+import com.yyon.grapplinghook.physics.PhysicsContextTracker;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
 
@@ -72,7 +71,7 @@ public class GrappleEndMessage extends BaseMessageServer {
 
 		ctx.getServer().execute(() -> {
 			if (player == null) return;
-			ServerControllerManager.receiveGrappleEnd(id, player.level(), this.hookEntityIds);
+			PhysicsContextTracker.receiveGrappleEnd(id, player.level(), this.hookEntityIds);
 		});
     }
 }

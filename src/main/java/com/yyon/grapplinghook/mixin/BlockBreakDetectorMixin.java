@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.item.GrapplehookItem;
+import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;

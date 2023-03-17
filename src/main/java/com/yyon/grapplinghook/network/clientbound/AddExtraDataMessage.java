@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.entity.grapplehook.IExtendedSpawnPacketEntity;
+import com.yyon.grapplinghook.content.entity.grapplinghook.IExtendedSpawnPacketEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
