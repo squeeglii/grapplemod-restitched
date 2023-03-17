@@ -37,19 +37,28 @@ public class GrappleModCustomizationCategories {
         }
     }
 
+    // rename to reinforcement?
+    public static final Entry<CustomizationCategory> LIMITS = category("limits", () -> new CustomizationCategory(
+            GrappleModItems.LIMITS_UPGRADE.get()
+    ));
 
     public static final Entry<CustomizationCategory> ROPE = category("rope", () -> new CustomizationCategory(
             GrappleModItems.ROPE_UPGRADE.get(),
             MAX_ROPE_LENGTH.get(), BLOCK_PHASE_ROPE.get(), STICKY_ROPE.get()
     ));
 
-
+    // TODO: Group gravity with playermovementmult in a physics tab maybe?
     public static final Entry<CustomizationCategory> HOOK_THROWER = category("hook_thrower", () -> new CustomizationCategory(
             GrappleModItems.THROW_UPGRADE.get(),
             HOOK_GRAVITY_MULTIPLIER.get(), HOOK_THROW_SPEED.get(), HOOK_THROW_ANGLE.get(), HOOK_THROW_ANGLE_ON_SNEAK.get(),
             HOOK_REEL_IN_ON_SNEAK.get(), DETACH_HOOK_ON_KEY_UP.get()
     ));
 
+    public static final Entry<CustomizationCategory> MOTOR = category("motor", () -> new CustomizationCategory(
+            GrappleModItems.MOTOR_UPGRADE.get(),
+            MOTOR_ATTACHED.get(), MOTOR_ACCELERATION.get(), MAX_MOTOR_SPEED.get(), MOTOR_ACTIVATION.get(),
+            SMART_MOTOR.get(), MOTOR_DAMPENER.get(), MOTOR_WORKS_BACKWARDS.get()
+    ));
 
 
     public static class Entry<T extends CustomizationCategory> extends AbstractRegistryReference<T> {

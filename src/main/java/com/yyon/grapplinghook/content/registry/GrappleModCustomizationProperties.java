@@ -3,7 +3,9 @@ package com.yyon.grapplinghook.content.registry;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.customization.CustomizationProperty;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
+import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.DoubleProperty;
+import com.yyon.grapplinghook.customization.type.EnumProperty;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
@@ -51,6 +53,13 @@ public class GrappleModCustomizationProperties {
     public static final Entry<DoubleProperty> HOOK_THROW_ANGLE_ON_SNEAK = property("hook_throw_angle_on_sneak", () -> new DoubleProperty(0.0D, 0.0D, 45.0D));
     public static final Entry<BooleanProperty> DETACH_HOOK_ON_KEY_UP = property("detach_hook_on_key_up", () -> new BooleanProperty(false));
 
+    public static final Entry<BooleanProperty> MOTOR_ATTACHED = property("motor", () -> new BooleanProperty(false));
+    public static final Entry<DoubleProperty> MOTOR_ACCELERATION = property("motor_acceleration", () -> new DoubleProperty(0.2, 0, 0.2));
+    public static final Entry<DoubleProperty> MAX_MOTOR_SPEED = property("max_motor_speed", () -> new DoubleProperty(4, 0, 4));
+    public static final Entry<EnumProperty<CrouchToggle>> MOTOR_ACTIVATION = property("motor_activation", () -> new EnumProperty<>(CrouchToggle.WHEN_NOT_CROUCHING));
+    public static final Entry<BooleanProperty> SMART_MOTOR = property("smart_motor", () -> new BooleanProperty(false));
+    public static final Entry<BooleanProperty> MOTOR_DAMPENER = property("motor_dampener", () -> new BooleanProperty(false)); //TODO: Only available with limits.
+    public static final Entry<BooleanProperty> MOTOR_WORKS_BACKWARDS = property("motor_works_backwards", () -> new BooleanProperty(true));
 
 
 
