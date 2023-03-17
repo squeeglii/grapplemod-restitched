@@ -1,28 +1,28 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "com.yyon.grapplinghook",
+    "package": "com.yyon.grapplinghook.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "mixin.BasePlayerDamageHandlerMixin",
-        "mixin.BlockBreakDetectorMixin",
-        "mixin.LivingEntityDamageHandlerMixin",
-        "mixin.PlayerDropHandlerMixin",
-        "mixin.SendExtraEntityDataMixin",
-        "mixin.ServerConfigSyncMixin",
-        "mixin.ServerPlayerDeathHandlerMixin",
-        "mixin.ServerStartMixin",
-        "mixin.CreativeTabForceUpdateMixin"
+        "BasePlayerDamageHandlerMixin",
+        "BlockBreakDetectorMixin",
+        "LivingEntityDamageHandlerMixin",
+        "PlayerDropHandlerMixin",
+        "SendExtraEntityDataMixin",
+        "ServerConfigSyncMixin",
+        "ServerPlayerDeathHandlerMixin",
+        "ServerStartMixin",
+        "CreativeTabForceUpdateMixin"
     ],
     "client": [
-        "client.mixin.BlockBreakDetectorMixin",
-        "client.mixin.CameraSetupHookMixin",
-        "client.mixin.ClientHookMixin",
-        "client.mixin.GrappleCrosshairMixin",
-        "client.mixin.KeybindingHandlerMixin",
-        "client.mixin.MovementInputHandlerMixin",
-        "client.mixin.NonConflictingKeyBindingMixin",
-        "client.mixin.attachable.LayerDefinitionsMixin"
+      "client.BlockBreakDetectorMixin",
+      "client.CameraSetupHookMixin",
+      "client.ClientHookMixin",
+      "client.GrappleCrosshairMixin",
+      "client.KeybindingHandlerMixin",
+      "client.MovementInputHandlerMixin",
+      "client.NonConflictingKeyBindingMixin",
+      "client.attachable.LayerDefinitionsMixin"
     ],
     "injectors": {
         "defaultRequire": 1
