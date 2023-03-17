@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.mixin.client;
+package com.yyon.grapplinghook.client.mixin;
 
 import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
 import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
