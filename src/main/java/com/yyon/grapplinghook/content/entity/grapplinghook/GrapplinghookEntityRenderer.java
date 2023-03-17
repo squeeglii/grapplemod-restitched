@@ -123,7 +123,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		
 		/* draw hook */
 		// get direction of rope where hook is attached
-		Vec attach_dir = Vec.motionVec(hookEntity).mult(-1);
+		Vec attach_dir = Vec.motionVec(hookEntity).scale(-1);
 
 		if (attach_dir.length() == 0) {
 			if (hookEntity.attach_dir != null) {
@@ -141,7 +141,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 			}
 		}
 
-        attach_dir.normalize_ip();
+        attach_dir.mutableNormalize();
 
 		if (hookEntity.attached && hookEntity.attach_dir != null)
 			attach_dir = hookEntity.attach_dir;
@@ -214,18 +214,18 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 				: segmenthandler.segments.get(segmenthandler.segments.size() - 2);
 
         Vec diff = hand_closest.sub(hand_position);
-        Vec forward = diff.changeLen(1);
+        Vec forward = diff.withMagnitude(1);
         Vec up = forward.cross(new Vec(1, 0, 0));
 
         if (up.length() == 0)
 			up = forward.cross(new Vec(0, 0, 1));
 
-        up.changeLen_ip(0.025);
+        up.mutableSetMagnitude(0.025);
 
         Vec side = forward.cross(up);
-        side.changeLen_ip(0.025);
+        side.mutableSetMagnitude(0.025);
         
-        Vec[] corners = new Vec[] {up.mult(-1).add(side.mult(-1)), up.mult(-1).add(side), up.add(side), up.add(side.mult(-1))};
+        Vec[] corners = new Vec[] {up.scale(-1).add(side.scale(-1)), up.scale(-1).add(side), up.add(side), up.add(side.scale(-1))};
         float[][] uvs = new float[][] {{0, 0.99F}, {0, 1}, {1, 1}, {1, 0.99F}};
         
         for (int size = 0; size < 4; size++) {
@@ -256,16 +256,16 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
     	Vec diff = finish.sub(start);
         
-        Vec forward = diff.changeLen(1);
+        Vec forward = diff.withMagnitude(1);
         Vec up = forward.cross(new Vec(1, 0, 0));
         if (up.length() == 0) {
         	up = forward.cross(new Vec(0, 0, 1));
         }
-        up.changeLen_ip(0.025);
+        up.mutableSetMagnitude(0.025);
         Vec side = forward.cross(up);
-        side.changeLen_ip(0.025);
+        side.mutableSetMagnitude(0.025);
         
-        Vec[] corners = new Vec[] {up.mult(-1).add(side.mult(-1)), up.add(side.mult(-1)), up.add(side), up.mult(-1).add(side)};
+        Vec[] corners = new Vec[] {up.scale(-1).add(side.scale(-1)), up.add(side.scale(-1)), up.add(side), up.scale(-1).add(side)};
 
         for (int size = 0; size < 4; size++) {
             Vec corner1 = corners[size];
@@ -276,10 +276,10 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
             
             for (int square_num = 0; square_num < number_squares; square_num++) {
                 float squarefrac1 = (float)square_num / (float) number_squares;
-                Vec pos1 = start.add(diff.mult(squarefrac1));
+                Vec pos1 = start.add(diff.scale(squarefrac1));
                 pos1.y += - (1 - taut) * (0.25 - Math.pow((squarefrac1 - 0.5), 2)) * 1.5;
                 float squarefrac2 = ((float) square_num+1) / (float) number_squares;
-                Vec pos2 = start.add(diff.mult(squarefrac2));
+                Vec pos2 = start.add(diff.scale(squarefrac2));
                 pos2.y += - (1 - taut) * (0.25 - Math.pow((squarefrac2 - 0.5), 2)) * 1.5;
                 
                 Vec corner1pos1 = pos1.add(corner1);

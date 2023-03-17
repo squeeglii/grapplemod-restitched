@@ -80,7 +80,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 			if (this.custom != null) {
 				if (this.custom.rocket) {
 					Vec rocket = this.rocket(entity);
-					this.motion.add_ip(rocket);
+					this.motion.mutableAdd(rocket);
 					if (rocket.length() > 0) {
 						doesrocket = true;
 					}
@@ -100,12 +100,12 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 						motion = motion.removeAlong(this.wallDirection);
 					}
 
-					Vec new_movement = this.playerMovement.changeLen(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed*1.5);
+					Vec new_movement = this.playerMovement.withMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed*1.5);
 					if (this.wallDirection != null) {
 						new_movement = new_movement.removeAlong(this.wallDirection);
 					}
 					if (new_movement.length() > GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed) {
-						new_movement.changeLen_ip(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed);
+						new_movement.mutableSetMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed);
 					}
 					Vec current_motion_along = this.motion.removeAlong(new Vec(0,1,0));
 					Vec new_motion_along = this.motion.add(new_movement).removeAlong(new Vec(0,1,0));
@@ -114,18 +114,18 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 						new_motion_along = new_motion_along.removeAlong(this.wallDirection);
 					}
 					if (current_motion_along.length() <= GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed || current_motion_along.dot(new_movement) < 0) {
-						motion.add_ip(new_movement);
+						motion.mutableAdd(new_movement);
 						if (new_motion_along.length() > GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed) {
-							this.motion.changeLen_ip(GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed);
+							this.motion.mutableSetMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed);
 						}
 					}
-					additionalmotion.add_ip(wallrunPressAgainstWall());
+					additionalmotion.mutableAdd(wallrunPressAgainstWall());
 				} else {
 					double max_motion = GrappleModConfig.getConf().other.airstrafe_max_speed;
 					double accel = GrappleModConfig.getConf().other.airstrafe_acceleration;
 					Vec motion_horizontal = motion.removeAlong(new Vec(0,1,0));
 					double prev_motion = motion_horizontal.length();
-					Vec new_motion_horizontal = motion_horizontal.add(this.playerMovement.changeLen(accel));
+					Vec new_motion_horizontal = motion_horizontal.add(this.playerMovement.withMagnitude(accel));
 					double angle = motion_horizontal.angle(new_motion_horizontal);
 					if (new_motion_horizontal.length() > max_motion && new_motion_horizontal.length() > prev_motion) {
 						double ninety_deg = Math.PI / 2;
@@ -133,7 +133,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 						if (angle < ninety_deg && prev_motion > max_motion) {
 							new_max_motion = prev_motion + ((max_motion - prev_motion) * (angle / (Math.PI / 2)));
 						}
-						new_motion_horizontal.changeLen_ip(new_max_motion);
+						new_motion_horizontal.mutableSetMagnitude(new_max_motion);
 					}
 					motion.x = new_motion_horizontal.x;
 					motion.z = new_motion_horizontal.z;
@@ -149,7 +149,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 			Vec gravity = new Vec(0, -0.10, 0);
 
 			if (!wallrun) {
-				motion.add_ip(gravity);
+				motion.mutableAdd(gravity);
 			}
 
 			Vec newmotion;

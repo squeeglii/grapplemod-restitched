@@ -150,7 +150,7 @@ public class ClientPhysicsContextTracker {
 				this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, custom);
 			}
 
-			facing.mult_ip(GrappleModConfig.getConf().enderstaff.ender_staff_strength);
+			facing.mutableScale(GrappleModConfig.getConf().enderstaff.ender_staff_strength);
 			ClientPhysicsContextTracker.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
 			GrappleModClient.get().playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleModConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
 		}

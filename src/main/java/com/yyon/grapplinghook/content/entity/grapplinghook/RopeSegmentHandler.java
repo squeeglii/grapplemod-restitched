@@ -182,7 +182,7 @@ public class RopeSegmentHandler {
             // calculate where bottomhitvec was along the rope in the previous tick
             double prevropelen = prevtop.sub(prevbottom).length();
             
-            Vec cornerbound1 = bottomhitvec.add(bottomnormal.changeLen(-intoBlock));
+            Vec cornerbound1 = bottomhitvec.add(bottomnormal.withMagnitude(-intoBlock));
             
             Vec bound_option1 = linePlaneIntersection(prevtop, prevbottom, cornerbound1, bottomnormal);
             Vec bound_option2 = linePlaneIntersection(top, prevtop, cornerbound1, bottomnormal);
@@ -201,8 +201,8 @@ public class RopeSegmentHandler {
                 	
                 	if (!(cornerside == bottomside || cornerside.getOpposite() == bottomside)) {
                 		// add a bend around the corner
-                		Vec actualcorner = cornerhitpos.add(bottomnormal.changeLen(intoBlock));
-                		Vec bend = actualcorner.add(bottomnormal.changeLen(bendOffset)).add(getNormal(cornerside).changeLen(bendOffset));
+                		Vec actualcorner = cornerhitpos.add(bottomnormal.withMagnitude(intoBlock));
+                		Vec bend = actualcorner.add(bottomnormal.withMagnitude(bendOffset)).add(getNormal(cornerside).withMagnitude(bendOffset));
                 		Vec topropevec = bend.sub(top);
                 		Vec bottomropevec = bend.sub(bottom);
                 		
@@ -230,7 +230,7 @@ public class RopeSegmentHandler {
                 		double newropelen = topropevec.length() + bottomropevec.length();
                 		
                 		double prevtoptobend = topropevec.length() * prevropelen / newropelen;
-                		Vec prevbend = prevtop.add(prevbottom.sub(prevtop).changeLen(prevtoptobend));
+                		Vec prevbend = prevtop.add(prevbottom.sub(prevtop).withMagnitude(prevtoptobend));
                 		
                 		if (numberrecursions < 10) {
                     		updateSegment(top, prevtop, bend, prevbend, index, numberrecursions+1);
@@ -255,7 +255,7 @@ public class RopeSegmentHandler {
 		}
 		
 		double d = planepoint.sub(linepoint1).dot(planenormal) / linevec.dot(planenormal);
-		return linepoint1.add(linevec.mult(d));
+		return linepoint1.add(linevec.scale(d));
 	}
 	
 	public Vec getNormal(Direction facing) {
@@ -269,8 +269,8 @@ public class RopeSegmentHandler {
 	
 	public BlockPos getBendBlock(int index) {
 		Vec bendpos = this.segments.get(index);
-		bendpos.add_ip(this.getNormal(this.segmentBottomSides.get(index)).changeLen(-this.intoBlock * 2));
-		bendpos.add_ip(this.getNormal(this.segmentTopSides.get(index)).changeLen(-this.intoBlock * 2));
+		bendpos.mutableAdd(this.getNormal(this.segmentBottomSides.get(index)).withMagnitude(-this.intoBlock * 2));
+		bendpos.mutableAdd(this.getNormal(this.segmentTopSides.get(index)).withMagnitude(-this.intoBlock * 2));
 		return BlockPos.containing(bendpos.toVec3d());
 	}
 	

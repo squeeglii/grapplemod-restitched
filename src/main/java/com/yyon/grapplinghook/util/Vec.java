@@ -71,13 +71,13 @@ public class Vec {
 		return new Vec(this.x + v2.x, this.y + v2.y, this.z + v2.z);
 	}
 	
-	public void add_ip(double x, double y, double z) {
+	public void mutableAdd(double x, double y, double z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
 	}
 	
-	public void add_ip(Vec v2) {
+	public void mutableAdd(Vec v2) {
 		this.x += v2.x;
 		this.y += v2.y;
 		this.z += v2.z;
@@ -87,7 +87,7 @@ public class Vec {
 		return new Vec(this.x - v2.x, this.y - v2.y, this.z - v2.z);
 	}
 
-	public void sub_ip(Vec v2) {
+	public void mutableSub(Vec v2) {
 		this.x -= v2.x;
 		this.y -= v2.y;
 		this.z -= v2.z;
@@ -105,14 +105,14 @@ public class Vec {
     	return new Vec(Math.tan(-yaw), Math.tan(pitch), 1).normalize();
     }
 	
-	public Vec mult(double changefactor) {
-		return new Vec(this.x * changefactor, this.y * changefactor, this.z * changefactor);
+	public Vec scale(double factor) {
+		return new Vec(this.x * factor, this.y * factor, this.z * factor);
 	}
 	
-	public void mult_ip(double changefactor) {
-		this.x *= changefactor;
-		this.y *= changefactor;
-		this.z *= changefactor;
+	public void mutableScale(double factor) {
+		this.x *= factor;
+		this.y *= factor;
+		this.z *= factor;
 	}
 	
 	public double length() {
@@ -124,42 +124,42 @@ public class Vec {
 			GrappleMod.LOGGER.warn("normalizing vector with no length");
 			return new Vec(this);
 		}
-		return this.mult(1.0 / this.length());
+		return this.scale(1.0 / this.length());
 	}
 	
-	public void normalize_ip() {
-		this.mult_ip(1.0 / this.length());
+	public void mutableNormalize() {
+		this.mutableScale(1.0 / this.length());
 	}
 	
 	public double dot(Vec v2) {
 		return this.x*v2.x + this.y*v2.y + this.z*v2.z;
 	}
 	
-	public Vec changeLen(double l) {
+	public Vec withMagnitude(double l) {
 		double oldl = this.length();
 		if (oldl != 0) {
-			double changefactor = l / oldl;
-			return this.mult(changefactor);
+			double factor = l / oldl;
+			return this.scale(factor);
 		} else {
 			return this;
 		}
 	}
 	
-	public void changeLen_ip(double l) {
+	public void mutableSetMagnitude(double l) {
 		double oldl = this.length();
 		if (oldl != 0) {
 			double changefactor = l / oldl;
-			this.mult_ip(changefactor);
+			this.mutableScale(changefactor);
 		}
 	}
 	
 	public Vec proj(Vec v2) {
 		Vec v3 = v2.normalize();
 		double dot = this.dot(v3);
-		return v3.changeLen(dot);
+		return v3.withMagnitude(dot);
 	}
 	
-	public double distAlong(Vec v2) {
+	public double distanceAlong(Vec v2) {
 		Vec v3 = v2.normalize();
 		return this.dot(v3);
 	}

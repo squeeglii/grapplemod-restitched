@@ -25,17 +25,17 @@ public class ForcefieldPhysicsContext extends GrapplingHookPhysicsContext {
 //					double dist = oldspherevec.length();
 
 				if (playerSneak) {
-					motion.mult_ip(0.95);
+					motion.mutableScale(0.95);
 				}
 				applyPlayerMovement();
 
 				Vec blockpush = checkRepel(playerpos, entity.level());
-				blockpush.mult_ip(0.5);
+				blockpush.mutableScale(0.5);
 				blockpush = new Vec(blockpush.x*0.5, blockpush.y*2, blockpush.z*0.5);
-				this.motion.add_ip(blockpush);
+				this.motion.mutableAdd(blockpush);
 
 				if (!entity.onGround()) {
-					motion.add_ip(0, -0.05, 0);
+					motion.mutableAdd(0, -0.05, 0);
 				}
 
 				motion.setMotion(this.entity);

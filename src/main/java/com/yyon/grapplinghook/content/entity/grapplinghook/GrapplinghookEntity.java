@@ -218,7 +218,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 						
 						this.setVelocityActually(motion.x, motion.y, motion.z);
 						
-						ropevec.changeLen_ip(this.r - distToFarthest);
+						ropevec.mutableSetMagnitude(this.r - distToFarthest);
 						Vec newpos = ropevec.add(farthest);
 						
 						this.setPos(newpos.x, newpos.y, newpos.z);
@@ -248,7 +248,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 				    				if (found != null) {
 //				    					if (wasinair) {
 								    		Vec distvec = new Vec(found.getX(), found.getY(), found.getZ());
-								    		distvec.sub_ip(prevPos);
+								    		distvec.mutableSub(prevPos);
 								    		if (distvec.length() < radius) {
 						    					this.setPosRaw(prevPos.x, prevPos.y, prevPos.z);
 						    					pos = prevPos;
@@ -262,7 +262,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 				    					wasInAir = true;
 				    				}
 				    				
-				    				prevPos.add_ip(normvector);
+				    				prevPos.mutableAdd(normvector);
 				    			}
 			    			}
 		    			}
@@ -277,7 +277,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 						
 						double l = newvel.length();
 						
-						newvel.changeLen(this.getVelocity());
+						newvel.withMagnitude(this.getVelocity());
 						
 						this.setDeltaMovement(newvel.x, newvel.y, newvel.z);
 						
@@ -368,7 +368,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 				
 				Vec playerpos = Vec.positionVec(this.shootingEntity);
 				Vec entitypos = Vec.positionVec(entity);
-				Vec yank = playerpos.sub(entitypos).mult(0.4);
+				Vec yank = playerpos.sub(entitypos).scale(0.4);
 				yank.y = Math.min(yank.y, 2);
 				Vec newmotion = Vec.motionVec(entity).add(yank);
 				entity.setDeltaMovement(newmotion.toVec3d());
@@ -411,7 +411,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		}
 		
 		Vec vec3 = Vec.positionVec(this);
-		vec3.add_ip(Vec.motionVec(this));
+		vec3.mutableAdd(Vec.motionVec(this));
 		if (pos != null) {
             vec3 = pos;
             
@@ -489,7 +489,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			    	BlockPos pos = new BlockPos(x, y, z);
 					if (hasBlock(pos, checkedset)) {
 						Vec distvec = new Vec(pos.getX(), pos.getY(), pos.getZ());
-						distvec.sub_ip(p);
+						distvec.mutableSub(p);
 						double dist = distvec.length();
 						if (closestpos == null || dist < closestdist) {
 							closestpos = pos;

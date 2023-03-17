@@ -248,7 +248,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
         float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
         float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
 		GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, false, true);
-        float extravelocity = (float) Vec.motionVec(entityLiving).distAlong(new Vec(velx, vely, velz));
+        float extravelocity = (float) Vec.motionVec(entityLiving).distanceAlong(new Vec(velx, vely, velz));
         if (extravelocity < 0) { extravelocity = 0; }
         hookEntity.shoot( velx, vely, velz, hookEntity.getVelocity() + extravelocity, 0.0F);
         
@@ -276,7 +276,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	        float velx = -Mth.sin((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
 	        float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
 	        float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-	        float extravelocity = (float) Vec.motionVec(entityLiving).distAlong(new Vec(velx, vely, velz));
+	        float extravelocity = (float) Vec.motionVec(entityLiving).distanceAlong(new Vec(velx, vely, velz));
 	        if (extravelocity < 0) { extravelocity = 0; }
 	        hookEntity.shoot(velx, vely, velz, hookEntity.getVelocity() + extravelocity, 0.0F);
 			setHookEntityRight(entityLiving, hookEntity);
@@ -290,7 +290,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	        float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
 	        float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
 			GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, true, true);
-	        float extravelocity = (float) Vec.motionVec(entityLiving).distAlong(new Vec(velx, vely, velz));
+	        float extravelocity = (float) Vec.motionVec(entityLiving).distanceAlong(new Vec(velx, vely, velz));
 	        if (extravelocity < 0) { extravelocity = 0; }
 	        hookEntity.shoot(velx, vely, velz, hookEntity.getVelocity() + extravelocity, 0.0F);
             
