@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.content.registry;
 
+import com.google.common.collect.ImmutableMap;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.block.modifierblock.GrappleModifierBlock;
 import net.minecraft.core.Registry;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -16,16 +18,16 @@ import java.util.function.Supplier;
 
 public class GrappleModBlocks {
 
-    private static HashMap<ResourceLocation, BlockEntry<?>> blocks;
+    private static final HashMap<ResourceLocation, BlockEntry<?>> blocks;
 
     static {
-        GrappleModBlocks.blocks = new HashMap<>();
+        blocks = new HashMap<>();
     }
 
     public static <B extends Block> Flow<B> block(String id, Supplier<B> block) {
         ResourceLocation qualId = GrappleMod.id(id);
         BlockEntry<B> entry = new BlockEntry<>(qualId, block);
-        GrappleModBlocks.blocks.put(qualId, entry);
+        blocks.put(qualId, entry);
         return new Flow<>(entry);
     }
 
@@ -40,8 +42,8 @@ public class GrappleModBlocks {
         }
     }
 
-    public static HashMap<ResourceLocation, BlockEntry<?>> getBlocks() {
-        return new HashMap<>(GrappleModBlocks.blocks);
+    public static Map<ResourceLocation, BlockEntry<?>> getBlocks() {
+        return Collections.unmodifiableMap(blocks);
     }
 
     public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks

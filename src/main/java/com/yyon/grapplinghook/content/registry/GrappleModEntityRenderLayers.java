@@ -25,10 +25,10 @@ import java.util.function.Supplier;
 @SuppressWarnings("rawtypes")
 public class GrappleModEntityRenderLayers {
 
-    private static HashMap<ResourceLocation, RenderLayerEntry> renderLayers;
+    private static final HashMap<ResourceLocation, RenderLayerEntry> renderLayers;
 
     static {
-        GrappleModEntityRenderLayers.renderLayers = new HashMap<>();
+        renderLayers = new HashMap<>();
     }
 
     public static void registerAll() { }
@@ -38,7 +38,7 @@ public class GrappleModEntityRenderLayers {
         RenderLayerEntry entry = new RenderLayerEntry(qualId, modelLayerName, def, layerFactory);
 
         entry.registerModelLocation();
-        GrappleModEntityRenderLayers.renderLayers.put(qualId, entry);
+        renderLayers.put(qualId, entry);
         entry.finalize(def.get());
         return entry;
     }
@@ -54,7 +54,7 @@ public class GrappleModEntityRenderLayers {
 
 
     // Registry Entries:
-    public static final RenderLayerEntry LONG_FALL_BOOTS = GrappleModEntityRenderLayers.layer("long_fall_boots", LongFallBootsLayer::new, LongFallBootsModel::generateLayer);
+    public static final RenderLayerEntry LONG_FALL_BOOTS = layer("long_fall_boots", LongFallBootsLayer::new, LongFallBootsModel::generateLayer);
 
 
     public static Map<ResourceLocation, RenderLayerEntry> getRenderLayers() {

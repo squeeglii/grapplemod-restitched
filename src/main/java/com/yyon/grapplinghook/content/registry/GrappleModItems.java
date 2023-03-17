@@ -22,16 +22,16 @@ import java.util.stream.Collectors;
 
 public final class GrappleModItems {
 
-    private static ArrayList<ResourceLocation> itemsInRegistryOrder;
-    private static HashMap<ResourceLocation, ItemEntry<?>> items;
+    private static final ArrayList<ResourceLocation> itemsInRegistryOrder;
+    private static final HashMap<ResourceLocation, ItemEntry<?>> items;
 
     private static List<ItemStack> creativeMenuCache;
     private static boolean creativeCacheInvalid;
 
     static {
-        GrappleModItems.items = new HashMap<>();
-        GrappleModItems.itemsInRegistryOrder = new ArrayList<>();
-        GrappleModItems.creativeMenuCache = null;
+        items = new HashMap<>();
+        itemsInRegistryOrder = new ArrayList<>();
+        creativeMenuCache = null;
     }
 
     public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new, ItemEntry.populateHookVariantsInTab());

@@ -15,16 +15,16 @@ import java.util.function.Supplier;
 
 public class GrappleModEnchantments {
 
-    private static HashMap<ResourceLocation, EnchantmentEntry<?>> enchantments;
+    private static final HashMap<ResourceLocation, EnchantmentEntry<?>> enchantments;
 
     static {
-        GrappleModEnchantments.enchantments = new HashMap<>();
+        enchantments = new HashMap<>();
     }
 
     public static <E extends Enchantment> EnchantmentEntry<E> enchantment(String id, Supplier<E> ench) {
         ResourceLocation qualId = GrappleMod.id(id);
         EnchantmentEntry<E> entry = new EnchantmentEntry<>(qualId, ench);
-        GrappleModEnchantments.enchantments.put(qualId, entry);
+        enchantments.put(qualId, entry);
         return entry;
     }
 

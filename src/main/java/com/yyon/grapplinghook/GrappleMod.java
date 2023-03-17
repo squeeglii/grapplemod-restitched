@@ -60,6 +60,9 @@ public class GrappleMod implements ModInitializer {
             e.printStackTrace();
         }
 
+        GrappleModCustomizationProperties.registerAll();
+        GrappleModCustomizationCategories.registerAll();
+
         GrappleModBlocks.registerAllBlocks();
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
         GrappleModEntities.registerAllEntities();

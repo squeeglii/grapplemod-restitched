@@ -13,16 +13,16 @@ import java.util.function.Supplier;
 
 public class GrappleModBlockEntities {
 
-    private static HashMap<ResourceLocation, GrappleModBlockEntities.BlockEntityEntry<?>> blockEntities;
+    private static final HashMap<ResourceLocation, BlockEntityEntry<?>> blockEntities;
 
     static {
-        GrappleModBlockEntities.blockEntities = new HashMap<>();
+        blockEntities = new HashMap<>();
     }
 
     public static <E extends BlockEntityType<?>> BlockEntityEntry<E> blockEntity(String id, Supplier<E> type) {
         ResourceLocation qualId = GrappleMod.id(id);
         BlockEntityEntry<E> entry = new BlockEntityEntry<>(qualId, type);
-        GrappleModBlockEntities.blockEntities.put(qualId, entry);
+        blockEntities.put(qualId, entry);
         return entry;
     }
 

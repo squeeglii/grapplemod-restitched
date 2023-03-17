@@ -16,16 +16,16 @@ import java.util.function.Supplier;
 
 public class GrappleModEntities {
 
-    private static HashMap<ResourceLocation, EntityEntry<?>> entities;
+    private static final HashMap<ResourceLocation, EntityEntry<?>> entities;
 
     static {
-        GrappleModEntities.entities = new HashMap<>();
+        entities = new HashMap<>();
     }
 
     public static <E extends EntityType<?>> EntityEntry<E> entity(String id, Supplier<E> type) {
         ResourceLocation qualId = GrappleMod.id(id);
         EntityEntry<E> entry = new EntityEntry<>(qualId, type);
-        GrappleModEntities.entities.put(qualId, entry);
+        entities.put(qualId, entry);
         return entry;
     }
 

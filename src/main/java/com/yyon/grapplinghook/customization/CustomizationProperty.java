@@ -18,6 +18,7 @@ public abstract class CustomizationProperty<T> {
 
     public CustomizationProperty(T defaultValue) {
         this.defaultValue = defaultValue;
+        this.status = CustomizationAvailability.ALLOWED;
     }
 
     public abstract CustomizationRendererProvider<T, CustomizationProperty<T>> getRenderer();
