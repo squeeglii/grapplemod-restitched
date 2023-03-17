@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.client.mixin.attachable;
+package com.yyon.grapplinghook.mixin.client.attachable;
 
 import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayers;
 import net.minecraft.client.model.HumanoidModel;

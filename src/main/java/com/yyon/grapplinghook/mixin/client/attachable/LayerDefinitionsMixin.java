@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.client.mixin.attachable;
+package com.yyon.grapplinghook.mixin.client.attachable;
 
 import com.google.common.collect.ImmutableMap;
 import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayers;
