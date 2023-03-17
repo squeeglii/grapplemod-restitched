@@ -27,4 +27,8 @@ public class CustomizationCategory {
     public BaseUpgradeItem getUpgradeItem() {
         return this.upgradeItem;
     }
+
+    public boolean shouldRender() {
+        return this.linkedProperties.length > 0;
+    }
 }

@@ -16,12 +16,12 @@ public class GrapplingHookTemplate {
         return template;
     }
 
-    private static BooleanProperty property(String id, boolean value) {
-        return new BooleanProperty(id, value);
+    private static BooleanPropertyValue property(String id, boolean value) {
+        return new BooleanPropertyValue(id, value);
     }
 
-    private static DoubleProperty property(String id, double value) {
-        return new DoubleProperty(id, value);
+    private static DoublePropertyValue property(String id, double value) {
+        return new DoublePropertyValue(id, value);
     }
 
     public static Collection<GrapplingHookTemplate> getTemplates() {
@@ -128,9 +128,9 @@ public class GrapplingHookTemplate {
 
 
     private final String identifier;
-    private final Set<AbstractProperty<?>> properties;
+    private final Set<AbstractSetProperty<?>> properties;
 
-    private GrapplingHookTemplate(String identifier, AbstractProperty<?>... properties) {
+    private GrapplingHookTemplate(String identifier, AbstractSetProperty<?>... properties) {
         this.identifier = identifier;
         this.properties = Set.of(properties);
     }
@@ -141,7 +141,7 @@ public class GrapplingHookTemplate {
 
     public boolean isEnabled() {
         return properties.stream()
-                .map(AbstractProperty::getId)
+                .map(AbstractSetProperty::getId)
                 .noneMatch(p -> CustomizationVolume.optionEnabledInConfig(p) >= 2); // 2 = Disabled Fully.
     }
 
@@ -149,10 +149,10 @@ public class GrapplingHookTemplate {
         CustomizationVolume customization = new CustomizationVolume();
 
         properties.forEach(p -> {
-            if (p instanceof BooleanProperty b)
+            if (p instanceof BooleanPropertyValue b)
                 customization.setBoolean(b.getId(), b.getValue());
 
-            if (p instanceof DoubleProperty d)
+            if (p instanceof DoublePropertyValue d)
                 customization.setDouble(d.getId(), d.getValue());
         });
 
@@ -169,12 +169,12 @@ public class GrapplingHookTemplate {
 
 
 
-    private static abstract class AbstractProperty<T> {
+    private static abstract class AbstractSetProperty<T> {
 
         private final String id;
         private final T value;
 
-        public AbstractProperty(String id, T value) {
+        public AbstractSetProperty(String id, T value) {
             this.id = id;
             this.value = value;
         }
@@ -188,14 +188,14 @@ public class GrapplingHookTemplate {
         }
     }
 
-    public static class BooleanProperty extends AbstractProperty<Boolean> {
-        public BooleanProperty(String id, boolean value) {
+    public static class BooleanPropertyValue extends AbstractSetProperty<Boolean> {
+        public BooleanPropertyValue(String id, boolean value) {
             super(id, value);
         }
     }
 
-    public static class DoubleProperty extends AbstractProperty<Double> {
-        public DoubleProperty(String id, double value) {
+    public static class DoublePropertyValue extends AbstractSetProperty<Double> {
+        public DoublePropertyValue(String id, double value) {
             super(id, value);
         }
     }
