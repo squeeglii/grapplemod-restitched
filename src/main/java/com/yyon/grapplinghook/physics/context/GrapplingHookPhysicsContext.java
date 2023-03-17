@@ -9,7 +9,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
@@ -55,9 +55,9 @@ public class GrapplingHookPhysicsContext {
 	
 	public int controllerId;
 	
-	public GrappleCustomization custom = null;
+	public CustomizationVolume custom = null;
 	
-	public GrapplingHookPhysicsContext(int grapplehookEntityId, int entityId, Level world, int controllerId, GrappleCustomization custom) {
+	public GrapplingHookPhysicsContext(int grapplehookEntityId, int entityId, Level world, int controllerId, CustomizationVolume custom) {
 		this.entityId = entityId;
 		this.world = world;
 		this.custom = custom;

@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.content.item.upgrade;
 
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 
 public class MagnetUpgradeItem extends BaseUpgradeItem {
 	public MagnetUpgradeItem() {
-		super(1, GrappleCustomization.UpgradeCategory.MAGNET);
+		super(1, CustomizationVolume.UpgradeCategory.MAGNET);
 	}
 }

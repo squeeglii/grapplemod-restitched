@@ -3,8 +3,8 @@ package com.yyon.grapplinghook.content.blockentity;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
-import com.yyon.grapplinghook.customization.GrappleCustomization.UpgradeCategory;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.CustomizationVolume.UpgradeCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -16,11 +16,11 @@ import java.util.HashMap;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
 	public HashMap<UpgradeCategory, Boolean> unlockedCategories = new HashMap<>();
-	public GrappleCustomization customization;
+	public CustomizationVolume customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
 		super(GrappleModBlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
-		this.customization = new GrappleCustomization();
+		this.customization = new CustomizationVolume();
 	}
 
 	private void triggerUpdate() {
@@ -36,13 +36,13 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.triggerUpdate();
 	}
 
-	public void setCustomizationClient(GrappleCustomization customization) {
+	public void setCustomizationClient(CustomizationVolume customization) {
 		this.customization = customization;
 		NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
 		this.triggerUpdate();
 	}
 
-	public void setCustomizationServer(GrappleCustomization customization) {
+	public void setCustomizationServer(CustomizationVolume customization) {
 		this.customization = customization;
 		this.triggerUpdate();
 	}

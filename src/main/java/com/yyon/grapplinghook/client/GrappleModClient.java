@@ -18,7 +18,7 @@ import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayers;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.ClientModInitializer;
@@ -116,7 +116,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
 
-    public void startRocket(Player player, GrappleCustomization custom) {
+    public void startRocket(Player player, CustomizationVolume custom) {
         ClientPhysicsContextTracker.instance.startRocket(player, custom);
     }
 
@@ -187,7 +187,7 @@ public class GrappleModClient implements ClientModInitializer {
         return ClientPhysicsContextTracker.instance.isSliding(entity, motion);
     }
 
-    public GrapplingHookPhysicsContext createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, GrappleCustomization custom) {
+    public GrapplingHookPhysicsContext createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, CustomizationVolume custom) {
         return ClientPhysicsContextTracker.instance.createControl(id, hookEntityId, entityId, world, blockpos, custom);
     }
 

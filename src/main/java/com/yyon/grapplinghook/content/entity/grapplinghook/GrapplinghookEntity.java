@@ -10,7 +10,7 @@ import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.physics.PhysicsContextTracker;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -63,10 +63,10 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		super(type, world);
 
 		this.segmentHandler = new RopeSegmentHandler(this.level(), this, Vec.positionVec(this), Vec.positionVec(this));
-		this.customization = new GrappleCustomization();
+		this.customization = new CustomizationVolume();
 	}
 
-	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean righthand, GrappleCustomization customization, boolean isdouble) {
+	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean righthand, CustomizationVolume customization, boolean isdouble) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
 		
 		this.shootingEntity = shooter;
@@ -106,7 +106,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	
 	public RopeSegmentHandler segmentHandler = null;
 	
-	public GrappleCustomization customization = null;
+	public CustomizationVolume customization = null;
 	
 	// magnet attract
 	public Vec prevPos = null;
@@ -133,7 +133,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	    this.shootingEntity = this.level().getEntity(this.shootingEntityID);
 	    this.rightHand = data.readBoolean();
 	    this.isDouble = data.readBoolean();
-	    this.customization = new GrappleCustomization();
+	    this.customization = new CustomizationVolume();
 	    this.customization.readFromBuf(data);
     }
 

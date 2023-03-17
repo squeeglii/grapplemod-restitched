@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.content.item.upgrade;
 
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 
 public class StaffUpgradeItem extends BaseUpgradeItem {
 	public StaffUpgradeItem() {
-		super(1, GrappleCustomization.UpgradeCategory.STAFF);
+		super(1, CustomizationVolume.UpgradeCategory.STAFF);
 	}
 }

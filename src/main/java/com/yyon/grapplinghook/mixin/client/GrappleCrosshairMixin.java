@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -49,7 +49,7 @@ public class GrappleCrosshairMixin {
         }
 
         if (grapplehookItemStack != null) {
-            GrappleCustomization custom = GrappleModItems.GRAPPLING_HOOK.get().getCustomization(grapplehookItemStack);
+            CustomizationVolume custom = GrappleModItems.GRAPPLING_HOOK.get().getCustomization(grapplehookItemStack);
             double angle = Math.toRadians(custom.angle);
             double verticalAngle = Math.toRadians(custom.verticalthrowangle);
 

@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-public class GrappleCustomization {
+public class CustomizationVolume {
 	public static final String[] booleanoptions = new String[] {"phaserope", "motor", "motorwhencrouching", "motorwhennotcrouching", "smartmotor", "enderstaff", "repel", "attract", "doublehook", "smartdoublemotor", "motordampener", "reelin", "pullbackwards", "oneropepull", "sticky", "detachonkeyrelease", "rocket"};
 	public static final String[] doubleoptions = new String[] {"maxlen", "hookgravity", "throwspeed", "motormaxspeed", "motoracceleration", "playermovementmult", "repelforce", "attractradius", "angle", "sneakingangle", "verticalthrowangle", "sneakingverticalthrowangle", "rocket_force", "rocket_active_time", "rocket_refuel_ratio", "rocket_vertical_angle"};
 	
@@ -123,7 +123,7 @@ public class GrappleCustomization {
 		}
 	}
 	
-	public GrappleCustomization() {
+	public CustomizationVolume() {
 		this.setDefaults();
 	}
 	
@@ -414,7 +414,7 @@ public class GrappleCustomization {
 		return getDoubleConfig(option).enabled;
 	}
 	
-	public boolean equals(GrappleCustomization other) {
+	public boolean equals(CustomizationVolume other) {
 		for (String option : booleanoptions) {
 			if (this.getBoolean(option) != other.getBoolean(option)) {
 				return false;
@@ -428,5 +428,5 @@ public class GrappleCustomization {
 		return true;
 	}
 	
-	public static GrappleCustomization DEFAULT = new GrappleCustomization();
+	public static CustomizationVolume DEFAULT = new CustomizationVolume();
 }

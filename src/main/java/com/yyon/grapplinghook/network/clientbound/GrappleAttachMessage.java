@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -48,13 +48,13 @@ public class GrappleAttachMessage extends BaseMessageClient {
 	public LinkedList<Vec> segments;
 	public LinkedList<Direction> segmentTopSides;
 	public LinkedList<Direction> segmentBottomSides;
-	public GrappleCustomization custom;
+	public CustomizationVolume custom;
 
     public GrappleAttachMessage(FriendlyByteBuf buf) {
     	super(buf);
     }
 
-    public GrappleAttachMessage(int id, double x, double y, double z, int controlid, int entityid, BlockPos blockpos, LinkedList<Vec> segments, LinkedList<Direction> segmenttopsides, LinkedList<Direction> segmentbottomsides, GrappleCustomization custom) {
+    public GrappleAttachMessage(int id, double x, double y, double z, int controlid, int entityid, BlockPos blockpos, LinkedList<Vec> segments, LinkedList<Direction> segmenttopsides, LinkedList<Direction> segmentbottomsides, CustomizationVolume custom) {
     	this.id = id;
         this.x = x;
         this.y = y;
@@ -81,7 +81,7 @@ public class GrappleAttachMessage extends BaseMessageClient {
         int blockz = buf.readInt();
         this.blockPos = new BlockPos(blockx, blocky, blockz);
         
-        this.custom = new GrappleCustomization();
+        this.custom = new CustomizationVolume();
         this.custom.readFromBuf(buf);
         
         int size = buf.readInt();

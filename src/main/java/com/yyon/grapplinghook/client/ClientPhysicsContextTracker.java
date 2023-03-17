@@ -18,7 +18,7 @@ import com.yyon.grapplinghook.content.enchantment.WallrunEnchantment;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
-import com.yyon.grapplinghook.customization.GrappleCustomization;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 
@@ -141,7 +141,7 @@ public class ClientPhysicsContextTracker {
 
 			Vec facing = Vec.lookVec(player);
 
-			GrappleCustomization custom = null;
+			CustomizationVolume custom = null;
 			if (usedItem instanceof GrapplehookItem grapple)
 				custom = grapple.getCustomization(usedStack);
 
@@ -305,7 +305,7 @@ public class ClientPhysicsContextTracker {
 	}
 
 
-	public GrapplingHookPhysicsContext createControl(int controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, GrappleCustomization custom) {
+	public GrapplingHookPhysicsContext createControl(int controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, CustomizationVolume custom) {
 		GrapplinghookEntity grapplinghookEntity;
 		if (world.getEntity(grapplehookEntityId) instanceof GrapplinghookEntity g)
 			grapplinghookEntity = g;
@@ -454,7 +454,7 @@ public class ClientPhysicsContextTracker {
 		}
 	}
 
-	public void startRocket(Player player, GrappleCustomization custom) {
+	public void startRocket(Player player, CustomizationVolume custom) {
 		if (!custom.rocket) return;
 		
 		GrapplingHookPhysicsContext controller;

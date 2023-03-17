@@ -142,11 +142,11 @@ public class GrapplingHookTemplate {
     public boolean isEnabled() {
         return properties.stream()
                 .map(AbstractProperty::getId)
-                .noneMatch(p -> GrappleCustomization.optionEnabledInConfig(p) >= 2); // 2 = Disabled Fully.
+                .noneMatch(p -> CustomizationVolume.optionEnabledInConfig(p) >= 2); // 2 = Disabled Fully.
     }
 
-    public GrappleCustomization getCustomizations() {
-        GrappleCustomization customization = new GrappleCustomization();
+    public CustomizationVolume getCustomizations() {
+        CustomizationVolume customization = new CustomizationVolume();
 
         properties.forEach(p -> {
             if (p instanceof BooleanProperty b)

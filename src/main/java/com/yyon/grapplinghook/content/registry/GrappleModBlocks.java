@@ -99,7 +99,7 @@ public class GrappleModBlocks {
         }
 
         @Override
-        Supplier<I> getFactory() {
+        public Supplier<I> getFactory() {
             return this.source.getFactory();
         }
 

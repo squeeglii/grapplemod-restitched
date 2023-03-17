@@ -18,7 +18,7 @@ public abstract class AbstractRegistryReference<T> {
         this.entry = null;
     }
 
-    Supplier<T> getFactory() {
+    public Supplier<T> getFactory() {
         return this.factory;
     }
 
