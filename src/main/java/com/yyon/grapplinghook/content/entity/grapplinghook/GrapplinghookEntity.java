@@ -445,7 +445,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
 		
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
-		NetworkManager.packetToClient(msg, GrappleModUtils.getChunkPlayers((ServerLevel) this.level(), new Vec(this.position())));
+		NetworkManager.packetToClient(msg, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) this.level(), new Vec(this.position())));
 	}
 	
 	public void clientAttach(double x, double y, double z) {

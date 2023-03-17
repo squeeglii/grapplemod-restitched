@@ -160,7 +160,7 @@ public class RopeSegmentHandler {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), false, index, new Vec(0, 0, 0), Direction.DOWN, Direction.DOWN);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
 
-			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers((ServerLevel) world, playerpoint));
+			NetworkManager.packetToClient(addmessage, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) world, playerpoint));
 
 		}
 	}
@@ -283,7 +283,7 @@ public class RopeSegmentHandler {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), true, index, bendpoint, topside, bottomside);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
 
-			NetworkManager.packetToClient(addmessage, GrappleModUtils.getChunkPlayers((ServerLevel) world, playerpoint));
+			NetworkManager.packetToClient(addmessage, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) world, playerpoint));
 		}
 	}
 	

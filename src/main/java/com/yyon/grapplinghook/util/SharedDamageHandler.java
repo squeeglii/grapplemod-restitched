@@ -17,41 +17,40 @@ public class SharedDamageHandler {
 
     /** @return true if the death should be cancelled. */
     public static boolean handleDeath(Entity deadEntity) {
-        if (!deadEntity.level().isClientSide) {
-            int id = deadEntity.getId();
-            boolean isConnected = PhysicsContextTracker.allGrapplehookEntities.containsKey(id);
+        if (deadEntity.level().isClientSide) return false;
 
-            if (isConnected) return false;
+        int id = deadEntity.getId();
+        boolean isConnected = PhysicsContextTracker.allGrapplehookEntities.containsKey(id);
 
-            HashSet<GrapplinghookEntity> grapplehookEntities = PhysicsContextTracker.allGrapplehookEntities.get(id);
+        if (isConnected) return false;
 
-            if(grapplehookEntities != null) {
-                for (GrapplinghookEntity hookEntity : grapplehookEntities)
-                    hookEntity.removeServer();
+        HashSet<GrapplinghookEntity> grapplehookEntities = PhysicsContextTracker.allGrapplehookEntities.get(id);
 
-                grapplehookEntities.clear();
-            }
+        if(grapplehookEntities != null) {
+            for (GrapplinghookEntity hookEntity : grapplehookEntities)
+                hookEntity.removeServer();
 
-            PhysicsContextTracker.attached.remove(id);
-
-            GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
-            GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
-
-            if(deadEntity instanceof Player)
-                GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level());
+            grapplehookEntities.clear();
         }
+
+        PhysicsContextTracker.attached.remove(id);
+
+        GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
+        GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
+
+        if(deadEntity instanceof Player)
+            GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level());
 
         return false;
     }
 
     /** @return true if the death should be cancelled. */
     public static boolean handleDamage(Entity damagedEntity, DamageSource source) {
-        if (damagedEntity instanceof Player player) {
+        if (!(damagedEntity instanceof Player player)) return false;
 
-            for (ItemStack armor : player.getArmorSlots()) {
-                if (armor != null && armor.getItem() instanceof LongFallBootsItem) continue;
-                if (source.is(DamageTypes.FLY_INTO_WALL)) return true;
-            }
+        for (ItemStack armor : player.getArmorSlots()) {
+            if (armor != null && armor.getItem() instanceof LongFallBootsItem) continue;
+            if (source.is(DamageTypes.FLY_INTO_WALL)) return true;
         }
 
         return false;

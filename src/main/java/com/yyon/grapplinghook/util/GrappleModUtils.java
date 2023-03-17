@@ -34,9 +34,10 @@ public class GrappleModUtils {
 		Entity entity = w.getEntity(playerid);
 		if (entity instanceof ServerPlayer player) {
 			NetworkManager.packetToClient(message, player);
-		} else {
-			GrappleMod.LOGGER.warn("ERROR! couldn't find player");
+			return;
 		}
+
+		GrappleMod.LOGGER.warn("ERROR! couldn't find player");
 	}
 
 	public static BlockHitResult rayTraceBlocks(Entity entity, Level world, Vec from, Vec to) {
@@ -62,7 +63,7 @@ public class GrappleModUtils {
 		return !failed;
 	}
 
-	public static synchronized ServerPlayer[] getChunkPlayers(ServerLevel level, Vec point) {
+	public static synchronized ServerPlayer[] getPlayersThatCanSeeChunkAt(ServerLevel level, Vec point) {
 		ChunkPos chunk = level.getChunkAt(BlockPos.containing(point.toVec3d())).getPos();
 		return PlayerLookup.tracking(level, chunk).toArray(new ServerPlayer[0]);
 	}
