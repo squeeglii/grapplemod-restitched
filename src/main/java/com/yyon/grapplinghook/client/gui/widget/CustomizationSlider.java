@@ -1,7 +1,7 @@
-package com.yyon.grapplinghook.gui.widget;
+package com.yyon.grapplinghook.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yyon.grapplinghook.gui.GrappleModifierBlockGUI;
+import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;
 

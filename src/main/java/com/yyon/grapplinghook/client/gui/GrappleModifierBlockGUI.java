@@ -1,6 +1,6 @@
-package com.yyon.grapplinghook.gui;
+package com.yyon.grapplinghook.client.gui;
 
-import com.yyon.grapplinghook.gui.widget.*;
+import com.yyon.grapplinghook.client.gui.widget.*;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.client.Minecraft;

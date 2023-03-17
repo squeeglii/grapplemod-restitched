@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.gui.widget;
+package com.yyon.grapplinghook.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;

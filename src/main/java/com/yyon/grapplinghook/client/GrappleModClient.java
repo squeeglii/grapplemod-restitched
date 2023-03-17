@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.keybind.GrappleKeys;
 import com.yyon.grapplinghook.client.keybind.MCKeys;
-import com.yyon.grapplinghook.gui.GrappleModifierBlockGUI;
+import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.client.keybind.GrappleModKeyBindings;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
