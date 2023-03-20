@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.customization;
 
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.resources.ResourceLocation;
 
 public class CustomizationCategory {
@@ -17,7 +18,7 @@ public class CustomizationCategory {
 
     public String getLocalizationString() {
         String path = this.getIdentifier().toString().replaceAll("[:/\\\\]", ".");
-        return "customization_category.%s.name".formatted(path);
+        return "grapple_category.%s.name".formatted(path);
     }
 
     public ResourceLocation getIdentifier() {

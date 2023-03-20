@@ -1,16 +1,15 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.CustomizationProperty;
-import com.yyon.grapplinghook.customization.CustomizationRendererProvider;
+import com.yyon.grapplinghook.customization.render.CustomizationRendererProvider;
 
 public class BooleanProperty extends CustomizationProperty<Boolean> {
 
-    public BooleanProperty(Boolean defaultValue) {
+    public BooleanProperty(boolean defaultValue) {
         super(defaultValue);
     }
 
     @Override
     public CustomizationRendererProvider<Boolean, CustomizationProperty<Boolean>> getRenderer() {
-        return null;
+        throw new UnsupportedOperationException("Unimplemented");
     }
 }

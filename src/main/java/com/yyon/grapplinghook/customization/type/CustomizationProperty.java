@@ -1,4 +1,7 @@
-package com.yyon.grapplinghook.customization;
+package com.yyon.grapplinghook.customization.type;
+
+import com.yyon.grapplinghook.customization.CustomizationAvailability;
+import com.yyon.grapplinghook.customization.render.CustomizationRendererProvider;
 
 public abstract class CustomizationProperty<T> {
 

@@ -60,6 +60,27 @@ public class GrappleModCustomizationCategories {
             SMART_MOTOR.get(), MOTOR_DAMPENER.get(), MOTOR_WORKS_BACKWARDS.get()
     ));
 
+    public static final Entry<CustomizationCategory> SWING = category("swing", () -> new CustomizationCategory(
+            GrappleModItems.SWING_UPGRADE.get(),
+            MOVE_SPEED_MULTIPLIER.get()
+    ));
+
+    public static final Entry<CustomizationCategory> ENDER_STAFF = category("ender_staff", () -> new CustomizationCategory(
+            GrappleModItems.ENDER_STAFF_UPGRADE.get(),
+            ENDER_STAFF_ATTACHED.get()
+    ));
+
+    public static final Entry<CustomizationCategory> FORCEFIELD = category("forcefield", () -> new CustomizationCategory(
+            GrappleModItems.FORCE_FIELD_UPGRADE.get(),
+            FORCEFIELD_ATTACHED.get(), FORCEFIELD_FORCE.get()
+    ));
+
+    public static final Entry<CustomizationCategory> MAGNET = category("magnet", () -> new CustomizationCategory(
+            GrappleModItems.MAGNET_UPGRADE.get(),
+            MAGNET_ATTACHED.get(), MAGNET_RADIUS.get()
+    ));
+
+
 
     public static class Entry<T extends CustomizationCategory> extends AbstractRegistryReference<T> {
 

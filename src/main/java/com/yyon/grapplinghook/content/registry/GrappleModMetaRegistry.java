@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.customization.CustomizationProperty;
+import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.core.MappedRegistry;

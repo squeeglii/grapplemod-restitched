@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.customization.CustomizationProperty;
+import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.DoubleProperty;
@@ -54,14 +54,22 @@ public class GrappleModCustomizationProperties {
     public static final Entry<BooleanProperty> DETACH_HOOK_ON_KEY_UP = property("detach_hook_on_key_up", () -> new BooleanProperty(false));
 
     public static final Entry<BooleanProperty> MOTOR_ATTACHED = property("motor", () -> new BooleanProperty(false));
-    public static final Entry<DoubleProperty> MOTOR_ACCELERATION = property("motor_acceleration", () -> new DoubleProperty(0.2, 0, 0.2));
-    public static final Entry<DoubleProperty> MAX_MOTOR_SPEED = property("max_motor_speed", () -> new DoubleProperty(4, 0, 4));
+    public static final Entry<DoubleProperty> MOTOR_ACCELERATION = property("motor_acceleration", () -> new DoubleProperty(0.2D, 0.0D, 0.2D));
+    public static final Entry<DoubleProperty> MAX_MOTOR_SPEED = property("max_motor_speed", () -> new DoubleProperty(4.0D, 0.0D, 4.0D));
     public static final Entry<EnumProperty<CrouchToggle>> MOTOR_ACTIVATION = property("motor_activation", () -> new EnumProperty<>(CrouchToggle.WHEN_NOT_CROUCHING));
     public static final Entry<BooleanProperty> SMART_MOTOR = property("smart_motor", () -> new BooleanProperty(false));
     public static final Entry<BooleanProperty> MOTOR_DAMPENER = property("motor_dampener", () -> new BooleanProperty(false)); //TODO: Only available with limits.
     public static final Entry<BooleanProperty> MOTOR_WORKS_BACKWARDS = property("motor_works_backwards", () -> new BooleanProperty(true));
 
+    public static final Entry<DoubleProperty> MOVE_SPEED_MULTIPLIER = property("holder_move_speed_multiplier", () -> new DoubleProperty(1.0D, 0.0D, 2.0D));
 
+    public static final Entry<BooleanProperty> ENDER_STAFF_ATTACHED = property("ender_staff", () -> new BooleanProperty(false));
+
+    public static final Entry<BooleanProperty> FORCEFIELD_ATTACHED = property("forcefield", () -> new BooleanProperty(false));
+    public static final Entry<DoubleProperty> FORCEFIELD_FORCE = property("forcefield_repel_force", () -> new DoubleProperty(1.0D, 0.0D, 1.0D));
+
+    public static final Entry<BooleanProperty> MAGNET_ATTACHED = property("magnet", () -> new BooleanProperty(false));
+    public static final Entry<DoubleProperty> MAGNET_RADIUS = property("magnet_attract_radius", () -> new DoubleProperty(3.0D, 0.0D, 3.0D));
 
 
     public static class Entry<T extends CustomizationProperty<?>> extends AbstractRegistryReference<T> {
