@@ -56,7 +56,7 @@ public class GrappleModCustomizationProperties {
     public static final Entry<BooleanProperty> MOTOR_ATTACHED = property("motor", () -> new BooleanProperty(false));
     public static final Entry<DoubleProperty> MOTOR_ACCELERATION = property("motor_acceleration", () -> new DoubleProperty(0.2D, 0.0D, 0.2D));
     public static final Entry<DoubleProperty> MAX_MOTOR_SPEED = property("max_motor_speed", () -> new DoubleProperty(4.0D, 0.0D, 4.0D));
-    public static final Entry<EnumProperty<CrouchToggle>> MOTOR_ACTIVATION = property("motor_activation", () -> new EnumProperty<>(CrouchToggle.WHEN_NOT_CROUCHING));
+    public static final Entry<EnumProperty<CrouchToggle>> MOTOR_ACTIVATION = property("motor_activation", () -> new EnumProperty<>(CrouchToggle.WHEN_NOT_CROUCHING, CrouchToggle.values()));
     public static final Entry<BooleanProperty> SMART_MOTOR = property("smart_motor", () -> new BooleanProperty(false));
     public static final Entry<BooleanProperty> MOTOR_DAMPENER = property("motor_dampener", () -> new BooleanProperty(false)); //TODO: Only available with limits.
     public static final Entry<BooleanProperty> MOTOR_WORKS_BACKWARDS = property("motor_works_backwards", () -> new BooleanProperty(true));

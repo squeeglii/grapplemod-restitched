@@ -1,13 +1,54 @@
 package com.yyon.grapplinghook.customization.type;
 
 import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.CompoundTag;
+
+import java.nio.ByteBuffer;
+import java.util.function.Function;
 
 public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
 
-    public EnumProperty(E defaultValue) {
+    private final E[] ordinalReversal;
+
+    public EnumProperty(E defaultValue, E[] ordinalReverser) {
         super(defaultValue);
 
-        if(defaultValue == null) throw new IllegalStateException("Default enum value cannot be null.");
+        if(defaultValue == null) throw new IllegalArgumentException("Default enum value cannot be null.");
+        if(ordinalReverser == null) throw new IllegalArgumentException("Ordinal reverser cannot be null. Please just pass [Enum Here].values()");
+
+        this.ordinalReversal = ordinalReverser;
+    }
+
+    @Override
+    public void encodeValueTo(ByteBuf targetBuffer, E value) {
+
+    }
+
+    @Override
+    public E decodeValueFrom(ByteBuf targetBuffer) {
+        return null;
+    }
+
+    @Override
+    public void saveValueToTag(CompoundTag nbt, E value) {
+
+    }
+
+    @Override
+    public E loadValueFromTag(CompoundTag nbt) {
+        return null;
+    }
+
+    @Override
+    public byte[] valueToChecksumBytes(E value) {
+        int ordinal = value.ordinal();
+        if(ordinal <= Byte.MAX_VALUE)
+            return new byte[] { (byte) ordinal };
+
+        // enum is not small - give up and just save an int.
+        ByteBuffer buffer = ByteBuffer.allocate(4).putInt(ordinal);
+        return buffer.array();
     }
 
     @Override
