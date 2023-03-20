@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.config.GrappleModConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
+import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
@@ -34,6 +35,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 
 /*
@@ -110,8 +113,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	}
 
 	@Override
-	public boolean canAttackBlock(BlockState p_195938_1_, Level p_195938_2_, BlockPos p_195938_3_,
-			Player p_195938_4_) {
+	public boolean canAttackBlock(BlockState p_195938_1_, Level p_195938_2_, BlockPos p_195938_3_, Player p_195938_4_) {
 		return false;
 	}
 
@@ -119,7 +121,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public void onCustomKeyDown(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
 		if (player.level().isClientSide) {
 			if (key == KeypressItem.Keys.LAUNCHER) {
-				if (this.getCustomization(stack).enderstaff) {
+				if (this.getCustomization(stack).get(ENDER_STAFF_ATTACHED.get())) {
 					GrappleModClient.get().launchPlayer(player);
 				}
 			} else if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
@@ -127,14 +129,14 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 			} else if (key == KeypressItem.Keys.ROCKET) {
 				CustomizationVolume custom = this.getCustomization(stack);
-				if (custom.rocket) {
+				if (custom.get(ROCKET_ATTACHED.get())) {
 					GrappleModClient.get().startRocket(player, custom);
 				}
 			}
 		} else {
 	    	CustomizationVolume custom = this.getCustomization(stack);
 
-			if (key == KeypressItem.Keys.THROWBOTH || (!custom.doublehook && (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT))) {
+			if (key == KeypressItem.Keys.THROWBOTH || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT))) {
 	        	throwBoth(stack, player.level(), player, ismainhand);
 
 			} else if (key == KeypressItem.Keys.THROWLEFT) {
@@ -150,7 +152,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 					return;
 				}
 				
-				boolean threw = throwLeft(stack, player.level(), player, ismainhand);
+				boolean threw = throwLeft(stack, player.level(), player);
 
 				if (threw) {
 			        player.level().playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (player.getRandom().nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
@@ -185,7 +187,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		} else {
 	    	CustomizationVolume custom = this.getCustomization(stack);
 	    	
-	    	if (custom.detachonkeyrelease) {
+	    	if (custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
 	    		GrapplinghookEntity hookLeft = getHookEntityLeft(player);
 	    		GrapplinghookEntity hookRight = getHookEntityRight(player);
 	    		
@@ -200,7 +202,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		}
 	}
 
-	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
+	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean rightHand) {
 		GrapplinghookEntity hookLeft = getHookEntityLeft(entityLiving);
 		GrapplinghookEntity hookRight = getHookEntityRight(entityLiving);
 
@@ -215,31 +217,24 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		}
 
     	CustomizationVolume custom = this.getCustomization(stack);
-  		double angle = custom.angle;
-//  		double verticalangle = custom.verticalthrowangle;
+  		double angle = custom.get(HOOK_THROW_ANGLE.get());
   		if (entityLiving.isCrouching()) {
-  			angle = custom.sneakingangle;
-//  			verticalangle = custom.sneakingverticalthrowangle;
+  			angle = custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get());
   		}
 
-    	if (!(!custom.doublehook || angle == 0)) {
-    		throwLeft(stack, worldIn, entityLiving, righthand);
+    	if (!(!custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0)) {
+    		throwLeft(stack, worldIn, entityLiving);
     	}
-		throwRight(stack, worldIn, entityLiving, righthand);
+		throwRight(stack, worldIn, entityLiving, rightHand);
 
 		entityLiving.level().playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 	}
 	
-	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
+	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
     	CustomizationVolume custom = this.getCustomization(stack);
-    	
-  		double angle = custom.angle;
-  		double verticalangle = custom.verticalthrowangle;
-  		
-  		if (entityLiving.isCrouching()) {
-  			angle = custom.sneakingangle;
-  			verticalangle = custom.sneakingverticalthrowangle;
-  		}
+
+		double angle = this.getAngle(entityLiving, custom);
+		double verticalangle = this.getDoubleHookAngle(entityLiving, custom);
 
 		Vec anglevec = Vec.fromAngles(Math.toRadians(-angle), Math.toRadians(verticalangle));
   		anglevec = anglevec.rotatePitch(Math.toRadians(-entityLiving.getViewXRot(1.0F)));
@@ -261,14 +256,10 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public void throwRight(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
     	CustomizationVolume custom = this.getCustomization(stack);
     	
-  		double angle = custom.angle;
-  		double verticalangle = custom.verticalthrowangle;
-  		if (entityLiving.isCrouching()) {
-  			angle = custom.sneakingangle;
-  			verticalangle = custom.sneakingverticalthrowangle;
-  		}
+  		double angle = this.getAngle(entityLiving, custom);
+  		double verticalangle = this.getDoubleHookAngle(entityLiving, custom);
 
-    	if (!custom.doublehook || angle == 0) {
+    	if (!custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0) {
 			GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, righthand, false);
       		Vec anglevec = new Vec(0,0,1).rotatePitch(Math.toRadians(verticalangle));
       		anglevec = anglevec.rotatePitch(Math.toRadians(-entityLiving.getViewXRot(1.0F)));
@@ -361,14 +352,17 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		PhysicsContextTracker.attached.remove(id);
 	}
 	
-    public double getAngle(LivingEntity entity, ItemStack stack) {
-    	CustomizationVolume custom = this.getCustomization(stack);
-    	if (entity.isCrouching()) {
-    		return custom.sneakingangle;
-    	} else {
-    		return custom.angle;
-    	}
+    public double getAngle(LivingEntity entity, CustomizationVolume custom) {
+		return entity.isCrouching()
+				? custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get())
+				: custom.get(HOOK_THROW_ANGLE.get());
     }
+
+	public double getDoubleHookAngle(LivingEntity entity, CustomizationVolume custom) {
+		return entity.isCrouching()
+				? custom.get(DOUBLE_HOOK_ANGLE_ON_SNEAK.get())
+				: custom.get(DOUBLE_HOOK_ANGLE.get());
+	}
 	
 	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {
 		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomization(stack), isdouble);
@@ -383,6 +377,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
         	CustomizationVolume custom = new CustomizationVolume();
     		custom.loadFromNBT(tag.getCompound("custom"));
         	return custom;
+
     	} else {
     		CustomizationVolume custom = this.getDefaultCustomization();
 
@@ -405,13 +400,15 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		CustomizationVolume custom = getCustomization(stack);
 		
 		if (Screen.hasShiftDown()) {
-			if (!custom.detachonkeyrelease) {
+			if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
 				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()));
 				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()));
 				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
+
 			} else {
 				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()));
 			}
+
 			list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
 					GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
 					GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
@@ -425,34 +422,44 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + " / " +
 					KeyBindingManagement.key_climbdown.getTranslatedKeyMessage().getString() +
 					" " + Component.translatable("grappletooltip.climbdown.desc").getString()));
-			if (custom.enderstaff) {
+
+			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
 				list.add(Component.literal(KeyBindingManagement.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()));
 			}
-			if (custom.rocket) {
+
+			if (custom.get(ROCKET_ATTACHED.get())) {
 				list.add(Component.literal(KeyBindingManagement.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()));
 			}
-			if (custom.motor) {
-				if (custom.motorwhencrouching && !custom.motorwhennotcrouching) {
-					list.add(Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString()));
-				}
-				else if (!custom.motorwhencrouching && custom.motorwhennotcrouching) {
-					list.add(Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString()));
-				}
+
+			if (custom.get(MOTOR_ATTACHED.get())) {
+
+				Component text = switch (custom.get(MOTOR_ACTIVATION.get())) {
+					case WHEN_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString());
+					case WHEN_NOT_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString());
+					default -> null;
+				};
+
+				if(text != null)
+					list.add(text);
 			}
-			if (custom.doublehook) {
-				if (!custom.detachonkeyrelease) {
+
+			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
+				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
 					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()));
 					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()));
 				} else {
 					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()));
 					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()));
 				}
+
 			} else {
 				list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()));
 			}
-			if (custom.reelin) {
+
+			if (custom.get(HOOK_REEL_IN_ON_SNEAK.get())) {
 				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()));
 			}
+
 		} else {
 			if (Screen.hasControlDown()) {
 				for (String option : CustomizationVolume.booleanoptions) {
@@ -465,28 +472,30 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 						list.add(Component.translatable(custom.getName(option)).append(": " + Math.floor(custom.getDouble(option) * 100) / 100));
 					}
 				}
+
 			} else {
-				if (custom.doublehook) {
-					list.add(Component.translatable(custom.getName("doublehook")));
+				if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
+					list.add(DOUBLE_HOOK_ATTACHED.get().getRenderer().getDisplayName());
 				}
-				if (custom.motor) {
-					if (custom.smartmotor) {
-						list.add(Component.translatable(custom.getName("smartmotor")));
-					} else {
-						list.add(Component.translatable(custom.getName("motor")));
-					}
+
+				if (custom.get(MOTOR_ATTACHED.get())) {
+					list.add((custom.get(SMART_MOTOR.get())
+							? SMART_MOTOR.get()
+							: MOTOR_ATTACHED.get()
+					).getRenderer().getDisplayName());
 				}
-				if (custom.enderstaff) {
-					list.add(Component.translatable(custom.getName("enderstaff")));
+
+				if (custom.get(ENDER_STAFF_ATTACHED.get())) {
+					list.add(ENDER_STAFF_ATTACHED.get().getRenderer().getDisplayName());
 				}
-				if (custom.rocket) {
-					list.add(Component.translatable(custom.getName("rocket")));
+				if (custom.get(MAGNET_ATTACHED.get())) {
+					list.add(MAGNET_ATTACHED.get().getRenderer().getDisplayName());
 				}
-				if (custom.attract) {
-					list.add(Component.translatable(custom.getName("attract")));
+				if (custom.get(MAGNET_ATTACHED.get())) {
+					list.add(MAGNET_ATTACHED.get().getRenderer().getDisplayName());
 				}
-				if (custom.repel) {
-					list.add(Component.translatable(custom.getName("repel")));
+				if (custom.get(FORCEFIELD_ATTACHED.get())) {
+					list.add(FORCEFIELD_ATTACHED.get().getRenderer().getDisplayName());
 				}
 				
 				list.add(Component.literal(""));
@@ -531,32 +540,8 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			}
 		}
 	}
-	
-	public boolean getPropertyRocket(ItemStack stack, Level world, LivingEntity entity) {
-		return this.getCustomization(stack).rocket;
-	}
 
-	public boolean getPropertyDouble(ItemStack stack, Level world, LivingEntity entity) {
-		return this.getCustomization(stack).doublehook;
-	}
-
-	public boolean getPropertyMotor(ItemStack stack, Level world, LivingEntity entity) {
-		return this.getCustomization(stack).motor;
-	}
-
-	public boolean getPropertySmart(ItemStack stack, Level world, LivingEntity entity) {
-		return this.getCustomization(stack).smartmotor;
-	}
-
-	public boolean getPropertyEnderstaff(ItemStack stack, Level world, LivingEntity entity) {
-		return this.getCustomization(stack).enderstaff;
-	}
-
-	public boolean getPropertyMagnet(ItemStack stack, Level world, LivingEntity entity) {
-		return this.getCustomization(stack).attract || this.getCustomization(stack).repel;
-	}
-
-	public boolean getPropertyHook(ItemStack stack, Level world, LivingEntity entity) {
+	public boolean getPropertyHook(ItemStack stack) {
     	CompoundTag tag = stack.getOrCreateTag();
     	return tag.contains("hook");
 	}
