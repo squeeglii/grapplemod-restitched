@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 public class GrappleModifierBlockGUI extends Screen {
 
-	private static final int FULL_SIZE_X = 221;
-	private static final int FULL_SIZE_Y = 221;
+	public static final int FULL_SIZE_X = 221;
+	public static final int FULL_SIZE_Y = 221;
 
 	private final OnPress actionGoBack = button -> showMainScreenLayout();
 
@@ -55,7 +55,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	public void addCheckbox(String option) {
 		String text = Component.translatable(this.customization.getName(option)).getString();
 		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		CustomizationCheckbox checkbox = new CustomizationCheckbox(this, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), customization.getBoolean(option), option, Component.literal(desc));
+		CustomizationCheckbox checkbox = new CustomizationCheckbox(this, this::getCurrentCustomizations, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), customization.getBoolean(option), option, Component.literal(desc), this::markConfigurationsDirty);
 		this.addRenderableWidget(checkbox);
 		this.options.put(checkbox, option);
 	}
@@ -69,7 +69,7 @@ public class GrappleModifierBlockGUI extends Screen {
 
 		String text = Component.translatable(this.customization.getName(option)).getString();
 		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		CustomizationSlider slider = new CustomizationSlider(this, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), min, max, d, option, Component.literal(desc));
+		CustomizationSlider slider = new CustomizationSlider(this, this::getCurrentCustomizations, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), min, max, d, option, Component.literal(desc), this::markConfigurationsDirty);
 		this.addRenderableWidget(slider);
 		this.options.put(slider, option);
 	}

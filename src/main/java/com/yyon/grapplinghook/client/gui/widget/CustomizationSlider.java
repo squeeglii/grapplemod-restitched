@@ -2,10 +2,14 @@ package com.yyon.grapplinghook.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+
+import java.util.function.Supplier;
 
 public class CustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
     private final double min, max;
@@ -14,9 +18,11 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
     private Component tooltipText;
     private double val;
 
-    private final GrappleModifierBlockGUI context;
+    private final Screen context;
+    private final Supplier<CustomizationVolume> customizations;
+    private final Runnable onValueUpdate;
 
-    public CustomizationSlider(GrappleModifierBlockGUI context, int x, int y, int w, int h, Component text, double min, double max, double val, String option, Component tooltip) {
+    public CustomizationSlider(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, Component text, double min, double max, double val, String option, Component tooltip, Runnable onValueUpdate) {
         super(x, y, w, h, text, (val - min) / (max - min));
         this.context = context;
 
@@ -26,6 +32,8 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
         this.text = text.getString();
         this.option = option;
         this.tooltipText = tooltip;
+        this.customizations = customizations;
+        this.onValueUpdate = onValueUpdate;
 
         this.updateMessage();
     }
@@ -38,7 +46,8 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
     @Override
     protected void applyValue() {
         this.val = (this.value * (this.max - this.min)) + this.min;
-        this.context.getCurrentCustomizations().setDouble(option, this.val);
+        this.customizations.get().setDouble(option, this.val);
+        this.onValueUpdate.run();
     }
 
     @Override
