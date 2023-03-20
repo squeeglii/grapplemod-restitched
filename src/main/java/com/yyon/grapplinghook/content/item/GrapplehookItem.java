@@ -381,12 +381,12 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
     	
     	if (tag.contains("custom")) {
         	CustomizationVolume custom = new CustomizationVolume();
-    		custom.loadNBT(tag.getCompound("custom"));
+    		custom.loadFromNBT(tag.getCompound("custom"));
         	return custom;
     	} else {
     		CustomizationVolume custom = this.getDefaultCustomization();
 
-			CompoundTag nbt = custom.writeNBT();
+			CompoundTag nbt = custom.writeToNBT();
 			
 			tag.put("custom", nbt);
 			itemstack.setTag(tag);
@@ -498,7 +498,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 	public void setCustomOnServer(ItemStack helditemstack, CustomizationVolume custom) {
 		CompoundTag tag = helditemstack.getOrCreateTag();
-		CompoundTag nbt = custom.writeNBT();
+		CompoundTag nbt = custom.writeToNBT();
 		
 		tag.put("custom", nbt);
 		

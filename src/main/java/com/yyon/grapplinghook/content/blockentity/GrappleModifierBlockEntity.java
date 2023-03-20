@@ -65,7 +65,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		}
 
 		nbtTagCompound.put("unlocked", unlockedNBT);
-		nbtTagCompound.put("customization", this.customization.writeNBT());
+		nbtTagCompound.put("customization", this.customization.writeToNBT());
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		}
 
 		CompoundTag custom = parentNBTTagCompound.getCompound("customization");
-		this.customization.loadNBT(custom);
+		this.customization.loadFromNBT(custom);
 	}
 
 	@Override
