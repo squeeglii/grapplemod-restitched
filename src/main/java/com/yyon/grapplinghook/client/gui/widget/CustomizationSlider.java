@@ -22,8 +22,8 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
     private final Supplier<CustomizationVolume> customizations;
     private final Runnable onValueUpdate;
 
-    public CustomizationSlider(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, Component text, double min, double max, double val, String option, Component tooltip, Runnable onValueUpdate) {
-        super(x, y, w, h, text, (val - min) / (max - min));
+    public CustomizationSlider(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, Component text, double min, double max, String option, Component tooltip, Runnable onValueUpdate) {
+        super(x, y, w, h, text, (convertDouble(customizations.get(), option) - min) / (max - min));
         this.context = context;
 
         this.min = min;
@@ -62,5 +62,10 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
 
     public void setTooltip(Component tooltipText) {
         this.tooltipText = tooltipText;
+    }
+
+    private static double convertDouble(CustomizationVolume volume, String optionString) {
+        double d = volume.getDouble(optionString);
+        return Math.floor(d * 10 + 0.5) / 10;
     }
 }

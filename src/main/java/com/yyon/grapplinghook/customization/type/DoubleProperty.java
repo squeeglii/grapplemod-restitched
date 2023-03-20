@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.CustomizationRendererProvider;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
 
 public class DoubleProperty extends CustomizationProperty<Double> {
 
@@ -14,7 +14,15 @@ public class DoubleProperty extends CustomizationProperty<Double> {
     }
 
     @Override
-    public CustomizationRendererProvider<Double, CustomizationProperty<Double>> getRenderer() {
+    public AbstractCustomizationRenderer<Double, CustomizationProperty<Double>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
+    }
+
+    public double getMin() {
+        return this.min;
+    }
+
+    public double getMax() {
+        return this.max;
     }
 }

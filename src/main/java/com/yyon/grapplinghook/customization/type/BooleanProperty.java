@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.CustomizationRendererProvider;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
 
 public class BooleanProperty extends CustomizationProperty<Boolean> {
 
@@ -9,7 +9,7 @@ public class BooleanProperty extends CustomizationProperty<Boolean> {
     }
 
     @Override
-    public CustomizationRendererProvider<Boolean, CustomizationProperty<Boolean>> getRenderer() {
+    public AbstractCustomizationRenderer<Boolean, CustomizationProperty<Boolean>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
     }
 }

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.CustomizationRendererProvider;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
 
 public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
 
@@ -11,7 +11,7 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     }
 
     @Override
-    public CustomizationRendererProvider<E, CustomizationProperty<E>> getRenderer() {
+    public AbstractCustomizationRenderer<E, CustomizationProperty<E>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
     }
 }

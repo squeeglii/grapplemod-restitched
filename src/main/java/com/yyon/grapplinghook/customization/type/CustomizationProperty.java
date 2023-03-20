@@ -1,18 +1,11 @@
 package com.yyon.grapplinghook.customization.type;
 
+import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationAvailability;
-import com.yyon.grapplinghook.customization.render.CustomizationRendererProvider;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class CustomizationProperty<T> {
-
-    //TODO:
-    // 3 components requires:
-    // - Renderer: A handler of a given property type (such as double or boolean currently)
-    //    - Handles rendering of elements in UI
-    // - Property: An overview of the defaults for a property, so that a value can be mapped to it.
-    //     - Can store the min, max for a double for example
-    //     - Stores name and config status
-    // - Category: A reference with an associated upgrade, linked to a range of keys.
 
     private CustomizationAvailability status; // config can update this at any time.
 
@@ -24,11 +17,20 @@ public abstract class CustomizationProperty<T> {
         this.status = CustomizationAvailability.ALLOWED;
     }
 
-    public abstract CustomizationRendererProvider<T, CustomizationProperty<T>> getRenderer();
+    public abstract AbstractCustomizationRenderer<T, CustomizationProperty<T>> getRenderer();
 
+
+    public ResourceLocation getIdentifier() {
+        return GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES.getKey(this);
+    }
 
     public CustomizationAvailability getAvailability() {
         return this.status;
+    }
+
+    public CustomizationProperty<T> setStatus(CustomizationAvailability status) {
+        this.status = status;
+        return this;
     }
 
     public final T getDefaultValue() {

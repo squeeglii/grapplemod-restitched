@@ -61,15 +61,12 @@ public class GrappleModifierBlockGUI extends Screen {
 	}
 
 	public void addSlider(String option) {
-		double d = this.customization.getDouble(option);
-		d = Math.floor(d * 10 + 0.5) / 10;
-
 		double max = CustomizationVolume.getMaxFromConfig(option, this.getLimits());
 		double min = CustomizationVolume.getMinFromConfig(option, this.getLimits());
 
 		String text = Component.translatable(this.customization.getName(option)).getString();
 		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		CustomizationSlider slider = new CustomizationSlider(this, this::getCurrentCustomizations, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), min, max, d, option, Component.literal(desc), this::markConfigurationsDirty);
+		CustomizationSlider slider = new CustomizationSlider(this, this::getCurrentCustomizations, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), min, max, option, Component.literal(desc), this::markConfigurationsDirty);
 		this.addRenderableWidget(slider);
 		this.options.put(slider, option);
 	}
