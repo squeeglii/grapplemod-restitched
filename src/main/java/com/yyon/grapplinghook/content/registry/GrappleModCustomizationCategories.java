@@ -80,6 +80,17 @@ public class GrappleModCustomizationCategories {
             MAGNET_ATTACHED.get(), MAGNET_RADIUS.get()
     ));
 
+    public static final Entry<CustomizationCategory> DOUBLE_HOOK = category("double_hook", () -> new CustomizationCategory(
+            GrappleModItems.DOUBLE_UPGRADE.get(),
+            DOUBLE_HOOK_ATTACHED.get(), DOUBLE_SMART_MOTOR.get(), SINGLE_ROPE_PULL.get(),
+            DOUBLE_HOOK_ANGLE.get(), DOUBLE_HOOK_ANGLE_ON_SNEAK.get()
+    ));
+
+    public static final Entry<CustomizationCategory> ROCKET = category("rocket", () -> new CustomizationCategory(
+            GrappleModItems.ROCKET_UPGRADE.get(),
+            ROCKET_ATTACHED.get(), ROCKET_FORCE.get(), ROCKET_ANGLE.get(),
+            ROCKET_FUEL_DEPLETION_RATIO.get(), ROCKET_REFUEL_RATIO.get()
+    ));
 
 
     public static class Entry<T extends CustomizationCategory> extends AbstractRegistryReference<T> {

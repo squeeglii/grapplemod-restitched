@@ -71,6 +71,18 @@ public class GrappleModCustomizationProperties {
     public static final Entry<BooleanProperty> MAGNET_ATTACHED = property("magnet", () -> new BooleanProperty(false));
     public static final Entry<DoubleProperty> MAGNET_RADIUS = property("magnet_attract_radius", () -> new DoubleProperty(3.0D, 0.0D, 3.0D));
 
+    public static final Entry<BooleanProperty> DOUBLE_HOOK_ATTACHED = property("double_hook", () -> new BooleanProperty(false));
+    public static final Entry<BooleanProperty> DOUBLE_SMART_MOTOR = property("double_smart_motor", () -> new BooleanProperty(true));
+    public static final Entry<DoubleProperty> DOUBLE_HOOK_ANGLE = property("double_hook_angle", () -> new DoubleProperty(20.0D, 0.0D, 45.0D));
+    public static final Entry<DoubleProperty> DOUBLE_HOOK_ANGLE_ON_SNEAK = property("double_hook_angle_on_sneak", () -> new DoubleProperty(10.0D, 0.0D, 45.0D));
+    public static final Entry<BooleanProperty> SINGLE_ROPE_PULL = property("single_rope_pull", () -> new BooleanProperty(false));
+
+    public static final Entry<BooleanProperty> ROCKET_ATTACHED = property("rocket", () -> new BooleanProperty(false));
+    public static final Entry<DoubleProperty> ROCKET_FORCE = property("rocket_force", () -> new DoubleProperty(1.0D, 0.0D, 1.0D));
+    public static final Entry<DoubleProperty> ROCKET_FUEL_DEPLETION_RATIO = property("rocket_depletion_ratio", () -> new DoubleProperty(0.5D, 0.0D, 0.5D));
+    public static final Entry<DoubleProperty> ROCKET_REFUEL_RATIO = property("rocket_refuel_ratio", () -> new DoubleProperty(15.0D, 15.0D, 30.0D));
+    public static final Entry<DoubleProperty> ROCKET_ANGLE = property("double_hook_angle", () -> new DoubleProperty(0.0D, 0.0D, 90.0D));
+
 
     public static class Entry<T extends CustomizationProperty<?>> extends AbstractRegistryReference<T> {
 
