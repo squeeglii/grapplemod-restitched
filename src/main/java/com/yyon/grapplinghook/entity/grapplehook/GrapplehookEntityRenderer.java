@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 
 /*
@@ -48,7 +49,12 @@ import org.joml.Quaternionf;
 @Environment(EnvType.CLIENT)
 public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends EntityRenderer<T>
 {
-	protected final boolean RENDER_GRAPPLE_HOOK = true;
+
+	public static final Vector3f X_AXIS = new Vector3f(1, 0, 0);
+	public static final Vector3f Y_AXIS = new Vector3f(0, 1, 0);
+	public static final Vector3f Z_AXIS = new Vector3f(0, 0, 1);
+
+	protected static final boolean RENDER_GRAPPLE_HOOK = true;
 
 
     protected final Item item;
@@ -147,11 +153,10 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 		matrix.pushPose();
 		matrix.scale(0.5F, 0.5F, 0.5F);
 
-		Quaternionf base = new Quaternionf();
-		matrix.mulPose(base.rotateAxis((float) -attach_dir.getYaw(), 0, 1, 0));
-		matrix.mulPose(base.rotateAxis((float) attach_dir.getPitch() - 90.0f, 0, 1, 0));
-		matrix.mulPose(base.rotateAxis(45.0f * hand_right, 0, 1, 0));
-		matrix.mulPose(base.rotateAxis(-45.0f, 0, 0, 1));
+		matrix.mulPose(new Quaternionf().rotateAxis((float) -attach_dir.getYaw(), Y_AXIS));
+		matrix.mulPose(new Quaternionf().rotateAxis((float) attach_dir.getPitch() - 90.0f, X_AXIS));
+		matrix.mulPose(new Quaternionf().rotateAxis(45.0f * hand_right, Y_AXIS));
+		matrix.mulPose(new Quaternionf().rotateAxis(-45.0f, Z_AXIS));
 		
 		// draw hook
 		ItemStack stack = this.getStackToRender();
