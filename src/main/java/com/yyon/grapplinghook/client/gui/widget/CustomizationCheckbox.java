@@ -17,8 +17,8 @@ public class CustomizationCheckbox extends Checkbox implements CustomTooltipHand
     private final Supplier<CustomizationVolume> customizations;
 
     private final String option;
+    private final Runnable onValueUpdated;
     private Component tooltipText;
-    private Runnable onValueUpdated;
 
     public CustomizationCheckbox(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, Component text, boolean val, String option, Component tooltip, Runnable onValueUpdate) {
         super(x, y, w, h, text, val);

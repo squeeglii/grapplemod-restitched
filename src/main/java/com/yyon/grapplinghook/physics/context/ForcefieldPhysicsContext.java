@@ -38,7 +38,7 @@ public class ForcefieldPhysicsContext extends GrapplingHookPhysicsContext {
 					motion.mutableAdd(0, -0.05, 0);
 				}
 
-				motion.setMotion(this.entity);
+				motion.applyAsMotionTo(this.entity);
 
 				this.updateServerPos();
 			}

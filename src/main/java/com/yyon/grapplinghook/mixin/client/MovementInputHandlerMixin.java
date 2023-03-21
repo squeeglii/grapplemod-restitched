@@ -29,7 +29,7 @@ public class MovementInputHandlerMixin {
         if (ClientPhysicsContextTracker.controllers.containsKey(id)) {
             Input input = this.input;
             GrapplingHookPhysicsContext control = ClientPhysicsContextTracker.controllers.get(id);
-            control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.jumping, input.shiftKeyDown);
+            control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.shiftKeyDown);
 
             boolean overrideMovement = true;
             if (Minecraft.getInstance().player.onGround()) {

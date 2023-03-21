@@ -434,7 +434,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		} else if (sideHit == Direction.UP) {
 			curpos.y += 0.05;
 		}
-		curpos.setPos(this);
+		curpos.applyAsPositionTo(this);
 		
 		this.setDeltaMovement(0, 0, 0);
         

@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
+import com.yyon.grapplinghook.client.sound.RocketSound;
 import com.yyon.grapplinghook.config.GrappleModConfig;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
 import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
@@ -24,13 +25,10 @@ import com.yyon.grapplinghook.util.Vec;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,6 +39,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 public class ClientPhysicsContextTracker {
 	public static ClientPhysicsContextTracker instance;
@@ -240,7 +240,7 @@ public class ClientPhysicsContextTracker {
 
 		if(allConditionsMet && controllers.get(player.getId()) instanceof AirFrictionPhysicsContext ctrl) {
 			this.alreadyUsedDoubleJump = true;
-			ctrl.doubleJump();
+			ctrl.doDoubleJump();
 			GrappleModClient.get().playDoubleJumpSound();
 			GrappleMod.LOGGER.info("Branch 2");
 		}
@@ -313,15 +313,20 @@ public class ClientPhysicsContextTracker {
 			grapplinghookEntity = null;
 		}
 
-		boolean multi = custom != null && custom.doublehook;
-		
 		GrapplingHookPhysicsContext currentController = controllers.get(playerId);
-		if (currentController != null && !(multi && currentController.custom != null && currentController.custom.doublehook))
-			currentController.unattach();
+
+		boolean thisMulti = custom != null && custom.get(DOUBLE_HOOK_ATTACHED.get());
+
+		if(currentController != null) {
+			boolean currentMulti = currentController.custom != null && currentController.custom.get(DOUBLE_HOOK_ATTACHED.get());
+
+			if (!(thisMulti && currentMulti))
+				currentController.unattach();
+		}
 		
 		GrapplingHookPhysicsContext control;
 		if (controllerId == GrappleModUtils.GRAPPLE_ID) {
-			if (!multi) {
+			if (!thisMulti) {
 				control = new GrapplingHookPhysicsContext(grapplehookEntityId, playerId, world, controllerId, custom);
 
 			} else {
@@ -331,7 +336,7 @@ public class ClientPhysicsContextTracker {
 				List<Supplier<Boolean>> conditions = List.of(
 						() -> finalControl != null,
 						() -> finalControl.getClass().equals(GrapplingHookPhysicsContext.class),
-						() -> finalControl.custom.doublehook,
+						() -> finalControl.custom.get(DOUBLE_HOOK_ATTACHED.get()),
 						() -> grapplinghookEntity != null
 				);
 
@@ -358,7 +363,7 @@ public class ClientPhysicsContextTracker {
 		
 		Entity e = world.getEntity(playerId);
 		if (e instanceof LocalPlayer p)
-			control.receivePlayerMovementMessage(p.input.leftImpulse, p.input.forwardImpulse, p.input.jumping, p.input.shiftKeyDown);
+			control.receivePlayerMovementMessage(p.input.leftImpulse, p.input.forwardImpulse, p.input.shiftKeyDown);
 
 		
 		return control;
@@ -412,68 +417,30 @@ public class ClientPhysicsContextTracker {
 		controller.receiveEnderLaunch(x, y, z);
 	}
 
-
-	public static class RocketSound extends AbstractTickableSoundInstance {
-		GrapplingHookPhysicsContext controller;
-		boolean stopping = false;
-		public float changeSpeed;
-
-		protected RocketSound(GrapplingHookPhysicsContext controller, SoundEvent soundEvent, SoundSource soundSource) {
-			super(soundEvent, soundSource, RandomSource.create());
-			this.looping = true;
-			this.controller = controller;
-			controller.rocket_key = true;
-			controller.rocket_on = 1.0F;
-
-			this.changeSpeed = GrappleModConfig.getClientConf().sounds.rocket_sound_volume * 0.5F * 0.2F;
-			this.volume = this.changeSpeed;
-			this.delay = 0;
-			this.attenuation = SoundInstance.Attenuation.NONE;
-			this.relative = false;
-		}
-
-		@Override
-		public void tick() {
-			if (!controller.rocket_key || !controller.attached)
-				this.stopping = true;
-
-			float targetvolume = (float) controller.rocket_on * GrappleModConfig.getClientConf().sounds.rocket_sound_volume * 0.5F;
-			if (this.stopping) targetvolume = 0;
-
-			float diff = Math.abs(targetvolume - this.volume);
-			this.volume = diff > changeSpeed
-					? this.volume + changeSpeed * (this.volume > targetvolume ? -1 : 1)
-					: targetvolume;
-
-			if (this.volume == 0 && this.stopping)
-				this.stop();
-
-			this.x = controller.entity.getX();
-			this.y = controller.entity.getY();
-			this.z = controller.entity.getZ();
-		}
-	}
-
 	public void startRocket(Player player, CustomizationVolume custom) {
-		if (!custom.rocket) return;
+		if (!custom.get(ROCKET_ATTACHED.get())) return;
 		
 		GrapplingHookPhysicsContext controller;
 		if (controllers.containsKey(player.getId())) {
 			controller = controllers.get(player.getId());
-			if (controller.custom == null || !controller.custom.rocket) {
+
+			// Syncing controller's rocket property
+			if (controller.custom == null || !controller.custom.get(ROCKET_ATTACHED.get())) {
 				if (controller.custom == null)
 					controller.custom = custom;
-				controller.custom.rocket = true;
-				controller.custom.rocket_active_time = custom.rocket_active_time;
-				controller.custom.rocket_force = custom.rocket_force;
-				controller.custom.rocket_refuel_ratio = custom.rocket_refuel_ratio;
-				this.updateRocketRegen(custom.rocket_active_time, custom.rocket_refuel_ratio);
+
+				controller.custom.syncPropertyFrom(custom, ROCKET_ATTACHED.get());
+				controller.custom.syncPropertyFrom(custom, ROCKET_FUEL_DEPLETION_RATIO.get());
+				controller.custom.syncPropertyFrom(custom, ROCKET_FORCE.get());
+				controller.custom.syncPropertyFrom(custom, ROCKET_REFUEL_RATIO.get());
+				this.updateRocketRegen(custom.get(ROCKET_FUEL_DEPLETION_RATIO.get()), custom.get(ROCKET_REFUEL_RATIO.get()));
 			}
 
 		} else {
 			controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, custom);
 		}
-		
+
+		controller.resetRocketProgression();
 		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
 		Minecraft.getInstance().getSoundManager().play(sound);
 	}

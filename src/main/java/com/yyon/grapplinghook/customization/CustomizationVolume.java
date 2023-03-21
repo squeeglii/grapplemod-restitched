@@ -67,6 +67,11 @@ public final class CustomizationVolume {
 	}
 	
 	public <T> void set(CustomizationProperty<T> property, T value) {
+		if(value == null) {
+			this.reset(property);
+			return;
+		}
+
 		this.setUnsafe(property, value);
 	}
 
@@ -93,7 +98,12 @@ public final class CustomizationVolume {
 	}
 
 	public void reset(CustomizationProperty<?> property) {
+		if(property == null) return;
 		this.values.remove(property);
+	}
+
+	public <T> void syncPropertyFrom(CustomizationVolume volume, CustomizationProperty<T> property) {
+		this.set(property, volume.get(property));
 	}
 
 	@SuppressWarnings("unchecked") // properties and keys are always consistent in type.

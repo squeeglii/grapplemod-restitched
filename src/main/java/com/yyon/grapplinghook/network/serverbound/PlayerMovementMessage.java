@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkContext;
-import com.yyon.grapplinghook.network.serverbound.BaseMessageServer;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -88,8 +87,8 @@ public class PlayerMovementMessage extends BaseMessageServer {
 
 		ctx.getServer().execute(() -> {
 			if(referencedPlayer.getId() == this.entityId) {
-				new Vec(this.x, this.y, this.z).setPos(referencedPlayer);
-				new Vec(this.mx, this.my, this.mz).setMotion(referencedPlayer);
+				new Vec(this.x, this.y, this.z).applyAsPositionTo(referencedPlayer);
+				new Vec(this.mx, this.my, this.mz).applyAsMotionTo(referencedPlayer);
 
 				referencedPlayer.connection.resetPosition();
 

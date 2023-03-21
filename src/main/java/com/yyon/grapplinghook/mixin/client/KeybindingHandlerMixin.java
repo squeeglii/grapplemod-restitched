@@ -30,7 +30,7 @@ public class KeybindingHandlerMixin {
         if (Minecraft.getInstance().options.keyJump.isDown()) {
             if (controller != null) {
                 if (controller instanceof AirFrictionPhysicsContext && ((AirFrictionPhysicsContext) controller).wasSliding) {
-                    controller.slidingJump();
+                    controller.doSlidingJump();
                 }
             }
         }

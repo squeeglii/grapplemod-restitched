@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public class BooleanProperty extends CustomizationProperty<Boolean> {
 
-    public BooleanProperty(boolean defaultValue) {
+    public BooleanProperty(Boolean defaultValue) {
         super(defaultValue);
     }
 

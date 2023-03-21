@@ -14,7 +14,6 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     public EnumProperty(E defaultValue, E[] ordinalReverser) {
         super(defaultValue);
 
-        if(defaultValue == null) throw new IllegalArgumentException("Default enum value cannot be null.");
         if(ordinalReverser == null) throw new IllegalArgumentException("Ordinal reverser cannot be null. Please just pass [Enum Here].values()");
 
         this.ordinalReversal = ordinalReverser;
@@ -54,5 +53,9 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     @Override
     public AbstractCustomizationRenderer<E, CustomizationProperty<E>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
+    }
+
+    public E[] getOrdinalReversal() {
+        return this.ordinalReversal;
     }
 }

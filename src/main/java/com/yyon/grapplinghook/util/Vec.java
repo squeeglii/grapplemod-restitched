@@ -71,26 +71,37 @@ public class Vec {
 		return new Vec(this.x + v2.x, this.y + v2.y, this.z + v2.z);
 	}
 	
-	public void mutableAdd(double x, double y, double z) {
+	public Vec mutableAdd(double x, double y, double z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
+		return this;
 	}
 	
-	public void mutableAdd(Vec v2) {
-		this.x += v2.x;
-		this.y += v2.y;
-		this.z += v2.z;
+	public Vec mutableAdd(Vec v2) {
+		return this.mutableAdd(v2.x, v2.y, v2.z);
 	}
 	
 	public Vec sub(Vec v2) {
 		return new Vec(this.x - v2.x, this.y - v2.y, this.z - v2.z);
 	}
 
-	public void mutableSub(Vec v2) {
+	public Vec mutableSub(Vec v2) {
 		this.x -= v2.x;
 		this.y -= v2.y;
 		this.z -= v2.z;
+		return this;
+	}
+
+	public Vec multiply(double x, double y, double z) {
+		return new Vec(this.x * x, this.y * y, this.z * z);
+	}
+
+	public Vec mutableMultiply(double x, double y, double z) {
+		this.x *= x;
+		this.y *= y;
+		this.z *= z;
+		return this;
 	}
 	
 	public Vec rotateYaw(double a) {
@@ -106,13 +117,11 @@ public class Vec {
     }
 	
 	public Vec scale(double factor) {
-		return new Vec(this.x * factor, this.y * factor, this.z * factor);
+		return this.multiply(factor, factor, factor);
 	}
 	
-	public void mutableScale(double factor) {
-		this.x *= factor;
-		this.y *= factor;
-		this.z *= factor;
+	public Vec mutableScale(double factor) {
+		return this.mutableMultiply(factor, factor, factor);
 	}
 	
 	public double length() {
@@ -132,24 +141,24 @@ public class Vec {
 	}
 	
 	public double dot(Vec v2) {
-		return this.x*v2.x + this.y*v2.y + this.z*v2.z;
+		return this.x * v2.x + this.y * v2.y + this.z * v2.z;
 	}
 	
 	public Vec withMagnitude(double l) {
-		double oldl = this.length();
-		if (oldl != 0) {
-			double factor = l / oldl;
+		double oldLength = this.length();
+		if (oldLength != 0) {
+			double factor = l / oldLength;
 			return this.scale(factor);
-		} else {
-			return this;
 		}
+
+		return this;
 	}
 	
 	public void mutableSetMagnitude(double l) {
-		double oldl = this.length();
-		if (oldl != 0) {
-			double changefactor = l / oldl;
-			this.mutableScale(changefactor);
+		double oldLength = this.length();
+		if (oldLength != 0) {
+			double changeFactor = l / oldLength;
+			this.mutableScale(changeFactor);
 		}
 	}
 	
@@ -173,7 +182,7 @@ public class Vec {
 	}
 	
 	public String toString() {
-		return "<" + Double.toString(this.x) + "," + Double.toString(this.y) + "," + Double.toString(this.z) + ">";
+		return "<%s,%s,%s>".formatted(this.x, this.y, this.z);
 	}
 
 	public Vec add(double x, double y, double z) {
@@ -201,15 +210,13 @@ public class Vec {
 		return Math.acos(this.dot(b) / (la*lb));
 	}
 	
-	public void setPos(Entity e) {
+	public void applyAsPositionTo(Entity e) {
 		this.checkNaN();
-
 		e.setPos(this.x, this.y, this.z);
 	}
 	
-	public void setMotion(Entity e) {
+	public void applyAsMotionTo(Entity e) {
 		this.checkNaN();
-		
 		e.setDeltaMovement(this.toVec3d());
 	}
 

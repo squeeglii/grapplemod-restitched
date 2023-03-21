@@ -91,7 +91,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 				this.applySlidingFriction();
 			}
 
-			boolean wallrun = this.applyWallrun();
+			boolean wallrun = this.applyWallRun();
 
 			if (!issliding && !wasSliding) {
 				if (wallrun) {
@@ -160,7 +160,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 //				newmotion.add_ip(this.walldirection);
 //			}
 
-			newmotion.setMotion(entity);
+			newmotion.applyAsMotionTo(entity);
 
 			this.updateServerPos();
 
@@ -191,8 +191,8 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 		this.ignoreGroundCounter = 2;
 	}
 	
-	public void slidingJump() {
-		super.slidingJump();
+	public void doSlidingJump() {
+		super.doSlidingJump();
 		this.ignoreGroundCounter = 2;
 	}
 	
