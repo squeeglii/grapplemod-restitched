@@ -40,6 +40,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+
 /*
  * This file is part of GrappleMod.
 
@@ -58,6 +60,38 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 
 public class GrapplinghookEntity extends ThrowableItemProjectile implements IExtendedSpawnPacketEntity {
+
+	public Entity shootingEntity = null;
+	public int shootingEntityID;
+
+	private boolean firstAttach = false;
+	public Vec thisPos;
+
+	public boolean rightHand = true;
+
+	public boolean attached = false;
+
+	public double pull;
+
+	public double taut = 1;
+
+	public boolean ignoreFrustumCheck = true;
+
+	public boolean isDouble = false;
+
+	public double r;
+
+	public RopeSegmentHandler segmentHandler;
+
+	public CustomizationVolume customization;
+
+	// magnet attract
+	public Vec prevPos = null;
+	public boolean foundBlock = false;
+	public boolean wasInAir = false;
+	public BlockPos magnetBlock = null;
+
+	public Vec attachDirection = null;
 
 	public GrapplinghookEntity(EntityType<? extends GrapplinghookEntity> type, Level world) {
 		super(type, world);
@@ -79,42 +113,12 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.segmentHandler = new RopeSegmentHandler(this.level(), this, new Vec(pos), new Vec(pos));
 
 		this.customization = customization;
-		this.r = customization.maxlen;
+		this.r = customization.get(MAX_ROPE_LENGTH.get());
 		
 		this.rightHand = righthand;
 	}
 
-	public Entity shootingEntity = null;
-	public int shootingEntityID;
-	
-	private boolean firstAttach = false;
-	public Vec thisPos;
-	
-	public boolean rightHand = true;
-	
-	public boolean attached = false;
-	
-	public double pull;
-	
-	public double taut = 1;
-	
-	public boolean ignoreFrustumCheck = true;
-	
-	public boolean isDouble = false;
-	
-	public double r;
-	
-	public RopeSegmentHandler segmentHandler = null;
-	
-	public CustomizationVolume customization = null;
-	
-	// magnet attract
-	public Vec prevPos = null;
-	public boolean foundBlock = false;
-	public boolean wasInAir = false;
-	public BlockPos magnetBlock = null;
-	
-	public Vec attach_dir = null;
+
 
 	@Override
     public void writeSpawnData(FriendlyByteBuf data) {
@@ -147,8 +151,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.shootingEntityID = 0;
 	}
 
-	public float getVelocity() {
-        return (float) this.customization.throwspeed;
+	public double getSpeed() {
+        return this.customization.get(HOOK_THROW_SPEED.get());
     }
 	
 	@Override
@@ -177,10 +181,10 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 						this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
 					}
 					
-					if (!this.customization.phaserope) {
+					if (!this.customization.get(BLOCK_PHASE_ROPE.get())) {
 						this.segmentHandler.update(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.r, true);
 						
-						if (this.customization.sticky) {
+						if (this.customization.get(STICKY_ROPE.get())) {
 							if (this.segmentHandler.segments.size() > 2) {
 								int bendnumber = this.segmentHandler.segments.size() - 2;
 								Vec closest = this.segmentHandler.segments.get(bendnumber);
@@ -201,9 +205,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 					Vec ropevec = Vec.positionVec(this).sub(farthest);
 					double d = ropevec.length();
 					
-					if (this.customization.reelin && this.shootingEntity.isCrouching()) {
+					if (this.customization.get(HOOK_REEL_IN_ON_SNEAK.get()) && this.shootingEntity.isCrouching()) {
 						double newdist = d + distToFarthest - 0.4;
-						if (newdist > 1 && newdist <= this.customization.maxlen) {
+						if (newdist > 1 && newdist <= this.customization.get(MAX_ROPE_LENGTH.get())) {
 							this.r = newdist;
 						}
 					}
@@ -229,7 +233,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		}
 		
 		// magnet attraction
-		if (!this.attached && this.customization.attract && Vec.positionVec(this).sub(Vec.positionVec(this.shootingEntity)).length() > this.customization.attractradius) {
+		if (!this.attached && this.customization.get(MAGNET_ATTACHED.get()) && Vec.positionVec(this).sub(Vec.positionVec(this.shootingEntity)).length() > this.customization.get(MAGNET_RADIUS.get())) {
 	    	if (this.shootingEntity == null) {return;}
 	    	if (!this.foundBlock) {
 	    		if (!this.level().isClientSide) {
@@ -277,7 +281,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 						
 						double l = newvel.length();
 						
-						newvel.withMagnitude(this.getVelocity());
+						newvel.withMagnitude(this.getSpeed());
 						
 						this.setDeltaMovement(newvel.x, newvel.y, newvel.z);
 						
@@ -291,7 +295,11 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	    	}
 		}
 	}
-	
+
+	public void shoot(double x, double y, double z, double speed, float inaccuracy) {
+		super.shoot(x, y, z, (float) speed, inaccuracy);
+	}
+
 	public void setVelocityActually(double x, double y, double z) {
 		this.setDeltaMovement(x, y, z);
 
@@ -459,10 +467,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	
 	@Override
 	protected float getGravity() {
-		if (this.attached) {
-			return 0.0F;
-		}
-        return (float) this.customization.hookgravity * 0.1F;
+		if (this.attached) return 0.0F;
+
+        return this.customization.get(HOOK_GRAVITY_MULTIPLIER.get()).floatValue() * 0.1F;
     }
 	
 	public int getControlId() {
@@ -480,7 +487,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	
 	// used for magnet attraction
     public BlockPos check(Vec p, HashMap<BlockPos, Boolean> checkedset) {
-    	int radius = (int) Math.floor(this.customization.attractradius);
+    	int radius = (int) Math.floor(this.customization.get(MAGNET_RADIUS.get()));
     	BlockPos closestpos = null;
     	double closestdist = 0;
     	for (int x = (int)p.x - radius; x <= (int)p.x + radius; x++) {

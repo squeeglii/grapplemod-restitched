@@ -126,8 +126,8 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		Vec attach_dir = Vec.motionVec(hookEntity).scale(-1);
 
 		if (attach_dir.length() == 0) {
-			if (hookEntity.attach_dir != null) {
-				attach_dir = hookEntity.attach_dir;
+			if (hookEntity.attachDirection != null) {
+				attach_dir = hookEntity.attachDirection;
 
 			} else {
 
@@ -143,9 +143,9 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
         attach_dir.mutableNormalize();
 
-		if (hookEntity.attached && hookEntity.attach_dir != null)
-			attach_dir = hookEntity.attach_dir;
-		hookEntity.attach_dir = attach_dir;
+		if (hookEntity.attached && hookEntity.attachDirection != null)
+			attach_dir = hookEntity.attachDirection;
+		hookEntity.attachDirection = attach_dir;
 		
 		// transformation so hook texture is facing the correct way
 		matrix.pushPose();
