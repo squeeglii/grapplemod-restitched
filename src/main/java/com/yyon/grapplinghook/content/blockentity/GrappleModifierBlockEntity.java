@@ -1,10 +1,11 @@
 package com.yyon.grapplinghook.content.blockentity;
 
+import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.customization.CustomizationVolume.UpgradeCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -12,11 +13,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
-	public HashMap<UpgradeCategory, Boolean> unlockedCategories = new HashMap<>();
-	public CustomizationVolume customization;
+	private final HashMap<CustomizationCategory, Boolean> unlockedCategories = new HashMap<>();
+	private CustomizationVolume customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
 		super(GrappleModBlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
@@ -31,7 +34,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		}
 	}
 
-	public void unlockCategory(UpgradeCategory category) {
+	public void unlockCategory(CustomizationCategory category) {
 		unlockedCategories.put(category, true);
 		this.triggerUpdate();
 	}
@@ -47,7 +50,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.triggerUpdate();
 	}
 
-	public boolean isUnlocked(UpgradeCategory category) {
+	public boolean isUnlocked(CustomizationCategory category) {
 		return this.unlockedCategories.containsKey(category) && this.unlockedCategories.get(category);
 	}
 
@@ -57,12 +60,11 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 		CompoundTag unlockedNBT = nbtTagCompound.getCompound("unlocked");
 
-		for (UpgradeCategory category : UpgradeCategory.values()) {
-			String num = String.valueOf(category.toInt());
+		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
 			boolean unlocked = this.isUnlocked(category);
 
-			unlockedNBT.putBoolean(num, unlocked);
-		}
+			unlockedNBT.putBoolean(category.getIdentifier().toString(), unlocked);
+		});
 
 		nbtTagCompound.put("unlocked", unlockedNBT);
 		nbtTagCompound.put("customization", this.customization.writeToNBT());
@@ -74,12 +76,10 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 		CompoundTag unlockedNBT = parentNBTTagCompound.getCompound("unlocked");
 
-		for (UpgradeCategory category : UpgradeCategory.values()) {
-			String num = String.valueOf(category.toInt());
-			boolean unlocked = unlockedNBT.getBoolean(num);
-
+		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
+			boolean unlocked = unlockedNBT.getBoolean(category.getIdentifier().toString());
 			this.unlockedCategories.put(category, unlocked);
-		}
+		});
 
 		CompoundTag custom = parentNBTTagCompound.getCompound("customization");
 		this.customization.loadFromNBT(custom);
@@ -102,4 +102,11 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		return nbtTagCompound;
 	}
 
+	public CustomizationVolume getCurrentCustomizations() {
+		return this.customization;
+	}
+
+	public Set<CustomizationCategory> getUnlockedCategories() {
+		return Collections.unmodifiableSet(this.unlockedCategories.keySet());
+	}
 }

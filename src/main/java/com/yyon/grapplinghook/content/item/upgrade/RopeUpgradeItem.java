@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.content.item.upgrade;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
 
 public class RopeUpgradeItem extends BaseUpgradeItem {
 	public RopeUpgradeItem() {
-		super(1, CustomizationVolume.UpgradeCategory.ROPE);
+		super(1, GrappleModCustomizationCategories.ROPE);
 	}
 }

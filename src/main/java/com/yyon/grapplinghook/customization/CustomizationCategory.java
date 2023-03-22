@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.customization;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class CustomizationCategory {
@@ -16,9 +17,10 @@ public class CustomizationCategory {
     }
 
 
-    public String getLocalizationString() {
+    public String getLocalization(String suffix) {
         String path = this.getIdentifier().toString().replaceAll("[:/\\\\]", ".");
-        return "grapple_category.%s.name".formatted(path);
+        boolean includeConnectingDot = suffix != null && suffix.length() > 0 && !suffix.startsWith(".");
+        return "grapple_category.%s%s".formatted(path, includeConnectingDot ? "." : "");
     }
 
     public ResourceLocation getIdentifier() {
@@ -27,6 +29,14 @@ public class CustomizationCategory {
 
     public BaseUpgradeItem getUpgradeItem() {
         return this.upgradeItem;
+    }
+
+    public Component getName() {
+        return Component.translatable(this.getLocalization("name"));
+    }
+
+    public Component getDescription() {
+        return Component.translatable(this.getLocalization("desc"));
     }
 
     public boolean shouldRender() {

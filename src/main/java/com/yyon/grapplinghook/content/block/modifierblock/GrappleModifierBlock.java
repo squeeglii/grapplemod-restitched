@@ -6,6 +6,8 @@ import com.yyon.grapplinghook.config.GrappleModConfig;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.util.Check;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.Vec;
@@ -64,11 +66,11 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		if (!(ent instanceof GrappleModifierBlockEntity tile)) return drops;
 
-		for (CustomizationVolume.UpgradeCategory category : CustomizationVolume.UpgradeCategory.values()) {
-			if (tile.unlockedCategories.containsKey(category) && tile.unlockedCategories.get(category)) {
-				drops.add(new ItemStack(category.getItem()));
-			}
-		}
+		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
+			if (tile.getUnlockedCategories().contains(category))
+				drops.add(new ItemStack(category.getUpgradeItem()));
+		});
+
 		return drops;
 	}
 
@@ -86,10 +88,10 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			BlockEntity ent = worldIn.getBlockEntity(pos);
 			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
 
-			if (Check.missingTileEntity(tile, playerIn, worldIn, pos))
+			if (Check.missingTileEntity(this, tile, playerIn, worldIn, pos))
 				return InteractionResult.FAIL;
 
-			CustomizationVolume.UpgradeCategory category = upgradeItem.category;
+			CustomizationCategory category = upgradeItem.getCategory();
 			if (category == null)
 				return InteractionResult.FAIL;
 
@@ -113,10 +115,10 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			BlockEntity ent = worldIn.getBlockEntity(pos);
 			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
 
-			if (Check.missingTileEntity(tile, playerIn, worldIn, pos))
+			if (Check.missingTileEntity(this, tile, playerIn, worldIn, pos))
 				return InteractionResult.FAIL;
 
-			CustomizationVolume custom = tile.customization;
+			CustomizationVolume custom = tile.getCurrentCustomizations();
 			GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(helditemstack, custom);
 
 			playerIn.sendSystemMessage(Component.literal("Applied configuration"));

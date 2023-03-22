@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.content.item.upgrade;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
 
 public class LimitsUpgradeItem extends BaseUpgradeItem {
 	public LimitsUpgradeItem() {
-		super(1, CustomizationVolume.UpgradeCategory.LIMITS);
+		super(1, GrappleModCustomizationCategories.LIMITS);
 	}
 }

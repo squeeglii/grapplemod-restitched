@@ -30,3 +30,15 @@
          - "property1": value
          - "property2": value
        - "crc32"
+
+ - NBT structure has changed for grappling hook modifier block entities.
+   - Before:
+       - "unlocked"
+           - "1": true
+           - "2": false
+       -  "customization": <see old grapple hook "custom">
+   - After:
+       - "unlocked"
+           - "namespaced:id1": true
+           - "namespaced:id2": false
+       -  "customization": <see new grapple hook "custom">
