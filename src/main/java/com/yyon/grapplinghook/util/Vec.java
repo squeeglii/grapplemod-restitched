@@ -220,6 +220,18 @@ public class Vec {
 		e.setDeltaMovement(this.toVec3d());
 	}
 
+	public double getX() {
+		return this.x;
+	}
+
+	public double getY() {
+		return this.y;
+	}
+
+	public double getZ() {
+		return this.z;
+	}
+
 	public static Vec lookVec(Entity entity) {
 		return new Vec(entity.getLookAngle());
 	}

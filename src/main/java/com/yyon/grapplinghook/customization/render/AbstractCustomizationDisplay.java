@@ -10,13 +10,14 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Supplier;
 
-public abstract class AbstractCustomizationRenderer<T, P extends CustomizationProperty<T>> {
+public abstract class AbstractCustomizationDisplay<T, P extends CustomizationProperty<T>> {
 
     private final P property;
 
-    public AbstractCustomizationRenderer(P property) {
+    public AbstractCustomizationDisplay(P property) {
         this.property = property;
     }
+
 
     public Component getDisplayName() {
         ResourceLocation id = this.getProperty().getIdentifier();
@@ -24,6 +25,13 @@ public abstract class AbstractCustomizationRenderer<T, P extends CustomizationPr
                 ? Component.literal("grapple_property.invalid.name")
                 : Component.translatable("grapple_property."+id.toLanguageKey()+".name");
     }
+
+    public Component getModificationHint(CustomizationVolume volume) {
+        if(!volume.has(this.property)) return null;
+        return this.getModificationHint(volume.get(this.property));
+    }
+
+    public abstract Component getModificationHint(T value);
 
 
     public abstract AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight);

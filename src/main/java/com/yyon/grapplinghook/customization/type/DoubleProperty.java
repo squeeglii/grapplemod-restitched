@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
@@ -44,7 +44,7 @@ public class DoubleProperty extends CustomizationProperty<Double> {
     }
 
     @Override
-    public AbstractCustomizationRenderer<Double, CustomizationProperty<Double>> getRenderer() {
+    public AbstractCustomizationDisplay<Double, CustomizationProperty<Double>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
     }
 

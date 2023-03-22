@@ -1,11 +1,10 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
 import java.nio.ByteBuffer;
-import java.util.function.Function;
 
 public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
 
@@ -51,7 +50,7 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     }
 
     @Override
-    public AbstractCustomizationRenderer<E, CustomizationProperty<E>> getRenderer() {
+    public AbstractCustomizationDisplay<E, CustomizationProperty<E>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
     }
 

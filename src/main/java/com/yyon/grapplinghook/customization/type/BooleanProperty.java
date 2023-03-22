@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
@@ -36,7 +36,7 @@ public class BooleanProperty extends CustomizationProperty<Boolean> {
     }
 
     @Override
-    public AbstractCustomizationRenderer<Boolean, CustomizationProperty<Boolean>> getRenderer() {
+    public AbstractCustomizationDisplay<Boolean, CustomizationProperty<Boolean>> getRenderer() {
         throw new UnsupportedOperationException("Unimplemented");
     }
 }

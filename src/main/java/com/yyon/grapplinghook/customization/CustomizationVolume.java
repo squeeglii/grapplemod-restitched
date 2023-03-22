@@ -9,9 +9,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -95,6 +94,11 @@ public final class CustomizationVolume {
 	public <T> T get(CustomizationProperty<T> property) {
 		if(property == null) return null;
 		return (T) this.values.getOrDefault(property, property.getDefaultValue());
+	}
+
+	public <T> boolean has(CustomizationProperty<T> property) {
+		if(property == null) return false;
+		return this.values.containsKey(property);
 	}
 
 	public void reset(CustomizationProperty<?> property) {
@@ -217,4 +221,7 @@ public final class CustomizationVolume {
 		return true;
 	}
 
+	public Set<CustomizationProperty<?>> getPropertiesPresent() {
+		return Collections.unmodifiableSet(this.values.keySet());
+	}
 }

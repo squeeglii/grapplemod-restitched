@@ -296,15 +296,14 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		}
 	}
 
-	public void shoot(double x, double y, double z, double speed, float inaccuracy) {
-		super.shoot(x, y, z, (float) speed, inaccuracy);
+	public void shoot(Vec direction, double speed, float inaccuracy) {
+		super.shoot(direction.getX(), direction.getY(), direction.getZ(), (float) speed, inaccuracy);
 	}
 
 	public void setVelocityActually(double x, double y, double z) {
 		this.setDeltaMovement(x, y, z);
 
-        if (this.xRotO == 0.0F && this.yRotO == 0.0F)
-        {
+        if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
             double f = Math.sqrt(x * x + z * z);
             this.setYRot((float)(Mth.atan2(x, z) * (180D / Math.PI)));
             this.setXRot((float)(Mth.atan2(y, f) * (180D / Math.PI)));

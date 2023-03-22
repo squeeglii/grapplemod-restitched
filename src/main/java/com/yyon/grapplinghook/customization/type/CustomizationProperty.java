@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.customization.type;
 
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationAvailability;
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationRenderer;
+import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -28,9 +28,7 @@ public abstract class CustomizationProperty<T> {
     public abstract T loadValueFromTag(CompoundTag nbt);
     public abstract byte[] valueToChecksumBytes(T value);
 
-    public abstract AbstractCustomizationRenderer<T, CustomizationProperty<T>> getRenderer();
-
-
+    public abstract AbstractCustomizationDisplay<T, CustomizationProperty<T>> getRenderer();
 
 
     public CustomizationAvailability getAvailability() {
@@ -68,7 +66,7 @@ public abstract class CustomizationProperty<T> {
         boolean matchingDefaults = this.getDefaultValue().equals(other.getDefaultValue());
         boolean defaultsDefinitelyWorkTogether = this.getDefaultValue() // Order of equals matters here.
                 .getClass()
-                .isInstance(other.getDefaultValue().getClass());
+                .isInstance(other.getDefaultValue());
 
         return matchingIDs && matchingDefaults && defaultsDefinitelyWorkTogether;
     }

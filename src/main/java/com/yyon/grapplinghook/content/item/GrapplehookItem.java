@@ -7,6 +7,8 @@ import com.yyon.grapplinghook.config.GrappleModConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
+import com.yyon.grapplinghook.customization.type.AttachmentProperty;
+import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
@@ -17,10 +19,12 @@ import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -32,8 +36,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
@@ -218,23 +221,34 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 		entityLiving.level().playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 	}
+
+	public Vec calculateThrowDirectionVector(Vec angleVec) {
+		float velx = -Mth.sin((float) angleVec.getYaw() * 0.017453292F) * Mth.cos((float) angleVec.getPitch() * 0.017453292F);
+		float vely = -Mth.sin((float) angleVec.getPitch() * 0.017453292F);
+		float velz = Mth.cos((float) angleVec.getYaw() * 0.017453292F) * Mth.cos((float) angleVec.getPitch() * 0.017453292F);
+
+		return new Vec(velx, vely, velz);
+	}
+
+	public double calculateExtraSpeedFromAngles(LivingEntity holder, Vec directionVec) {
+		return Math.max(0.0D, Vec.motionVec(holder).distanceAlong(directionVec));
+	}
+
+
 	
 	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
     	CustomizationVolume custom = this.getCustomization(stack);
 
 		double angle = this.getAngle(entityLiving, custom);
-		double verticalangle = this.getDoubleHookAngle(entityLiving, custom);
+		double verticalAngle = this.getDoubleHookAngle(entityLiving, custom);
 
-		Vec anglevec = Vec.fromAngles(Math.toRadians(-angle), Math.toRadians(verticalangle));
-  		anglevec = anglevec.rotatePitch(Math.toRadians(-entityLiving.getViewXRot(1.0F)));
-  		anglevec = anglevec.rotateYaw(Math.toRadians(entityLiving.getViewYRot(1.0F)));
-        float velx = -Mth.sin((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-        float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
-        float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-		double extraSpeed = Math.max(0.0f, Vec.motionVec(entityLiving).distanceAlong(new Vec(velx, vely, velz)));
+		Vec initialAngle = Vec.fromAngles(Math.toRadians(-angle), Math.toRadians(verticalAngle));
+		Vec anglevec = applyHolderRotation(initialAngle, entityLiving);
+	  	Vec direction = this.calculateThrowDirectionVector(anglevec);
+	  	double extraSpeed = this.calculateExtraSpeedFromAngles(entityLiving, direction);
 
 		GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, false, true);
-        hookEntity.shoot( velx, vely, velz, hookEntity.getSpeed() + extraSpeed, 0.0F);
+        hookEntity.shoot(direction, hookEntity.getSpeed() + extraSpeed, 0.0F);
         
 		worldIn.addFreshEntity(hookEntity);
 		setHookEntityLeft(entityLiving, hookEntity);    			
@@ -243,41 +257,28 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	}
 	
 	public boolean throwRight(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
-    	CustomizationVolume custom = this.getCustomization(stack);
-    	
-  		double angle = this.getAngle(entityLiving, custom);
-  		double verticalangle = this.getDoubleHookAngle(entityLiving, custom);
+	    CustomizationVolume custom = this.getCustomization(stack);
+		double angle = this.getAngle(entityLiving, custom);
+  		double verticalAngle = this.getDoubleHookAngle(entityLiving, custom);
 
-    	if (!custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0) {
-			Vec anglevec = new Vec(0,0,1).rotatePitch(Math.toRadians(verticalangle));
-      		anglevec = anglevec.rotatePitch(Math.toRadians(-entityLiving.getViewXRot(1.0F)));
-      		anglevec = anglevec.rotateYaw(Math.toRadians(entityLiving.getViewYRot(1.0F)));
-	        float velx = -Mth.sin((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-	        float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
-	        float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-			float extravelocity = Math.max(0.0f, (float) Vec.motionVec(entityLiving).distanceAlong(new Vec(velx, vely, velz)));
+		boolean isNotDouble = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
 
-			GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, righthand, false);
-			hookEntity.shoot(velx, vely, velz, hookEntity.getSpeed() + extravelocity, 0.0F);
+		Vec initialAngle = isNotDouble
+				? new Vec(0,0,1).rotatePitch(Math.toRadians(verticalAngle))
+				: Vec.fromAngles(Math.toRadians(angle), Math.toRadians(verticalAngle));
 
-			worldIn.addFreshEntity(hookEntity);
-			setHookEntityRight(entityLiving, hookEntity);
-    	} else {
+		Vec anglevec = applyHolderRotation(initialAngle, entityLiving);
+		Vec direction = this.calculateThrowDirectionVector(anglevec);
+		double extraSpeed = this.calculateExtraSpeedFromAngles(entityLiving, direction);
 
-			Vec anglevec = Vec.fromAngles(Math.toRadians(angle), Math.toRadians(verticalangle));
-      		anglevec = anglevec.rotatePitch(Math.toRadians(-entityLiving.getViewXRot(1.0F)));
-      		anglevec = anglevec.rotateYaw(Math.toRadians(entityLiving.getViewYRot(1.0F)));
-	        float velx = -Mth.sin((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-	        float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
-	        float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-			float extravelocity = Math.max(0.0f, (float) Vec.motionVec(entityLiving).distanceAlong(new Vec(velx, vely, velz)));
+		GrapplinghookEntity hookEntity = isNotDouble
+				? this.createGrapplehookEntity(stack, worldIn, entityLiving, righthand, false)
+				: this.createGrapplehookEntity(stack, worldIn, entityLiving, true, true);
 
-			GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, true, true);
-			hookEntity.shoot(velx, vely, velz, hookEntity.getSpeed() + extravelocity, 0.0F);
-            
-			worldIn.addFreshEntity(hookEntity);
-			setHookEntityRight(entityLiving, hookEntity);
-		}
+		hookEntity.shoot(direction, hookEntity.getSpeed() + extraSpeed, 0.0F);
+
+		worldIn.addFreshEntity(hookEntity);
+		setHookEntityRight(entityLiving, hookEntity);
 
 		return true;
 	}
@@ -359,7 +360,6 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
         	CustomizationVolume custom = new CustomizationVolume();
     		custom.loadFromNBT(tag.getCompound("custom"));
         	return custom;
-
     	}
 
 		return this.resetCustomizationNBT(itemstack);
@@ -445,49 +445,47 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()));
 			}
 
-		} else {
-			if (Screen.hasControlDown()) {
-				for (String option : CustomizationVolume.booleanoptions) {
-					if (custom.isOptionValid(option) && custom.getBoolean(option) != CustomizationVolume.DEFAULT.getBoolean(option)) {
-						list.add(Component.literal((custom.getBoolean(option) ? "" : Component.translatable("grappletooltip.negate.desc").getString() + " ") + Component.translatable(custom.getName(option)).getString()));
-					}
-				}
-				for (String option : CustomizationVolume.doubleoptions) {
-					if (custom.isOptionValid(option) && (custom.getDouble(option) != CustomizationVolume.DEFAULT.getDouble(option))) {
-						list.add(Component.translatable(custom.getName(option)).append(": " + Math.floor(custom.getDouble(option) * 100) / 100));
-					}
-				}
-
-			} else {
-				if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
-					list.add(DOUBLE_HOOK_ATTACHED.get().getRenderer().getDisplayName());
-				}
-
-				if (custom.get(MOTOR_ATTACHED.get())) {
-					list.add((custom.get(SMART_MOTOR.get())
-							? SMART_MOTOR.get()
-							: MOTOR_ATTACHED.get()
-					).getRenderer().getDisplayName());
-				}
-
-				if (custom.get(ENDER_STAFF_ATTACHED.get())) {
-					list.add(ENDER_STAFF_ATTACHED.get().getRenderer().getDisplayName());
-				}
-				if (custom.get(MAGNET_ATTACHED.get())) {
-					list.add(MAGNET_ATTACHED.get().getRenderer().getDisplayName());
-				}
-				if (custom.get(MAGNET_ATTACHED.get())) {
-					list.add(MAGNET_ATTACHED.get().getRenderer().getDisplayName());
-				}
-				if (custom.get(FORCEFIELD_ATTACHED.get())) {
-					list.add(FORCEFIELD_ATTACHED.get().getRenderer().getDisplayName());
-				}
-				
-				list.add(Component.literal(""));
-				list.add(Component.translatable("grappletooltip.shiftcontrols.desc"));
-				list.add(Component.translatable("grappletooltip.controlconfiguration.desc"));
-			}
 		}
+
+		if (Screen.hasControlDown()) {
+			for(CustomizationProperty<?> property: custom.getPropertiesPresent()) {
+				Component hintText = property.getRenderer().getModificationHint(custom);
+				if(hintText != null)
+					list.add(hintText);
+			}
+
+			return;
+		}
+
+		HashMap<ResourceLocation, Component> attachmentTexts = new HashMap<>();
+
+		for(AttachmentProperty attachment: AttachmentProperty.getBakedProperties()) {
+			boolean useShadowerName = AttachmentProperty.shouldUseShadowerName(custom, attachment);
+
+			if(!useShadowerName) {
+				attachmentTexts.put(attachment.getIdentifier(), attachment.getRenderer().getDisplayName());
+				continue;
+			}
+
+			// Handle chains -- remove if this attachment was another's shadow.
+			attachmentTexts.remove(attachment.getIdentifier());
+
+			Component newText = attachment.getShadowingProperty().orElseThrow().getRenderer().getDisplayName();
+			attachmentTexts.put(attachment.getIdentifier(), newText);
+		}
+
+		if(attachmentTexts.size() > 0) {
+			list.add(Component.translatable("grappletooltip.attachments.title")
+					.withStyle(ChatFormatting.GRAY)
+					.withStyle(ChatFormatting.BOLD)
+			);
+
+			list.addAll(attachmentTexts.values());
+		}
+
+		list.add(Component.literal(""));
+		list.add(Component.translatable("grappletooltip.shiftcontrols.desc"));
+		list.add(Component.translatable("grappletooltip.controlconfiguration.desc"));
 	}
 
 	public void setCustomOnServer(ItemStack helditemstack, CustomizationVolume custom) {
@@ -497,6 +495,11 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		tag.put("custom", nbt);
 		
 		helditemstack.setTag(tag);
+	}
+
+	public static Vec applyHolderRotation(Vec angleVec, LivingEntity holder) {
+		Vec newVec = angleVec.rotatePitch(Math.toRadians(-holder.getViewXRot(1.0F)));
+		return newVec.rotateYaw(Math.toRadians(holder.getViewYRot(1.0F)));
 	}
 
 	
