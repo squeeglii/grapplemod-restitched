@@ -227,7 +227,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	
 	public int getLimits() {
 		if(Minecraft.getInstance().player == null) return 0;
-		return this.blockEntity.isUnlocked(GrappleModCustomizationCategories.LIMITS) || Minecraft.getInstance().player.isCreative()
+		return this.blockEntity.isUnlocked(GrappleModCustomizationCategories.LIMITS.get()) || Minecraft.getInstance().player.isCreative()
 				? 1
 				: 0;
 	}
