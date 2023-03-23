@@ -463,14 +463,14 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			boolean useShadowerName = AttachmentProperty.shouldUseShadowerName(custom, attachment);
 
 			if(!useShadowerName) {
-				attachmentTexts.put(attachment.getIdentifier(), attachment.getRenderer().getDisplayName());
+				attachmentTexts.put(attachment.getIdentifier(), attachment.getDisplayName());
 				continue;
 			}
 
 			// Handle chains -- remove if this attachment was another's shadow.
 			attachmentTexts.remove(attachment.getIdentifier());
 
-			Component newText = attachment.getShadowingProperty().orElseThrow().getRenderer().getDisplayName();
+			Component newText = attachment.getShadowingProperty().orElseThrow().getDisplayName();
 			attachmentTexts.put(attachment.getIdentifier(), newText);
 		}
 

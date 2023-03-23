@@ -318,7 +318,7 @@ public class ClientPhysicsContextTracker {
 		boolean thisMulti = custom != null && custom.get(DOUBLE_HOOK_ATTACHED.get());
 
 		if(currentController != null) {
-			boolean currentMulti = currentController.custom != null && currentController.custom.get(DOUBLE_HOOK_ATTACHED.get());
+			boolean currentMulti = currentController.getCurrentCustomizations() != null && currentController.getCurrentCustomizations().get(DOUBLE_HOOK_ATTACHED.get());
 
 			if (!(thisMulti && currentMulti))
 				currentController.unattach();
@@ -336,7 +336,7 @@ public class ClientPhysicsContextTracker {
 				List<Supplier<Boolean>> conditions = List.of(
 						() -> finalControl != null,
 						() -> finalControl.getClass().equals(GrapplingHookPhysicsContext.class),
-						() -> finalControl.custom.get(DOUBLE_HOOK_ATTACHED.get()),
+						() -> finalControl.getCurrentCustomizations().get(DOUBLE_HOOK_ATTACHED.get()),
 						() -> grapplinghookEntity != null
 				);
 
@@ -423,16 +423,17 @@ public class ClientPhysicsContextTracker {
 		GrapplingHookPhysicsContext controller;
 		if (controllers.containsKey(player.getId())) {
 			controller = controllers.get(player.getId());
+			CustomizationVolume serverCustom = controller.getCurrentCustomizations();
 
 			// Syncing controller's rocket property
-			if (controller.custom == null || !controller.custom.get(ROCKET_ATTACHED.get())) {
-				if (controller.custom == null)
-					controller.custom = custom;
+			if (serverCustom == null || !serverCustom.get(ROCKET_ATTACHED.get())) {
+				if (serverCustom == null)
+					serverCustom = custom;
 
-				controller.custom.syncPropertyFrom(custom, ROCKET_ATTACHED.get());
-				controller.custom.syncPropertyFrom(custom, ROCKET_FUEL_DEPLETION_RATIO.get());
-				controller.custom.syncPropertyFrom(custom, ROCKET_FORCE.get());
-				controller.custom.syncPropertyFrom(custom, ROCKET_REFUEL_RATIO.get());
+				serverCustom.syncPropertyFrom(custom, ROCKET_ATTACHED.get());
+				serverCustom.syncPropertyFrom(custom, ROCKET_FUEL_DEPLETION_RATIO.get());
+				serverCustom.syncPropertyFrom(custom, ROCKET_FORCE.get());
+				serverCustom.syncPropertyFrom(custom, ROCKET_REFUEL_RATIO.get());
 				this.updateRocketRegen(custom.get(ROCKET_FUEL_DEPLETION_RATIO.get()), custom.get(ROCKET_REFUEL_RATIO.get()));
 			}
 

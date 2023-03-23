@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.customization;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.customization.template.PropertyOverride;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -72,6 +73,10 @@ public final class CustomizationVolume {
 		}
 
 		this.setUnsafe(property, value);
+	}
+
+	public <T> void set(PropertyOverride<T> override) {
+		this.setUnsafe(override.property(), override.value());
 	}
 
 	private void setUnsafe(CustomizationProperty<?> property, Object value) {

@@ -6,6 +6,8 @@ import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Set;
+
 public class CustomizationCategory {
 
     private final BaseUpgradeItem upgradeItem;
@@ -37,6 +39,10 @@ public class CustomizationCategory {
 
     public Component getDescription() {
         return Component.translatable(this.getLocalization("desc"));
+    }
+
+    public Set<CustomizationProperty<?>> getLinkedProperties() {
+        return Set.of(this.linkedProperties);
     }
 
     public boolean shouldRender() {

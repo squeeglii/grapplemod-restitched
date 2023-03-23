@@ -1,52 +1,51 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.type.DoubleProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.function.Supplier;
 
 public class CustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
-    private final double min, max;
-    private final String text, option;
-
-    private Component tooltipText;
-    private double val;
-
+    private final DoubleProperty option;
     private final Screen context;
     private final Supplier<CustomizationVolume> customizations;
     private final Runnable onValueUpdate;
 
-    public CustomizationSlider(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, Component text, double min, double max, String option, Component tooltip, Runnable onValueUpdate) {
-        super(x, y, w, h, text, (convertDouble(customizations.get(), option) - min) / (max - min));
-        this.context = context;
+    private Component tooltipOverride;
 
-        this.min = min;
-        this.max = max;
-        this.val = val;
-        this.text = text.getString();
+    public CustomizationSlider(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
+        super(x, y, w, h, option.getDisplayName(), (convertDouble(customizations.get(), option) - option.getMin()) / (option.getMax() - option.getMin()));
+        this.context = context;
         this.option = option;
-        this.tooltipText = tooltip;
         this.customizations = customizations;
         this.onValueUpdate = onValueUpdate;
+
+        this.tooltipOverride = null;
 
         this.updateMessage();
     }
 
     @Override
     protected void updateMessage() {
-        this.setMessage(Component.literal(text + ": " + String.format("%.1f", this.val)));
+        MutableComponent message = this.option.getDisplayName().copy();
+
+        double value = this.customizations.get().get(this.option);
+        Component valueComp = Component.literal(": " + String.format("%.1f", value));
+
+        this.setMessage(message.append(valueComp));
     }
 
     @Override
     protected void applyValue() {
-        this.val = (this.value * (this.max - this.min)) + this.min;
-        this.customizations.get().setDouble(option, this.val);
+        double newVal = (this.value * (this.option.getMax() - this.option.getMin())) + this.option.getMin();
+        this.customizations.get().set(this.option, newVal);
         this.onValueUpdate.run();
     }
 
@@ -56,16 +55,20 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
         if (this.isHovered) this.displayTooltip(Minecraft.getInstance().font, gui, mouseX, mouseY);
     }
 
-    public Component getTooltipText() {
-        return this.tooltipText;
+    @Override
+    public Component getTooltip() {
+        return this.tooltipOverride == null
+                ? this.option.getDescription()
+                : this.tooltipOverride;
     }
 
-    public void setTooltip(Component tooltipText) {
-        this.tooltipText = tooltipText;
+    @Override
+    public void setTooltipOverride(Component tooltipText) {
+        this.tooltipOverride = tooltipText;
     }
 
-    private static double convertDouble(CustomizationVolume volume, String optionString) {
-        double d = volume.getDouble(optionString);
+    private static double convertDouble(CustomizationVolume volume, DoubleProperty optionString) {
+        double d = volume.get(optionString);
         return Math.floor(d * 10 + 0.5) / 10;
     }
 }

@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.customization.GrapplingHookTemplate;
+import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.ForcefieldItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;

@@ -1054,4 +1054,8 @@ public class GrapplingHookPhysicsContext {
 	public double getRocketProgression() {
 		return this.rocketProgression;
 	}
+
+	public CustomizationVolume getCurrentCustomizations() {
+		return this.custom;
+	}
 }

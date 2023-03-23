@@ -3,8 +3,10 @@ package com.yyon.grapplinghook.client.gui;
 import com.yyon.grapplinghook.client.gui.widget.*;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
+import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -14,11 +16,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GrappleModifierBlockGUI extends Screen {
 
 	public static final int FULL_SIZE_X = 221;
 	public static final int FULL_SIZE_Y = 221;
+
+	public static final int COLUMNS = 2;
 
 	private final OnPress actionGoBack = button -> showMainScreenLayout();
 
@@ -28,15 +33,15 @@ public class GrappleModifierBlockGUI extends Screen {
 
 	private final GrappleModifierBlockEntity blockEntity;
 
-	private HashMap<AbstractWidget, String> options;
+	private HashMap<AbstractWidget, CustomizationProperty<?>> options;
 	private CustomizationVolume customization;
 	private CustomizationCategory currentActiveCategory;
 
-	public GrappleModifierBlockGUI(GrappleModifierBlockEntity tileent) {
+	public GrappleModifierBlockGUI(GrappleModifierBlockEntity blockEntity) {
 		super(Component.translatable("grapplemodifier.title.desc"));
 
-		this.blockEntity = tileent;
-		this.customization = tileent.customization;
+		this.blockEntity = blockEntity;
+		this.customization = blockEntity.getCurrentCustomizations();
 		this.currentActiveCategory = null;
 	}
 
@@ -52,26 +57,6 @@ public class GrappleModifierBlockGUI extends Screen {
 	public void onClose() {
 		this.blockEntity.setCustomizationClient(customization);
 		super.onClose();
-	}
-
-
-	public void addCheckbox(String option) {
-		String text = Component.translatable(this.customization.getName(option)).getString();
-		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		CustomizationCheckbox checkbox = new CustomizationCheckbox(this, this::getCurrentCustomizations, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), customization.getBoolean(option), option, Component.literal(desc), this::markConfigurationsDirty);
-		this.addRenderableWidget(checkbox);
-		this.options.put(checkbox, option);
-	}
-
-	public void addSlider(String option) {
-		double max = CustomizationVolume.getMaxFromConfig(option, this.getLimits());
-		double min = CustomizationVolume.getMinFromConfig(option, this.getLimits());
-
-		String text = Component.translatable(this.customization.getName(option)).getString();
-		String desc = Component.translatable(this.customization.getDescription(option)).getString();
-		CustomizationSlider slider = new CustomizationSlider(this, this::getCurrentCustomizations, 10 + this.guiLeft, this.getNextYPosition(), FULL_SIZE_X - 20, 20, Component.literal(text), min, max, option, Component.literal(desc), this::markConfigurationsDirty);
-		this.addRenderableWidget(slider);
-		this.options.put(slider, option);
 	}
 
 	// -- GUI Screens
@@ -106,25 +91,21 @@ public class GrappleModifierBlockGUI extends Screen {
 				.build()
 		);
 
-		int y = 0;
-		int x = 0;
-		for (int i = 0; i < CustomizationCategory.size(); i++) {
-			CustomizationCategory category = CustomizationCategory.fromInt(i);
-			if (category == CustomizationCategory.LIMITS) continue;
+		AtomicInteger counter = new AtomicInteger(0);
+		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
+			if (!category.shouldRender()) return;
 
-			if (i == CustomizationCategory.size() / 2) {
-				y = 0;
-				x += 1;
-			}
+			int i = counter.getAndIncrement();
+			int y = Math.floorDiv(i, COLUMNS);
+			int x = i % COLUMNS;
 
 			this.addRenderableWidget(
-					Button.builder(Component.literal(category.getName()), this.createCategoryActionHandler(category))
+					Button.builder(category.getName(), this.createCategoryActionHandler(category))
 							.pos(this.guiLeft + 10 + 105 * x, this.guiTop + 15 + 30 * y)
 							.size(95, 20)
 							.build()
 			);
-			y += 1;
-		}
+		});
 
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.apply.desc"), this.guiLeft + 10, this.guiTop + FULL_SIZE_Y - 20 - 10 - 10));
 	}
@@ -150,10 +131,10 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.currentActiveCategory = category;
 
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock1.desc"), this.guiLeft + 10, this.guiTop + 10));
-		this.addRenderableWidget(new TextWidget(Component.literal(this.currentActiveCategory.getName()), this.guiLeft + 10, this.guiTop + 25));
+		this.addRenderableWidget(new TextWidget(this.currentActiveCategory.getName(), this.guiLeft + 10, this.guiTop + 25));
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock2.desc"), this.guiLeft + 10, this.guiTop + 40));
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock3.desc"), this.guiLeft + 10, this.guiTop + 55));
-		this.addRenderableWidget(new TextWidget(new ItemStack(this.currentActiveCategory.getItem()).getDisplayName(), this.guiLeft + 10, this.guiTop + 70));
+		this.addRenderableWidget(new TextWidget(new ItemStack(this.currentActiveCategory.getUpgradeItem()).getDisplayName(), this.guiLeft + 10, this.guiTop + 70));
 		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock4.desc"), this.guiLeft + 10, this.guiTop + 85));
 	}
 
@@ -182,62 +163,14 @@ public class GrappleModifierBlockGUI extends Screen {
 
 		this.currentActiveCategory = category;
 
-		switch (this.currentActiveCategory) {
-			case ROPE -> {
-				this.addSlider("maxlen");
-				this.addCheckbox("phaserope");
-				this.addCheckbox("sticky");
-			}
+		this.currentActiveCategory.getLinkedProperties().forEach(property -> {
+			int x = 10 + this.guiLeft;
+			int y = this.getNextYPosition();
 
-			case THROW -> {
-				this.addSlider("hookgravity");
-				this.addSlider("throwspeed");
-				this.addCheckbox("reelin");
-				this.addSlider("verticalthrowangle");
-				this.addSlider("sneakingverticalthrowangle");
-				this.addCheckbox("detachonkeyrelease");
-			}
-
-			case MOTOR -> {
-				this.addCheckbox("motor");
-				this.addSlider("motormaxspeed");
-				this.addSlider("motoracceleration");
-				this.addCheckbox("motorwhencrouching");
-				this.addCheckbox("motorwhennotcrouching");
-				this.addCheckbox("smartmotor");
-				this.addCheckbox("motordampener");
-				this.addCheckbox("pullbackwards");
-			}
-
-			case FORCEFIELD -> {
-				this.addCheckbox("repel");
-				this.addSlider("repelforce");
-			}
-
-			case MAGNET -> {
-				this.addCheckbox("attract");
-				this.addSlider("attractradius");
-			}
-
-			case DOUBLE -> {
-				this.addCheckbox("doublehook");
-				this.addCheckbox("smartdoublemotor");
-				this.addSlider("angle");
-				this.addSlider("sneakingangle");
-				this.addCheckbox("oneropepull");
-			}
-
-			case ROCKET -> {
-				this.addCheckbox("rocket");
-				this.addSlider("rocket_force");
-				this.addSlider("rocket_active_time");
-				this.addSlider("rocket_refuel_ratio");
-				this.addSlider("rocket_vertical_angle");
-			}
-
-			case SWING -> this.addSlider("playermovementmult");
-			case STAFF -> this.addCheckbox("enderstaff");
-		}
+			AbstractWidget widget = property.getRenderer().getModifierBlockUI(this, x, y);
+			this.addRenderableWidget(widget);
+			this.options.put(widget, property);
+		});
 		
 		this.markConfigurationsDirty();
 	}
@@ -248,41 +181,53 @@ public class GrappleModifierBlockGUI extends Screen {
 	 */
 	public void markConfigurationsDirty() {
 		for (AbstractWidget b : this.options.keySet()) {
-			String option = this.options.get(b);
+			CustomizationProperty<?> option = this.options.get(b);
 			boolean enabled = true;
+
+			String desc = option.getDescription().getString();
 			
-			String desc = Component.translatable(this.customization.getDescription(option)).getString();
-			
-			if (!this.customization.isOptionValid(option)) {
+			if (!option.getValidityPredicate().shouldPass(this.customization)) {
 				desc = Component.translatable("grapplemodifier.incompatability.desc").getString() + "\n" + desc;
 				enabled = false;
 			}
-			
-			int level = CustomizationVolume.optionEnabledInConfig(option);
-			if (this.getLimits() < level) {
-				desc = level == 1
-						? Component.translatable("grapplemodifier.limits.desc").getString() + "\n" + desc
-						: Component.translatable("grapplemodifier.locked.desc").getString() + "\n" + desc;
-				enabled = false;
+
+			switch (option.getAvailability()) {
+				case REQUIRES_LIMITS -> {
+					desc = Component.translatable("grapplemodifier.limits.desc").getString() + "\n" + desc;
+					enabled = false;
+				}
+
+				case BLOCKED -> {
+					desc = Component.translatable("grapplemodifier.locked.desc").getString() + "\n" + desc;
+					enabled = false;
+				}
 			}
 			
 			b.active = enabled;
 
+			if(enabled) {
+				if(b instanceof CustomTooltipHandler tooltipHandle)
+					tooltipHandle.resetTooltipOverride();
+				b.setAlpha(1.0f);
+				continue;
+			}
+
 			if (b instanceof CustomizationSlider slide) {
-				slide.setTooltip(Component.literal(desc));
-				slide.setAlpha(enabled ? 1.0F : 0.5F);
+				slide.setTooltipOverride(Component.literal(desc));
+				slide.setAlpha(0.5F);
+				continue;
 			}
 
 			if (b instanceof CustomizationCheckbox check) {
-				check.setTooltip(Component.literal(desc));
-				check.setAlpha(enabled ? 1.0F : 0.5F);
+				check.setTooltipOverride(Component.literal(desc));
+				check.setAlpha(0.5F);
 			}
 		}
 	}
 	
 	public int getLimits() {
 		if(Minecraft.getInstance().player == null) return 0;
-		return this.blockEntity.isUnlocked(GrappleModCustomizationCategories.LIMITS.get()) || Minecraft.getInstance().player.isCreative()
+		return this.blockEntity.isUnlocked(GrappleModCustomizationCategories.LIMITS) || Minecraft.getInstance().player.isCreative()
 				? 1
 				: 0;
 	}

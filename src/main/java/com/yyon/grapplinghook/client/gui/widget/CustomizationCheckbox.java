@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
@@ -13,27 +13,28 @@ import java.util.function.Supplier;
 
 public class CustomizationCheckbox extends Checkbox implements CustomTooltipHandler {
 
+    private final BooleanProperty option;
     private final Screen context;
     private final Supplier<CustomizationVolume> customizations;
 
-    private final String option;
     private final Runnable onValueUpdated;
-    private Component tooltipText;
+    private Component tooltipOverride;
 
-    public CustomizationCheckbox(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, Component text, boolean val, String option, Component tooltip, Runnable onValueUpdate) {
-        super(x, y, w, h, text, val);
+    public CustomizationCheckbox(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, BooleanProperty option, Runnable onValueUpdate) {
+        super(x, y, w, h, option.getDisplayName(), customizations.get().get(option));
         this.context = context;
         this.customizations = customizations;
         this.option = option;
-        this.tooltipText = tooltip;
         this.onValueUpdated = onValueUpdate;
+
+        this.tooltipOverride = null;
     }
 
     @Override
     public void onPress() {
         super.onPress();
 
-        this.customizations.get().setBoolean(option, this.selected());
+        this.customizations.get().set(this.option, this.selected());
         this.onValueUpdated.run();
     }
 
@@ -43,11 +44,15 @@ public class CustomizationCheckbox extends Checkbox implements CustomTooltipHand
         if (this.isHovered) this.displayTooltip(Minecraft.getInstance().font, gui, mouseX, mouseY);
     }
 
-    public Component getTooltipText() {
-        return this.tooltipText;
+    @Override
+    public Component getTooltip() {
+        return this.tooltipOverride == null
+                ? this.option.getDescription()
+                : this.tooltipOverride;
     }
 
-    public void setTooltip(Component tooltipText) {
-        this.tooltipText = tooltipText;
+    @Override
+    public void setTooltipOverride(Component tooltipText) {
+        this.tooltipOverride = tooltipText;
     }
 }

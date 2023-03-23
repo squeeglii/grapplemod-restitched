@@ -6,7 +6,6 @@ import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Supplier;
 
@@ -16,14 +15,6 @@ public abstract class AbstractCustomizationDisplay<T, P extends CustomizationPro
 
     public AbstractCustomizationDisplay(P property) {
         this.property = property;
-    }
-
-
-    public Component getDisplayName() {
-        ResourceLocation id = this.getProperty().getIdentifier();
-        return id == null
-                ? Component.literal("grapple_property.invalid.name")
-                : Component.translatable("grapple_property."+id.toLanguageKey()+".name");
     }
 
     public Component getModificationHint(CustomizationVolume volume) {
@@ -40,7 +31,7 @@ public abstract class AbstractCustomizationDisplay<T, P extends CustomizationPro
         return this.getConfigurationUIElement(gui::getCurrentCustomizations, gui, gui::markConfigurationsDirty, x, y, GrappleModifierBlockGUI.FULL_SIZE_X - 20, 20);
     }
 
-    public P getProperty() {
+    public final P getProperty() {
         return this.property;
     }
 }
