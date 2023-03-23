@@ -8,6 +8,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
+
 /*
  * This file is part of GrappleMod.
 
@@ -77,8 +79,8 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 			}
 
 			boolean doesrocket = false;
-			if (this.custom != null) {
-				if (this.custom.rocket) {
+			if (this.getCurrentCustomizations() != null) {
+				if (this.getCurrentCustomizations().get(ROCKET_ATTACHED.get())) {
 					Vec rocket = this.rocket(entity);
 					this.motion.mutableAdd(rocket);
 					if (rocket.length() > 0) {
@@ -96,23 +98,25 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 			if (!issliding && !wasSliding) {
 				if (wallrun) {
 					motion = motion.removeAlong(new Vec(0,1,0));
-					if (this.wallDirection != null) {
-						motion = motion.removeAlong(this.wallDirection);
-					}
+
+					if (this.getWallDirection() != null)
+						motion = motion.removeAlong(this.getWallDirection());
 
 					Vec new_movement = this.playerMovement.withMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed*1.5);
-					if (this.wallDirection != null) {
-						new_movement = new_movement.removeAlong(this.wallDirection);
+					if (this.getWallDirection() != null) {
+						new_movement = new_movement.removeAlong(this.getWallDirection());
 					}
 					if (new_movement.length() > GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed) {
 						new_movement.mutableSetMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed);
 					}
 					Vec current_motion_along = this.motion.removeAlong(new Vec(0,1,0));
 					Vec new_motion_along = this.motion.add(new_movement).removeAlong(new Vec(0,1,0));
-					if (this.wallDirection != null) {
-						current_motion_along = current_motion_along.removeAlong(this.wallDirection);
-						new_motion_along = new_motion_along.removeAlong(this.wallDirection);
+
+					if (this.getWallDirection() != null) {
+						current_motion_along = current_motion_along.removeAlong(this.getWallDirection());
+						new_motion_along = new_motion_along.removeAlong(this.getWallDirection());
 					}
+
 					if (current_motion_along.length() <= GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed || current_motion_along.dot(new_movement) < 0) {
 						motion.mutableAdd(new_movement);
 						if (new_motion_along.length() > GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed) {

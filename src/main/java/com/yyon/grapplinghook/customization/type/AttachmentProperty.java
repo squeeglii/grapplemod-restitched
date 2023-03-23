@@ -41,11 +41,12 @@ public class AttachmentProperty extends BooleanProperty {
      * shadowing property, thus forming a circular dependency.
      */
     private boolean isInVisibilityCycleTrap() {
-        Optional<AttachmentProperty> optOther = this.shadowedBy.getShadowingProperty();
-        if(optOther.isEmpty()) return false;
+        if(this.getShadowingProperty().isEmpty()) return false;
+        Optional<AttachmentProperty> optShadower = this.getShadowingProperty();
+        if(optShadower.isEmpty()) return false;
 
-        AttachmentProperty other = optOther.get();
-        Optional<AttachmentProperty> optOtherDep = other.getShadowingProperty();
+        AttachmentProperty shadower = optShadower.get();
+        Optional<AttachmentProperty> optOtherDep = shadower.getShadowingProperty();
 
         return optOtherDep.isPresent() && optOtherDep.get() == this;
     }

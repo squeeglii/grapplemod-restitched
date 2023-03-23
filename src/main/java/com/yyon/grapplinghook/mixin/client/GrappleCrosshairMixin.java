@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+
 @Mixin(Gui.class)
 public class GrappleCrosshairMixin {
 
@@ -50,15 +52,16 @@ public class GrappleCrosshairMixin {
 
         if (grapplehookItemStack != null) {
             CustomizationVolume custom = GrappleModItems.GRAPPLING_HOOK.get().getCustomization(grapplehookItemStack);
-            double angle = Math.toRadians(custom.angle);
-            double verticalAngle = Math.toRadians(custom.verticalthrowangle);
+            double angle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
+            double verticalAngle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
 
             if (player.isCrouching()) {
-                angle = Math.toRadians(custom.sneakingangle);
-                verticalAngle = Math.toRadians(custom.sneakingverticalthrowangle);
+                angle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
+                verticalAngle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
             }
 
-            if (!custom.doublehook) angle = 0;
+            if (!custom.get(DOUBLE_HOOK_ATTACHED.get()))
+                angle = 0;
 
             Window resolution = this.minecraft.getWindow();
             int w = resolution.getGuiScaledWidth();
@@ -68,7 +71,7 @@ public class GrappleCrosshairMixin {
             fov *= player.getFieldOfViewModifier();
             double l = ((double) h/2) / Math.tan(fov/2);
 
-            if (!((verticalAngle == 0) && (!custom.doublehook || angle == 0))) {
+            if (!((verticalAngle == 0) && (!custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0))) {
                 int offset = (int) (Math.tan(angle) * l);
                 int verticalOffset = (int) (-Math.tan(verticalAngle) * l);
 
@@ -78,8 +81,8 @@ public class GrappleCrosshairMixin {
                 }
             }
 
-            if (custom.rocket && custom.rocket_vertical_angle != 0) {
-                int verticalOffset = (int) (-Math.tan(Math.toRadians(custom.rocket_vertical_angle)) * l);
+            if (custom.get(ROCKET_ATTACHED.get()) && custom.get(ROCKET_ANGLE.get()) != 0) {
+                int verticalOffset = (int) (-Math.tan(Math.toRadians(custom.get(ROCKET_ANGLE.get()))) * l);
                 this.drawCrosshair(guiGraphics, w / 2, h / 2 + verticalOffset);
             }
         }
