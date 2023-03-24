@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
+import com.yyon.grapplinghook.customization.render.EnumCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
 
     private final E[] ordinalReversal;
+    protected EnumCustomizationDisplay<E> display;
 
     public EnumProperty(E defaultValue, E[] ordinalReverser) {
         super(defaultValue);
@@ -49,8 +50,10 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     }
 
     @Override
-    public AbstractCustomizationDisplay<E, CustomizationProperty<E>> getDisplay() {
-        throw new UnsupportedOperationException("Unimplemented");
+    public EnumCustomizationDisplay<E> getDisplay() {
+        if(this.display == null)
+            this.display = new EnumCustomizationDisplay<>(this);
+        return this.display;
     }
 
     public final E[] getOrdinalReversal() {

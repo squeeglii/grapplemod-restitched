@@ -265,9 +265,8 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     private static int propertyEquipOverride(ItemStack stack, BooleanProperty property) {
-        return GrappleModItems.GRAPPLING_HOOK.get().getCustomization(stack).get(property)
-                ? 1
-                : 0;
+        CustomizationVolume volume = GrappleModItems.GRAPPLING_HOOK.get().getCustomization(stack);
+        return volume.get(property) ? 1 : 0;
     }
 
 

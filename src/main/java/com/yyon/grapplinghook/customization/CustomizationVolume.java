@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import java.util.*;
@@ -17,8 +18,7 @@ import java.util.zip.Checksum;
 
 public final class CustomizationVolume {
 
-	// Order matters for checksum - thus, linked hashmap
-	private LinkedHashMap<CustomizationProperty<?>, Object> values;
+	private HashMap<CustomizationProperty<?>, Object> values;
 
 	
 	public CustomizationVolume() {
@@ -26,7 +26,7 @@ public final class CustomizationVolume {
 	}
 	
 	public void setDefaults() {
-		this.values = new LinkedHashMap<>();
+		this.values = new HashMap<>();
 	}
 
 	@SuppressWarnings("unchecked") // Types are already verified
@@ -68,7 +68,8 @@ public final class CustomizationVolume {
 
 		long recordedChecksum = compound.getLong("crc32");
 		if (this.getChecksum() != recordedChecksum) {
-			GrappleMod.LOGGER.error("Error checksum reading from NBT");
+			String keyCollection = Arrays.toString(propertiesTag.getAllKeys().toArray());
+			GrappleMod.LOGGER.error("Error checksum reading from NBT! Keys present: %s".formatted(keyCollection));
 			this.setDefaults();
 		}
 	}
@@ -105,6 +106,9 @@ public final class CustomizationVolume {
 	@SuppressWarnings("unchecked") // Checks are implemented in CustomizationProperty#equals()
 	public <T> T get(CustomizationProperty<T> property) {
 		if(property == null) return null;
+		if(property.getIdentifier() == null)
+			throw new IllegalStateException("Tried to get unregistered property");
+
 		return (T) this.values.getOrDefault(property, property.getDefaultValue());
 	}
 
@@ -125,16 +129,24 @@ public final class CustomizationVolume {
 	@SuppressWarnings("unchecked") // properties and keys are always consistent in type.
 	public <T> long getChecksum() {
 		Checksum checker = new CRC32();
+		Set<Long> pairs = new HashSet<>();
 
 		this.values.forEach((k, v) -> {
+			CRC32 pairChecker = new CRC32();
 			CustomizationProperty<T> key = (CustomizationProperty<T>) k;
 			T value = (T) v;
 
 			String id = key.getIdentifier().toString();
 
-			checker.update(id.getBytes(StandardCharsets.UTF_8));
-			checker.update(key.valueToChecksumBytes(value));
+			pairChecker.update(id.getBytes(StandardCharsets.UTF_8));
+			pairChecker.update(key.valueToChecksumBytes(value));
+			pairChecker.update(69420);
+			pairs.add(pairChecker.getValue());
 		});
+
+		pairs.stream().sorted()
+				.map(pairChecksum -> ByteBuffer.allocate(8).putLong(pairChecksum).array())
+				.forEach(checker::update);
 
 		checker.update(54902349);
 		return checker.getValue();
