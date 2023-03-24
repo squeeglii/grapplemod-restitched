@@ -41,6 +41,12 @@ public abstract class CustomizationProperty<T> {
 
     public abstract AbstractCustomizationDisplay<T, ? extends CustomizationProperty<T>> getDisplay();
 
+    public final T ifNullDefault(T value) {
+        return value == null
+                ? this.getDefaultValue()
+                : value;
+    }
+
 
     public CustomizationAvailability getAvailability() {
         return this.status;
@@ -95,7 +101,7 @@ public abstract class CustomizationProperty<T> {
 
     @Override
     public final boolean equals(Object obj) {
-        if(!(obj instanceof CustomizationProperty<?> other)) return false;
+        if (!(obj instanceof CustomizationProperty<?> other)) return false;
 
         boolean matchingIDs = this.getIdentifier().equals(other.getIdentifier());
         boolean matchingDefaults = this.getDefaultValue().equals(other.getDefaultValue());

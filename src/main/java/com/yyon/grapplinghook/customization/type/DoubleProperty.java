@@ -1,7 +1,5 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
-import com.yyon.grapplinghook.customization.render.BooleanCustomizationDisplay;
 import com.yyon.grapplinghook.customization.render.DoubleCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -23,28 +21,28 @@ public class DoubleProperty extends CustomizationProperty<Double> {
 
     @Override
     public void encodeValueTo(ByteBuf targetBuffer, Double value) {
-
+        targetBuffer.writeDouble(this.ifNullDefault(value));
     }
 
     @Override
     public Double decodeValueFrom(ByteBuf targetBuffer) {
-        return null;
+        return targetBuffer.readDouble();
     }
 
     @Override
     public void saveValueToTag(CompoundTag nbt, Double value) {
-
+        nbt.putDouble(this.getIdentifier().toString(), this.ifNullDefault(value));
     }
 
     @Override
     public Double loadValueFromTag(CompoundTag nbt) {
-        return null;
+        return nbt.getDouble(this.getIdentifier().toString());
     }
 
     @Override
     public byte[] valueToChecksumBytes(Double value) {
         // https://stackoverflow.com/questions/13071777/convert-double-to-byte-array
-        return ByteBuffer.allocate(8).putDouble(value).array();
+        return ByteBuffer.allocate(8).putDouble(this.ifNullDefault(value)).array();
     }
 
     @Override

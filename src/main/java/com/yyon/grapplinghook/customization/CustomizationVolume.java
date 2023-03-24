@@ -52,10 +52,16 @@ public final class CustomizationVolume {
 		}
 
 		propertiesTag.getAllKeys().forEach(k ->
-			tryParseProperty(k)
-					.ifPresent(property ->
-							this.setUnsafe(property, property.loadValueFromTag(propertiesTag))
-					)
+			tryParseProperty(k).ifPresent(property -> {
+				Object val = property.loadValueFromTag(propertiesTag);
+
+				if(val == null) {
+					GrappleMod.LOGGER.warn("NBT Parse Error: value for item property '%s'".formatted(property.getIdentifier()));
+					return;
+				}
+
+				this.setUnsafe(property, val);
+			})
 		);
 
 		if (!compound.contains("crc32")) return;
