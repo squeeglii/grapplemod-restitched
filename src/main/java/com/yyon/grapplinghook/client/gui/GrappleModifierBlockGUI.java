@@ -167,7 +167,7 @@ public class GrappleModifierBlockGUI extends Screen {
 			int x = 10 + this.guiLeft;
 			int y = this.getNextYPosition();
 
-			AbstractWidget widget = property.getRenderer().getModifierBlockUI(this, x, y);
+			AbstractWidget widget = property.getDisplay().getModifierBlockUI(this, x, y);
 			this.addRenderableWidget(widget);
 			this.options.put(widget, property);
 		});

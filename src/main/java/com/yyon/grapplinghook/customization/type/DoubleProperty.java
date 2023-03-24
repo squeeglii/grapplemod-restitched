@@ -1,6 +1,8 @@
 package com.yyon.grapplinghook.customization.type;
 
 import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
+import com.yyon.grapplinghook.customization.render.BooleanCustomizationDisplay;
+import com.yyon.grapplinghook.customization.render.DoubleCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
@@ -10,11 +12,13 @@ public class DoubleProperty extends CustomizationProperty<Double> {
 
     protected double min;
     protected double max;
+    protected DoubleCustomizationDisplay display;
 
     public DoubleProperty(double defaultValue, double min, double max) {
         super(defaultValue);
         this.min = Math.min(min, max);
         this.max = Math.max(min, max);
+        this.display = null;
     }
 
     @Override
@@ -44,8 +48,11 @@ public class DoubleProperty extends CustomizationProperty<Double> {
     }
 
     @Override
-    public AbstractCustomizationDisplay<Double, CustomizationProperty<Double>> getRenderer() {
-        throw new UnsupportedOperationException("Unimplemented");
+    public DoubleCustomizationDisplay getDisplay() {
+        if(this.display == null)
+            this.display = new DoubleCustomizationDisplay(this);
+
+        return this.display;
     }
 
     public double getMin() {

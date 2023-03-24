@@ -39,7 +39,7 @@ public abstract class CustomizationProperty<T> {
     public abstract T loadValueFromTag(CompoundTag nbt);
     public abstract byte[] valueToChecksumBytes(T value);
 
-    public abstract AbstractCustomizationDisplay<T, CustomizationProperty<T>> getRenderer();
+    public abstract AbstractCustomizationDisplay<T, ? extends CustomizationProperty<T>> getDisplay();
 
 
     public CustomizationAvailability getAvailability() {

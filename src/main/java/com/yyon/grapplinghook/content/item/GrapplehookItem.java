@@ -449,7 +449,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 		if (Screen.hasControlDown()) {
 			for(CustomizationProperty<?> property: custom.getPropertiesPresent()) {
-				Component hintText = property.getRenderer().getModificationHint(custom);
+				Component hintText = property.getDisplay().getModificationHint(custom);
 				if(hintText != null)
 					list.add(hintText);
 			}

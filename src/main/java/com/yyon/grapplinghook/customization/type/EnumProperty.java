@@ -50,7 +50,7 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     }
 
     @Override
-    public AbstractCustomizationDisplay<E, CustomizationProperty<E>> getRenderer() {
+    public AbstractCustomizationDisplay<E, CustomizationProperty<E>> getDisplay() {
         throw new UnsupportedOperationException("Unimplemented");
     }
 
