@@ -96,7 +96,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 				return InteractionResult.FAIL;
 
 			if (tile.isUnlocked(category)) {
-				playerIn.sendSystemMessage(Component.literal("Already has upgrade: " + category.getName()));
+				playerIn.sendSystemMessage(Component.literal("Already has upgrade: ").append(category.getName()));
 
 			} else {
 				if (!playerIn.isCreative())
@@ -104,7 +104,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 				tile.unlockCategory(category);
 
-				playerIn.sendSystemMessage(Component.literal("Applied upgrade: " + category.getName()));
+				playerIn.sendSystemMessage(Component.literal("Applied upgrade: ").append(category.getName()));
 			}
 
 

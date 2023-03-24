@@ -4,6 +4,6 @@ import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories
 
 public class LimitsUpgradeItem extends BaseUpgradeItem {
 	public LimitsUpgradeItem() {
-		super(1, GrappleModCustomizationCategories.LIMITS.get());
+		super(1, GrappleModCustomizationCategories.LIMITS::get);
 	}
 }
