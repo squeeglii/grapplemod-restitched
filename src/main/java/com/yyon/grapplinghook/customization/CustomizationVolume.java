@@ -174,7 +174,7 @@ public final class CustomizationVolume {
 			int idByteCount = buf.readByte();
 			byte[] idBytes = new byte[idByteCount];
 
-			buf.readBytes(idByteCount);
+			buf.readBytes(idBytes);
 
 			String id = new String(idBytes, StandardCharsets.UTF_8);
 			Optional<CustomizationProperty<?>> prop = tryParseProperty(id);
