@@ -24,12 +24,13 @@ public abstract class AbstractRegistryReference<T> {
 
     @SuppressWarnings("unchecked")
     protected void finalize(Object entry) {
-        if(this.entry != null) throw new IllegalStateException("Item is already registered!");
+        if(entry == null) throw new IllegalStateException("Entry cannot be null!");
+        if(this.isRegistered()) throw new IllegalStateException("Entry is already registered!");
 
         try {
             this.entry = (T) entry;
         } catch (ClassCastException err) {
-            throw new IllegalStateException("Item is already registered by a different mod!");
+            throw new IllegalStateException("Entry is already registered by a different mod!");
         }
 
     }

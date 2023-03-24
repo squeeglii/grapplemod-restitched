@@ -17,7 +17,8 @@ import java.util.zip.Checksum;
 
 public final class CustomizationVolume {
 
-	private HashMap<CustomizationProperty<?>, Object> values;
+	// Order matters for checksum - thus, linked hashmap
+	private LinkedHashMap<CustomizationProperty<?>, Object> values;
 
 	
 	public CustomizationVolume() {
@@ -25,7 +26,7 @@ public final class CustomizationVolume {
 	}
 	
 	public void setDefaults() {
-		this.values = new HashMap<>();
+		this.values = new LinkedHashMap<>();
 	}
 
 	@SuppressWarnings("unchecked") // Types are already verified

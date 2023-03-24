@@ -79,7 +79,7 @@ public class GrappleModCustomizationProperties {
     public static final Entry<DoubleProperty> ROCKET_FORCE = property("rocket_force", () -> new DoubleProperty(1.0D, 0.0D, 1.0D));
     public static final Entry<DoubleProperty> ROCKET_FUEL_DEPLETION_RATIO = property("rocket_depletion_ratio", () -> new DoubleProperty(0.5D, 0.0D, 0.5D));
     public static final Entry<DoubleProperty> ROCKET_REFUEL_RATIO = property("rocket_refuel_ratio", () -> new DoubleProperty(15.0D, 15.0D, 30.0D));
-    public static final Entry<DoubleProperty> ROCKET_ANGLE = property("double_hook_angle", () -> new DoubleProperty(0.0D, 0.0D, 90.0D));
+    public static final Entry<DoubleProperty> ROCKET_ANGLE = property("rocket_angle", () -> new DoubleProperty(0.0D, 0.0D, 90.0D));
 
 
     public static class Entry<T extends CustomizationProperty<?>> extends AbstractRegistryReference<T> {
