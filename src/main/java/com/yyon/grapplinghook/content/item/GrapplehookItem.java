@@ -209,7 +209,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		if (stack.getCount() <= 0) return;
 
     	CustomizationVolume custom = this.getCustomization(stack);
-  		double angle = this.getAngle(entityLiving, custom);
+  		double angle = this.getSingleHookAngle(entityLiving, custom);
 
 	    boolean shouldThrowLeft = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
 
@@ -239,8 +239,8 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
     	CustomizationVolume custom = this.getCustomization(stack);
 
-		double angle = this.getAngle(entityLiving, custom);
-		double verticalAngle = this.getDoubleHookAngle(entityLiving, custom);
+		double angle = this.getDoubleHookAngle(entityLiving, custom);
+		double verticalAngle = this.getSingleHookAngle(entityLiving, custom);
 
 		Vec initialAngle = Vec.fromAngles(Math.toRadians(-angle), Math.toRadians(verticalAngle));
 		Vec anglevec = applyHolderRotation(initialAngle, entityLiving);
@@ -258,8 +258,8 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	
 	public boolean throwRight(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
 	    CustomizationVolume custom = this.getCustomization(stack);
-		double angle = this.getAngle(entityLiving, custom);
-  		double verticalAngle = this.getDoubleHookAngle(entityLiving, custom);
+		double angle = this.getDoubleHookAngle(entityLiving, custom);
+  		double verticalAngle = this.getSingleHookAngle(entityLiving, custom);
 
 		boolean isNotDouble = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
 
@@ -335,7 +335,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		PhysicsContextTracker.attached.remove(id);
 	}
 	
-    public double getAngle(LivingEntity entity, CustomizationVolume custom) {
+    public double getSingleHookAngle(LivingEntity entity, CustomizationVolume custom) {
 		return entity.isCrouching()
 				? custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get())
 				: custom.get(HOOK_THROW_ANGLE.get());

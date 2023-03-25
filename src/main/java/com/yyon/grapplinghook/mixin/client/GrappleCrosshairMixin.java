@@ -52,12 +52,12 @@ public class GrappleCrosshairMixin {
 
         if (grapplehookItemStack != null) {
             CustomizationVolume custom = GrappleModItems.GRAPPLING_HOOK.get().getCustomization(grapplehookItemStack);
-            double angle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
-            double verticalAngle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
+            double angle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
+            double verticalAngle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
 
             if (player.isCrouching()) {
-                angle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
-                verticalAngle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
+                angle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE_ON_SNEAK.get()));
+                verticalAngle = Math.toRadians(custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get()));
             }
 
             if (!custom.get(DOUBLE_HOOK_ATTACHED.get()))
