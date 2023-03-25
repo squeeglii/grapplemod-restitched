@@ -74,7 +74,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
     public void render(T hookEntity, float entityYaw, float partialTicks, PoseStack matrix, MultiBufferSource rendertype, int packedLight) {
 		if (hookEntity == null || !hookEntity.isAlive()) return;
 		
-		RopeSegmentHandler ropeHandler = hookEntity.segmentHandler;
+		RopeSegmentHandler ropeHandler = hookEntity.getSegmentHandler();
 
 		if(!(hookEntity.shootingEntity instanceof LivingEntity holder)) return;
 		if (!holder.isAlive()) return;

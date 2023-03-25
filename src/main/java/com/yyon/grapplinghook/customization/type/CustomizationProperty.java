@@ -69,7 +69,7 @@ public abstract class CustomizationProperty<T> {
     public String getLocalization(String suffix) {
         String path = this.getIdentifier().toLanguageKey();
         boolean includeConnectingDot = suffix != null && suffix.length() > 0 && !suffix.startsWith(".");
-        return "grapple_property.%s%s".formatted(path, includeConnectingDot ? "." : "");
+        return "grapple_property.%s%s%s".formatted(path, includeConnectingDot ? "." : "", suffix);
     }
 
     public Component getDisplayName() {

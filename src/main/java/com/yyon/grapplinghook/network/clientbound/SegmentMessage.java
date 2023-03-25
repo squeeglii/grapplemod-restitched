@@ -33,12 +33,12 @@ import net.minecraft.world.level.Level;
 
 public class SegmentMessage extends BaseMessageClient {
    
-	public int id;
-	public boolean add;
-	public int index;
-	public Vec pos;
-	public Direction topFacing;
-	public Direction bottomFacing;
+	private int id;
+	private boolean add;
+	private int index;
+	private Vec pos;
+	private Direction topFacing;
+	private Direction bottomFacing;
 
     public SegmentMessage(FriendlyByteBuf buf) {
     	super(buf);
@@ -89,12 +89,12 @@ public class SegmentMessage extends BaseMessageClient {
     		return;
     	}
     	
-    	if (grapple instanceof GrapplinghookEntity) {
-    		RopeSegmentHandler segmenthandler = ((GrapplinghookEntity) grapple).segmentHandler;
+    	if (grapple instanceof GrapplinghookEntity hookEntity) {
+    		RopeSegmentHandler segmentHandler = hookEntity.getSegmentHandler();
     		if (this.add) {
-    			segmenthandler.actuallyAddSegment(this.index, this.pos, this.bottomFacing, this.topFacing);
+    			segmentHandler.actuallyAddSegment(this.index, this.pos, this.bottomFacing, this.topFacing);
     		} else {
-    			segmenthandler.removeSegment(this.index);
+    			segmentHandler.removeSegment(this.index);
     		}
     	}
     }

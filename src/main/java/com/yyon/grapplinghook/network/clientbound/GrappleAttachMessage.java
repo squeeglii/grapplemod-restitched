@@ -146,10 +146,10 @@ public class GrappleAttachMessage extends BaseMessageClient {
     	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
 
         	grapple.clientAttach(this.x, this.y, this.z);
-        	RopeSegmentHandler segmenthandler = grapple.segmentHandler;
-        	segmenthandler.segments = this.segments;
-        	segmenthandler.segmentBottomSides = this.segmentBottomSides;
-        	segmenthandler.segmentTopSides = this.segmentTopSides;
+        	RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
+        	segmentHandler.segments = this.segments;
+        	segmentHandler.segmentBottomSides = this.segmentBottomSides;
+        	segmentHandler.segmentTopSides = this.segmentTopSides;
         	
         	Entity holder = world.getEntity(this.entityId);
 
@@ -158,7 +158,7 @@ public class GrappleAttachMessage extends BaseMessageClient {
                 return;
             }
 
-        	segmenthandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
+        	segmentHandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
     	}
     	            	
     	GrappleModClient.get().createControl(this.controlId, this.id, this.entityId, world, new Vec(this.x, this.y, this.z), this.blockPos, this.custom);

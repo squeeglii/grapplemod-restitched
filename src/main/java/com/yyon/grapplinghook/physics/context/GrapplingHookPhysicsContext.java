@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import com.yyon.grapplinghook.config.GrappleModConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
@@ -183,21 +184,24 @@ public class GrapplingHookPhysicsContext {
 
 		for (GrapplinghookEntity hookEntity : this.grapplehookEntities) {
 			Vec hookPos = Vec.positionVec(hookEntity);
+			RopeSegmentHandler segmentHandler = hookEntity.getSegmentHandler();
 
 			// Update segment handler (handles rope bends)
 			if (this.custom.get(BLOCK_PHASE_ROPE.get())) {
-				hookEntity.segmentHandler.updatePos(hookPos, playerPos, hookEntity.ropeLength);
+				segmentHandler.updatePos(hookPos, playerPos, hookEntity.ropeLength);
 			} else {
-				hookEntity.segmentHandler.update(hookPos, playerPos, hookEntity.ropeLength, false);
+				segmentHandler.update(hookPos, playerPos, hookEntity.ropeLength, false);
 			}
 
 			// vectors along rope
-			Vec anchor = hookEntity.segmentHandler.getClosest(hookPos);
-			double distToAnchor = hookEntity.segmentHandler.getDistToAnchor();
-			double remaininglength = motor ? Math.max(this.custom.get(MAX_ROPE_LENGTH.get()), hookEntity.ropeLength) - distToAnchor : hookEntity.ropeLength - distToAnchor;
+			Vec anchor = segmentHandler.getClosest(hookPos);
+			double distToAnchor = segmentHandler.getDistToAnchor();
+			double remainingLength = motor
+					? Math.max(this.custom.get(MAX_ROPE_LENGTH.get()), hookEntity.ropeLength) - distToAnchor
+					: hookEntity.ropeLength - distToAnchor;
 
 			Vec oldspherevec = playerPos.sub(anchor);
-			Vec spherevec = oldspherevec.withMagnitude(remaininglength);
+			Vec spherevec = oldspherevec.withMagnitude(remainingLength);
 			Vec spherechange = spherevec.sub(oldspherevec);
 
 			if (spherevec.length() < min_spherevec_dist) {min_spherevec_dist = spherevec.length();}
@@ -209,12 +213,11 @@ public class GrapplingHookPhysicsContext {
 			}
 
 			// snap to rope length
-			if (oldspherevec.length() >= remaininglength) {
-				if (oldspherevec.length() - remaininglength > GrappleModConfig.getConf().grapplinghook.other.rope_snap_buffer) {
+			if (oldspherevec.length() >= remainingLength) {
+				if (oldspherevec.length() - remainingLength > GrappleModConfig.getConf().grapplinghook.other.rope_snap_buffer) {
 					// if rope is too long, the rope snaps
 
 					this.unattach();
-
 					this.updateServerPos();
 					return;
 				} else {
@@ -227,21 +230,19 @@ public class GrapplingHookPhysicsContext {
 			this.applyCalculatedTaut(dist, hookEntity);
 
 			// handle keyboard input (jumping and climbing)
-			if (entity instanceof Player) {
-				Player player = (Player) entity;
-				boolean isjumping = GrappleModClient.get().isKeyDown(GrappleModKey.key_jumpanddetach);
-				isjumping = isjumping && !playerJump; // only jump once when key is first pressed
+			if (entity instanceof Player player) {
+				boolean isJumping = GrappleModClient.get().isKeyDown(GrappleModKey.key_jumpanddetach) && !playerJump;
 				playerJump = GrappleModClient.get().isKeyDown(GrappleModKey.key_jumpanddetach);
-				if (isjumping) {
+
+				if (isJumping && onGroundTimer >= 0) {
 					// jumping
-					if (onGroundTimer >= 0) {
-						double timer = GrappleModClient.get().getTimeSinceLastRopeJump(this.entity.level());
-						if (timer > GrappleModConfig.getConf().grapplinghook.other.rope_jump_cooldown_s * 20.0) {
-							doJump = true;
-							jumpSpeed = this.getJumpPower(player, spherevec, hookEntity);
-						}
+					double timer = GrappleModClient.get().getTimeSinceLastRopeJump(this.entity.level());
+					if (timer > GrappleModConfig.getConf().grapplinghook.other.rope_jump_cooldown_s * 20.0) {
+						doJump = true;
+						jumpSpeed = this.getJumpPower(player, spherevec, hookEntity);
 					}
 				}
+
 				if (GrappleModClient.get().isKeyDown(GrappleModKey.key_slow)) {
 					// slow down
 					Vec motiontorwards = spherevec.withMagnitude(-0.1);
@@ -254,6 +255,7 @@ public class GrapplingHookPhysicsContext {
 					motion = new Vec(newmotion.x, motion.y, newmotion.z);
 
 				}
+
 				if ((GrappleModClient.get().isKeyDown(GrappleModKey.key_climb) || GrappleModClient.get().isKeyDown(GrappleModKey.key_climbup) || GrappleModClient.get().isKeyDown(GrappleModKey.key_climbdown)) && !motor) {
 					isClimbing = true;
 					if (anchor.y > playerPos.y) {
@@ -290,7 +292,7 @@ public class GrapplingHookPhysicsContext {
 			}
 
 			// swing along max rope length
-			if (anchor.sub(playerPos.add(motion)).length() > remaininglength) { // moving away
+			if (anchor.sub(playerPos.add(motion)).length() > remainingLength) { // moving away
 				motion = motion.removeAlong(spherevec);
 			}
 		}
@@ -330,7 +332,7 @@ public class GrapplingHookPhysicsContext {
 			// set all motors to maximum pull and precalculate some stuff for smart motor / smart double motor
 			for (GrapplinghookEntity hookEntity : this.grapplehookEntities) {
 				Vec hookPos = Vec.positionVec(hookEntity);//this.getPositionVector();
-				Vec anchor = hookEntity.segmentHandler.getClosest(hookPos);
+				Vec anchor = hookEntity.getSegmentHandler().getClosest(hookPos);
 				Vec spherevec = playerPos.sub(anchor);
 				Vec pull = spherevec.scale(-1);
 
@@ -377,7 +379,7 @@ public class GrapplingHookPhysicsContext {
 
 				for (GrapplinghookEntity hookEntity : this.grapplehookEntities) {
 					Vec hookPos = Vec.positionVec(hookEntity);
-					Vec anchor = hookEntity.segmentHandler.getClosest(hookPos);
+					Vec anchor = hookEntity.getSegmentHandler().getClosest(hookPos);
 					Vec spherevec = playerPos.sub(anchor);
 					Vec pull = spherevec.scale(-1);
 					pull.mutableSetMagnitude(hookEntity.pull);
@@ -456,7 +458,7 @@ public class GrapplingHookPhysicsContext {
 			if (dopull) {
 				for (GrapplinghookEntity hookEntity : this.grapplehookEntities) {
 					Vec hookPos = Vec.positionVec(hookEntity);
-					Vec anchor = hookEntity.segmentHandler.getClosest(hookPos);
+					Vec anchor = hookEntity.getSegmentHandler().getClosest(hookPos);
 					Vec spherevec = playerPos.sub(anchor);
 					Vec pull = spherevec.scale(-1);
 					pull.mutableSetMagnitude(hookEntity.pull * pullmult);
@@ -725,7 +727,7 @@ public class GrapplingHookPhysicsContext {
 
 	public void addHookEntity(GrapplinghookEntity hookEntity) {
 		this.grapplehookEntities.add(hookEntity);
-		hookEntity.ropeLength = hookEntity.segmentHandler.getDist(Vec.positionVec(hookEntity), Vec.positionVec(entity).add(new Vec(0, entity.getEyeHeight(), 0)));
+		hookEntity.ropeLength = hookEntity.getSegmentHandler().getDist(Vec.positionVec(hookEntity), Vec.positionVec(entity).add(new Vec(0, entity.getEyeHeight(), 0)));
 		this.grapplehookEntityIds.add(hookEntity.getId());
 	}
 

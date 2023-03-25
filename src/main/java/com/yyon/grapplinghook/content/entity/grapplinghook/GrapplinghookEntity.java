@@ -79,9 +79,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	public double ropeLength;
 
-	public RopeSegmentHandler segmentHandler;
+	private final RopeSegmentHandler segmentHandler;
 
-	public CustomizationVolume customization;
+	private CustomizationVolume customization;
 
 	// magnet attract
 	public Vec prevPos = null;
@@ -526,6 +526,14 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
     	} else {
     		return checkedset.get(pos);
     	}
+	}
+
+	public CustomizationVolume getCurrentCustomizations() {
+		return this.customization;
+	}
+
+	public RopeSegmentHandler getSegmentHandler() {
+		return this.segmentHandler;
 	}
 
 	@Override

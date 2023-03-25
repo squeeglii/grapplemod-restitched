@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization.render;
 
+import com.yyon.grapplinghook.client.gui.widget.CustomizationPicker;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.EnumProperty;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -17,17 +18,21 @@ public class EnumCustomizationDisplay<E extends Enum<E>> extends AbstractCustomi
     @Override
     public Component getModificationHint(E value) {
         if(value == null) return null;
+        Component valTranslation = this.getValueTranslationKey(value);
+        return this.getProperty().getDisplayName().copy().append(": ").append(valTranslation);
+    }
 
-        Component translation = Component.translatable("enum.%s.%s".formatted(
+    public Component getValueTranslationKey(E value) {
+        return Component.translatable("enum.%s.%s".formatted(
                 this.getProperty().getIdentifier().toLanguageKey(),
-                value.name().toLowerCase())
-        );
-
-        return this.getProperty().getDisplayName().copy().append(": ").append(translation);
+                value == null
+                        ? "null"
+                        : value.name().toLowerCase()
+        ));
     }
 
     @Override
     public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
-        return null;
+        return new CustomizationPicker<>(context, source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
     }
 }
