@@ -186,15 +186,15 @@ public class GrapplingHookPhysicsContext {
 
 			// Update segment handler (handles rope bends)
 			if (this.custom.get(BLOCK_PHASE_ROPE.get())) {
-				hookEntity.segmentHandler.updatePos(hookPos, playerPos, hookEntity.r);
+				hookEntity.segmentHandler.updatePos(hookPos, playerPos, hookEntity.ropeLength);
 			} else {
-				hookEntity.segmentHandler.update(hookPos, playerPos, hookEntity.r, false);
+				hookEntity.segmentHandler.update(hookPos, playerPos, hookEntity.ropeLength, false);
 			}
 
 			// vectors along rope
 			Vec anchor = hookEntity.segmentHandler.getClosest(hookPos);
 			double distToAnchor = hookEntity.segmentHandler.getDistToAnchor();
-			double remaininglength = motor ? Math.max(this.custom.get(MAX_ROPE_LENGTH.get()), hookEntity.r) - distToAnchor : hookEntity.r - distToAnchor;
+			double remaininglength = motor ? Math.max(this.custom.get(MAX_ROPE_LENGTH.get()), hookEntity.ropeLength) - distToAnchor : hookEntity.ropeLength - distToAnchor;
 
 			Vec oldspherevec = playerPos.sub(anchor);
 			Vec spherevec = oldspherevec.withMagnitude(remaininglength);
@@ -205,7 +205,7 @@ public class GrapplingHookPhysicsContext {
 			averagemotiontowards.mutableAdd(spherevec.withMagnitude(-1));
 
 			if (motor) {
-				hookEntity.r = distToAnchor + oldspherevec.length();
+				hookEntity.ropeLength = distToAnchor + oldspherevec.length();
 			}
 
 			// snap to rope length
@@ -270,10 +270,10 @@ public class GrapplingHookPhysicsContext {
 						else if (GrappleModClient.get().isKeyDown(GrappleModKey.key_climbdown)) { climbup = -1.0; }
 						if (climbup != 0) {
 								if (dist + distToAnchor < maxLen || climbup > 0 || maxLen == 0) {
-									hookEntity.r = dist + distToAnchor;
-									hookEntity.r -= climbup* GrappleModConfig.getConf().grapplinghook.other.climb_speed;
-									if (hookEntity.r < distToAnchor) {
-										hookEntity.r = dist + distToAnchor;
+									hookEntity.ropeLength = dist + distToAnchor;
+									hookEntity.ropeLength -= climbup* GrappleModConfig.getConf().grapplinghook.other.climb_speed;
+									if (hookEntity.ropeLength < distToAnchor) {
+										hookEntity.ropeLength = dist + distToAnchor;
 									}
 
 									Vec additionalmovementdown = spherevec.withMagnitude(-climbup * GrappleModConfig.getConf().grapplinghook.other.climb_speed).proj(new Vec(0,1,0));
@@ -306,7 +306,7 @@ public class GrapplingHookPhysicsContext {
 			if (this.custom.get(DOUBLE_HOOK_ATTACHED.get()) && this.grapplehookEntities.size() == 1) {
 				boolean isdouble = true;
 				for (GrapplinghookEntity hookEntity : this.grapplehookEntities) {
-					if (!hookEntity.isDouble) {
+					if (!hookEntity.isInDoublePair) {
 						isdouble = false;
 						break;
 					}
@@ -400,7 +400,7 @@ public class GrapplingHookPhysicsContext {
 						}
 						totalPull.mutableAdd(pull.withMagnitude(hookEntity.pull));
 					} else {
-						if (hookEntity.isDouble) {
+						if (hookEntity.isInDoublePair) {
 							if (!this.custom.get(SINGLE_ROPE_PULL.get())) {
 								dopull = false;
 							}
@@ -527,8 +527,8 @@ public class GrapplingHookPhysicsContext {
 	public void applyCalculatedTaut(double dist, GrapplinghookEntity hookEntity) {
 		if (hookEntity == null) return;
 
-		hookEntity.taut = dist < hookEntity.r
-				? Math.max(0, 1 - ((hookEntity.r - dist) / 5))
+		hookEntity.taut = dist < hookEntity.ropeLength
+				? Math.max(0, 1 - ((hookEntity.ropeLength - dist) / 5))
 				: 1.0d;
 	}
 
@@ -668,7 +668,7 @@ public class GrapplingHookPhysicsContext {
 		if (spherevec != null && spherevec.y > 0) {
 			jumppower = 0;
 		}
-		if ((hookEntity != null) && hookEntity.r < 1 && (player.position().y < hookEntity.position().y)) {
+		if ((hookEntity != null) && hookEntity.ropeLength < 1 && (player.position().y < hookEntity.position().y)) {
 			jumppower = maxjump;
 		}
 
@@ -725,7 +725,7 @@ public class GrapplingHookPhysicsContext {
 
 	public void addHookEntity(GrapplinghookEntity hookEntity) {
 		this.grapplehookEntities.add(hookEntity);
-		hookEntity.r = hookEntity.segmentHandler.getDist(Vec.positionVec(hookEntity), Vec.positionVec(entity).add(new Vec(0, entity.getEyeHeight(), 0)));
+		hookEntity.ropeLength = hookEntity.segmentHandler.getDist(Vec.positionVec(hookEntity), Vec.positionVec(entity).add(new Vec(0, entity.getEyeHeight(), 0)));
 		this.grapplehookEntityIds.add(hookEntity.getId());
 	}
 

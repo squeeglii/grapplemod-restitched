@@ -75,11 +75,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	public double taut = 1;
 
-	public boolean ignoreFrustumCheck = true;
+	public boolean isInDoublePair = false;
 
-	public boolean isDouble = false;
-
-	public double r;
+	public double ropeLength;
 
 	public RopeSegmentHandler segmentHandler;
 
@@ -100,22 +98,22 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.customization = new CustomizationVolume();
 	}
 
-	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean righthand, CustomizationVolume customization, boolean isdouble) {
+	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean rightHand, CustomizationVolume customization, boolean isInDoublePair) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
 		
 		this.shootingEntity = shooter;
 		this.shootingEntityID = this.shootingEntity.getId();
 		
-		this.isDouble = isdouble;
+		this.isInDoublePair = isInDoublePair;
 		
 		Vec pos = Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0));
 
 		this.segmentHandler = new RopeSegmentHandler(this.level(), this, new Vec(pos), new Vec(pos));
 
 		this.customization = customization;
-		this.r = customization.get(MAX_ROPE_LENGTH.get());
+		this.ropeLength = customization.get(MAX_ROPE_LENGTH.get());
 		
-		this.rightHand = righthand;
+		this.rightHand = rightHand;
 	}
 
 
@@ -124,7 +122,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
     public void writeSpawnData(FriendlyByteBuf data) {
 	    data.writeInt(this.shootingEntity != null ? this.shootingEntity.getId() : 0);
 	    data.writeBoolean(this.rightHand);
-	    data.writeBoolean(this.isDouble);
+	    data.writeBoolean(this.isInDoublePair);
 	    if (this.customization == null) {
 	    	GrappleMod.LOGGER.warn("error: customization null");
 	    }
@@ -136,7 +134,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
     	this.shootingEntityID = data.readInt();
 	    this.shootingEntity = this.level().getEntity(this.shootingEntityID);
 	    this.rightHand = data.readBoolean();
-	    this.isDouble = data.readBoolean();
+	    this.isInDoublePair = data.readBoolean();
 	    this.customization = new CustomizationVolume();
 	    this.customization.readFromBuf(data);
     }
@@ -176,13 +174,13 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		if (!this.level().isClientSide) {
 			if (this.shootingEntity != null)  {
 				if (!this.attached) {
-					if (this.segmentHandler.hookPastBend(this.r)) {
+					if (this.segmentHandler.hookPastBend(this.ropeLength)) {
 						Vec farthest = this.segmentHandler.getFarthest();
 						this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
 					}
 					
 					if (!this.customization.get(BLOCK_PHASE_ROPE.get())) {
-						this.segmentHandler.update(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.r, true);
+						this.segmentHandler.update(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.ropeLength, true);
 						
 						if (this.customization.get(STICKY_ROPE.get())) {
 							if (this.segmentHandler.segments.size() > 2) {
@@ -196,7 +194,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 							}
 						}
 					} else {
-						this.segmentHandler.updatePos(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.r);
+						this.segmentHandler.updatePos(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.ropeLength);
 					}
 					
 					Vec farthest = this.segmentHandler.getFarthest();
@@ -208,12 +206,12 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 					if (this.customization.get(HOOK_REEL_IN_ON_SNEAK.get()) && this.shootingEntity.isCrouching()) {
 						double newdist = d + distToFarthest - 0.4;
 						if (newdist > 1 && newdist <= this.customization.get(MAX_ROPE_LENGTH.get())) {
-							this.r = newdist;
+							this.ropeLength = newdist;
 						}
 					}
 
 
-					if (d + distToFarthest > this.r) {
+					if (d + distToFarthest > this.ropeLength) {
 						Vec motion = Vec.motionVec(this);
 						
 						if (motion.dot(ropevec) > 0) {
@@ -222,7 +220,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 						
 						this.setVelocityActually(motion.x, motion.y, motion.z);
 						
-						ropevec.mutableSetMagnitude(this.r - distToFarthest);
+						ropevec.mutableSetMagnitude(this.ropeLength - distToFarthest);
 						Vec newpos = ropevec.add(farthest);
 						
 						this.setPos(newpos.x, newpos.y, newpos.z);
@@ -297,7 +295,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	public void shoot(Vec direction, double speed, float inaccuracy) {
-		super.shoot(direction.getX(), direction.getY(), direction.getZ(), (float) speed, inaccuracy);
+		this.shoot(direction.getX(), direction.getY(), direction.getZ(), (float) speed, inaccuracy);
 	}
 
 	public void setVelocityActually(double x, double y, double z) {
