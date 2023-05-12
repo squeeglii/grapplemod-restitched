@@ -896,13 +896,13 @@ public class GrapplingHookPhysicsContext {
 
 	public boolean isWallRunning() {
 		double currentSpeed = Math.sqrt(Math.pow(this.motion.x, 2) + Math.pow(this.motion.z,  2));
-		if (currentSpeed < GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
+		if (currentSpeed <= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
 			this.isOnWall = false;
 			return false;
 		}
 		
 		if (this.isOnWall) {
-			GrappleModClient.get().setWallrunTicks(GrappleModClient.get().getWallrunTicks()+1);
+			GrappleModClient.get().setWallrunTicks(GrappleModClient.get().getWallrunTicks() + 1);
 		}
 		
 		if (GrappleModClient.get().getWallrunTicks() < GrappleModLegacyConfig.getConf().enchantments.wallrun.max_wallrun_time * 40) {
@@ -922,7 +922,7 @@ public class GrapplingHookPhysicsContext {
 			this.isOnWall = false;
 		}
 		
-		if (GrappleModClient.get().getWallrunTicks() > 0 && (this.entity.onGround() || (!this.entity.horizontalCollision && !wallNearby(0.2)))) {
+		if (GrappleModClient.get().getWallrunTicks() > 0 && (this.entity.onGround() || (!this.entity.horizontalCollision && !this.wallNearby(0.2)))) {
 			this.ticksSinceLastWallrunSoundEffect = 0;
 		}
 		
