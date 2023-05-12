@@ -6,7 +6,9 @@ import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LadderBlock;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
 
@@ -49,6 +51,10 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 			this.unattach();
 			this.updateServerPos();
 			return;
+		}
+
+		if (entity instanceof LivingEntity e && e.onClimbable()) {
+			this.unattach();
 		}
 
 		Vec additionalmotion = new Vec(0,0,0);
@@ -159,10 +165,6 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 			Vec newmotion;
 
 			newmotion = motion.add(additionalmotion);
-
-//			if (wallrun) {
-//				newmotion.add_ip(this.walldirection);
-//			}
 
 			newmotion.applyAsMotionTo(entity);
 

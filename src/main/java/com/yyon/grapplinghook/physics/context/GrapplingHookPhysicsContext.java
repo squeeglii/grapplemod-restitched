@@ -1028,6 +1028,7 @@ public class GrapplingHookPhysicsContext {
 
 		this.motion.y += GrappleModLegacyConfig.getConf().enchantments.doublejump.doublejumpforce;
 		this.motion.applyAsMotionTo(this.entity);
+		this.entity.resetFallDistance();
 	}
 	
 	public void applySlidingFriction() {
