@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.LoggedInMessage;
 import net.minecraft.network.Connection;
@@ -16,7 +16,7 @@ public class ServerConfigSyncMixin {
 
     @Inject(method = "placeNewPlayer(Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;)V", at = @At("TAIL"))
     public void onLogin(Connection netManager, ServerPlayer player, CallbackInfo ci) {
-        NetworkManager.packetToClient(new LoggedInMessage(GrappleModConfig.getConf()), player);
+        NetworkManager.packetToClient(new LoggedInMessage(GrappleModLegacyConfig.getConf()), player);
     }
 
 }

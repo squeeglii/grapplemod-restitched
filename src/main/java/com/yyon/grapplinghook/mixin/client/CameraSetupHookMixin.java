@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
 import com.yyon.grapplinghook.util.Vec;
@@ -56,7 +56,7 @@ public class CameraSetupHookMixin {
         if (currentCameraTilt != targetCameraTilt) {
             float cameraDiff = targetCameraTilt - currentCameraTilt;
             if (cameraDiff != 0) {
-                float anim_s = GrappleModConfig.getClientConf().camera.wallrun_camera_animation_s;
+                float anim_s = GrappleModLegacyConfig.getClientConf().camera.wallrun_camera_animation_s;
                 float speed = (anim_s == 0) ? 9999 :  1.0f / (anim_s * 20.0f);
                 if (speed > Math.abs(cameraDiff)) {
                     currentCameraTilt = targetCameraTilt;

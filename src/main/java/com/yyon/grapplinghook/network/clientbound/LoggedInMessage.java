@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -30,13 +30,13 @@ import java.util.Comparator;
  */
 
 public class LoggedInMessage extends BaseMessageClient {
-    GrappleModConfig.Config conf;
+    GrappleModLegacyConfig.Config conf;
 
     public LoggedInMessage(FriendlyByteBuf buf) {
     	super(buf);
     }
     
-    public LoggedInMessage(GrappleModConfig.Config serverconf) {
+    public LoggedInMessage(GrappleModLegacyConfig.Config serverconf) {
     	this.conf = serverconf;
     }
 
@@ -76,8 +76,8 @@ public class LoggedInMessage extends BaseMessageClient {
 
 	@Override
     public void decode(FriendlyByteBuf buf) {
-    	Class<GrappleModConfig.Config> confclass = GrappleModConfig.Config.class;
-    	this.conf = new GrappleModConfig.Config();
+    	Class<GrappleModLegacyConfig.Config> confclass = GrappleModLegacyConfig.Config.class;
+    	this.conf = new GrappleModLegacyConfig.Config();
     	
     	decodeClass(buf, confclass, this.conf);
     }
@@ -114,7 +114,7 @@ public class LoggedInMessage extends BaseMessageClient {
 
 	@Override
     public void encode(FriendlyByteBuf buf) {
-    	Class<GrappleModConfig.Config> confclass = GrappleModConfig.Config.class;
+    	Class<GrappleModLegacyConfig.Config> confclass = GrappleModLegacyConfig.Config.class;
     	encodeClass(buf, confclass, this.conf);
     }
 
@@ -125,6 +125,6 @@ public class LoggedInMessage extends BaseMessageClient {
 
 	@Override
 	public void processMessage(NetworkContext ctx) {
-    	GrappleModConfig.setServerOptions(this.conf);
+    	GrappleModLegacyConfig.setServerOptions(this.conf);
     }
 }

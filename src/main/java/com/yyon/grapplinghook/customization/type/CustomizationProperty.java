@@ -12,9 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 
 public abstract class CustomizationProperty<T> {
 
+    private T defaultValue;
     private CustomizationAvailability status; // config can update this at any time.
 
-    private final T defaultValue;
     private final CustomizationPredicate<?> validityPredicate;
 
     public CustomizationProperty(T defaultValue) {
@@ -48,8 +48,10 @@ public abstract class CustomizationProperty<T> {
     }
 
 
-    public CustomizationAvailability getAvailability() {
-        return this.status;
+
+    public CustomizationProperty<T> setDefaultValue(T defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
     }
 
     public CustomizationProperty<T> setAvailability(CustomizationAvailability status) {
@@ -58,12 +60,21 @@ public abstract class CustomizationProperty<T> {
     }
 
 
+
+    public final T getDefaultValue() {
+        return this.defaultValue;
+    }
+
+    public CustomizationAvailability getAvailability() {
+        return this.status;
+    }
+
     public final ResourceLocation getIdentifier() {
         return GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES.getKey(this);
     }
 
-    public final T getDefaultValue() {
-        return this.defaultValue;
+    public CustomizationPredicate<?> getValidityPredicate() {
+        return this.validityPredicate;
     }
 
     public String getLocalization(String suffix) {
@@ -84,10 +95,6 @@ public abstract class CustomizationProperty<T> {
         return id == null
                 ? Component.literal("grapple_property.invalid.desc")
                 : Component.translatable(this.getLocalization("desc"));
-    }
-
-    public CustomizationPredicate<?> getValidityPredicate() {
-        return this.validityPredicate;
     }
 
     @Override

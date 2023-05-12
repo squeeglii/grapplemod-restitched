@@ -5,15 +5,14 @@ import com.yyon.grapplinghook.customization.CustomizationCategory;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 public class GrappleModCustomizationCategories {
 
-    private static final HashMap<ResourceLocation, Entry<?>> categories;
+    private static final HashMap<ResourceLocation, Entry<? extends CustomizationCategory>> categories;
 
     static {
         categories = new HashMap<>();
@@ -91,6 +90,10 @@ public class GrappleModCustomizationCategories {
             ROCKET_ATTACHED.get(), ROCKET_FORCE.get(), ROCKET_ANGLE.get(),
             ROCKET_FUEL_DEPLETION_RATIO.get(), ROCKET_REFUEL_RATIO.get()
     ));
+
+    public static Set<Entry<? extends CustomizationCategory>> getModCategories() {
+        return Set.copyOf(categories.values());
+    }
 
 
     public static class Entry<T extends CustomizationCategory> extends AbstractRegistryReference<T> {

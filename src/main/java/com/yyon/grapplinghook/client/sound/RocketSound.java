@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.client.sound;
 
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -20,7 +20,7 @@ public final class RocketSound extends AbstractTickableSoundInstance {
         this.looping = true;
         this.controller = controller;
 
-        this.changeSpeed = GrappleModConfig.getClientConf().sounds.rocket_sound_volume * 0.5F * 0.2F;
+        this.changeSpeed = GrappleModLegacyConfig.getClientConf().sounds.rocket_sound_volume * 0.5F * 0.2F;
         this.volume = this.changeSpeed;
         this.delay = 0;
         this.attenuation = SoundInstance.Attenuation.NONE;
@@ -34,7 +34,7 @@ public final class RocketSound extends AbstractTickableSoundInstance {
 
         float targetVolume = this.isStopping
                 ? 0
-                : (float) controller.getRocketProgression() * GrappleModConfig.getClientConf().sounds.rocket_sound_volume * 0.5F;
+                : (float) controller.getRocketProgression() * GrappleModLegacyConfig.getClientConf().sounds.rocket_sound_volume * 0.5F;
 
         float diff = Math.abs(targetVolume - this.volume);
         this.volume = diff > changeSpeed

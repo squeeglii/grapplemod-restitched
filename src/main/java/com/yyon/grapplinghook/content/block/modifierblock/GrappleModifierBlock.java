@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.block.modifierblock;
 
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
@@ -129,7 +129,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 				return InteractionResult.PASS;
 			}
 
-			if (!GrappleModConfig.getConf().longfallboots.longfallbootsrecipe)
+			if (!GrappleModLegacyConfig.getConf().longfallboots.longfallbootsrecipe)
 				return InteractionResult.SUCCESS;
 
 			boolean gaveitem = false;

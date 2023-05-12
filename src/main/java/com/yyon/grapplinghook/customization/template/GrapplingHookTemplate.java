@@ -1,11 +1,12 @@
 package com.yyon.grapplinghook.customization.template;
 
-import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationAvailability;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
@@ -38,7 +39,7 @@ public class GrapplingHookTemplate {
 
 
     public static final GrapplingHookTemplate ENDER_HOOK = register(new GrapplingHookTemplate(
-            "ender_hook",
+            "ender_hook", Component.translatable("grapple_template.ender_hook.name"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -46,7 +47,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate MOTOR_HOOK = register(new GrapplingHookTemplate(
-            "motor_hook",
+            "motor_hook", Component.translatable("grapple_template.motor_hook.name"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -55,7 +56,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate SMART_HOOK = register(new GrapplingHookTemplate(
-            "smart_hook",
+            "smart_hook", Component.translatable("grapple_template.smart_hook.name"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -65,7 +66,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate MAGNET_HOOK = register(new GrapplingHookTemplate(
-            "magnet_hook",
+            "magnet_hook", Component.translatable("grapple_template.magnet_hook.name"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -74,7 +75,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate ROCKET_HOOK = register(new GrapplingHookTemplate(
-            "rocket_hook",
+            "rocket_hook", Component.translatable("grapple_template.rocket_hook.name"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -82,7 +83,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate DOUBLE_MOTOR_HOOK = register(new GrapplingHookTemplate(
-            "double_motor_hook",
+            "double_motor_hook", Component.translatable("grapple_template.double_motor_hook.name"),
             property(HOOK_THROW_SPEED, 20.0d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -106,7 +107,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate DOUBLE_ROCKET_MOTOR_HOOK = register(new GrapplingHookTemplate(
-            "double_rocket_motor_hook",
+            "double_rocket_motor_hook", Component.translatable("grapple_template.double_rocket_motor_hook.name"),
             property(HOOK_THROW_SPEED, 20.0d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -134,15 +135,25 @@ public class GrapplingHookTemplate {
 
 
     private final String identifier;
+    private final Component displayName;
     private final Set<PropertyOverride<?>> properties;
 
     private GrapplingHookTemplate(String identifier, PropertyOverride<?>... properties) {
+        this(identifier, null, properties);
+    }
+
+    private GrapplingHookTemplate(String identifier, Component displayName, PropertyOverride<?>... properties) {
         this.identifier = identifier;
+        this.displayName = displayName;
         this.properties = Set.of(properties);
     }
 
     public String getId() {
-        return identifier;
+        return this.identifier;
+    }
+
+    public Component getDisplayName() {
+        return this.displayName;
     }
 
     public boolean isEnabled() {
@@ -159,6 +170,8 @@ public class GrapplingHookTemplate {
 
     public ItemStack getAsStack() {
         ItemStack itemStack = GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance();
+        if(this.getDisplayName() != null)
+            itemStack.setHoverName(this.getDisplayName().copy().withStyle(ChatFormatting.RESET));
         GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(itemStack, this.getCustomizations());
 
         return itemStack;

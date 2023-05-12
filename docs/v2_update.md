@@ -1,22 +1,34 @@
 # V2 Changelist Guide
 
 ### User facing changes
- - Merged boolean customizations now use a drop down.
+
+ - Merged some boolean customizations into multi-option customizations
+   - They now have a button in the customization screen that cycles
  - Most customization translation keys have changed.
 
+
 ### Internal Customization Rewrite:
+
  - Properties & Categories now use a registry, thus they're much more extensible.
  - All grappling hook properties/configuration ids have been changed
    - All are now namespaced (starting with `grapplemod:`)
    - Some have seen changes for consistency `enderstaff` -> `ender_staff`
    - There's now a hard limit of 128 characters on their length.
  - All grappling hook category ids are now namespaced
- - Packets & NBT no longer store all properties
+
+ - Properties are no longer restricted to booleans and doubles.
+   - Some boolean pairs of properties have been merged together into a new Enum type.
+   - Any type is now possible, as long as an encoder, decoder, and checksum calculator can be written for it.
+   - Any hardcoded checks for booleans or doubles should've been abstracted away into common interfaces.
+ 
+ - Packets & NBT (because of CustomizationVolume changes) no longer store all properties
    - If a value is equal to a property's default, it is omitted.
    - Packets now include a property's id, followed by its value.
    - Packets no longer send the keys in a fixed order
- - Properties are no longer restricted to booleans and doubles.
-   - Some boolean pairs of properties have been merged together into a new Enum type.
+ 
+ - Calculations for crc32 have been changed.
+   - Shouldn't affect packets but all previous checksums in NBT will no longer match
+   - Datafixers will ignore old checksums and calculate new ones..
 
  - NBT structure has changed for grappling hooks.
    - Before:

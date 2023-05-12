@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
 import com.yyon.grapplinghook.client.sound.RocketSound;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
 import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
@@ -123,7 +123,7 @@ public class ClientPhysicsContextTracker {
 
 		long timer = GrappleModUtils.getTime(player.level()) - previousTime;
 
-		if (timer > GrappleModConfig.getConf().enderstaff.ender_staff_recharge) {
+		if (timer > GrappleModLegacyConfig.getConf().enderstaff.ender_staff_recharge) {
 			ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
 			ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
 			Item mainHandItem = mainHandStack.getItem();
@@ -150,9 +150,9 @@ public class ClientPhysicsContextTracker {
 				this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, custom);
 			}
 
-			facing.mutableScale(GrappleModConfig.getConf().enderstaff.ender_staff_strength);
+			facing.mutableScale(GrappleModLegacyConfig.getConf().enderstaff.ender_staff_strength);
 			ClientPhysicsContextTracker.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
-			GrappleModClient.get().playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleModConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
+			GrappleModClient.get().playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleModLegacyConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
 		}
 	}
 	
@@ -194,7 +194,7 @@ public class ClientPhysicsContextTracker {
 					BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 					if (rayTraceResult == null) {
 						double currentSpeed = Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.z,  2));
-						if (currentSpeed >= GrappleModConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
+						if (currentSpeed >= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
 							return true;
 						}
 					}
@@ -297,7 +297,7 @@ public class ClientPhysicsContextTracker {
 			}
 
 			double speed = motion.removeAlong(new Vec (0,1,0)).length();
-			return speed > GrappleModConfig.getConf().enchantments.slide.sliding_end_min_speed && (wasSliding || speed > GrappleModConfig.getConf().enchantments.slide.sliding_min_speed);
+			return speed > GrappleModLegacyConfig.getConf().enchantments.slide.sliding_end_min_speed && (wasSliding || speed > GrappleModLegacyConfig.getConf().enchantments.slide.sliding_min_speed);
 
 		}
 		

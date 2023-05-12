@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.physics.context;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.world.entity.Entity;
@@ -53,7 +53,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 
 		Vec additionalmotion = new Vec(0,0,0);
 
-		if (GrappleModConfig.getConf().other.dont_override_movement_in_air && !entity.onGround() && !wasSliding && !wasWallrunning && !wasRocket && !firstTickSinceCreated) {
+		if (GrappleModLegacyConfig.getConf().other.dont_override_movement_in_air && !entity.onGround() && !wasSliding && !wasWallrunning && !wasRocket && !firstTickSinceCreated) {
 			motion = Vec.motionVec(entity);
 			this.unattach();
 			return;
@@ -102,12 +102,12 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 					if (this.getWallDirection() != null)
 						motion = motion.removeAlong(this.getWallDirection());
 
-					Vec new_movement = this.playerMovement.withMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed*1.5);
+					Vec new_movement = this.playerMovement.withMagnitude(GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_speed*1.5);
 					if (this.getWallDirection() != null) {
 						new_movement = new_movement.removeAlong(this.getWallDirection());
 					}
-					if (new_movement.length() > GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed) {
-						new_movement.mutableSetMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_speed);
+					if (new_movement.length() > GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_speed) {
+						new_movement.mutableSetMagnitude(GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_speed);
 					}
 					Vec current_motion_along = this.motion.removeAlong(new Vec(0,1,0));
 					Vec new_motion_along = this.motion.add(new_movement).removeAlong(new Vec(0,1,0));
@@ -117,16 +117,16 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 						new_motion_along = new_motion_along.removeAlong(this.getWallDirection());
 					}
 
-					if (current_motion_along.length() <= GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed || current_motion_along.dot(new_movement) < 0) {
+					if (current_motion_along.length() <= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_max_speed || current_motion_along.dot(new_movement) < 0) {
 						motion.mutableAdd(new_movement);
-						if (new_motion_along.length() > GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed) {
-							this.motion.mutableSetMagnitude(GrappleModConfig.getConf().enchantments.wallrun.wallrun_max_speed);
+						if (new_motion_along.length() > GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_max_speed) {
+							this.motion.mutableSetMagnitude(GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_max_speed);
 						}
 					}
 					additionalmotion.mutableAdd(wallrunPressAgainstWall());
 				} else {
-					double max_motion = GrappleModConfig.getConf().other.airstrafe_max_speed;
-					double accel = GrappleModConfig.getConf().other.airstrafe_acceleration;
+					double max_motion = GrappleModLegacyConfig.getConf().other.airstrafe_max_speed;
+					double accel = GrappleModLegacyConfig.getConf().other.airstrafe_acceleration;
 					Vec motion_horizontal = motion.removeAlong(new Vec(0,1,0));
 					double prev_motion = motion_horizontal.length();
 					Vec new_motion_horizontal = motion_horizontal.add(this.playerMovement.withMagnitude(accel));

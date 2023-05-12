@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.content.item;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
 import com.yyon.grapplinghook.client.keybind.MinecraftKey;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
@@ -63,7 +63,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
 	
 	public GrapplehookItem() {
-		super(new Item.Properties().stacksTo(1).durability(GrappleModConfig.getConf().grapplinghook.other.default_durability));
+		super(new Item.Properties().stacksTo(1).durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability));
 	}
 
 	public boolean hasHookEntity(Entity entity) {

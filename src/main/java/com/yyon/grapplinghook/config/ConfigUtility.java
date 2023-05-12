@@ -45,9 +45,9 @@ public class ConfigUtility {
 	}
 	
 	public static void updateGrapplingBlocks() {
-		String s = GrappleModConfig.getConf().grapplinghook.blocks.grapplingBlocks;
+		String s = GrappleModLegacyConfig.getConf().grapplinghook.blocks.grapplingBlocks;
 		if (s.equals("any") || s.equals("")) {
-			s = GrappleModConfig.getConf().grapplinghook.blocks.grapplingNonBlocks;
+			s = GrappleModLegacyConfig.getConf().grapplinghook.blocks.grapplingNonBlocks;
 			if (s.equals("none") || s.equals("")) {
 				anyBlocks = true;
 			} else {
@@ -63,7 +63,7 @@ public class ConfigUtility {
 			grapplingBlocks = stringToBlocks(s);
 		}
 		
-		grapplingBreaksBlocks = stringToBlocks(GrappleModConfig.getConf().grapplinghook.blocks.grappleBreakBlocks);
+		grapplingBreaksBlocks = stringToBlocks(GrappleModLegacyConfig.getConf().grapplinghook.blocks.grappleBreakBlocks);
 		anyBreakBlocks = grapplingBreaksBlocks.size() != 0;
 		
 	}
@@ -71,7 +71,7 @@ public class ConfigUtility {
 	private static String prevGrapplingBlocks = null;
 	private static String prevGrapplingNonBlocks = null;
 	public static boolean attachesBlock(Block block) {
-		if (!GrappleModConfig.getConf().grapplinghook.blocks.grapplingBlocks.equals(prevGrapplingBlocks) || !GrappleModConfig.getConf().grapplinghook.blocks.grapplingNonBlocks.equals(prevGrapplingNonBlocks)) {
+		if (!GrappleModLegacyConfig.getConf().grapplinghook.blocks.grapplingBlocks.equals(prevGrapplingBlocks) || !GrappleModLegacyConfig.getConf().grapplinghook.blocks.grapplingNonBlocks.equals(prevGrapplingNonBlocks)) {
 			updateGrapplingBlocks();
 		}
 		
@@ -90,7 +90,7 @@ public class ConfigUtility {
 
 	private static String prevGrapplingBreakBlocks = null;
 	public static boolean breaksBlock(Block block) {
-		if (!GrappleModConfig.getConf().grapplinghook.blocks.grappleBreakBlocks.equals(prevGrapplingBreakBlocks)) {
+		if (!GrappleModLegacyConfig.getConf().grapplinghook.blocks.grappleBreakBlocks.equals(prevGrapplingBreakBlocks)) {
 			updateGrapplingBlocks();
 		}
 		

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.content.enchantment;
 
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.config.ConfigUtility;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class SlidingEnchantment extends Enchantment {
 	public SlidingEnchantment() {
-		super(ConfigUtility.getRarityFromInt(GrappleModConfig.getConf().enchantments.slide.enchant_rarity_sliding), EnchantmentCategory.ARMOR_FEET, new EquipmentSlot[] {EquipmentSlot.FEET});
+		super(ConfigUtility.getRarityFromInt(GrappleModLegacyConfig.getConf().enchantments.slide.enchant_rarity_sliding), EnchantmentCategory.ARMOR_FEET, new EquipmentSlot[] {EquipmentSlot.FEET});
 	}
 	
 	@Override

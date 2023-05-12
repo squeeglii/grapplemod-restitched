@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
 import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
 import com.yyon.grapplinghook.content.registry.GrappleModBlocks;
 import net.minecraft.client.Minecraft;
@@ -68,7 +68,7 @@ public class ClientHookMixin {
 
     @Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V"))
     public void handleLogOut(Screen pScreen, CallbackInfo ci) {
-        GrappleModConfig.setServerOptions(null);
+        GrappleModLegacyConfig.setServerOptions(null);
     }
 
 

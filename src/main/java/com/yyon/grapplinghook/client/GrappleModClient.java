@@ -6,9 +6,8 @@ import com.yyon.grapplinghook.client.keybind.GrappleModKey;
 import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
-import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
 import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
@@ -157,15 +156,15 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     public void playSlideSound() {
-        this.playSound(GrappleModClient.SOUND_SLIDE, GrappleModConfig.getClientConf().sounds.slide_sound_volume);
+        this.playSound(GrappleModClient.SOUND_SLIDE, GrappleModLegacyConfig.getClientConf().sounds.slide_sound_volume);
     }
 
     public void playDoubleJumpSound() {
-        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModConfig.getClientConf().sounds.doublejump_sound_volume * 0.7F);
+        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModLegacyConfig.getClientConf().sounds.doublejump_sound_volume * 0.7F);
     }
 
     public void playWallrunJumpSound() {
-        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModConfig.getClientConf().sounds.wallrunjump_sound_volume * 0.7F);
+        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModLegacyConfig.getClientConf().sounds.wallrunjump_sound_volume * 0.7F);
     }
 
     public void resetLauncherTime(int playerId) {

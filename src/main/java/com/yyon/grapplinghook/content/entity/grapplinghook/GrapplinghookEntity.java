@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.entity.grapplinghook;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.config.ConfigUtility;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
@@ -344,7 +344,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			Vec vec3d = Vec.positionVec(this);
 	        Vec vec3d1 = vec3d.add(Vec.motionVec(this));
 
-			if (movingobjectposition instanceof EntityHitResult && !GrappleModConfig.getConf().grapplinghook.other.hookaffectsentities) {
+			if (movingobjectposition instanceof EntityHitResult && !GrappleModLegacyConfig.getConf().grapplinghook.other.hookaffectsentities) {
 				onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 		        return;
 			}

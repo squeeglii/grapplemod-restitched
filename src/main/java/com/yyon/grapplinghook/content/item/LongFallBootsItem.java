@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.content.item;
 
-import com.yyon.grapplinghook.config.GrappleModConfig;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
@@ -36,7 +36,7 @@ public class LongFallBootsItem extends ArmorItem {
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
 		if (!stack.isEnchanted()) {
-			if (GrappleModConfig.getConf().longfallboots.longfallbootsrecipe) {
+			if (GrappleModLegacyConfig.getConf().longfallboots.longfallbootsrecipe) {
 				list.add(Component.translatable("grappletooltip.longfallbootsrecipe.desc"));
 			}
 		}
