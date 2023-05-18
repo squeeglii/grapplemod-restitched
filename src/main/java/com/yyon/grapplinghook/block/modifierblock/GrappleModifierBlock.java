@@ -28,11 +28,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ import java.util.Map;
 public class GrappleModifierBlock extends BaseEntityBlock {
 
 	public GrappleModifierBlock() {
-		super(Block.Properties.of(Material.STONE).strength(1.5f));
+		super(Block.Properties.copy(Blocks.STONE).strength(1.5f));
 	}
 
 
@@ -54,13 +54,13 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new GrappleModifierBlockEntity(pos,state);
 	}
-	
+
 	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder lootContext) {
+	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 		List<ItemStack> drops = new ArrayList<>();
 		drops.add(new ItemStack(this.asItem()));
 
-		BlockEntity ent = lootContext.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+		BlockEntity ent = builder.getParameter(LootContextParams.BLOCK_ENTITY);
 
 		if (!(ent instanceof GrappleModifierBlockEntity tile)) return drops;
 

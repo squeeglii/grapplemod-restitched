@@ -91,7 +91,7 @@ public class ClientHookMixin {
         if (result != null && result.getType() == HitResult.Type.BLOCK) {
             BlockHitResult bray = (BlockHitResult) result;
             BlockPos pos = bray.getBlockPos();
-            BlockState state = player.level.getBlockState(pos);
+            BlockState state = player.level().getBlockState(pos);
 
             return (state.getBlock() == GrappleModBlocks.GRAPPLE_MODIFIER.get());
         }

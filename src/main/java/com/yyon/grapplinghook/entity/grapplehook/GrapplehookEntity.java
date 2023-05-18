@@ -62,7 +62,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	public GrapplehookEntity(EntityType<? extends GrapplehookEntity> type, Level world) {
 		super(type, world);
 
-		this.segmentHandler = new SegmentHandler(this.level, this, Vec.positionVec(this), Vec.positionVec(this));
+		this.segmentHandler = new SegmentHandler(this.level(), this, Vec.positionVec(this), Vec.positionVec(this));
 		this.customization = new GrappleCustomization();
 	}
 
@@ -76,7 +76,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 		
 		Vec pos = Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0));
 
-		this.segmentHandler = new SegmentHandler(this.level, this, new Vec(pos), new Vec(pos));
+		this.segmentHandler = new SegmentHandler(this.level(), this, new Vec(pos), new Vec(pos));
 
 		this.customization = customization;
 		this.r = customization.maxlen;
@@ -130,7 +130,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	@Override
     public void readSpawnData(FriendlyByteBuf data) {
     	this.shootingEntityID = data.readInt();
-	    this.shootingEntity = this.level.getEntity(this.shootingEntityID);
+	    this.shootingEntity = this.level().getEntity(this.shootingEntityID);
 	    this.rightHand = data.readBoolean();
 	    this.isDouble = data.readBoolean();
 	    this.customization = new GrappleCustomization();
@@ -169,7 +169,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 		
 		super.tick();
 		
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.shootingEntity != null)  {
 				if (!this.attached) {
 					if (this.segmentHandler.hookPastBend(this.r)) {
@@ -232,7 +232,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 		if (!this.attached && this.customization.attract && Vec.positionVec(this).sub(Vec.positionVec(this.shootingEntity)).length() > this.customization.attractradius) {
 	    	if (this.shootingEntity == null) {return;}
 	    	if (!this.foundBlock) {
-	    		if (!this.level.isClientSide) {
+	    		if (!this.level().isClientSide) {
 	    			Vec playerpos = Vec.positionVec(this.shootingEntity);
 	    			Vec pos = Vec.positionVec(this);
 	    			if (magnetBlock == null) {
@@ -269,8 +269,8 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	    			}
 	    			
 	    			if (magnetBlock != null) {
-				    	BlockState blockstate = this.level.getBlockState(magnetBlock);
-				    	VoxelShape BB = blockstate.getCollisionShape(this.level, magnetBlock);
+				    	BlockState blockstate = this.level().getBlockState(magnetBlock);
+				    	VoxelShape BB = blockstate.getCollisionShape(this.level(), magnetBlock);
 
 						Vec blockvec = new Vec(magnetBlock.getX() + (BB.max(Axis.X) + BB.min(Axis.X)) / 2, magnetBlock.getY() + (BB.max(Axis.Y) + BB.min(Axis.Y)) / 2, magnetBlock.getZ() + (BB.max(Axis.Z) + BB.min(Axis.Z)) / 2);
 						Vec newvel = blockvec.sub(pos);
@@ -325,7 +325,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 
 	@Override
 	protected void onHit(HitResult movingobjectposition) {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.attached) {
 				return;
 			}
@@ -340,7 +340,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	        Vec vec3d1 = vec3d.add(Vec.motionVec(this));
 
 			if (movingobjectposition instanceof EntityHitResult && !GrappleConfig.getConf().grapplinghook.other.hookaffectsentities) {
-				onHit(GrappleModUtils.rayTraceBlocks(this, this.level, vec3d, vec3d1));
+				onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 		        return;
 			}
 			
@@ -351,10 +351,10 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 			
 			if (blockhit != null) {
 				BlockPos blockpos = blockhit.getBlockPos();
-				Block block = this.level.getBlockState(blockpos).getBlock();
+				Block block = this.level().getBlockState(blockpos).getBlock();
 				if (GrappleConfigUtils.breaksBlock(block)) {
-					this.level.destroyBlock(blockpos, true);
-					onHit(GrappleModUtils.rayTraceBlocks(this, this.level, vec3d, vec3d1));
+					this.level().destroyBlock(blockpos, true);
+					onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 					return;
 				}
 			}
@@ -402,7 +402,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 		this.attached = true;
 		
 		if (blockpos != null) {
-			Block block = this.level.getBlockState(blockpos).getBlock();
+			Block block = this.level().getBlockState(blockpos).getBlock();
 
 			if (!GrappleConfigUtils.attachesBlock(block)) {
 				this.removeServer();
@@ -442,10 +442,10 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 		this.firstAttach = true;
 		ServerControllerManager.attached.add(this.shootingEntityID);
 		
-		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level);
+		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
 		
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
-		NetworkManager.packetToClient(msg, GrappleModUtils.getChunkPlayers((ServerLevel) this.level, new Vec(this.position())));
+		NetworkManager.packetToClient(msg, GrappleModUtils.getChunkPlayers((ServerLevel) this.level(), new Vec(this.position())));
 	}
 	
 	public void clientAttach(double x, double y, double z) {
@@ -506,11 +506,11 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IExten
 	public boolean hasBlock(BlockPos pos, HashMap<BlockPos, Boolean> checkedset) {
     	if (!checkedset.containsKey(pos)) {
     		boolean isblock = false;
-	    	BlockState blockstate = this.level.getBlockState(pos);
+	    	BlockState blockstate = this.level().getBlockState(pos);
 	    	Block b = blockstate.getBlock();
 			if (GrappleConfigUtils.attachesBlock(b)) {
 		    	if (!(blockstate.isAir())) {
-			    	VoxelShape BB = blockstate.getCollisionShape(this.level, pos);
+			    	VoxelShape BB = blockstate.getCollisionShape(this.level(), pos);
 			    	if (!BB.isEmpty()) {
 			    		isblock = true;
 			    	}

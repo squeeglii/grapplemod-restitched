@@ -10,8 +10,10 @@ import com.yyon.grapplinghook.registry.GrappleModItems;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -29,8 +31,11 @@ public class GrappleCrosshairMixin {
     @Final @Shadow
     private Minecraft minecraft;
 
-    @Inject(method = "renderCrosshair(Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIII)V", shift = At.Shift.AFTER, ordinal = 0))
-    public void renderModCrosshair(PoseStack matrices, CallbackInfo ci) {
+    @Final @Shadow
+    private static ResourceLocation GUI_ICONS_LOCATION;
+
+    @Inject(method = "renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V", shift = At.Shift.AFTER, ordinal = 0))
+    public void renderModCrosshair(GuiGraphics guiGraphics, CallbackInfo ci) {
 
         LocalPlayer player = this.minecraft.player;
         ItemStack grapplehookItemStack = null;
@@ -67,15 +72,15 @@ public class GrappleCrosshairMixin {
                 int offset = (int) (Math.tan(angle) * l);
                 int verticalOffset = (int) (-Math.tan(verticalAngle) * l);
 
-                this.drawCrosshair(matrices, w / 2 + offset, h / 2 + verticalOffset);
+                this.drawCrosshair(guiGraphics, w / 2 + offset, h / 2 + verticalOffset);
                 if (angle != 0) {
-                    this.drawCrosshair(matrices, w / 2 - offset, h / 2 + verticalOffset);
+                    this.drawCrosshair(guiGraphics, w / 2 - offset, h / 2 + verticalOffset);
                 }
             }
 
             if (custom.rocket && custom.rocket_vertical_angle != 0) {
                 int verticalOffset = (int) (-Math.tan(Math.toRadians(custom.rocket_vertical_angle)) * l);
-                this.drawCrosshair(matrices, w / 2, h / 2 + verticalOffset);
+                this.drawCrosshair(guiGraphics, w / 2, h / 2 + verticalOffset);
             }
         }
 
@@ -98,9 +103,9 @@ public class GrappleCrosshairMixin {
     }
 
 
-    private void drawCrosshair(PoseStack mStack, int x, int y) {
+    private void drawCrosshair(GuiGraphics guiGraphics, int x, int y) {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        Minecraft.getInstance().gui.blit(mStack, (int) (x - (15.0F/2)), (int) (y - (15.0F/2)), 0, 0, 15, 15);
+        guiGraphics.blit(GUI_ICONS_LOCATION, (int) (x - (15.0F/2)), (int) (y - (15.0F/2)), 0, 0, 15, 15);
         RenderSystem.defaultBlendFunc();
     }
 
