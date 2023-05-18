@@ -7,6 +7,8 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.SharedConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import org.apache.logging.log4j.LogManager;
@@ -40,18 +42,23 @@ public class GrappleMod implements ModInitializer {
     public static final String MODID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    private static boolean configSuccessfullyInitialized = false;
+
     @Override
     public void onInitialize() {
-        ConfigHolder<?> cfg = AutoConfig.register(GrappleConfig.class, GsonConfigSerializer::new);
-        cfg.registerSaveListener((holder, config) -> {
-            GrappleModItems.invalidateCreativeTabCache();
-            return InteractionResult.SUCCESS;
-        });
 
-        cfg.registerLoadListener((holder, config) -> {
-            GrappleModItems.invalidateCreativeTabCache();
-            return InteractionResult.SUCCESS;
-        });
+        try {
+            this.initConfig();
+            configSuccessfullyInitialized = true;
+
+            // Block rendering of config if snapshot as that's the most likely thing
+            // to break.
+            if(SharedConstants.SNAPSHOT)
+                configSuccessfullyInitialized = false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         GrappleModBlocks.registerAllBlocks();
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
@@ -62,10 +69,27 @@ public class GrappleMod implements ModInitializer {
         NetworkManager.registerPacketListeners();
     }
 
+    private void initConfig() {
+        ConfigHolder<?> cfg = AutoConfig.register(GrappleConfig.class, GsonConfigSerializer::new);
+        cfg.registerSaveListener((holder, config) -> {
+            GrappleModItems.invalidateCreativeTabCache();
+            return InteractionResult.SUCCESS;
+        });
+
+        cfg.registerLoadListener((holder, config) -> {
+            GrappleModItems.invalidateCreativeTabCache();
+            return InteractionResult.SUCCESS;
+        });
+    }
+
     public static ResourceLocation id(String id) {
         return new ResourceLocation(MODID, id);
     }
     public static ResourceLocation fakeId(String id) {
         return new ResourceLocation("minecraft", id);
+    }
+
+    public static boolean isConfigSuccessfullyInitialized() {
+        return configSuccessfullyInitialized;
     }
 }

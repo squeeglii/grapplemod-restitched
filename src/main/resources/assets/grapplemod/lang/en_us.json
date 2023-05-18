@@ -521,5 +521,8 @@
     "grapplemod.upgradecategories.rocket": "Rocket",
     
     "grapplemod.jei_modifier_text": "Add upgrade(s), open\ninterface to customize,\nthen apply to hook",
-    "pack.grapplemod.original": "Classic Textures"
+    "pack.grapplemod.original": "Classic Textures",
+
+    "grapplemod.config.failed_integration.title":  "No Valid Config Support!",
+    "grapplemod.config.failed_integration.description": "The Grappling Hook Mod's config is disabled in snapshots - do not report this as a bug!"
 }
