@@ -58,7 +58,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
     public void processMessage(NetworkContext ctx) {
 		// Block Entities must be obtained on the main thread.
 		ctx.getServer().execute(() -> {
-			Level w = ctx.getSender().getLevel();
+			Level w = ctx.getSender().level();
 			BlockEntity ent = w.getBlockEntity(this.pos);
 
 			if (ent instanceof GrappleModifierBlockEntity e) {
@@ -66,7 +66,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
 				return;
 			}
 
-			GrappleMod.LOGGER.warn("Wrong type! is null: %s, pos: %s, isClient: %s".formatted(ent == null, this.pos, ctx.getSender().level.isClientSide));
+			GrappleMod.LOGGER.warn("Wrong type! is null: %s, pos: %s, isClient: %s".formatted(ent == null, this.pos, ctx.getSender().level().isClientSide));
 		});
 	}
 }

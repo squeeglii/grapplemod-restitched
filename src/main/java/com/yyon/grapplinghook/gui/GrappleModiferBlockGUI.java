@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -142,12 +143,12 @@ public class GrappleModiferBlockGUI extends Screen {
 		public BackgroundWidget(int x, int y, int w, int h) {
 			this(x, y, w, h, Component.literal(""));
 		}
-		
-	    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-			RenderSystem.setShaderTexture(0,texture);
+
+		@Override
+		public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			this.blit(stack, this.getX(), this.getY(), 0, 0, this.width, this.height);
-	    }
+			guiGraphics.blit(texture, this.getX(), this.getY(), 0, 0, this.width, this.height);
+		}
 
 		@Override
 		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
@@ -169,12 +170,13 @@ public class GrappleModiferBlockGUI extends Screen {
 		public TextWidget(int posX, int posY, int sizeVertical, int sizeHorizontal, Component text) {
 			super(posX, posY, sizeVertical, sizeHorizontal, text);
 		}
-		
+
 		public TextWidget(Component text, int x, int y) {
 			this(x, y, 50, 15 * text.getString().split("\n").length + 5, text);
 		}
-		
-		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+
+		@Override
+		public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 			Minecraft minecraft = Minecraft.getInstance();
 			Font fontRenderer = minecraft.font;
 			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
@@ -185,7 +187,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			int colour = this.active ? 16777215 : 10526880;
 			int lineno = 0;
 			for (String s : this.getMessage().getString().split("\n")) {
-				drawString(stack, fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
+				guiGraphics.drawString(fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
 				lineno++;
 			}
 		}
@@ -254,9 +256,10 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 		
 		@Override
-		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-			super.renderWidget(stack, mouseX, mouseY, partialTick);
-			
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+			Minecraft minecraft = Minecraft.getInstance();
+
 			if (this.isHovered) {
 				String tooltipText = tooltip.getString();
 				ArrayList<Component> lines = new ArrayList<>();
@@ -265,7 +268,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					lines.add(Component.literal(line));
 
 
-				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
+				guiGraphics.renderTooltip(minecraft.font, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}
@@ -306,20 +309,23 @@ public class GrappleModiferBlockGUI extends Screen {
 //			d = Math.floor(d * 10 + 0.5) / 10;
 			customization.setDouble(option, this.val);
 		}
-		
+
 		@Override
-		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-			super.renderWidget(stack, mouseX, mouseY, partialTick);
-			
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+			Minecraft minecraft = Minecraft.getInstance();
+
 			if (this.isHovered) {
 				String tooltiptext = tooltip.getString();
 				ArrayList<Component> lines = new ArrayList<>();
 				for (String line : tooltiptext.split("\n")) {
 					lines.add(Component.literal(line));
 				}
-				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
+
+				guiGraphics.renderTooltip(minecraft.font, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
+
 	}
 	
 	public void addSlider(String option) {

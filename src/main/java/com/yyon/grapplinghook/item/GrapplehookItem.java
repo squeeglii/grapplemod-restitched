@@ -115,7 +115,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 	@Override
 	public void onCustomKeyDown(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
-		if (player.level.isClientSide) {
+		if (player.level().isClientSide) {
 			if (key == KeypressItem.Keys.LAUNCHER) {
 				if (this.getCustomization(stack).enderstaff) {
 					GrappleModClient.get().launchPlayer(player);
@@ -133,7 +133,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	    	GrappleCustomization custom = this.getCustomization(stack);
 
 			if (key == KeypressItem.Keys.THROWBOTH || (!custom.doublehook && (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT))) {
-	        	throwBoth(stack, player.level, player, ismainhand);
+	        	throwBoth(stack, player.level(), player, ismainhand);
 
 			} else if (key == KeypressItem.Keys.THROWLEFT) {
 				GrapplehookEntity hookLeft = getHookEntityLeft(player);
@@ -148,10 +148,10 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 					return;
 				}
 				
-				boolean threw = throwLeft(stack, player.level, player, ismainhand);
+				boolean threw = throwLeft(stack, player.level(), player, ismainhand);
 
 				if (threw) {
-			        player.level.playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (player.getRandom().nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
+			        player.level().playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (player.getRandom().nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 				}
 
 			} else if (key == KeypressItem.Keys.THROWRIGHT) {
@@ -167,16 +167,16 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 					return;
 				}
 				
-				throwRight(stack, player.level, player, ismainhand);
+				throwRight(stack, player.level(), player, ismainhand);
 
-		        player.level.playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (player.getRandom().nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
+		        player.level().playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (player.getRandom().nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 			}
 		}
 	}
 	
 	@Override
 	public void onCustomKeyUp(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
-		if (player.level.isClientSide) {
+		if (player.level().isClientSide) {
 			if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
 				NetworkManager.packetToServer(new KeypressMessage(key, false));
 			}
@@ -225,7 +225,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
     	}
 		throwRight(stack, worldIn, entityLiving, righthand);
 
-		entityLiving.level.playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
+		entityLiving.level().playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 	}
 	
 	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
@@ -312,7 +312,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		}
 
 		int id = entityLiving.getId();
-		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level);
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level());
 
 		ServerControllerManager.attached.remove(id);
 	}
@@ -330,9 +330,9 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		
 		// remove controller if hook is attached
 		if (getHookEntityRight(entityLiving) == null) {
-			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level());
 		}
 
 		ServerControllerManager.attached.remove(id);
@@ -351,9 +351,9 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		
 		// remove controller if hook is attached
 		if (getHookEntityLeft(entityLiving) == null) {
-			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level);
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level());
 		}
 
 		ServerControllerManager.attached.remove(id);
@@ -507,9 +507,9 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	@Override
 	public void onDroppedByPlayer(ItemStack item, Player player) {
 		int id = player.getId();
-		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level);
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
 		
-		if (!player.level.isClientSide) {
+		if (!player.level().isClientSide) {
 			ServerControllerManager.attached.remove(id);
 		}
 		

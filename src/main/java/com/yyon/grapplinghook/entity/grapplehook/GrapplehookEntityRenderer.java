@@ -160,7 +160,7 @@ public class GrapplehookEntityRenderer<T extends GrapplehookEntity> extends Enti
 		
 		// draw hook
 		ItemStack stack = this.getStackToRender();
-		BakedModel bakedmodel = context.getItemRenderer().getModel(stack, hookEntity.level, null, hookEntity.getId());
+		BakedModel bakedmodel = context.getItemRenderer().getModel(stack, hookEntity.level(), null, hookEntity.getId());
 
 		if(RENDER_GRAPPLE_HOOK)
 			context.getItemRenderer()

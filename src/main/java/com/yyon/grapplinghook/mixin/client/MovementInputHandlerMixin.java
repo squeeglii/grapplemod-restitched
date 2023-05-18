@@ -32,7 +32,7 @@ public class MovementInputHandlerMixin {
             control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.jumping, input.shiftKeyDown);
 
             boolean overrideMovement = true;
-            if (Minecraft.getInstance().player.isOnGround()) {
+            if (Minecraft.getInstance().player.onGround()) {
                 if (!(control instanceof AirfrictionController) && !(control instanceof ForcefieldController)) {
                     overrideMovement = false;
                 }

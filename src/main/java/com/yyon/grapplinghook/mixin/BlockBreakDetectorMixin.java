@@ -21,7 +21,7 @@ public class BlockBreakDetectorMixin {
     @Shadow
     protected ServerPlayer player;
 
-    @Inject(method = "destroyBlock(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "HEAD", shift = At.Shift.BY, by = 1), cancellable = true)
+    @Inject(method = "destroyBlock(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "HEAD", shift = At.Shift.AFTER), cancellable = true)
     public void handleBlockBreak(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (player == null) return;
 
