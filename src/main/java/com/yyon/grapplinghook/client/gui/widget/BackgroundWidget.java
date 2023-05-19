@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.client.gui.widget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.GrappleMod;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -25,10 +25,9 @@ public class BackgroundWidget extends AbstractWidget {
         this(x, y, w, h, Component.literal(""));
     }
 
-    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
-        RenderSystem.setShaderTexture(0, BG_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        GuiComponent.blit(stack, this.getX(), this.getY(), 0, 0, this.width, this.height);
+    @Override
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.blit(BG_TEXTURE, this.getX(), this.getY(), 0, 0, this.width, this.height);
     }
 
     @Override

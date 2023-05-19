@@ -2,6 +2,8 @@ package com.yyon.grapplinghook.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;
 
@@ -40,12 +42,12 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
     }
 
     @Override
-    public void renderWidget(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        super.renderWidget(matrix, mouseX, mouseY, partialTicks);
-        if (this.isHovered) this.displayTooltip(this.context, matrix, mouseX, mouseY);
+    public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+        super.renderWidget(gui, mouseX, mouseY, partialTicks);
+        if (this.isHovered) this.displayTooltip(Minecraft.getInstance().font, gui, mouseX, mouseY);
     }
 
-    public Component getTooltip() {
+    public Component getTooltipText() {
         return this.tooltipText;
     }
 
