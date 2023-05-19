@@ -895,13 +895,13 @@ public class GrappleController {
 	
 	public boolean isWallRunning() {
 		double current_speed = Math.sqrt(Math.pow(this.motion.x, 2) + Math.pow(this.motion.z,  2));
-		if (current_speed < GrappleConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
+		if (current_speed <= GrappleConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
 			isOnWall = false;
 			return false;
 		}
 		
 		if (isOnWall) {
-			GrappleModClient.get().setWallrunTicks(GrappleModClient.get().getWallrunTicks()+1);
+			GrappleModClient.get().setWallrunTicks(GrappleModClient.get().getWallrunTicks() + 1);
 		}
 		
 		if (GrappleModClient.get().getWallrunTicks() < GrappleConfig.getConf().enchantments.wallrun.max_wallrun_time * 40) {
@@ -1024,6 +1024,7 @@ public class GrappleController {
 		}
 		this.motion.y += GrappleConfig.getConf().enchantments.doublejump.doublejumpforce;
 		motion.setMotion(this.entity);
+		this.entity.resetFallDistance();
 	}
 	
 	public void applySlidingFriction() {
