@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.client.ClientControllerManager;
 import com.yyon.grapplinghook.config.GrappleConfig;
 import com.yyon.grapplinghook.controller.AirfrictionController;
 import com.yyon.grapplinghook.controller.GrappleController;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class CameraSetupHookMixin {
+
 
     private float currentCameraTilt = 0;
 
@@ -63,7 +64,7 @@ public class CameraSetupHookMixin {
         if (this.currentCameraTilt == 0) return;
 
         float angle = this.currentCameraTilt * GrappleConfig.getClientConf().camera.wallrun_camera_tilt_degrees;
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(angle));
+        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(angle));
     }
 
 }
