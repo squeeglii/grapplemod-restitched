@@ -6,8 +6,6 @@ import com.yyon.grapplinghook.customization.CustomizationCategory;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.DropdownBoxEntry;
-import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.EnumSelectorBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screens.Screen;
@@ -67,7 +65,7 @@ public class GrappleModConfig {
                     .build()
             );
 
-            categorySub.add() // default value provider
+            //TODOL categorySub.add() // default value provider
             // extra providers
 
             builder.add(categorySub.build());

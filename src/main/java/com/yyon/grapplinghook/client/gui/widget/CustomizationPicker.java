@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.EnumProperty;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -49,17 +50,16 @@ public class CustomizationPicker<E extends Enum<E>> extends AbstractButton imple
     }
 
     @Override
-    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
-        AbstractWidget.drawString(
-                poseStack,
+    public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+        super.renderWidget(gui, mouseX, mouseY, partialTicks);
+        gui.drawString(
                 Minecraft.getInstance().font,
                 this.option.getDisplayName(),
                 this.getX() + this.getWidth() + 4,
                 this.getY() + (this.height - 8) / 2,
                 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
 
-        if (this.isHovered) this.displayTooltip(this.context, poseStack, mouseX, mouseY);
+        if (this.isHovered) this.displayTooltip(Minecraft.getInstance().font, gui, mouseX, mouseY);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class CustomizationPicker<E extends Enum<E>> extends AbstractButton imple
     }
 
     @Override
-    public Component getTooltip() {
+    public Component getTooltipText() {
         return this.tooltipOverride == null
                 ? this.option.getDescription()
                 : this.tooltipOverride;

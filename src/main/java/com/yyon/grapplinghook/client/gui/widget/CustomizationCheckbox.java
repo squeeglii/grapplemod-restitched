@@ -45,7 +45,7 @@ public class CustomizationCheckbox extends Checkbox implements CustomTooltipHand
     }
 
     @Override
-    public Component getTooltip() {
+    public Component getTooltipText() {
         return this.tooltipOverride == null
                 ? this.option.getDescription()
                 : this.tooltipOverride;
