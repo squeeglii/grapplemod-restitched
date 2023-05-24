@@ -15,7 +15,7 @@ public class GrappleModCustomizationCategories {
     private static final HashMap<ResourceLocation, Entry<? extends CustomizationCategory>> categories;
 
     static {
-        categories = new HashMap<>();
+        categories = new LinkedHashMap<>();
     }
 
     public static <P extends CustomizationCategory> Entry<P> category(String id, Supplier<P> type) {

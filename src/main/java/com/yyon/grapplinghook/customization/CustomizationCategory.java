@@ -6,16 +6,18 @@ import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CustomizationCategory {
 
     private final BaseUpgradeItem upgradeItem;
-    private final CustomizationProperty<?>[] linkedProperties;
+    private final List<CustomizationProperty<?>> linkedProperties;
 
     public CustomizationCategory(BaseUpgradeItem upgradeItem, CustomizationProperty<?>... unlocks) {
         this.upgradeItem = upgradeItem;
-        this.linkedProperties = unlocks;
+        this.linkedProperties = List.of(unlocks);
     }
 
 
@@ -42,10 +44,10 @@ public class CustomizationCategory {
     }
 
     public Set<CustomizationProperty<?>> getLinkedProperties() {
-        return Set.of(this.linkedProperties);
+        return new LinkedHashSet<>(this.linkedProperties);
     }
 
     public boolean shouldRender() {
-        return this.linkedProperties.length > 0;
+        return !this.linkedProperties.isEmpty();
     }
 }

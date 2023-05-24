@@ -7,6 +7,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -16,7 +17,7 @@ public class GrappleModCustomizationProperties {
     private static final HashMap<ResourceLocation, Entry<?>> properties;
 
     static {
-        properties = new HashMap<>();
+        properties = new LinkedHashMap<>();
     }
 
     private static <P extends CustomizationProperty<?>> Entry<P> property(String id, Supplier<P> type) {
