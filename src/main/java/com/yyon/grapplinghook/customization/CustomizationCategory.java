@@ -22,7 +22,7 @@ public class CustomizationCategory {
     public String getLocalization(String suffix) {
         String path = this.getIdentifier().toString().replaceAll("[:/\\\\]", ".");
         boolean includeConnectingDot = suffix != null && suffix.length() > 0 && !suffix.startsWith(".");
-        return "grapple_category.%s%s".formatted(path, includeConnectingDot ? "." : "");
+        return "grapple_category%s%s".formatted(includeConnectingDot ? "." : "", path);
     }
 
     public ResourceLocation getIdentifier() {
