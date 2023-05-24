@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.customization.render;
 import com.yyon.grapplinghook.client.gui.widget.CustomizationPicker;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.EnumProperty;
+import com.yyon.grapplinghook.util.FriendlyNameProvider;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -23,8 +24,12 @@ public class EnumCustomizationDisplay<E extends Enum<E>> extends AbstractCustomi
     }
 
     public Component getValueTranslationKey(E value) {
+        String type = value instanceof FriendlyNameProvider friendly
+                ? friendly.getFriendlyName()
+                : this.getProperty().getIdentifier().toLanguageKey();
+
         return Component.translatable("enum.%s.%s".formatted(
-                this.getProperty().getIdentifier().toLanguageKey(),
+                type,
                 value == null
                         ? "null"
                         : value.name().toLowerCase()
