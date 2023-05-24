@@ -33,6 +33,6 @@ public class EnumCustomizationDisplay<E extends Enum<E>> extends AbstractCustomi
 
     @Override
     public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
-        return new CustomizationPicker<>(context, source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
+        return new CustomizationPicker<>(source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
     }
 }

@@ -24,6 +24,6 @@ public class DoubleCustomizationDisplay extends AbstractCustomizationDisplay<Dou
 
     @Override
     public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
-        return new CustomizationSlider(context, source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
+        return new CustomizationSlider(source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
     }
 }

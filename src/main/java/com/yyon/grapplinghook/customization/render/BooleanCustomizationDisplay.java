@@ -26,7 +26,7 @@ public class BooleanCustomizationDisplay extends AbstractCustomizationDisplay<Bo
 
     @Override
     public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
-        return new CustomizationCheckbox(context, source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
+        return new CustomizationCheckbox(source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
     }
 
 }

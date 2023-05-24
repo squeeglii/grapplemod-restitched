@@ -1,12 +1,10 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.DoubleProperty;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -14,15 +12,14 @@ import java.util.function.Supplier;
 
 public class CustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
     private final DoubleProperty option;
-    private final Screen context;
     private final Supplier<CustomizationVolume> customizations;
     private final Runnable onValueUpdate;
 
     private Component tooltipOverride;
 
-    public CustomizationSlider(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
+    public CustomizationSlider(Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
         super(x, y, w, h, option.getDisplayName(), (convertDouble(customizations.get(), option) - option.getMin()) / (option.getMax() - option.getMin()));
-        this.context = context;
+
         this.option = option;
         this.customizations = customizations;
         this.onValueUpdate = onValueUpdate;
@@ -52,7 +49,6 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
     @Override
     public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
         super.renderWidget(gui, mouseX, mouseY, partialTicks);
-        if (this.isHovered) this.displayTooltip(Minecraft.getInstance().font, gui, mouseX, mouseY);
     }
 
     @Override
@@ -65,6 +61,7 @@ public class CustomizationSlider extends AbstractSliderButton implements CustomT
     @Override
     public void setTooltipOverride(Component tooltipText) {
         this.tooltipOverride = tooltipText;
+        this.setTooltip(Tooltip.create(this.getTooltipText()));
     }
 
     private static double convertDouble(CustomizationVolume volume, DoubleProperty optionString) {

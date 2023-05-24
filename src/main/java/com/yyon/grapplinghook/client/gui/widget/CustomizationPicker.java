@@ -1,14 +1,12 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.EnumProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
@@ -17,16 +15,14 @@ import java.util.function.Supplier;
 public class CustomizationPicker<E extends Enum<E>> extends AbstractButton implements CustomTooltipHandler {
 
     private final EnumProperty<E> option;
-    private final Screen context;
     private final Supplier<CustomizationVolume> customizations;
 
     private final Runnable onValueUpdated;
     private Component tooltipOverride;
 
-    public CustomizationPicker(Screen context, Supplier<CustomizationVolume> customizations, int x, int y, int width, int height, EnumProperty<E> option, Runnable onValueUpdate) {
+    public CustomizationPicker(Supplier<CustomizationVolume> customizations, int x, int y, int width, int height, EnumProperty<E> option, Runnable onValueUpdate) {
         super(x, y, width / 2, height, currentValue(customizations.get(), option));
 
-        this.context = context;
         this.customizations = customizations;
         this.option = option;
         this.onValueUpdated = onValueUpdate;
@@ -58,8 +54,6 @@ public class CustomizationPicker<E extends Enum<E>> extends AbstractButton imple
                 this.getX() + this.getWidth() + 4,
                 this.getY() + (this.height - 8) / 2,
                 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
-
-        if (this.isHovered) this.displayTooltip(Minecraft.getInstance().font, gui, mouseX, mouseY);
     }
 
     @Override
@@ -82,5 +76,6 @@ public class CustomizationPicker<E extends Enum<E>> extends AbstractButton imple
     @Override
     public void setTooltipOverride(Component tooltipText) {
         this.tooltipOverride = tooltipText;
+        this.setTooltip(Tooltip.create(this.getTooltipText()));
     }
 }
