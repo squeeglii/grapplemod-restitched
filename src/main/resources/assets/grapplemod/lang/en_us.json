@@ -94,7 +94,7 @@
     "grapple_modifier.category_unlock.title": "Category not unlocked: %s!",
     "grapple_modifier.category_unlock.desc": "Please right click this block with the item %s to unlock it.",
     "grapple_modifier.help.title": "Grappling Hook Tips!",
-    "grapple_modifier.help.desc": " - Right-Click the block with a Grappling Hook to apply.\n - Right-Click the block with Feather-Falling IV Diamond Boots to get Long Fall Boots.\n - Hooks can be repaired with leather or the mending enchantment.\n - Hold Shift when viewing item tooltip for controls",
+    "grapple_modifier.help.desc": " - Right-Click the block with a Grappling Hook to apply.\n\n - Right-Click the block with Feather-Falling IV Diamond Boots to get Long Fall Boots.\n\n - Hooks can be repaired with leather or the mending enchantment.\n\n - Hold Shift when viewing item tooltip for controls",
 
     "grapple_property.invalid.name": "Invalid Property",
     "grapple_property.invalid.desc": "Extension incorrectly configured.",

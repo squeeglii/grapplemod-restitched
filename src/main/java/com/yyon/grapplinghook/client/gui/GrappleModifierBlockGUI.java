@@ -115,6 +115,7 @@ public class GrappleModifierBlockGUI extends Screen {
 						Component.translatable("grapple_modifier.reset_button"),
 						button -> {
 							this.customization = new CustomizationVolume();
+							this.customizationsReset = true;
 							this.showMainScreenLayout();
 						})
 				.pos(
@@ -148,11 +149,14 @@ public class GrappleModifierBlockGUI extends Screen {
 		);
 
 		if(this.customizationsReset) {
-			this.addRenderableWidget(new TextWidget(
+			this.customizationsReset = false;
+
+			this.addRenderableWidget(new MultiLineTextWidget(
 					this.guiLeft + OUTER_PADDING_X,
 					this.guiTop + FULL_SIZE_Y - CONTROL_BUTTON_HEIGHT - 15 - OUTER_PADDING_Y,
 					Component.translatable("grapple_modifier.reset_customizations.desc")
-							.withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC)
+							.withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC),
+					font
 			));
 		}
 
