@@ -174,10 +174,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		int posY = this.guiTop + OUTER_PADDING_Y;
 
 		String categoryName = "\"%s\"".formatted(this.currentActiveCategory.getName().getString());
-		String itemUnlockName = "\"%s\"".formatted(
-				new ItemStack(this.currentActiveCategory.getUpgradeItem())
-						.getDisplayName().getString()
-		);
+		Component itemUnlockName = new ItemStack(this.currentActiveCategory.getUpgradeItem()).getDisplayName();
 
 		MultiLineTextWidget title = new MultiLineTextWidget(
 				posX, posY,
@@ -263,18 +260,18 @@ public class GrappleModifierBlockGUI extends Screen {
 			String desc = option.getDescription().getString();
 			
 			if (!option.getValidityPredicate().shouldPass(this.customization)) {
-				desc = Component.translatable("grapplemodifier.incompatability.desc").getString() + "\n" + desc;
+				desc = Component.translatable("grapple_property.incompatible").getString() + "\n" + desc;
 				enabled = false;
 			}
 
 			switch (option.getAvailability()) {
 				case REQUIRES_LIMITS -> {
-					desc = Component.translatable("grapplemodifier.limits.desc").getString() + "\n" + desc;
+					desc = Component.translatable("grapple_property.limits_restricted").getString() + "\n" + desc;
 					enabled = false;
 				}
 
 				case BLOCKED -> {
-					desc = Component.translatable("grapplemodifier.locked.desc").getString() + "\n" + desc;
+					desc = Component.translatable("grapple_property.blocked").getString() + "\n" + desc;
 					enabled = false;
 				}
 			}

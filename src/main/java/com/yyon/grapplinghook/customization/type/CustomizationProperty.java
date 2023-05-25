@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.customization.predicate.CustomizationPredicate;
 import com.yyon.grapplinghook.customization.predicate.SuccessCustomizationPredicate;
 import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -86,7 +87,7 @@ public abstract class CustomizationProperty<T> {
     public Component getDisplayName() {
         ResourceLocation id = this.getIdentifier();
         return id == null
-                ? Component.literal("grapple_property.invalid.name")
+                ? Component.literal("grapple_property.invalid.name").withStyle(ChatFormatting.RED)
                 : Component.translatable(this.getLocalization("name"));
     }
 
