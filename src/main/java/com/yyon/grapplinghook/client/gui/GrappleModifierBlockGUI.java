@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.client.gui;
 
 import com.yyon.grapplinghook.client.gui.widget.*;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
@@ -15,6 +14,7 @@ import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
@@ -27,7 +27,9 @@ public class GrappleModifierBlockGUI extends Screen {
 	public static final int OUTER_PADDING_X = 16;
 	public static final int OUTER_PADDING_Y = 16;
 
-	public static final int COLUMNS = 2;
+	// As there isn't scrolling, we just add more columns every time
+	// a visibility limit is reached for 1 column.
+	public static final int MAX_ROWS = 5;
 
 	private static final int CONTROL_BUTTON_WIDTH = 50;
 	private static final int CONTROL_BUTTON_HEIGHT = 20;
@@ -120,10 +122,12 @@ public class GrappleModifierBlockGUI extends Screen {
 		));
 
 
+		int columnCount = Mth.positiveCeilDiv(GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.size(), MAX_ROWS);
+
 		// get full size, remove left+right padding.
 		// + attempt to remove padding from the outermost columns.
 		int xColumnViewMax = (FULL_SIZE_X - (2 * OUTER_PADDING_X)) + (2 * COLUMN_PADDING);
-		int unpaddedColumnWidth = xColumnViewMax / COLUMNS;
+		int unpaddedColumnWidth = xColumnViewMax / columnCount;
 		int columnWidth = unpaddedColumnWidth - (COLUMN_PADDING * 2);
 
 		AtomicInteger counter = new AtomicInteger(0);
@@ -131,8 +135,8 @@ public class GrappleModifierBlockGUI extends Screen {
 			if (!category.shouldRender()) return;
 
 			int i = counter.getAndIncrement();
-			int y = Math.floorDiv(i, COLUMNS);
-			int x = i % COLUMNS;
+			int y = Math.floorDiv(i, columnCount);
+			int x = i % columnCount;
 
 			int xColumnAligner = (x * unpaddedColumnWidth);
 
@@ -151,7 +155,7 @@ public class GrappleModifierBlockGUI extends Screen {
 
 	public void resetScreenLayout() {
 		this.currentActiveCategory = null;
-		this.widgetPosYIncrementor = 10;
+		this.widgetPosYIncrementor = 0;
 		this.options = new HashMap<>();
 		this.clearWidgets();
 		

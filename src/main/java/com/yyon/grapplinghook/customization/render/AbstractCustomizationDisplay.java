@@ -28,7 +28,7 @@ public abstract class AbstractCustomizationDisplay<T, P extends CustomizationPro
     public abstract AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight);
 
     public final AbstractWidget getModifierBlockUI(GrappleModifierBlockGUI gui, int x, int y) {
-        return this.getConfigurationUIElement(gui::getCurrentCustomizations, gui, gui::markConfigurationsDirty, x, y, GrappleModifierBlockGUI.FULL_SIZE_X - (2 * GrappleModifierBlockGUI.OUTER_PADDING_Y), 20);
+        return this.getConfigurationUIElement(gui::getCurrentCustomizations, gui, gui::markConfigurationsDirty, x, y, GrappleModifierBlockGUI.FULL_SIZE_X - (2 * GrappleModifierBlockGUI.OUTER_PADDING_X), 20);
     }
 
     public final P getProperty() {
