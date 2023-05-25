@@ -3,7 +3,7 @@
     "textures": {
         "particle": "grapplemod:block/grapple_modifier_front",
 
-        "down": "minecraft:block/oak_planks",
+        "down": "minecraft:block/mangrove_planks",
         "up": "grapplemod:block/grapple_modifier_top",
 
         "east": "grapplemod:block/grapple_modifier_side",
