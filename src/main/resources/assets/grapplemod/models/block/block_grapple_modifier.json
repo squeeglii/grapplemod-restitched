@@ -1,6 +1,14 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "grapplemod:block/grapplemodifier"
-  }
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "particle": "grapplemod:block/grapple_modifier_front",
+
+        "down": "minecraft:block/oak_planks",
+        "up": "grapplemod:block/grapple_modifier_top",
+
+        "east": "grapplemod:block/grapple_modifier_side",
+        "west": "grapplemod:block/grapple_modifier_side",
+        "south": "grapplemod:block/grapple_modifier_front",
+        "north": "grapplemod:block/grapple_modifier_front"
+    }
 }
