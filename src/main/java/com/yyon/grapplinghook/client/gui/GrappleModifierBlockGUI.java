@@ -7,10 +7,12 @@ import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -20,10 +22,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GrappleModifierBlockGUI extends Screen {
 
-	public static final int FULL_SIZE_X = 221;
+	public static final int FULL_SIZE_X = 260;
 	public static final int FULL_SIZE_Y = 221;
+	public static final int OUTER_PADDING_X = 16;
+	public static final int OUTER_PADDING_Y = 16;
 
 	public static final int COLUMNS = 2;
+
+	private static final int CONTROL_BUTTON_WIDTH = 50;
+	private static final int CONTROL_BUTTON_HEIGHT = 20;
+	private static final int COLUMN_PADDING = 4;
+
+
 
 	private final OnPress actionGoBack = button -> showMainScreenLayout();
 
@@ -37,6 +47,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	private CustomizationVolume customization;
 	private CustomizationCategory currentActiveCategory;
 
+
 	public GrappleModifierBlockGUI(GrappleModifierBlockEntity blockEntity) {
 		super(Component.translatable("grapplemodifier.title.desc"));
 
@@ -44,6 +55,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.customization = blockEntity.getCurrentCustomizations();
 		this.currentActiveCategory = null;
 	}
+
 
 	@Override
 	public void init() {
@@ -59,37 +71,60 @@ public class GrappleModifierBlockGUI extends Screen {
 		super.onClose();
 	}
 
+
 	// -- GUI Screens
 
 	public void showMainScreenLayout() {
 		this.resetScreenLayout();
 
 		this.addRenderableWidget(Button.builder(
-				Component.translatable("grapplemodifier.close.desc"),
-				button -> this.onClose())
-				.pos(this.guiLeft + 10, this.guiTop + FULL_SIZE_Y - 20 - 10)
-				.size(50, 20)
-				.build()
-		);
-
-		this.addRenderableWidget(Button.builder(
-				Component.translatable("grapplemodifier.reset.desc"),
-				button -> {
-					this.customization = new CustomizationVolume();
-					this.showMainScreenLayout();
-				})
-				.pos(this.guiLeft + FULL_SIZE_X - 50 - 10, this.guiTop + FULL_SIZE_Y - 20 - 10)
-				.size(50, 20)
+						Component.translatable("grapplemodifier.reset.desc"),
+						button -> {
+							this.customization = new CustomizationVolume();
+							this.showMainScreenLayout();
+						})
+				.pos(
+						this.guiLeft + OUTER_PADDING_X,
+						this.guiTop + FULL_SIZE_Y - CONTROL_BUTTON_HEIGHT - OUTER_PADDING_Y
+				)
+				.size(CONTROL_BUTTON_WIDTH, CONTROL_BUTTON_HEIGHT)
 				.build()
 		);
 
 		this.addRenderableWidget(Button.builder(
 						Component.translatable("grapplemodifier.helpbutton.desc"),
 						button -> this.showHelpScreenLayout())
-				.pos(this.guiLeft + 10 + 75, this.guiTop + FULL_SIZE_Y - 20 - 10)
-				.size(50, 20)
+				.pos(
+						this.guiLeft + (FULL_SIZE_X / 2) - (CONTROL_BUTTON_WIDTH / 2),
+						this.guiTop + FULL_SIZE_Y - CONTROL_BUTTON_HEIGHT - OUTER_PADDING_Y
+				)
+				.size(CONTROL_BUTTON_WIDTH, CONTROL_BUTTON_HEIGHT)
 				.build()
 		);
+
+		this.addRenderableWidget(Button.builder(
+				Component.translatable("grapplemodifier.close.desc"),
+				button -> this.onClose())
+				.pos(
+						this.guiLeft + FULL_SIZE_X - 50 - OUTER_PADDING_X,
+						this.guiTop + FULL_SIZE_Y - CONTROL_BUTTON_HEIGHT - OUTER_PADDING_Y
+				)
+				.size(CONTROL_BUTTON_WIDTH, CONTROL_BUTTON_HEIGHT)
+				.build()
+		);
+
+		this.addRenderableWidget(new TextWidget(
+				this.guiLeft + OUTER_PADDING_X,
+				this.guiTop + FULL_SIZE_Y - CONTROL_BUTTON_HEIGHT - OUTER_PADDING_Y - 10,
+				Component.translatable("grapplemodifier.apply.desc")
+		));
+
+
+		// get full size, remove left+right padding.
+		// + attempt to remove padding from the outermost columns.
+		int xColumnViewMax = (FULL_SIZE_X - (2 * OUTER_PADDING_X)) + (2 * COLUMN_PADDING);
+		int unpaddedColumnWidth = xColumnViewMax / COLUMNS;
+		int columnWidth = unpaddedColumnWidth - (COLUMN_PADDING * 2);
 
 		AtomicInteger counter = new AtomicInteger(0);
 		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
@@ -99,16 +134,20 @@ public class GrappleModifierBlockGUI extends Screen {
 			int y = Math.floorDiv(i, COLUMNS);
 			int x = i % COLUMNS;
 
+			int xColumnAligner = (x * unpaddedColumnWidth);
+
 			this.addRenderableWidget(
 					Button.builder(category.getName(), this.createCategoryActionHandler(category))
-							.pos(this.guiLeft + 10 + 105 * x, this.guiTop + 15 + 30 * y)
-							.size(95, 20)
+							.pos(
+									this.guiLeft + xColumnAligner + OUTER_PADDING_X,
+									this.guiTop + OUTER_PADDING_Y + 30 * y
+							)
+							.size(columnWidth, 20)
 							.build()
 			);
 		});
-
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.apply.desc"), this.guiLeft + 10, this.guiTop + FULL_SIZE_Y - 20 - 10 - 10));
 	}
+
 
 	public void resetScreenLayout() {
 		this.currentActiveCategory = null;
@@ -119,36 +158,73 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.addRenderableWidget(new BackgroundWidget(this.guiLeft, this.guiTop, FULL_SIZE_X, FULL_SIZE_Y));
 	}
 
-	public void showNotAllowedScreenLayout(CustomizationCategory category) {
+
+	public void showCategoryLockedScreen(CustomizationCategory category) {
 		this.resetScreenLayout();
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapplemodifier.back.desc"), actionGoBack)
-						.pos(this.guiLeft + 10, this.guiTop + FULL_SIZE_Y - 20 - 10)
+						.pos(this.guiLeft + OUTER_PADDING_X, this.guiTop + FULL_SIZE_Y - 20 - OUTER_PADDING_Y)
 						.size(50, 20)
 						.build()
 		);
 
 		this.currentActiveCategory = category;
 
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock1.desc"), this.guiLeft + 10, this.guiTop + 10));
-		this.addRenderableWidget(new TextWidget(this.currentActiveCategory.getName(), this.guiLeft + 10, this.guiTop + 25));
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock2.desc"), this.guiLeft + 10, this.guiTop + 40));
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock3.desc"), this.guiLeft + 10, this.guiTop + 55));
-		this.addRenderableWidget(new TextWidget(new ItemStack(this.currentActiveCategory.getUpgradeItem()).getDisplayName(), this.guiLeft + 10, this.guiTop + 70));
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.unlock4.desc"), this.guiLeft + 10, this.guiTop + 85));
+		int posX = this.guiLeft + OUTER_PADDING_X;
+		int posY = this.guiTop + OUTER_PADDING_Y;
+
+		String categoryName = "\"%s\"".formatted(this.currentActiveCategory.getName().getString());
+		String itemUnlockName = "\"%s\"".formatted(
+				new ItemStack(this.currentActiveCategory.getUpgradeItem())
+						.getDisplayName().getString()
+		);
+
+		MultiLineTextWidget title = new MultiLineTextWidget(
+				posX, posY,
+				Component.translatable("grapplemodifier.category_unlock.title", categoryName)
+						.withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
+				this.font
+		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));
+
+		MultiLineTextWidget description = new MultiLineTextWidget(
+				posX,
+				posY + title.getHeight() + 10,
+				Component.translatable("grapplemodifier.category_unlock.desc", itemUnlockName),
+				this.font
+		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));
+
+		this.addRenderableWidget(title);
+		this.addRenderableWidget(description);
 	}
+
 
 	public void showHelpScreenLayout() {
 		resetScreenLayout();
 
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapplemodifier.back.desc"), actionGoBack)
-						.pos(this.guiLeft + 10, this.guiTop + FULL_SIZE_Y - 20 - 10)
+						.pos(this.guiLeft + OUTER_PADDING_X, this.guiTop + FULL_SIZE_Y - 20 - OUTER_PADDING_Y)
 						.size(50, 20)
 						.build()
 		);
 
-		this.addRenderableWidget(new TextWidget(Component.translatable("grapplemodifier.help.desc"), this.guiLeft + 10, this.guiTop + 10));
+		MultiLineTextWidget title = new MultiLineTextWidget(
+				this.guiLeft + OUTER_PADDING_X,
+				this.guiTop + OUTER_PADDING_Y,
+				Component.translatable("grapplemodifier.help.title")
+						.withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
+				this.font
+		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));;
+
+		MultiLineTextWidget guide = new MultiLineTextWidget(
+				this.guiLeft + OUTER_PADDING_X,
+				this.guiTop + OUTER_PADDING_Y + title.getHeight() + 10,
+				Component.translatable("grapplemodifier.help.desc"),
+				this.font
+		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));;
+
+		this.addRenderableWidget(title);
+		this.addRenderableWidget(guide);
 	}
 
 	public void showCategoryScreen(CustomizationCategory category) {
@@ -156,7 +232,7 @@ public class GrappleModifierBlockGUI extends Screen {
 
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapplemodifier.back.desc"), actionGoBack)
-						.pos(this.guiLeft + 10, this.guiTop + FULL_SIZE_Y - 20 - 10)
+						.pos(this.guiLeft + OUTER_PADDING_X, this.guiTop + FULL_SIZE_Y - 20 - OUTER_PADDING_Y)
 						.size(50, 20)
 						.build()
 		);
@@ -164,8 +240,8 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.currentActiveCategory = category;
 
 		this.currentActiveCategory.getLinkedProperties().forEach(property -> {
-			int x = 10 + this.guiLeft;
-			int y = this.getNextYPosition();
+			int x = this.guiLeft + OUTER_PADDING_X;
+			int y = this.getNextYPosition() + OUTER_PADDING_Y;
 
 			AbstractWidget widget = property.getDisplay().getModifierBlockUI(this, x, y);
 			this.addRenderableWidget(widget);
@@ -224,13 +300,7 @@ public class GrappleModifierBlockGUI extends Screen {
 			}
 		}
 	}
-	
-	public int getLimits() {
-		if(Minecraft.getInstance().player == null) return 0;
-		return this.blockEntity.isUnlocked(GrappleModCustomizationCategories.LIMITS.get()) || Minecraft.getInstance().player.isCreative()
-				? 1
-				: 0;
-	}
+
 
 	public CustomizationVolume getCurrentCustomizations() {
 		return this.customization;
@@ -251,7 +321,7 @@ public class GrappleModifierBlockGUI extends Screen {
 				return;
 			}
 
-			this.showNotAllowedScreenLayout(category);
+			this.showCategoryLockedScreen(category);
 		};
 	}
 }

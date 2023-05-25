@@ -27,7 +27,8 @@ public class BackgroundWidget extends AbstractWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blit(BG_TEXTURE, this.getX(), this.getY(), 0, 0, this.width, this.height);
+        // 9 slice:  slice-border, size-x, size-y, start-x, start-y
+        graphics.blitNineSliced(BG_TEXTURE, this.getX(), this.getY(), this.width, this.height, 10, 37, 37, 0, 0);
     }
 
     @Override
