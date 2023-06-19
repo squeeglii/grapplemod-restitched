@@ -1,7 +1,5 @@
 [![](./media/banner.png)](https://github.com/CloudG360/grapplemod-restitched)
 
-# Grappling Hook: Restiched
-
 [![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.20_pre5-blue?style=flat-square)](https://www.minecraft.net/en-us)
 [![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.19-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
 [![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v11.0.97-pink?style=flat-square)](https://modrinth.com/mod/cloth-config)
