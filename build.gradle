@@ -75,7 +75,7 @@ def targetJavaVersion = 17
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        it.options.release = targetJavaVersion
+        it.options.release.set(targetJavaVersion)
     }
 }
 
@@ -99,19 +99,30 @@ jar {
     }
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
+
+static def formatAsBadgeSafe(var val) {
+    if(!(val instanceof String))
+        return val
+
+    // Badges break if hyphens are present.
+    return ((String) val).replaceAll("[- /]", "_")
+}
+
+
+tasks.register('updateDocTemplates', Copy) {
+    group = "mod-utils"
+    description = "Takes documents from a folder, expands any template variables, and then copies them to the root."
+    doNotTrackState("Stops gradle from screaming - It doesn't let files get copied to the root if tracking state.")
+
+    Map filteredSrc = project.properties.collectEntries {
+        k, v -> [(k): formatAsBadgeSafe(v) ]
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
+    from "/template_docs"
+
+    into "/"
+    include "**"
+    exclude "media/**"
+
+    expand filteredSrc
 }
