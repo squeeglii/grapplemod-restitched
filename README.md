@@ -1,9 +1,9 @@
 [![](./media/banner.png)](https://github.com/CloudG360/grapplemod-restitched)
 
-[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.20_pre5-blue?style=flat-square)](https://www.minecraft.net/en-us)
-[![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.19-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
-[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v11.0.97-pink?style=flat-square)](https://modrinth.com/mod/cloth-config)
-[![Mod Menu Version](https://img.shields.io/badge/Mod_Menu-v7.0.0_beta.2-indigo?style=flat-square)](https://modrinth.com/mod/modmenu)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.20.1-blue?style=flat-square)](https://www.minecraft.net/en-us)
+[![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.21-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
+[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v11.0.99-pink?style=flat-square)](https://modrinth.com/mod/cloth-config)
+[![Mod Menu Version](https://img.shields.io/badge/Mod_Menu-v7.1.0-indigo?style=flat-square)](https://modrinth.com/mod/modmenu)
 [![GPL-3.0](https://img.shields.io/badge/License-GNU_GPL_3.0-mint?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 [![Modrinth](https://img.shields.io/modrinth/dt/f4hp6FTb?logo=modrinth&style=flat-square)](https://modrinth.com/mod/grappling-hook-mod-fabric)
