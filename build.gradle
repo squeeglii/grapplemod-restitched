@@ -13,12 +13,22 @@ project.setVersion(project.properties["minecraft_version"] + targetVersion)
 loom {
     accessWidenerPath = file("src/main/resources/grapplemod.accesswidener")
 
+    // This is here to ensure the environment sources just stay in
+    // one place. It was splitting them for some reason.
+    mods {
+        grapplemod {
+            sourceSet sourceSets.main
+        }
+    }
+
     runs {
-        client {
+        named("client") {
+            client()
             runDir "run/client"
         }
 
-        server {
+        named("server") {
+            server()
             runDir "run/server"
         }
     }
