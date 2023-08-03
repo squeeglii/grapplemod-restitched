@@ -1,4 +1,9 @@
 accessWidener v2 named
 
+# 3D armour experimentation
 accessible method net/minecraft/client/model/geom/ModelLayers register (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/client/model/geom/ModelLayerLocation;
 accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addLayer (Lnet/minecraft/client/renderer/entity/layers/RenderLayer;)Z
+
+# Non Conflict Keybinding overflows need this
+accessible field net/minecraft/client/KeyMapping clickCount I
+accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;

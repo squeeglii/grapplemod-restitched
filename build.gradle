@@ -22,13 +22,11 @@ loom {
     }
 
     runs {
-        named("client") {
-            client()
+        client {
             runDir "run/client"
         }
 
-        named("server") {
-            server()
+        server {
             runDir "run/server"
         }
     }
