@@ -21,7 +21,7 @@
     "client.GrappleCrosshairMixin",
     "client.KeybindingHandlerMixin",
     "client.MovementInputHandlerMixin",
-    "client.NonConflictingKeyBindingMixin",
+    "client.FixKeyMappingConflictsMixin",
     "client.attachable.LayerDefinitionsMixin"
   ],
   "injectors": {
