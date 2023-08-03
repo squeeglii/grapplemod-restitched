@@ -6,7 +6,6 @@ import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -55,13 +54,13 @@ public class GrappleModiferBlockGUI extends Screen {
 
 		this.mainScreen();
 	}
-	
+
 	class PressCategory implements OnPress {
 		GrappleCustomization.UpgradeCategories category;
 		public PressCategory(GrappleCustomization.UpgradeCategories category) {
 			this.category = category;
 		}
-		
+
 		public void onPress(Button p_onPress_1_) {
 			boolean unlocked = tile.isUnlocked(category) || Minecraft.getInstance().player.isCreative();
 
@@ -72,7 +71,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			}
 		}
 	}
-	
+
 	class PressBack implements OnPress {
 		public void onPress(Button p_onPress_1_) {
 			mainScreen();
@@ -83,10 +82,10 @@ public class GrappleModiferBlockGUI extends Screen {
 		clearScreen();
 
 		this.addRenderableWidget(Button.builder(
-								Component.translatable("grapplemodifier.close.desc"),
-								onPress -> onClose())
-						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
-						.build()
+						Component.translatable("grapplemodifier.close.desc"),
+						onPress -> onClose())
+				.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
+				.build()
 		);
 
 		this.addRenderableWidget(Button.builder(
@@ -117,10 +116,10 @@ public class GrappleModiferBlockGUI extends Screen {
 				}
 
 				this.addRenderableWidget(Button.builder(
-									Component.literal(category.getName()),
-									new PressCategory(category))
-								.bounds(this.guiLeft + 10 + 105*x, this.guiTop + 15 + 30 * y, 95, 20)
-								.build()
+								Component.literal(category.getName()),
+								new PressCategory(category))
+						.bounds(this.guiLeft + 10 + 105*x, this.guiTop + 15 + 30 * y, 95, 20)
+						.build()
 				);
 
 				y += 1;
@@ -139,15 +138,15 @@ public class GrappleModiferBlockGUI extends Screen {
 			super(posX, posY, sizeVertical, sizeHorizontal, text);
 			this.active = false;
 		}
-		
+
 		public BackgroundWidget(int x, int y, int w, int h) {
 			this(x, y, w, h, Component.literal(""));
 		}
 
-		@Override
-		public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			RenderSystem.setShaderTexture(0,texture);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			guiGraphics.blit(texture, this.getX(), this.getY(), 0, 0, this.width, this.height);
+			this.blit(stack, this.getX(), this.getY(), 0, 0, this.width, this.height);
 		}
 
 		@Override
@@ -162,10 +161,10 @@ public class GrappleModiferBlockGUI extends Screen {
 		id = 10;
 		options = new HashMap<>();
 		this.clearWidgets();
-		
+
 		this.addRenderableWidget(new BackgroundWidget(this.guiLeft, this.guiTop, this.xSize, this.ySize));
 	}
-	
+
 	static class TextWidget extends AbstractWidget {
 		public TextWidget(int posX, int posY, int sizeVertical, int sizeHorizontal, Component text) {
 			super(posX, posY, sizeVertical, sizeHorizontal, text);
@@ -175,8 +174,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			this(x, y, 50, 15 * text.getString().split("\n").length + 5, text);
 		}
 
-		@Override
-		public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
 			Minecraft minecraft = Minecraft.getInstance();
 			Font fontRenderer = minecraft.font;
 			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
@@ -187,7 +185,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			int colour = this.active ? 16777215 : 10526880;
 			int lineno = 0;
 			for (String s : this.getMessage().getString().split("\n")) {
-				guiGraphics.drawString(fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
+				drawString(stack, fontRenderer, Component.literal(s), this.getX(), this.getY() + lineno*15, colour | Mth.ceil(this.alpha * 255.0F) << 24);
 				lineno++;
 			}
 		}
@@ -203,8 +201,8 @@ public class GrappleModiferBlockGUI extends Screen {
 
 		this.addRenderableWidget(
 				Button.builder(
-							Component.translatable("grapplemodifier.back.desc"),
-							new PressBack())
+								Component.translatable("grapplemodifier.back.desc"),
+								new PressBack())
 						.bounds(this.guiLeft + 10, this.guiTop + this.ySize - 20 - 10, 50, 20)
 						.build()
 		);
@@ -230,12 +228,12 @@ public class GrappleModiferBlockGUI extends Screen {
 		);
 
 		this.addRenderableWidget(new TextWidget(
-						Component.translatable("grapplemodifier.help.desc"),
-						this.guiLeft + 10, this.guiTop + 10
+				Component.translatable("grapplemodifier.help.desc"),
+				this.guiLeft + 10, this.guiTop + 10
 		));
-		
+
 	}
-	
+
 	class GuiCheckbox extends Checkbox {
 		String option;
 		public Component tooltip;
@@ -245,20 +243,19 @@ public class GrappleModiferBlockGUI extends Screen {
 			this.option = option;
 			this.tooltip = tooltip;
 		}
-		
+
 		@Override
 		public void onPress() {
 			super.onPress();
-			
+
 			customization.setBoolean(option, this.selected());
-			
+
 			updateEnabled();
 		}
-		
+
 		@Override
-		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
-			Minecraft minecraft = Minecraft.getInstance();
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			super.renderWidget(stack, mouseX, mouseY, partialTick);
 
 			if (this.isHovered) {
 				String tooltipText = tooltip.getString();
@@ -268,7 +265,7 @@ public class GrappleModiferBlockGUI extends Screen {
 					lines.add(Component.literal(line));
 
 
-				guiGraphics.renderTooltip(minecraft.font, lines, Optional.empty(), mouseX, mouseY);
+				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
 	}
@@ -281,7 +278,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		this.addRenderableWidget(checkbox);
 		options.put(checkbox, option);
 	}
-		
+
 	class GuiSlider extends AbstractSliderButton {
 		double min, max, val;
 		String text, option;
@@ -294,7 +291,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			this.text = text.getString();
 			this.option = option;
 			this.tooltip = tooltip;
-			
+
 			this.updateMessage();
 		}
 
@@ -311,9 +308,8 @@ public class GrappleModiferBlockGUI extends Screen {
 		}
 
 		@Override
-		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
-			Minecraft minecraft = Minecraft.getInstance();
+		public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+			super.renderWidget(stack, mouseX, mouseY, partialTick);
 
 			if (this.isHovered) {
 				String tooltiptext = tooltip.getString();
@@ -321,24 +317,22 @@ public class GrappleModiferBlockGUI extends Screen {
 				for (String line : tooltiptext.split("\n")) {
 					lines.add(Component.literal(line));
 				}
-
-				guiGraphics.renderTooltip(minecraft.font, lines, Optional.empty(), mouseX, mouseY);
+				renderTooltip(stack, lines, Optional.empty(), mouseX, mouseY);
 			}
 		}
-
 	}
-	
+
 	public void addSlider(String option) {
 		double d = customization.getDouble(option);
 		d = Math.floor(d * 10 + 0.5) / 10;
-		
+
 		double max = GrappleCustomization.getMaxFromConfig(option, this.getLimits());
 		double min = GrappleCustomization.getMinFromConfig(option, this.getLimits());
-		
+
 		String text = Component.translatable(this.customization.getName(option)).getString();
 		String desc = Component.translatable(this.customization.getDescription(option)).getString();
 		GuiSlider slider = new GuiSlider(10 + this.guiLeft, posy + this.guiTop, this.xSize - 20, 20, Component.literal(text), min, max, d, option, Component.literal(desc));
-		
+
 		posy += 22;
 		this.addRenderableWidget(slider);
 		options.put(slider, option);
@@ -400,28 +394,28 @@ public class GrappleModiferBlockGUI extends Screen {
 			addSlider("rocket_refuel_ratio");
 			addSlider("rocket_vertical_angle");
 		}
-		
+
 		this.updateEnabled();
 	}
-	
+
 	@Override
 	public void onClose() {
 		this.tile.setCustomizationClient(customization);
 		super.onClose();
 	}
-	
+
 	public void updateEnabled() {
 		for (AbstractWidget b : this.options.keySet()) {
 			String option = this.options.get(b);
 			boolean enabled = true;
-			
+
 			String desc = Component.translatable(this.customization.getDescription(option)).getString();
-			
+
 			if (!this.customization.isOptionValid(option)) {
 				desc = Component.translatable("grapplemodifier.incompatability.desc").getString() + "\n" + desc;
 				enabled = false;
 			}
-			
+
 			int level = GrappleCustomization.optionEnabledInConfig(option);
 			if (this.getLimits() < level) {
 				if (level == 1) {
@@ -431,7 +425,7 @@ public class GrappleModiferBlockGUI extends Screen {
 				}
 				enabled = false;
 			}
-			
+
 			b.active = enabled;
 
 			if (b instanceof GuiSlider) {
@@ -444,7 +438,7 @@ public class GrappleModiferBlockGUI extends Screen {
 			}
 		}
 	}
-	
+
 	public int getLimits() {
 		if (this.tile.isUnlocked(GrappleCustomization.UpgradeCategories.LIMITS) || Minecraft.getInstance().player.isCreative()) {
 			return 1;

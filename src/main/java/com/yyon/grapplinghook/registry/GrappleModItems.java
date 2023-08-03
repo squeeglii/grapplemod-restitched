@@ -10,9 +10,6 @@ import com.yyon.grapplinghook.item.upgrade.*;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 
@@ -70,10 +67,7 @@ public final class GrappleModItems {
         creativeMenuCache.forEach(output::accept);
     };
 
-    private static final ResourceKey<CreativeModeTab> ITEM_GROUP_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, GrappleMod.id("main"));
-
-    private static final CreativeModeTab ITEM_GROUP = FabricItemGroup.builder()
-            .title(Component.translatable("itemGroup.grapplemod.main"))
+    private static final CreativeModeTab ITEM_GROUP = FabricItemGroup.builder(GrappleMod.id("main"))
             .icon(() -> new ItemStack(GRAPPLING_HOOK.get()))
             .displayItems(MOD_TAB_GENERATOR)
             .build();
@@ -114,8 +108,6 @@ public final class GrappleModItems {
 
             data.finalize(Registry.register(BuiltInRegistries.ITEM, id, it));
         }
-
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ITEM_GROUP_KEY, ITEM_GROUP);
     }
 
 

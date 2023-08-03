@@ -18,7 +18,7 @@ public class SharedDamageHandler {
 
     /** @return true if the death should be cancelled. */
     public static boolean handleDeath(Entity deadEntity) {
-        if (!deadEntity.level().isClientSide) {
+        if (!deadEntity.level.isClientSide) {
             int id = deadEntity.getId();
             boolean isConnected = ServerControllerManager.allGrapplehookEntities.containsKey(id);
 
@@ -39,7 +39,7 @@ public class SharedDamageHandler {
             GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
 
             if(deadEntity instanceof Player)
-                GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level());
+                GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level);
         }
 
         return false;

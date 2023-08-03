@@ -68,13 +68,13 @@ public class ClientControllerManager {
 
 
 	public void onClientTick(Player player) {
-		if (player.onGround() || (controllers.containsKey(player.getId()) && controllers.get(player.getId()).controllerId == GrappleModUtils.GRAPPLE_ID)) {
+		if (player.isOnGround() || (controllers.containsKey(player.getId()) && controllers.get(player.getId()).controllerId == GrappleModUtils.GRAPPLE_ID)) {
 			ticksWallRunning = 0;
 		}
 
 		if (this.isWallRunning(player, Vec.motionVec(player))) {
 			if (!controllers.containsKey(player.getId())) {
-				GrappleController controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
+				GrappleController controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
 				if (controller.getWallDirection() == null)
 					controller.unattach();
 			}
@@ -101,9 +101,9 @@ public class ClientControllerManager {
 
 		if (this.rocketFuel > 1) {this.rocketFuel = 1;}
 		
-		if (player.onGround()) {
+		if (player.isOnGround()) {
 			if (enderLaunchTimer.containsKey(player.getId())) {
-				long timer = GrappleModUtils.getTime(player.level()) - enderLaunchTimer.get(player.getId());
+				long timer = GrappleModUtils.getTime(player.level) - enderLaunchTimer.get(player.getId());
 				if (timer > 10)
 					this.resetLauncherTime(player.getId());
 			}
@@ -112,7 +112,7 @@ public class ClientControllerManager {
 
 	public void checkSlide(Player player) {
 		if (GrappleModKeyBindings.key_slide.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
-			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
+			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class ClientControllerManager {
 				? enderLaunchTimer.get(player.getId())
 				: 0 ;
 
-		long timer = GrappleModUtils.getTime(player.level()) - previousTime;
+		long timer = GrappleModUtils.getTime(player.level) - previousTime;
 
 		if (timer > GrappleConfig.getConf().enderstaff.ender_staff_recharge) {
 			ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
@@ -137,7 +137,7 @@ public class ClientControllerManager {
 			ItemStack usedStack = isMainHolding ? mainHandStack : offHandStack;
 			Item usedItem = isMainHolding ? mainHandItem : offHandItem;
 
-			enderLaunchTimer.put(player.getId(), GrappleModUtils.getTime(player.level()));
+			enderLaunchTimer.put(player.getId(), GrappleModUtils.getTime(player.level));
 
 			Vec facing = Vec.lookVec(player);
 
@@ -147,7 +147,7 @@ public class ClientControllerManager {
 
 			if (!controllers.containsKey(player.getId())) {
 				player.setOnGround(false);
-				this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, custom);
+				this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, custom);
 			}
 
 			facing.mult_ip(GrappleConfig.getConf().enderstaff.ender_staff_strength);
@@ -180,7 +180,7 @@ public class ClientControllerManager {
 	}
 	
 	public boolean isWallRunning(Entity entity, Vec motion) {
-		if (!(entity.horizontalCollision && !entity.onGround() && !entity.isCrouching())) return false;
+		if (!(entity.horizontalCollision && !entity.isOnGround() && !entity.isCrouching())) return false;
 		if (entity instanceof LivingEntity && ((LivingEntity) entity).onClimbable()) return false;
 
 		for (ItemStack stack : entity.getArmorSlots()) {
@@ -191,7 +191,7 @@ public class ClientControllerManager {
 					if (enchantments.get(enchant) < 1) continue;
 					if (GrappleModKeyBindings.key_jumpanddetach.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
 
-					BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
+					BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level, Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 					if (rayTraceResult == null) {
 						double currentSpeed = Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.z,  2));
 						if (currentSpeed >= GrappleConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
@@ -211,7 +211,7 @@ public class ClientControllerManager {
 		Player player = Minecraft.getInstance().player;
 		if(player == null) return;
 		
-		if (player.onGround()) {
+		if (player.isOnGround()) {
 			this.ticksSinceLastOnGround = 0;
 			this.alreadyUsedDoubleJump = false;
 		} else {
@@ -233,7 +233,7 @@ public class ClientControllerManager {
 		boolean allConditionsMet = GrappleModUtils.and(conditions);
 
 		if(allConditionsMet && !controllers.containsKey(player.getId())) {
-			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
+			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
 			GrappleModClient.get().playDoubleJumpSound();
 			GrappleMod.LOGGER.info("Branch 1");
 		}
@@ -286,7 +286,7 @@ public class ClientControllerManager {
 	public boolean isSliding(Entity entity, Vec motion) {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
-		if (entity.onGround() && GrappleModKeyBindings.key_slide.isDown()) {
+		if (entity.isOnGround() && GrappleModKeyBindings.key_slide.isDown()) {
 			if (!ClientControllerManager.isWearingSlidingEnchant(entity)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();
@@ -471,7 +471,7 @@ public class ClientControllerManager {
 			}
 
 		} else {
-			controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, custom);
+			controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, custom);
 		}
 		
 		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
