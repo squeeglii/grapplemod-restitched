@@ -19,7 +19,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version_long}",
+    "minecraft": ">=${minecraft_version_long}",
     "cloth-config": ">=${clothconfig_version}"
   },
   "recommends": {
