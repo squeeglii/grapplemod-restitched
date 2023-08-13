@@ -60,7 +60,7 @@ public final class GrappleModItems {
         if(creativeMenuCache == null || creativeCacheInvalid) {
             GrappleModItems.creativeCacheInvalid = false;
             creativeMenuCache = itemsInRegistryOrder.stream()
-                    .map(id -> items.get(id))
+                    .map(items::get)
                     .map(ItemEntry::getTabProvider)
                     .map(Supplier::get)
                     .flatMap(Collection::stream)

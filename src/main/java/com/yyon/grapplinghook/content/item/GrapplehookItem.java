@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
+import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.network.NetworkManager;
@@ -35,6 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -59,45 +61,19 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
  */
 
 public class GrapplehookItem extends Item implements KeypressItem, DroppableItem {
+
+	public static final String NBT_HOOK_CUSTOMIZATIONS = "custom";
+	public static final String NBT_HOOK_TEMPLATE = "hook_template";
+	public static final String NBT_TEMPLATE_DISPLAY_NAME = "display_name";
+
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
-	
+
+
 	public GrapplehookItem() {
 		super(new Item.Properties().stacksTo(1).durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability));
 	}
 
-	public boolean hasHookEntity(Entity entity) {
-		GrapplinghookEntity hookLeft = getHookEntityLeft(entity);
-		GrapplinghookEntity hookRight = getHookEntityRight(entity);
-		return (hookLeft != null) || (hookRight != null);
-	}
-
-	public void setHookEntityLeft(Entity entity, GrapplinghookEntity hookEntity) {
-		GrapplehookItem.grapplehookEntitiesLeft.put(entity, hookEntity);
-	}
-	public void setHookEntityRight(Entity entity, GrapplinghookEntity hookEntity) {
-		GrapplehookItem.grapplehookEntitiesRight.put(entity, hookEntity);
-	}
-
-	public GrapplinghookEntity getHookEntityLeft(Entity entity) {
-		if (!GrapplehookItem.grapplehookEntitiesLeft.containsKey(entity)) return null;
-
-		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesLeft.get(entity);
-		if (hookEntity != null && hookEntity.isAlive())
-			return hookEntity;
-
-		return null;
-	}
-
-	public GrapplinghookEntity getHookEntityRight(Entity entity) {
-		if (!GrapplehookItem.grapplehookEntitiesRight.containsKey(entity)) return null;
-
-		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesRight.get(entity);
-		if (hookEntity != null && hookEntity.isAlive())
-			return hookEntity;
-
-		return null;
-	}
 
 	@Override
 	public boolean isValidRepairItem(ItemStack stack, ItemStack repair) {
@@ -181,6 +157,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
 				NetworkManager.packetToServer(new KeypressMessage(key, false));
 			}
+
 		} else {
 	    	CustomizationVolume custom = this.getCustomization(stack);
 	    	
@@ -197,6 +174,202 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 				}
 	    	}
 		}
+	}
+
+	@Override
+	public void onDroppedByPlayer(ItemStack item, Player player) {
+		int id = player.getId();
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
+
+		if (!player.level().isClientSide) {
+			PhysicsContextTracker.attached.remove(id);
+		}
+
+		if (grapplehookEntitiesLeft.containsKey(player)) {
+			GrapplinghookEntity hookLeft = grapplehookEntitiesLeft.get(player);
+			setHookEntityLeft(player, null);
+			if (hookLeft != null) {
+				hookLeft.removeServer();
+			}
+		}
+
+		if (grapplehookEntitiesRight.containsKey(player)) {
+			GrapplinghookEntity hookRight = grapplehookEntitiesRight.get(player);
+			setHookEntityLeft(player, null);
+			if (hookRight != null) {
+				hookRight.removeServer();
+			}
+		}
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
+		CustomizationVolume custom = getCustomization(stack);
+
+		if (Screen.hasShiftDown()) {
+			if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
+				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()));
+				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()));
+				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
+
+			} else {
+				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()));
+			}
+
+			list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
+					GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
+					GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
+					GrappleModClient.get().getKeyname(MinecraftKey.keyBindRight) +
+					" " + Component.translatable("grappletooltip.swing.desc").getString()));
+			list.add(Component.literal(KeyBindingManagement.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()));
+			list.add(Component.literal(KeyBindingManagement.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()));
+			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + " / " +
+					KeyBindingManagement.key_climbup.getTranslatedKeyMessage().getString() +
+					" " + Component.translatable("grappletooltip.climbup.desc").getString()));
+			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + " / " +
+					KeyBindingManagement.key_climbdown.getTranslatedKeyMessage().getString() +
+					" " + Component.translatable("grappletooltip.climbdown.desc").getString()));
+
+			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
+				list.add(Component.literal(KeyBindingManagement.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()));
+			}
+
+			if (custom.get(ROCKET_ATTACHED.get())) {
+				list.add(Component.literal(KeyBindingManagement.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()));
+			}
+
+			if (custom.get(MOTOR_ATTACHED.get())) {
+
+				Component text = switch (custom.get(MOTOR_ACTIVATION.get())) {
+					case WHEN_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString());
+					case WHEN_NOT_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString());
+					default -> null;
+				};
+
+				if(text != null)
+					list.add(text);
+			}
+
+			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
+				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
+					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()));
+					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()));
+				} else {
+					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()));
+					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()));
+				}
+
+			} else {
+				list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()));
+			}
+
+			if (custom.get(HOOK_REEL_IN_ON_SNEAK.get())) {
+				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()));
+			}
+
+		}
+
+		if (Screen.hasControlDown()) {
+			for(CustomizationProperty<?> property: custom.getPropertiesPresent()) {
+				Component hintText = property.getDisplay().getModificationHint(custom);
+				if(hintText != null)
+					list.add(hintText);
+			}
+
+			return;
+		}
+
+		HashMap<ResourceLocation, Component> attachmentTexts = new HashMap<>();
+
+		for(AttachmentProperty attachment: AttachmentProperty.getBakedProperties()) {
+			boolean useShadowerName = AttachmentProperty.shouldUseShadowerName(custom, attachment);
+
+			if(!useShadowerName) {
+				attachmentTexts.put(attachment.getIdentifier(), attachment.getDisplayName());
+				continue;
+			}
+
+			// Handle chains -- remove if this attachment is hidden in another attachment's shadow.
+			attachmentTexts.remove(attachment.getIdentifier());
+
+			Component newText = attachment.getShadowingProperty().orElseThrow().getDisplayName();
+			attachmentTexts.put(attachment.getIdentifier(), newText);
+		}
+
+		if(!attachmentTexts.isEmpty()) {
+			list.add(Component.translatable("grappletooltip.attachments.title")
+					.withStyle(ChatFormatting.GRAY)
+					.withStyle(ChatFormatting.BOLD)
+			);
+
+			list.addAll(attachmentTexts.values());
+		}
+
+		list.add(Component.literal(""));
+		list.add(Component.translatable("grappletooltip.shiftcontrols.desc"));
+		list.add(Component.translatable("grappletooltip.controlconfiguration.desc"));
+	}
+
+	@NotNull
+	@Override
+	public Component getName(ItemStack stack) {
+		Component templateDisplayName = this.getTemplateDisplayName(stack);
+
+		return templateDisplayName == null
+				? super.getName(stack)
+				: templateDisplayName;
+	}
+
+	public Component getTemplateDisplayName(ItemStack stack) {
+		CompoundTag templateDisplayTag = stack.getTagElement(NBT_HOOK_TEMPLATE);
+
+		if(templateDisplayTag == null)
+			return null;
+
+		String nameJson = templateDisplayTag.getString(NBT_TEMPLATE_DISPLAY_NAME);
+
+		if(nameJson.isEmpty())
+			return null;
+
+		try {
+            return Component.Serializer.fromJson(nameJson);
+		} catch (Exception exception) {
+			return null;
+		}
+	}
+
+	public boolean hasHookEntity(Entity entity) {
+		GrapplinghookEntity hookLeft = getHookEntityLeft(entity);
+		GrapplinghookEntity hookRight = getHookEntityRight(entity);
+		return (hookLeft != null) || (hookRight != null);
+	}
+
+	public void setHookEntityLeft(Entity entity, GrapplinghookEntity hookEntity) {
+		GrapplehookItem.grapplehookEntitiesLeft.put(entity, hookEntity);
+	}
+	public void setHookEntityRight(Entity entity, GrapplinghookEntity hookEntity) {
+		GrapplehookItem.grapplehookEntitiesRight.put(entity, hookEntity);
+	}
+
+	public GrapplinghookEntity getHookEntityLeft(Entity entity) {
+		if (!GrapplehookItem.grapplehookEntitiesLeft.containsKey(entity)) return null;
+
+		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesLeft.get(entity);
+		if (hookEntity != null && hookEntity.isAlive())
+			return hookEntity;
+
+		return null;
+	}
+
+	public GrapplinghookEntity getHookEntityRight(Entity entity) {
+		if (!GrapplehookItem.grapplehookEntitiesRight.containsKey(entity)) return null;
+
+		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesRight.get(entity);
+		if (hookEntity != null && hookEntity.isAlive())
+			return hookEntity;
+
+		return null;
 	}
 
 	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean rightHand) {
@@ -356,145 +529,39 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
     public CustomizationVolume getCustomization(ItemStack itemstack) {
     	CompoundTag tag = itemstack.getOrCreateTag();
     	
-    	if (tag.contains("custom")) {
-        	CustomizationVolume custom = new CustomizationVolume();
-    		custom.loadFromNBT(tag.getCompound("custom"));
-        	return custom;
+    	if (!tag.contains(NBT_HOOK_CUSTOMIZATIONS)) {
+			return this.resetCustomizations(itemstack);
     	}
 
-		return this.resetCustomizationNBT(itemstack);
+		CustomizationVolume custom = new CustomizationVolume();
+		custom.loadFromNBT(tag.getCompound(NBT_HOOK_CUSTOMIZATIONS));
+		return custom;
     }
 
-	private CustomizationVolume resetCustomizationNBT(ItemStack itemstack) {
-		CompoundTag tag = itemstack.getOrCreateTag();
+	private CustomizationVolume resetCustomizations(ItemStack stack) {
 		CustomizationVolume custom = this.getDefaultCustomization();
-		CompoundTag nbt = custom.writeToNBT();
-		tag.put("custom", nbt);
-		itemstack.setTag(tag);
+		this.applyCustomizations(stack, custom);
 
 		return custom;
 	}
-    
-    public CustomizationVolume getDefaultCustomization() {
-    	return new CustomizationVolume();
-    }
-    
-	@Override
-	@Environment(EnvType.CLIENT)
-	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		CustomizationVolume custom = getCustomization(stack);
-		
-		if (Screen.hasShiftDown()) {
-			if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()));
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()));
-				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
 
-			} else {
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()));
-			}
-
-			list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
-					GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
-					GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
-					GrappleModClient.get().getKeyname(MinecraftKey.keyBindRight) +
-					" " + Component.translatable("grappletooltip.swing.desc").getString()));
-			list.add(Component.literal(KeyBindingManagement.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()));
-			list.add(Component.literal(KeyBindingManagement.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()));
-			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + " / " +
-					KeyBindingManagement.key_climbup.getTranslatedKeyMessage().getString() +
-					" " + Component.translatable("grappletooltip.climbup.desc").getString()));
-			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + " / " +
-					KeyBindingManagement.key_climbdown.getTranslatedKeyMessage().getString() +
-					" " + Component.translatable("grappletooltip.climbdown.desc").getString()));
-
-			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()));
-			}
-
-			if (custom.get(ROCKET_ATTACHED.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()));
-			}
-
-			if (custom.get(MOTOR_ATTACHED.get())) {
-
-				Component text = switch (custom.get(MOTOR_ACTIVATION.get())) {
-					case WHEN_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString());
-					case WHEN_NOT_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString());
-					default -> null;
-				};
-
-				if(text != null)
-					list.add(text);
-			}
-
-			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
-				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()));
-					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()));
-				} else {
-					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()));
-					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()));
-				}
-
-			} else {
-				list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()));
-			}
-
-			if (custom.get(HOOK_REEL_IN_ON_SNEAK.get())) {
-				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()));
-			}
-
-		}
-
-		if (Screen.hasControlDown()) {
-			for(CustomizationProperty<?> property: custom.getPropertiesPresent()) {
-				Component hintText = property.getDisplay().getModificationHint(custom);
-				if(hintText != null)
-					list.add(hintText);
-			}
-
-			return;
-		}
-
-		HashMap<ResourceLocation, Component> attachmentTexts = new HashMap<>();
-
-		for(AttachmentProperty attachment: AttachmentProperty.getBakedProperties()) {
-			boolean useShadowerName = AttachmentProperty.shouldUseShadowerName(custom, attachment);
-
-			if(!useShadowerName) {
-				attachmentTexts.put(attachment.getIdentifier(), attachment.getDisplayName());
-				continue;
-			}
-
-			// Handle chains -- remove if this attachment was another's shadow.
-			attachmentTexts.remove(attachment.getIdentifier());
-
-			Component newText = attachment.getShadowingProperty().orElseThrow().getDisplayName();
-			attachmentTexts.put(attachment.getIdentifier(), newText);
-		}
-
-		if(attachmentTexts.size() > 0) {
-			list.add(Component.translatable("grappletooltip.attachments.title")
-					.withStyle(ChatFormatting.GRAY)
-					.withStyle(ChatFormatting.BOLD)
-			);
-
-			list.addAll(attachmentTexts.values());
-		}
-
-		list.add(Component.literal(""));
-		list.add(Component.translatable("grappletooltip.shiftcontrols.desc"));
-		list.add(Component.translatable("grappletooltip.controlconfiguration.desc"));
-	}
-
-	public void setCustomOnServer(ItemStack helditemstack, CustomizationVolume custom) {
-		CompoundTag tag = helditemstack.getOrCreateTag();
+	public void applyCustomizations(ItemStack stack, CustomizationVolume custom) {
+		CompoundTag tag = stack.getOrCreateTag();
 		CompoundTag nbt = custom.writeToNBT();
 		
-		tag.put("custom", nbt);
+		tag.put(NBT_HOOK_CUSTOMIZATIONS, nbt);
+		tag.remove(NBT_HOOK_TEMPLATE);
 		
-		helditemstack.setTag(tag);
+		stack.setTag(tag);
+	}
+
+	public void applyHookTemplateName(ItemStack stack, GrapplingHookTemplate template) {
+		CompoundTag tag = stack.getOrCreateTag();
+		CompoundTag nbt = template.getMetadataBlob();
+
+		tag.put("hook_template", nbt);
+
+		stack.setTag(tag);
 	}
 
 	public static Vec applyHolderRotation(Vec angleVec, LivingEntity holder) {
@@ -502,35 +569,11 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		return newVec.rotateYaw(Math.toRadians(holder.getViewYRot(1.0F)));
 	}
 
-	
-	@Override
-	public void onDroppedByPlayer(ItemStack item, Player player) {
-		int id = player.getId();
-		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
-		
-		if (!player.level().isClientSide) {
-			PhysicsContextTracker.attached.remove(id);
-		}
-		
-		if (grapplehookEntitiesLeft.containsKey(player)) {
-			GrapplinghookEntity hookLeft = grapplehookEntitiesLeft.get(player);
-			setHookEntityLeft(player, null);
-			if (hookLeft != null) {
-				hookLeft.removeServer();
-			}
-		}
-		
-		if (grapplehookEntitiesRight.containsKey(player)) {
-			GrapplinghookEntity hookRight = grapplehookEntitiesRight.get(player);
-			setHookEntityLeft(player, null);
-			if (hookRight != null) {
-				hookRight.removeServer();
-			}
-		}
+	public boolean getPropertyHook(ItemStack stack) {
+    	return stack.getOrCreateTag().contains("hook");
 	}
 
-	public boolean getPropertyHook(ItemStack stack) {
-    	CompoundTag tag = stack.getOrCreateTag();
-    	return tag.contains("hook");
+	public CustomizationVolume getDefaultCustomization() {
+		return new CustomizationVolume();
 	}
 }

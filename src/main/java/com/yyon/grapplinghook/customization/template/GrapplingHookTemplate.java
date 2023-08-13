@@ -1,11 +1,12 @@
 package com.yyon.grapplinghook.customization.template;
 
+import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationAvailability;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
-import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -164,16 +165,30 @@ public class GrapplingHookTemplate {
 
     public CustomizationVolume getCustomizations() {
         CustomizationVolume customization = new CustomizationVolume();
-        properties.forEach(customization::set);
+        this.properties.forEach(customization::set);
         return customization;
     }
 
     public ItemStack getAsStack() {
         ItemStack itemStack = GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance();
-        if(this.getDisplayName() != null)
-            itemStack.setHoverName(this.getDisplayName().copy().withStyle(ChatFormatting.RESET));
-        GrappleModItems.GRAPPLING_HOOK.get().setCustomOnServer(itemStack, this.getCustomizations());
+        GrapplehookItem hook = GrappleModItems.GRAPPLING_HOOK.get();
+
+        hook.applyCustomizations(itemStack, this.getCustomizations());
+        hook.applyHookTemplateName(itemStack, this);
 
         return itemStack;
+    }
+
+    public CompoundTag getMetadataBlob() {
+        CompoundTag data = new CompoundTag();
+
+        data.putString("id", this.identifier);
+
+        if(this.displayName != null) {
+            String json = Component.Serializer.toJson(this.displayName);
+            data.putString("display_name", json);
+        }
+
+        return data;
     }
 }
