@@ -549,5 +549,7 @@
     "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_force.@Tooltip": "How fast the rocket propels the player",
     "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_active_time.@Tooltip": "The time that the rocket can be used until it has to refuel (fuel auto-regenerates when it is not being used)",
     "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_refuel_ratio.@Tooltip": "The ratio of the time that the rocket takes to regenerate fuel, compared to the time the rocket is used. (e.g. 2.0 means a unit of fuel that takes 1 second to use up will take 2 seconds to regenerate. Lower is better. )",
-    "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_vertical_angle.@Tooltip": "The angle upwards that the rocket force is applied"
+    "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_vertical_angle.@Tooltip": "The angle upwards that the rocket force is applied",
+
+    "grapplemod.subtitle.enderstaff": "Ender Staff propels"
 }
