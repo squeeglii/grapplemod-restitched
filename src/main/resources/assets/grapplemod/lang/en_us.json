@@ -53,17 +53,19 @@
     "grappletooltip.negate.desc": "No",
 
     "item.grapplemod.grapplinghook": "Grappling Hook",
-    "item.grapplemod.motorhook": "Motorized Grappling Hook",
     "item.grapplemod.launcheritem": "Ender Staff",
+    "item.grapplemod.repeller": "Magnetic Forcefield",
+
     "item.grapplemod.longfallboots": "Long Fall Boots",
     "item.grapplemod.wallrunboots": "Wallrunning Boots",
-    "item.grapplemod.enderhook": "Ender Grappling Hook",
-    "item.grapplemod.magnethook": "Magnetic Grappling Hook",
-    "item.grapplemod.repeller": "Magnetic Forcefield",
-    "item.grapplemod.doublemotorhook": "Dual Motorized Grappling Hooks",
-    "item.grapplemod.smarthook": "Smart Motorized Grappling Hook",
-    "item.grapplemod.rockethook": "Rocket Grappling Hook",
-    "item.grapplemod.rocketdoublemotorhook": "Rocket Dual Motorized Grappling Hooks",
+
+    "hook_template.grapplemod.ender_hook": "Ender Grappling Hook",
+    "hook_template.grapplemod.magnet_hook": "Magnetic Grappling Hook",
+    "hook_template.grapplemod.motor_hook": "Motorized Grappling Hook",
+    "hook_template.grapplemod.double_motor_hook": "Dual Motorized Grappling Hooks",
+    "hook_template.grapplemod.smart_hook": "Smart Motorized Grappling Hook",
+    "hook_template.grapplemod.rocket_hook": "Rocket Grappling Hook",
+    "hook_template.grapplemod.double_rocket_motor_hook": "Dual Motorized Rocket Grappling Hooks",
 
     "item.grapplemod.baseupgradeitem": "Base Grappling Hook Upgrade",
     "item.grapplemod.doubleupgradeitem": "Double Grappling Hook Upgrade",

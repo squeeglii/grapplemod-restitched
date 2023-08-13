@@ -39,7 +39,7 @@ public class GrapplingHookTemplate {
 
 
     public static final GrapplingHookTemplate ENDER_HOOK = register(new GrapplingHookTemplate(
-            "ender_hook", Component.translatable("grapple_template.ender_hook.name"),
+            "ender_hook", Component.translatable("hook_template.grapplemod.ender_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -47,7 +47,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate MOTOR_HOOK = register(new GrapplingHookTemplate(
-            "motor_hook", Component.translatable("grapple_template.motor_hook.name"),
+            "motor_hook", Component.translatable("hook_template.grapplemod.motor_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -56,7 +56,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate SMART_HOOK = register(new GrapplingHookTemplate(
-            "smart_hook", Component.translatable("grapple_template.smart_hook.name"),
+            "smart_hook", Component.translatable("hook_template.grapplemod.smart_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -66,7 +66,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate MAGNET_HOOK = register(new GrapplingHookTemplate(
-            "magnet_hook", Component.translatable("grapple_template.magnet_hook.name"),
+            "magnet_hook", Component.translatable("hook_template.grapplemod.magnet_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -75,7 +75,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate ROCKET_HOOK = register(new GrapplingHookTemplate(
-            "rocket_hook", Component.translatable("grapple_template.rocket_hook.name"),
+            "rocket_hook", Component.translatable("hook_template.grapplemod.rocket_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -83,7 +83,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate DOUBLE_MOTOR_HOOK = register(new GrapplingHookTemplate(
-            "double_motor_hook", Component.translatable("grapple_template.double_motor_hook.name"),
+            "double_motor_hook", Component.translatable("hook_template.grapplemod.double_motor_hook"),
             property(HOOK_THROW_SPEED, 20.0d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
@@ -107,7 +107,7 @@ public class GrapplingHookTemplate {
     ));
 
     public static final GrapplingHookTemplate DOUBLE_ROCKET_MOTOR_HOOK = register(new GrapplingHookTemplate(
-            "double_rocket_motor_hook", Component.translatable("grapple_template.double_rocket_motor_hook.name"),
+            "double_rocket_motor_hook", Component.translatable("hook_template.grapplemod.double_rocket_motor_hook"),
             property(HOOK_THROW_SPEED, 20.0d),
             property(MAX_ROPE_LENGTH, 60.0d),
 
