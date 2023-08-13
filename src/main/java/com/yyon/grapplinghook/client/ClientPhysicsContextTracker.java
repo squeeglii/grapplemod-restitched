@@ -235,14 +235,12 @@ public class ClientPhysicsContextTracker {
 		if(allConditionsMet && !controllers.containsKey(player.getId())) {
 			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
 			GrappleModClient.get().playDoubleJumpSound();
-			GrappleMod.LOGGER.info("Branch 1");
 		}
 
 		if(allConditionsMet && controllers.get(player.getId()) instanceof AirFrictionPhysicsContext ctrl) {
 			this.alreadyUsedDoubleJump = true;
 			ctrl.doDoubleJump();
 			GrappleModClient.get().playDoubleJumpSound();
-			GrappleMod.LOGGER.info("Branch 2");
 		}
 		
 		this.prevJumpButton = isJumpButtonDown;

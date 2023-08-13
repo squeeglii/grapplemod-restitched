@@ -47,7 +47,7 @@ import java.util.Map;
 public class GrappleModifierBlock extends BaseEntityBlock {
 
 	public GrappleModifierBlock() {
-		super(Block.Properties.copy(Blocks.STONE).strength(1.5f));
+		super(Block.Properties.copy(Blocks.FLETCHING_TABLE));
 	}
 
 
