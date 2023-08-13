@@ -551,5 +551,8 @@
     "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_refuel_ratio.@Tooltip": "The ratio of the time that the rocket takes to regenerate fuel, compared to the time the rocket is used. (e.g. 2.0 means a unit of fuel that takes 1 second to use up will take 2 seconds to regenerate. Lower is better. )",
     "text.autoconfig.grapplemod.option.options.grapplinghook.custom.rocket.rocket_vertical_angle.@Tooltip": "The angle upwards that the rocket force is applied",
 
+    "grapplemod.subtitle.slide": "Player slides",
+    "grapplemod.subtitle.doublejump": "Player double-jumps",
+    "grapplemod.subtitle.rocket": "Rocket propels",
     "grapplemod.subtitle.enderstaff": "Ender Staff propels"
 }
