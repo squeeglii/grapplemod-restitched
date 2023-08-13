@@ -525,5 +525,9 @@
 
     "grapplemod.config.failed_integration.title":  "No Valid Config Support!",
     "grapplemod.config.failed_integration.description": "The Grappling Hook Mod's config is disabled in snapshots - do not report this as a bug!",
+
+    "grapplemod.subtitle.slide": "Player slides",
+    "grapplemod.subtitle.doublejump": "Player double-jumps",
+    "grapplemod.subtitle.rocket": "Rocket propels",
     "grapplemod.subtitle.enderstaff": "Ender Staff propels"
 }
