@@ -18,6 +18,8 @@
     "key.slide.desc": "Slide",
 
     "grappletooltip.attachments.title":  "Attachments",
+    "grappletooltip.properties.title": "Customizations",
+    "grappletooltip.controls.title": "Controls",
     "grappletooltip.throw.desc": "- Throw grappling hook",
     "grappletooltip.release.desc": "again - Release",
     "grappletooltip.double.desc": "Double-",
@@ -40,16 +42,14 @@
     "grappletooltip.throwlefthold.desc": "(hold) - Throw Left Hook",
     "grappletooltip.throwrighthold.desc": "(hold) - Throw Right Hook",
     "grappletooltip.launcheritem.desc": "Launches the player into the air",
-    "grappletooltip.launcheritemaim.desc": "Use crosshairs to aim",
     "grappletooltip.launcheritemcontrols.desc": " - Launch player",
-    "grappletooltip.repelleritem.desc": "Player is repelled by nearby blocks",
-    "grappletooltip.repelleritem2.desc": "Can be used with ender staff",
+    "grappletooltip.repelleritem.desc": "Player is repelled by nearby blocks.",
     "grappletooltip.repelleritemon.desc": " - Turn on",
     "grappletooltip.repelleritemoff.desc": " again - Turn off",
     "grappletooltip.repelleritemslow.desc": " - Slow down",
     "grappletooltip.repelleritemmove.desc": " - Move",
-    "grappletooltip.longfallbootsrecipe.desc": "Right click a Grappling Hook Modifier block with Feather Falling IV Diamond Boots to obtain",
-    "grappletooltip.longfallboots.desc": "Cancels fall damage when worn",
+    "grappletooltip.longfallbootsrecipe.desc": "Right click a Grappling Hook Modifier block \nwith Feather Falling IV Diamond Boots to obtain!",
+    "grappletooltip.longfallboots.desc": "Cancels all fall damage when worn.",
     "grappletooltip.reelin.desc": "- Reel in hook (if hook is not attached to surface)",
     "grappletooltip.negate.desc": "No",
 
@@ -58,7 +58,7 @@
     "item.grapplemod.repeller": "Magnetic Forcefield",
 
     "item.grapplemod.longfallboots": "Long Fall Boots",
-    "item.grapplemod.wallrunboots": "Wallrunning Boots",
+    "item.grapplemod.wallrunboots": "Wall-Running Boots",
 
     "hook_template.grapplemod.ender_hook": "Ender Grappling Hook",
     "hook_template.grapplemod.magnet_hook": "Magnetic Grappling Hook",
@@ -120,7 +120,7 @@
     "grapple_property.grapplemod.hook_throw_speed.name": "Throw Speed",
     "grapple_property.grapplemod.detach_hook_on_key_up.name": "Detach on Button/Key Release",
 
-    "grapple_property.grapplemod.motor.name": "Motor Enabled",
+    "grapple_property.grapplemod.motor.name": "Motor",
     "grapple_property.grapplemod.motor_acceleration.name": "Motor Acceleration",
     "grapple_property.grapplemod.max_motor_speed.name": "Motor Maximum Speed",
     "grapple_property.grapplemod.motor_activation.name": "Motor Activation Type",
@@ -132,10 +132,10 @@
 
     "grapple_property.grapplemod.ender_staff.name": "Ender Staff",
 
-    "grapple_property.grapplemod.forcefield.name": "Forcefield Enabled",
+    "grapple_property.grapplemod.forcefield.name": "Forcefield",
     "grapple_property.grapplemod.forcefield_repel_force.name": "Repel Force",
 
-    "grapple_property.grapplemod.magnet.name": "Magnet Enabled",
+    "grapple_property.grapplemod.magnet.name": "Magnet",
     "grapple_property.grapplemod.magnet_attract_radius.name": "Attraction Radius",
 
     "grapple_property.grapplemod.double_hook.name": "Double Hook",

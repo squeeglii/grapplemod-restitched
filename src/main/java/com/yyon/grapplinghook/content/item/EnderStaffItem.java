@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -56,9 +57,19 @@ public class EnderStaffItem extends Item {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		list.add(Component.translatable("grappletooltip.launcheritem.desc"));
+		list.add(Component
+				.translatable("grappletooltip.launcheritem.desc")
+				.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
 		list.add(Component.literal(""));
-		list.add(Component.translatable("grappletooltip.launcheritemaim.desc"));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc").getString()));
+
+
+		list.add(Component
+				.translatable("grappletooltip.controls.title")
+				.withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
+		);
+		list.add(Component
+				.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc").getString())
+				.withStyle(ChatFormatting.DARK_GRAY)
+		);
 	}
 }

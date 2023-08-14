@@ -9,6 +9,7 @@ import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
+import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
@@ -208,35 +209,40 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		CustomizationVolume custom = getCustomization(stack);
 
 		if (Screen.hasShiftDown()) {
+			list.add(Component.translatable("grappletooltip.controls.title").withStyle(
+					ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
+			));
+			list.add(Component.literal(""));
+
 			if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()));
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()));
-				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")));
+				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")).withStyle(ChatFormatting.DARK_GRAY));
 
 			} else {
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()));
+				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
 					GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
 					GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
 					GrappleModClient.get().getKeyname(MinecraftKey.keyBindRight) +
-					" " + Component.translatable("grappletooltip.swing.desc").getString()));
-			list.add(Component.literal(KeyBindingManagement.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()));
-			list.add(Component.literal(KeyBindingManagement.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()));
+					" " + Component.translatable("grappletooltip.swing.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+			list.add(Component.literal(KeyBindingManagement.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+			list.add(Component.literal(KeyBindingManagement.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + " / " +
 					KeyBindingManagement.key_climbup.getTranslatedKeyMessage().getString() +
-					" " + Component.translatable("grappletooltip.climbup.desc").getString()));
+					" " + Component.translatable("grappletooltip.climbup.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + " / " +
 					KeyBindingManagement.key_climbdown.getTranslatedKeyMessage().getString() +
-					" " + Component.translatable("grappletooltip.climbdown.desc").getString()));
+					" " + Component.translatable("grappletooltip.climbdown.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 
 			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()));
+				list.add(Component.literal(KeyBindingManagement.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(ROCKET_ATTACHED.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()));
+				list.add(Component.literal(KeyBindingManagement.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(MOTOR_ATTACHED.get())) {
@@ -248,33 +254,42 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 				};
 
 				if(text != null)
-					list.add(text);
+					list.add(text.copy().withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
 				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()));
-					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()));
+					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 				} else {
-					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()));
-					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()));
+					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 				}
 
 			} else {
-				list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()));
+				list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(HOOK_REEL_IN_ON_SNEAK.get())) {
-				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()));
+				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
+			return;
 		}
 
 		if (Screen.hasControlDown()) {
+			list.add(Component.translatable("grappletooltip.properties.title").withStyle(
+					ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
+			));
+			list.add(Component.literal(""));
+
 			for(CustomizationProperty<?> property: custom.getPropertiesPresent()) {
 				Component hintText = property.getDisplay().getModificationHint(custom);
-				if(hintText != null)
-					list.add(hintText);
+				if(hintText == null) continue;
+
+				Component formatted = hintText.copy().withStyle(ChatFormatting.DARK_GRAY);
+
+				list.add(formatted);
 			}
 
 			return;
@@ -282,33 +297,39 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 		HashMap<ResourceLocation, Component> attachmentTexts = new HashMap<>();
 
-		for(AttachmentProperty attachment: AttachmentProperty.getBakedProperties()) {
-			boolean useShadowerName = AttachmentProperty.shouldUseShadowerName(custom, attachment);
+		custom.getPropertiesPresent().stream()
+				.filter(p -> p instanceof AttachmentProperty)
+				.map(p -> (AttachmentProperty) p)
+				.forEach(attachment -> {
+					boolean isAttachmentShadowed = AttachmentProperty.isShadowed(custom, attachment);
 
-			if(!useShadowerName) {
-				attachmentTexts.put(attachment.getIdentifier(), attachment.getDisplayName());
-				continue;
-			}
+					// Some attachments are hidden by others (i.e, smart motor hides motor)
+					// Skip any names where its shadower is present and enabled.
+					if(isAttachmentShadowed) return;
 
-			// Handle chains -- remove if this attachment is hidden in another attachment's shadow.
-			attachmentTexts.remove(attachment.getIdentifier());
+					Component formattedName = attachment.getDisplayName()
+							.copy()
+							.withStyle(ChatFormatting.DARK_GRAY);
 
-			Component newText = attachment.getShadowingProperty().orElseThrow().getDisplayName();
-			attachmentTexts.put(attachment.getIdentifier(), newText);
-		}
+					attachmentTexts.put(attachment.getIdentifier(), formattedName);
+				});
 
 		if(!attachmentTexts.isEmpty()) {
-			list.add(Component.translatable("grappletooltip.attachments.title")
-					.withStyle(ChatFormatting.GRAY)
-					.withStyle(ChatFormatting.BOLD)
-			);
+			list.add(Component.translatable("grappletooltip.attachments.title").withStyle(
+					ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
+			));
 
+			list.add(Component.literal(""));
 			list.addAll(attachmentTexts.values());
+			list.add(Component.literal(""));
 		}
 
-		list.add(Component.literal(""));
-		list.add(Component.translatable("grappletooltip.shiftcontrols.desc"));
-		list.add(Component.translatable("grappletooltip.controlconfiguration.desc"));
+		list.add(Component.translatable("grappletooltip.shiftcontrols.desc").withStyle(
+				ChatFormatting.ITALIC, ChatFormatting.GRAY
+		));
+		list.add(Component.translatable("grappletooltip.controlconfiguration.desc").withStyle(
+				ChatFormatting.ITALIC, ChatFormatting.GRAY
+		));
 	}
 
 	@NotNull

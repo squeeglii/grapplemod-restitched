@@ -19,7 +19,7 @@ public class BooleanCustomizationDisplay extends AbstractCustomizationDisplay<Bo
     public Component getModificationHint(Boolean value) {
         if(value == null) return null;
         String checkboxString = value
-                ? "[x]"
+                ? "[✓]"
                 : "[ ]";
         return this.getProperty().getDisplayName().copy().append(": " + checkboxString);
     }

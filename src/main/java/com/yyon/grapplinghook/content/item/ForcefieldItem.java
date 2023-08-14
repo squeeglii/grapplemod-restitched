@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -44,16 +45,27 @@ public class ForcefieldItem extends Item {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		list.add(Component.translatable("grappletooltip.repelleritem.desc"));
-		list.add(Component.translatable("grappletooltip.repelleritem2.desc"));
+		list.add(Component.translatable("grappletooltip.repelleritem.desc").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 		list.add(Component.literal(""));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemon.desc").getString()));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemoff.desc").getString()));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + Component.translatable("grappletooltip.repelleritemslow.desc").getString()));
-		list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
-				GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
-				GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
-				GrappleModClient.get().getKeyname(MinecraftKey.keyBindRight) +
-				" " + Component.translatable("grappletooltip.repelleritemmove.desc").getString()));
+
+		list.add(Component.translatable("grappletooltip.controls.title").withStyle(
+				ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
+		));
+		list.add(Component
+				.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemon.desc").getString())
+				.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
+		list.add(Component
+				.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.repelleritemoff.desc").getString())
+				.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
+		list.add(Component
+				.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + Component.translatable("grappletooltip.repelleritemslow.desc").getString())
+				.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
+		list.add(Component
+				.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
+					GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
+					GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
+					GrappleModClient.get().getKeyname(MinecraftKey.keyBindRight) +
+					" " + Component.translatable("grappletooltip.repelleritemmove.desc").getString())
+				.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 	}
 }

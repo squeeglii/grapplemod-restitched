@@ -12,16 +12,6 @@ import java.util.stream.Collectors;
 
 public class AttachmentProperty extends BooleanProperty {
 
-    private static Set<AttachmentProperty> attachments = new HashSet<>();
-
-    public static void bake() {
-        int initialLength = attachments.size();
-        AttachmentProperty.attachments = attachments.stream()
-                .filter(property -> GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES.getKey(property) != null)
-                .collect(Collectors.toSet());
-        GrappleMod.LOGGER.info("Baked Attachment Properties (Reduced %s -> %s)".formatted(initialLength, attachments.size()));
-    }
-
     private final AttachmentProperty shadowedBy;
 
     public AttachmentProperty(Boolean defaultValue) {
@@ -55,11 +45,7 @@ public class AttachmentProperty extends BooleanProperty {
         return Optional.ofNullable(this.shadowedBy);
     }
 
-    public static Set<AttachmentProperty> getBakedProperties() {
-        return Collections.unmodifiableSet(AttachmentProperty.attachments);
-    }
-
-    public static boolean shouldUseShadowerName(CustomizationVolume custom, AttachmentProperty attachment) {
+    public static boolean isShadowed(CustomizationVolume custom, AttachmentProperty attachment) {
         Optional<AttachmentProperty> optShadower = attachment.getShadowingProperty();
         if(optShadower.isEmpty())
             return false;

@@ -36,8 +36,6 @@ public class GrappleModCustomizationProperties {
 
             data.finalize(Registry.register(GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES, id, it));
         }
-
-        AttachmentProperty.bake();
     }
 
     //TODO: Figure out what to do with categories and items.
