@@ -214,9 +214,17 @@
     "grapple_category.grapplemod.limits": "Limits",
     "grapple_category.grapplemod.rocket": "Rocket",
 
+    "grapple_category.grapplemod.rope.desc": "All things ropes! Length, Material, we have it all!",
+    "grapple_category.grapplemod.hook_thrower.desc": "For the throws where you need a degree in physics.",
+    "grapple_category.grapplemod.motor.desc": "Strap a motor to the rope and see how fast it drags you.",
+    "grapple_category.grapplemod.swing.desc": "We've manipulated physics to make gravity bend to your will!",
+    "grapple_category.grapplemod.ender_staff.desc": "Strap your ender staff to the hook and see what happens!",
+    "grapple_category.grapplemod.forcefield.desc": "For anyone with a phobia of floors, walls, or non-solid surfaces.",
+    "grapple_category.grapplemod.magnet.desc": "For the people who just can't quite land their hook shots.",
+    "grapple_category.grapplemod.double_hook.desc": "Double Trouble, Eren Yeager style!",
+    "grapple_category.grapplemod.limits.desc": "Hook v2! You can now turn everything up to an 11!",
+    "grapple_category.grapplemod.rocket.desc": "Rocket Science (Now Pocket-Sized!)",
 
-    "grapplemod.config.failed_integration.title":  "No Config Support!",
-    "grapplemod.config.failed_integration.description": "The Grappling Hook Mod's config is disabled in snapshots - do not report this as a bug!",
 
     "text.autoconfig.grapplemod.title": "Grappling Hook Mod Config",
 

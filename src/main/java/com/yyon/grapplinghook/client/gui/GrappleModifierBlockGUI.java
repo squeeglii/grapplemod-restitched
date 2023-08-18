@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -184,6 +185,7 @@ public class GrappleModifierBlockGUI extends Screen {
 									this.guiLeft + xColumnAligner + OUTER_PADDING_X,
 									this.guiTop + OUTER_PADDING_Y + 30 * y
 							)
+							.tooltip(Tooltip.create(category.getEmbedContent()))
 							.size(columnWidth, 20)
 							.build()
 			);

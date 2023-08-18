@@ -54,12 +54,15 @@ public class CustomizationCategory {
         return Component.translatable(this.getLocalization("desc"));
     }
 
-    public MutableComponent getEmbed() {
-        Component hoverText = Component.empty()
+    public MutableComponent getEmbedContent() {
+        return Component.empty()
                 .append(this.getName().withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.UNDERLINE))
                 .append("\n\n")
                 .append(this.getDescription().withStyle(ChatFormatting.GRAY));
+    }
 
+    public MutableComponent getEmbed() {
+        Component hoverText = this.getEmbedContent();
 
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText);
 
