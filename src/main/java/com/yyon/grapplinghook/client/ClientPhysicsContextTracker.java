@@ -15,7 +15,7 @@ import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
 import com.yyon.grapplinghook.content.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.content.enchantment.SlidingEnchantment;
-import com.yyon.grapplinghook.content.enchantment.WallrunEnchantment;
+import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
@@ -187,7 +187,7 @@ public class ClientPhysicsContextTracker {
 			if (stack != null) {
 				Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 				for (Enchantment enchant : enchantments.keySet()) {
-					if (!(enchant instanceof WallrunEnchantment)) continue;
+					if (!(enchant instanceof WallRunEnchantment)) continue;
 					if (enchantments.get(enchant) < 1) continue;
 					if (KeyBindingManagement.key_jumpanddetach.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
 

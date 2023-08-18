@@ -7,8 +7,18 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class DoubleJumpEnchantment extends Enchantment {
+
+    private boolean isEnchantmentEnabled;
+
 	public DoubleJumpEnchantment() {
-		super(ConfigUtility.getRarityFromInt(GrappleModLegacyConfig.getConf().enchantments.doublejump.enchant_rarity_double_jump), EnchantmentCategory.ARMOR_FEET, new EquipmentSlot[] {EquipmentSlot.FEET});
+		super(
+                ConfigUtility.getRarity(GrappleModLegacyConfig.getConf().enchantments.doublejump.enchant_rarity_double_jump),
+                EnchantmentCategory.ARMOR_FEET,
+                new EquipmentSlot[] { EquipmentSlot.FEET }
+        );
+
+        int rarity = GrappleModLegacyConfig.getConf().enchantments.doublejump.enchant_rarity_double_jump;
+        this.isEnchantmentEnabled = rarity >= 0;
 	}
 	
 	@Override
@@ -27,5 +37,10 @@ public class DoubleJumpEnchantment extends Enchantment {
 	public int getMaxLevel()
     {
         return 1;
+    }
+
+    @Override
+    public boolean isDiscoverable() {
+        return this.isEnchantmentEnabled;
     }
 }

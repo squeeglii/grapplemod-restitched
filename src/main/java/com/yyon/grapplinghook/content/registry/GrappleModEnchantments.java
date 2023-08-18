@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.content.registry;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.content.enchantment.SlidingEnchantment;
-import com.yyon.grapplinghook.content.enchantment.WallrunEnchantment;
+import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public class GrappleModEnchantments {
         }
     }
 
-    public static final EnchantmentEntry<WallrunEnchantment> WALL_RUN = GrappleModEnchantments.enchantment("wallrunenchantment", WallrunEnchantment::new);
+    public static final EnchantmentEntry<WallRunEnchantment> WALL_RUN = GrappleModEnchantments.enchantment("wallrunenchantment", WallRunEnchantment::new);
     public static final EnchantmentEntry<DoubleJumpEnchantment> DOUBLE_JUMP = GrappleModEnchantments.enchantment("doublejumpenchantment", DoubleJumpEnchantment::new);
     public static final EnchantmentEntry<SlidingEnchantment> SLIDING = GrappleModEnchantments.enchantment("slidingenchantment", SlidingEnchantment::new);
 

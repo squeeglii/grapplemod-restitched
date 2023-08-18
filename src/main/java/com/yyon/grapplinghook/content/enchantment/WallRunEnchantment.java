@@ -6,18 +6,18 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-public class SlidingEnchantment extends Enchantment {
+public class WallRunEnchantment extends Enchantment {
 
     private boolean isEnchantmentEnabled;
 
-    public SlidingEnchantment() {
+    public WallRunEnchantment() {
         super(
-                ConfigUtility.getRarity(GrappleModLegacyConfig.getConf().enchantments.slide.enchant_rarity_sliding),
+                ConfigUtility.getRarity(GrappleModLegacyConfig.getConf().enchantments.wallrun.enchant_rarity_wallrun),
                 EnchantmentCategory.ARMOR_FEET,
                 new EquipmentSlot[] { EquipmentSlot.FEET }
         );
 
-        int rarity = GrappleModLegacyConfig.getConf().enchantments.slide.enchant_rarity_sliding;
+        int rarity = GrappleModLegacyConfig.getConf().enchantments.wallrun.enchant_rarity_wallrun;
         this.isEnchantmentEnabled = rarity >= 0;
     }
 	
