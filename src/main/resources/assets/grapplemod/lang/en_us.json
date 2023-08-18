@@ -1,5 +1,5 @@
 {
-    "itemGroup.grapplemod.main": "Grappling Hook Mod",
+    "itemgroup.grapplemod.main": "Grappling Hook Mod",
     "grapplemod.jei_modifier_text": "Add upgrade(s), open\ninterface to customize,\nthen apply to hook",
     "pack.grapplemod.original": "Classic Textures",
 
@@ -66,14 +66,6 @@
     "item.grapplemod.longfallboots": "Long Fall Boots",
     "item.grapplemod.wallrunboots": "Wall-Running Boots",
 
-    "hook_template.grapplemod.ender_hook": "Ender Grappling Hook",
-    "hook_template.grapplemod.magnet_hook": "Magnetic Grappling Hook",
-    "hook_template.grapplemod.motor_hook": "Motorized Grappling Hook",
-    "hook_template.grapplemod.double_motor_hook": "Dual Motorized Grappling Hooks",
-    "hook_template.grapplemod.smart_hook": "Smart Motorized Grappling Hook",
-    "hook_template.grapplemod.rocket_hook": "Rocket Grappling Hook",
-    "hook_template.grapplemod.double_rocket_motor_hook": "Dual Motorized Rocket Grappling Hooks",
-
     "item.grapplemod.baseupgradeitem": "Base Grappling Hook Upgrade",
     "item.grapplemod.doubleupgradeitem": "Double Grappling Hook Upgrade",
     "item.grapplemod.forcefieldupgradeitem": "Forcefield Grappling Hook Upgrade",
@@ -91,6 +83,14 @@
     "enchantment.grapplemod.wallrunenchantment": "Wall-Running",
     "enchantment.grapplemod.doublejumpenchantment": "Double-Jump",
     "enchantment.grapplemod.slidingenchantment": "Sliding",
+
+    "hook_template.grapplemod.ender_hook": "Ender Grappling Hook",
+    "hook_template.grapplemod.magnet_hook": "Magnetic Grappling Hook",
+    "hook_template.grapplemod.motor_hook": "Motorized Grappling Hook",
+    "hook_template.grapplemod.double_motor_hook": "Dual Motorized Grappling Hooks",
+    "hook_template.grapplemod.smart_hook": "Smart Motorized Grappling Hook",
+    "hook_template.grapplemod.rocket_hook": "Rocket Grappling Hook",
+    "hook_template.grapplemod.double_rocket_motor_hook": "Dual Motorized Rocket Grappling Hooks",
 
 
     "grapple_modifier.title": "Grapple Hook Modifier Table",

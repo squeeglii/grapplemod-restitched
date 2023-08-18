@@ -8,7 +8,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class WallRunEnchantment extends Enchantment {
 
-    private boolean isEnchantmentEnabled;
+    private final boolean isEnchantmentEnabled;
 
     public WallRunEnchantment() {
         super(

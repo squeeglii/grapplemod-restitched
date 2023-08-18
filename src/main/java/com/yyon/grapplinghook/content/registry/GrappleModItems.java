@@ -73,7 +73,7 @@ public final class GrappleModItems {
     private static final ResourceKey<CreativeModeTab> ITEM_GROUP_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, GrappleMod.id("main"));
 
     private static final CreativeModeTab ITEM_GROUP = FabricItemGroup.builder()
-            .title(Component.translatable("itemGroup.grapplemod.main"))
+            .title(Component.translatable("itemgroup.grapplemod.main"))
             .icon(() -> new ItemStack(GRAPPLING_HOOK.get()))
             .displayItems(MOD_TAB_GENERATOR)
             .build();

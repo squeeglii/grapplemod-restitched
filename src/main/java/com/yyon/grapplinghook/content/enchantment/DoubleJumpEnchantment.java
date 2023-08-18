@@ -8,7 +8,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class DoubleJumpEnchantment extends Enchantment {
 
-    private boolean isEnchantmentEnabled;
+    private final boolean isEnchantmentEnabled;
 
 	public DoubleJumpEnchantment() {
 		super(

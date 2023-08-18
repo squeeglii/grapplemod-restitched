@@ -1,22 +1,26 @@
 {
-    "item.grapplinghook": "Grappin",
-    "item.motorhook": "Grappin motorisé",
-    "item.launcheritem": "Bâton de l'Ender",
-    "item.longfallboots": "Bottes de longue chute",
-    "item.enderhook": "Grappin de l'Ender",
-    "item.magnethook": "Grappin magnétique",
-    "item.repeller": "Champ de force magnétique",
-    "item.doublemotorhook": "Double grappin motorisé",
-    "item.smarthook": "Grappin motorisé intelligent",
-    "item.baseupgradeitem": "Base d'amélioration de grappin",
-    "item.doubleupgradeitem": "Amélioration double grappin",
-    "item.forcefieldupgradeitem": "Amélioration grappin champ de force",
-    "item.motorupgradeitem": "Amélioration grappin motorisé",
-    "item.magnetupgradeitem": "Amélioration grappin aimanté",
-    "item.ropeupgradeitem": "Amélioration corde de grappin",
-    "item.staffupgradeitem": "Amélioration grappin bâton de l'Ender",
-    "item.swingupgradeitem": "Amélioration balancement de grappin",
-    "item.throwupgradeitem": "Amélioration lancement de grappin",
-    "item.limitsupgradeitem": "Amélioration limites de grappin",
-    "block.block_grapple_modifier": "Modificateur de grappin"
+    "item.grapplemod.grapplinghook": "Grappin",
+    "item.grapplemod.launcheritem": "Bâton de l'Ender",
+    "item.grapplemod.repeller": "Champ de force magnétique",
+
+    "item.grapplemod.longfallboots": "Bottes de longue chute",
+
+    "item.grapplemod.baseupgradeitem": "Base d'amélioration de grappin",
+    "item.grapplemod.doubleupgradeitem": "Amélioration double grappin",
+    "item.grapplemod.forcefieldupgradeitem": "Amélioration grappin champ de force",
+    "item.grapplemod.motorupgradeitem": "Amélioration grappin motorisé",
+    "item.grapplemod.magnetupgradeitem": "Amélioration grappin aimanté",
+    "item.grapplemod.ropeupgradeitem": "Amélioration corde de grappin",
+    "item.grapplemod.staffupgradeitem": "Amélioration grappin bâton de l'Ender",
+    "item.grapplemod.swingupgradeitem": "Amélioration balancement de grappin",
+    "item.grapplemod.throwupgradeitem": "Amélioration lancement de grappin",
+    "item.grapplemod.limitsupgradeitem": "Amélioration limites de grappin",
+
+    "block.grapplemod.block_grapple_modifier": "Modificateur de grappin",
+
+    "hook_template.grapplemod.ender_hook": "Grappin de l'Ender",
+    "hook_template.grapplemod.magnet_hook": "Grappin magnétique",
+    "hook_template.grapplemod.motor_hook": "Grappin motorisé",
+    "hook_template.grapplemod.smart_hook": "Grappin motorisé intelligent",
+    "hook_template.grapplemod.double_motor_hook": "Double grappin motorisé"
 }
