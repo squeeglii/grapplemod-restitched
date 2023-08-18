@@ -7,3 +7,7 @@ accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addL
 # Non Conflict Keybinding overflows need this
 accessible field net/minecraft/client/KeyMapping clickCount I
 accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;
+
+# Fixing Emissive Rendering via a new render type
+accessible class net/minecraft/client/renderer/RenderType$CompositeState
+accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard

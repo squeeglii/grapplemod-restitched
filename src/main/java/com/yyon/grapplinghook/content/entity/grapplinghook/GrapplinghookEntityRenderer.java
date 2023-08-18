@@ -1,16 +1,19 @@
 package com.yyon.grapplinghook.content.entity.grapplinghook;
 
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.yyon.grapplinghook.GrappleMod;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.style.RopeStyle;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -29,6 +32,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.*;
 
 import java.lang.Math;
+import java.util.function.Function;
+
+import static net.minecraft.client.renderer.RenderStateShard.*;
 
 
 /** This file is part of GrappleMod.
@@ -50,6 +56,18 @@ import java.lang.Math;
 @Environment(EnvType.CLIENT)
 public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends EntityRenderer<T> {
 
+	private static final Function<ResourceLocation, RenderType> HOOK_TRANSLUCENT_GLOWING = Util.memoize(resourceLocation -> {
+		RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
+				.setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER)
+				.setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false))
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setCullState(CULL)
+				.setLightmapState(NO_LIGHTMAP)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(false);
+		return RenderType.create("hook_translucent_emissive", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, compositeState);
+	});
+
 	public static final Vector3f X_AXIS = new Vector3f(1, 0, 0);
 	public static final Vector3f Y_AXIS = new Vector3f(0, 1, 0);
 	public static final Vector3f Z_AXIS = new Vector3f(0, 0, 1);
@@ -57,7 +75,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
     private static final ResourceLocation HOOK_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/hook.png");
     private static final ResourceLocation ROPE_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/rope.png");
 
-	private static final RenderType ROPE_RENDER_EMISSIVE = RenderType.entityTranslucentEmissive(ROPE_TEXTURES);
+	private static final RenderType ROPE_RENDER_GLOWING = HOOK_TRANSLUCENT_GLOWING.apply(ROPE_TEXTURES);
 	private static final RenderType ROPE_RENDER = RenderType.entityTranslucentCull(ROPE_TEXTURES);
 
 	private final EntityRendererProvider.Context context;
@@ -202,13 +220,13 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		Matrix4f poseMatrix = poseEntry.pose();
 		Matrix3f normalMatrix = poseEntry.normal();
 
-		// initialize vertexBuffer (used for drawing)
-		VertexConsumer vertexBuffer = renderType.getBuffer(ROPE_RENDER);
-
-		//TODO: Figure out how to make it emissive without it rendering behind the clouds.
-		//VertexConsumer emission = renderType.getBuffer(ROPE_RENDER_EMISSIVE);
-
 		CustomizationVolume volume = hookEntity.getCurrentCustomizations();
+
+		// initialize vertexBuffer (used for drawing)
+		VertexConsumer vertexBuffer = volume.get(GrappleModCustomizationProperties.GLOWING_ROPE.get())
+				? renderType.getBuffer(ROPE_RENDER_GLOWING)
+				: renderType.getBuffer(ROPE_RENDER);
+
 		RopeStyle styleId = volume.get(GrappleModCustomizationProperties.ROPE_STYLE.get());
 
 		// draw rope
@@ -216,7 +234,6 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 			// if no segmenthandler, straight line from hand to hook
 			Vec finishRelative = this.getRelativeToEntity(hookEntity, new Vec(handPosition), partialTicks);
 			this.drawSegment(new Vec(0,0,0), finishRelative, 1.0F, vertexBuffer, poseMatrix, normalMatrix, packedLight, styleId);
-
 
 		} else {
 			for (int i = 0; i < ropeHandler.segments.size() - 1; i++) {
@@ -240,6 +257,12 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 			}
 		}
 
+		this.drawRopeEnding(hookEntity, ropeHandler, handPosition, packedLight, partialTicks, styleId, vertexBuffer, poseMatrix, normalMatrix);
+
+		matrix.popPose();
+	}
+
+	private void drawRopeEnding(GrapplinghookEntity hookEntity, RopeSegmentHandler ropeHandler, Vec handPosition, int packedLight, float partialTicks, RopeStyle styleId, VertexConsumer vertexBuffer, Matrix4f poseMatrix, Matrix3f normalMatrix) {
 		// draw tip of rope closest to hand
 		Vec hook_pos = Vec.partialPositionVec(hookEntity, partialTicks);
 		Vec hand_closest = ropeHandler == null || ropeHandler.segments.size() <= 2
@@ -283,11 +306,9 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 					.normal(normalMatrix, (float) normal.x, (float) normal.y, (float) normal.z)
 					.endVertex();
 		}
-
-		matrix.popPose();
 	}
 
-    // draw a segment of the rope
+	// draw a segment of the rope
     public void drawSegment(Vec start, Vec finish, double taut, VertexConsumer vertexBuffer, Matrix4f poseMatrix, Matrix3f normalMatrix, int packedLight, RopeStyle style) {
     	if (start.sub(finish).length() < 0.05)
 			return;

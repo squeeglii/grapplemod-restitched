@@ -82,6 +82,7 @@ public class GrappleModCustomizationProperties {
     public static final Entry<DoubleProperty> ROCKET_ANGLE = property("rocket_angle", () -> new DoubleProperty(0.0D, 0.0D, 90.0D));
 
     public static final Entry<EnumProperty<RopeStyle>> ROPE_STYLE = property("rope_style", () -> new EnumProperty<>(RopeStyle.REGULAR, RopeStyle.values()));
+    public static final Entry<BooleanProperty> GLOWING_ROPE = property("glowing_rope", () -> new BooleanProperty(false));
 
 
     public static class Entry<T extends CustomizationProperty<?>> extends AbstractRegistryReference<T> {

@@ -93,7 +93,7 @@ public class GrappleModCustomizationCategories {
 
     public static final Entry<CustomizationCategory> STYLE = category("style", () -> new CustomizationCategory(
             null,
-            ROPE_STYLE.get()
+            ROPE_STYLE.get(), GLOWING_ROPE.get()
     ));
 
     public static Set<Entry<? extends CustomizationCategory>> getModCategories() {
