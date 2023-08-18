@@ -20,6 +20,8 @@ public class BaseUpgradeItem extends Item {
 	}
 
 	public CustomizationCategory getCategory() {
-		return this.category.get();
+		return this.category == null
+				? null
+				: this.category.get();
 	}
 }

@@ -3,7 +3,8 @@ package com.yyon.grapplinghook.customization;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
-import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashSet;
@@ -21,10 +22,23 @@ public class CustomizationCategory {
     }
 
 
+    public String getLocalization() {
+        return this.getLocalization(null);
+    }
+
     public String getLocalization(String suffix) {
-        String path = this.getIdentifier().toString().replaceAll("[:/\\\\]", ".");
-        boolean includeConnectingDot = suffix != null && suffix.length() > 0 && !suffix.startsWith(".");
-        return "grapple_category%s%s".formatted(includeConnectingDot ? "." : "", path);
+        String path = this.getIdentifier()
+                .toString()
+                .replaceAll("[:/\\\\]", ".");
+
+        boolean includeConnectingDot = suffix != null && !suffix.isEmpty() && !suffix.startsWith(".");
+
+
+        return "grapple_category.%s%s%s".formatted(
+                path,
+                includeConnectingDot ? "." : "",
+                suffix == null ? "" : suffix
+        );
     }
 
     public ResourceLocation getIdentifier() {
@@ -35,12 +49,32 @@ public class CustomizationCategory {
         return this.upgradeItem;
     }
 
-    public Component getName() {
-        return Component.translatable(this.getLocalization("name"));
+    public MutableComponent getName() {
+        return Component.translatable(this.getLocalization());
     }
 
-    public Component getDescription() {
+    public MutableComponent getDescription() {
         return Component.translatable(this.getLocalization("desc"));
+    }
+
+    public MutableComponent getEmbed() {
+        Component hoverText = Component.empty()
+                .append(this.getName().withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.UNDERLINE))
+                .append("\n\n")
+                .append(this.getDescription().withStyle(ChatFormatting.GRAY));
+
+
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText);
+
+        MutableComponent base = this.getName().copy();
+        Style style = Style.EMPTY
+                .withUnderlined(true)
+                .withItalic(true)
+                .withColor(ChatFormatting.AQUA)
+                .withHoverEvent(hoverEvent);
+
+        base.setStyle(style);
+        return base;
     }
 
     public Set<CustomizationProperty<?>> getLinkedProperties() {

@@ -53,6 +53,12 @@
     "grappletooltip.reelin.desc": "- Reel in hook (if hook is not attached to surface)",
     "grappletooltip.negate.desc": "No",
 
+    "feedback.grapplemod.modifier.long_fall_boots": "Retrofitted your boots into Aperture Science Grade Long-Fall Boots™",
+    "feedback.grapplemod.modifier.long_fall_boots.disabled": "You are not permitted to make Long Fall Boots at a workbench.",
+    "feedback.grapplemod.modifier.upgrade_already_applied": "This workbench already has that upgrade applied!",
+    "feedback.grapplemod.modifier.applied_new_upgrade": "Applied upgrade:",
+    "feedback.grapplemod.modifier.applied_configuration": "Applied modifier tweaks to your Grappling Hook! ⛏",
+
     "item.grapplemod.grapplinghook": "Grappling Hook",
     "item.grapplemod.launcheritem": "Ender Staff",
     "item.grapplemod.repeller": "Magnetic Forcefield",
