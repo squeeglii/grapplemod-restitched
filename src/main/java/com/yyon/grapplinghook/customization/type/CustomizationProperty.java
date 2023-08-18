@@ -78,23 +78,31 @@ public abstract class CustomizationProperty<T> {
         return this.validityPredicate;
     }
 
+    public String getLocalization() {
+        return this.getLocalization(null);
+    }
+
     public String getLocalization(String suffix) {
         String path = this.getIdentifier().toLanguageKey();
-        boolean includeConnectingDot = suffix != null && suffix.length() > 0 && !suffix.startsWith(".");
-        return "grapple_property.%s%s%s".formatted(path, includeConnectingDot ? "." : "", suffix);
+        boolean includeConnectingDot = suffix != null && !suffix.isEmpty() && !suffix.startsWith(".");
+        return "grapple_property.%s%s%s".formatted(
+                path,
+                includeConnectingDot ? "." : "",
+                suffix == null ? "" : suffix
+        );
     }
 
     public Component getDisplayName() {
         ResourceLocation id = this.getIdentifier();
         return id == null
-                ? Component.literal("grapple_property.invalid.name").withStyle(ChatFormatting.RED)
-                : Component.translatable(this.getLocalization("name"));
+                ? Component.translatable("grapple_property.invalid").withStyle(ChatFormatting.RED)
+                : Component.translatable(this.getLocalization());
     }
 
     public Component getDescription() {
         ResourceLocation id = this.getIdentifier();
         return id == null
-                ? Component.literal("grapple_property.invalid.desc")
+                ? Component.translatable("grapple_property.invalid.desc")
                 : Component.translatable(this.getLocalization("desc"));
     }
 

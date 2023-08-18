@@ -27,12 +27,9 @@ public class CustomizationCategory {
     }
 
     public String getLocalization(String suffix) {
-        String path = this.getIdentifier()
-                .toString()
-                .replaceAll("[:/\\\\]", ".");
+        String path = this.getIdentifier().toLanguageKey();
 
         boolean includeConnectingDot = suffix != null && !suffix.isEmpty() && !suffix.startsWith(".");
-
 
         return "grapple_category.%s%s%s".formatted(
                 path,
