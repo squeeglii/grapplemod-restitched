@@ -65,10 +65,10 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		if (!(ent instanceof GrappleModifierBlockEntity tile)) return drops;
 
-		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
-			if (tile.getUnlockedCategories().contains(category))
-				drops.add(new ItemStack(category.getUpgradeItem()));
-		});
+		tile.getUnlockedCategories().stream()
+				.map(CustomizationCategory::getUpgradeItem)
+				.map(ItemStack::new)
+				.forEach(drops::add);
 
 		return drops;
 	}

@@ -15,10 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
-	private final HashMap<CustomizationCategory, Boolean> unlockedCategories = new HashMap<>();
+	private final HashMap<CustomizationCategory, Boolean> categoryUnlockStates = new HashMap<>();
 	private CustomizationVolume customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
@@ -35,7 +37,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	}
 
 	public void unlockCategory(CustomizationCategory category) {
-		unlockedCategories.put(category, true);
+		this.categoryUnlockStates.put(category, true);
 		this.triggerUpdate();
 	}
 
@@ -51,7 +53,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	}
 
 	public boolean isUnlocked(CustomizationCategory category) {
-		return this.unlockedCategories.containsKey(category) && this.unlockedCategories.get(category);
+		return this.categoryUnlockStates.containsKey(category) && this.categoryUnlockStates.get(category);
 	}
 
 	@Override
@@ -78,7 +80,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
 			boolean unlocked = unlockedNBT.getBoolean(category.getIdentifier().toString());
-			this.unlockedCategories.put(category, unlocked);
+			this.categoryUnlockStates.put(category, unlocked);
 		});
 
 		CompoundTag custom = parentNBTTagCompound.getCompound("customization");
@@ -107,6 +109,10 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	}
 
 	public Set<CustomizationCategory> getUnlockedCategories() {
-		return Collections.unmodifiableSet(this.unlockedCategories.keySet());
+		return this.categoryUnlockStates.entrySet()
+				.stream()
+				.filter(Map.Entry::getValue)
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toUnmodifiableSet());
 	}
 }
