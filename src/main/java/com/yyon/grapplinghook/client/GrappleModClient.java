@@ -107,7 +107,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public void registerResourcePacks() {
-        Optional<ModContainer> cont = FabricLoader.getInstance().getModContainer(GrappleMod.MODID);
+        Optional<ModContainer> cont = FabricLoader.getInstance().getModContainer(GrappleMod.MOD_ID);
 
         if(cont.isEmpty()) {
             GrappleMod.LOGGER.error("Unable to register resource packs! This mod technically doesn't exist!!");

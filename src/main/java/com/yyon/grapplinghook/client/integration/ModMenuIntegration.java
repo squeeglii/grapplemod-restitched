@@ -12,13 +12,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return GrappleMod.isConfigSuccessfullyInitialized()
-                ? screen -> AutoConfig.getConfigScreen(GrappleModLegacyConfig.class, screen).get()
-                : screen -> new AlertScreen(
-                screen::onClose,
-                Component.translatable("grapplemod.config.failed_integration.title"),
-                Component.translatable("grapplemod.config.failed_integration.description")
-        );
+        return screen -> AutoConfig.getConfigScreen(GrappleModLegacyConfig.class, screen).get();
     }
 
 }

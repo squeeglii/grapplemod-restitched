@@ -7,7 +7,6 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import org.apache.logging.log4j.LogManager;
@@ -38,25 +37,17 @@ import org.apache.logging.log4j.Logger;
 // key events
 
 public class GrappleMod implements ModInitializer {
-    public static final String MODID = "grapplemod";
-    public static final Logger LOGGER = LogManager.getLogger();
 
-    private static boolean configSuccessfullyInitialized = false;
+    public static final String MOD_ID = "grapplemod";
+    public static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void onInitialize() {
 
         try {
             this.initConfig();
-            configSuccessfullyInitialized = true;
-
-            // Block rendering of config if snapshot as that's the most likely thing
-            // to break.
-            if(SharedConstants.SNAPSHOT)
-                configSuccessfullyInitialized = false;
-
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.info(e);
         }
 
         GrappleModBlocks.registerAllBlocks();
@@ -73,6 +64,7 @@ public class GrappleMod implements ModInitializer {
 
     private void initConfig() {
         ConfigHolder<?> cfg = AutoConfig.register(GrappleModLegacyConfig.class, GsonConfigSerializer::new);
+
         cfg.registerSaveListener((holder, config) -> {
             GrappleModItems.invalidateCreativeTabCache();
             return InteractionResult.SUCCESS;
@@ -84,14 +76,12 @@ public class GrappleMod implements ModInitializer {
         });
     }
 
+
     public static ResourceLocation id(String id) {
-        return new ResourceLocation(MODID, id);
-    }
-    public static ResourceLocation fakeId(String id) {
-        return new ResourceLocation("minecraft", id);
+        return new ResourceLocation(MOD_ID, id);
     }
 
-    public static boolean isConfigSuccessfullyInitialized() {
-        return configSuccessfullyInitialized;
+    public static ResourceLocation fakeId(String id) {
+        return new ResourceLocation("minecraft", id);
     }
 }
