@@ -8,7 +8,6 @@ import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.util.Check;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.ChatFormatting;
@@ -56,6 +55,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return new GrappleModifierBlockEntity(pos,state);
 	}
 
+	@NotNull
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 		List<ItemStack> drops = new ArrayList<>();
@@ -73,131 +73,141 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return drops;
 	}
 
+	@Override
+	@NotNull
+	public RenderShape getRenderShape(BlockState pState) {
+		return RenderShape.MODEL;
+	}
+
 
     @Override
 	@NotNull
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult raytraceresult) {
-		ItemStack helditemstack = playerIn.getItemInHand(hand);
-		Item helditem = helditemstack.getItem();
+		ItemStack heldStack = playerIn.getItemInHand(hand);
+		Item heldItem = heldStack.getItem();
 
-		if (helditem instanceof BaseUpgradeItem upgradeItem) {
-			if (worldIn.isClientSide)
-				return InteractionResult.SUCCESS;
+		if (heldItem instanceof BaseUpgradeItem upgradeItem)
+			return this.handleUpgradeItem(worldIn, pos, playerIn, hand, upgradeItem);
 
-			BlockEntity ent = worldIn.getBlockEntity(pos);
-			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
+		if (heldItem instanceof GrapplehookItem)
+			return this.handleGrappleHookItem(worldIn, pos, playerIn, heldStack);
 
-			if (Check.missingTileEntity(this, tile, playerIn, worldIn, pos))
-				return InteractionResult.FAIL;
+		if (heldItem == Items.DIAMOND_BOOTS)
+			return this.handleDiamondBoots(worldIn, pos, playerIn, hand, heldStack);
 
-			CustomizationCategory category = upgradeItem.getCategory();
+		if (heldItem == Items.DIAMOND)
+			return this.handleEasterEgg(worldIn, pos, playerIn);
 
-			if (category == null)
-				return InteractionResult.SUCCESS;
+		if (!worldIn.isClientSide)
+			return InteractionResult.CONSUME;
 
-			if (tile.isUnlocked(category)) {
-				Component msg = Component.translatable("feedback.grapplemod.modifier.upgrade_already_applied")
-									     .withStyle(ChatFormatting.RED);
-				playerIn.sendSystemMessage(msg);
-				worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
+		BlockEntity ent = worldIn.getBlockEntity(pos);
 
-			} else {
-				if (!playerIn.isCreative())
-					playerIn.setItemInHand(hand, ItemStack.EMPTY);
+		if (!(ent instanceof GrappleModifierBlockEntity tile))
+			return InteractionResult.FAIL;
 
-				tile.unlockCategory(category);
+		GrappleModClient.get().openModifierScreen(tile);
 
-				Component msg = Component.translatable("feedback.grapplemod.modifier.applied_new_upgrade")
-						                 .append(" ")
-						                 .append(category.getEmbed());
+		return InteractionResult.SUCCESS;
+	}
 
-				playerIn.sendSystemMessage(msg);
-				worldIn.playSound(null, pos, SoundEvents.ARMOR_EQUIP_CHAIN, SoundSource.BLOCKS, 1f, 1.0f);
-			}
+	private InteractionResult handleDiamondBoots(Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, ItemStack heldStack) {
+		if (worldIn.isClientSide)
+			return InteractionResult.SUCCESS;
 
-
-		} else if (helditem instanceof GrapplehookItem) {
-			if (worldIn.isClientSide)
-				return InteractionResult.SUCCESS;
-
-			BlockEntity ent = worldIn.getBlockEntity(pos);
-			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
-
-			if (Check.missingTileEntity(this, tile, playerIn, worldIn, pos))
-				return InteractionResult.FAIL;
-
-			CustomizationVolume custom = tile.getCurrentCustomizations();
-			GrappleModItems.GRAPPLING_HOOK.get().applyCustomizations(helditemstack, custom);
-
-			Component msg = Component.translatable("feedback.grapplemod.modifier.applied_configuration");
+		if (!GrappleModLegacyConfig.getConf().longfallboots.longfallbootsrecipe) {
+			Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots.disabled")
+									 .withStyle(ChatFormatting.RED);
 
 			playerIn.sendSystemMessage(msg);
-			worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_TOOLSMITH, SoundSource.BLOCKS, 1f, 1.0f);
+			worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
 
-		} else if (helditem == Items.DIAMOND_BOOTS) {
-			if (worldIn.isClientSide) {
-				return InteractionResult.SUCCESS;
-			}
-
-			if (!GrappleModLegacyConfig.getConf().longfallboots.longfallbootsrecipe) {
-				Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots.disabled")
-						                 .withStyle(ChatFormatting.RED);
-
-				playerIn.sendSystemMessage(msg);
-				worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
-
-				return InteractionResult.CONSUME;
-			}
-
-			boolean gaveitem = false;
-
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(helditemstack);
-
-			if (enchantments.getOrDefault(Enchantments.FALL_PROTECTION, -1) >= 4) {
-				ItemStack replacementStack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.get());
-				EnchantmentHelper.setEnchantments(enchantments, replacementStack);
-				playerIn.setItemInHand(hand, replacementStack);
-				gaveitem = true;
-			}
-
-			if (gaveitem) {
-				Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots");
-
-				playerIn.sendSystemMessage(msg);
-				worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_TOOLSMITH, SoundSource.BLOCKS, 1f, 1.0f);
-
-			} else {
-				Component msg = Component.translatable("grappletooltip.longfallbootsrecipe.desc")
-						.withStyle(ChatFormatting.RED);
-
-				playerIn.sendSystemMessage(msg);
-				worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
-
-			}
-
-		} else if (helditem == Items.DIAMOND) {
-			this.easterEgg(worldIn, pos, playerIn);
-
-		} else {
-			if ((!worldIn.isClientSide) || hand != InteractionHand.MAIN_HAND)
-				return InteractionResult.SUCCESS;
-
-			BlockEntity ent = worldIn.getBlockEntity(pos);
-			GrappleModifierBlockEntity tile = (GrappleModifierBlockEntity) ent;
-
-			GrappleModClient.get().openModifierScreen(tile);
+			return InteractionResult.CONSUME;
 		}
 
-		return InteractionResult.sidedSuccess(worldIn.isClientSide());
-	}
-    
-    @Override
-	@NotNull
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
-    }
+		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(heldStack);
 
-	public void easterEgg(Level worldIn, BlockPos pos, Player playerIn) {
+		boolean invalidForReplacement = enchantments.getOrDefault(Enchantments.FALL_PROTECTION, -1) < 4;
+
+		if (invalidForReplacement) {
+			Component msg = Component.translatable("grappletooltip.longfallbootsrecipe.desc")
+					.withStyle(ChatFormatting.RED);
+
+			playerIn.sendSystemMessage(msg);
+			worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
+
+			return InteractionResult.CONSUME;
+		}
+
+		Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots");
+		ItemStack replacementStack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.get());
+		EnchantmentHelper.setEnchantments(enchantments, replacementStack);
+
+		playerIn.setItemInHand(hand, replacementStack);
+		playerIn.sendSystemMessage(msg);
+		worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_TOOLSMITH, SoundSource.BLOCKS, 1f, 1.0f);
+
+		return InteractionResult.CONSUME;
+	}
+
+	private InteractionResult handleGrappleHookItem(Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
+		if (worldIn.isClientSide)
+			return InteractionResult.SUCCESS;
+
+		BlockEntity ent = worldIn.getBlockEntity(pos);
+
+		if (!(ent instanceof GrappleModifierBlockEntity tile))
+			return InteractionResult.FAIL;
+
+		CustomizationVolume custom = tile.getCurrentCustomizations();
+		GrappleModItems.GRAPPLING_HOOK.get().applyCustomizations(heldStack, custom);
+
+		Component msg = Component.translatable("feedback.grapplemod.modifier.applied_configuration");
+
+		playerIn.sendSystemMessage(msg);
+		worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_TOOLSMITH, SoundSource.BLOCKS, 1f, 1.0f);
+
+		return InteractionResult.CONSUME;
+	}
+
+	private InteractionResult handleUpgradeItem(Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BaseUpgradeItem upgradeItem) {
+		if (worldIn.isClientSide)
+			return InteractionResult.SUCCESS;
+
+		BlockEntity ent = worldIn.getBlockEntity(pos);
+
+		if (!(ent instanceof GrappleModifierBlockEntity tile))
+			return InteractionResult.FAIL;
+
+		CustomizationCategory category = upgradeItem.getCategory();
+
+		if (category == null)
+			return InteractionResult.CONSUME;
+
+		if (tile.isUnlocked(category)) {
+			Component msg = Component.translatable("feedback.grapplemod.modifier.upgrade_already_applied")
+									 .withStyle(ChatFormatting.RED);
+			playerIn.sendSystemMessage(msg);
+			worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
+
+			return InteractionResult.CONSUME;
+		}
+
+		if (!playerIn.isCreative())
+			playerIn.setItemInHand(hand, ItemStack.EMPTY);
+
+		Component msg = Component.translatable("feedback.grapplemod.modifier.applied_new_upgrade")
+				.append(" ")
+				.append(category.getEmbed());
+
+		tile.unlockCategory(category);
+		playerIn.sendSystemMessage(msg);
+		worldIn.playSound(null, pos, SoundEvents.ARMOR_EQUIP_CHAIN, SoundSource.BLOCKS, 1f, 1.0f);
+
+		return InteractionResult.CONSUME;
+	}
+
+	private InteractionResult handleEasterEgg(Level worldIn, BlockPos pos, Player playerIn) {
 		int spacing = 3;
 		Vec[] positions = new Vec[] {new Vec(-spacing*2, 0, 0), new Vec(-spacing, 0, 0), new Vec(0, 0, 0), new Vec(spacing, 0, 0), new Vec(2*spacing, 0, 0)};
 		int[] colors = new int[] {0x5bcffa, 0xf5abb9, 0xffffff, 0xf5abb9, 0x5bcffa};
@@ -233,6 +243,8 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 			firework.readAdditionalSaveData(fireworkSave);
 			worldIn.addFreshEntity(firework);
 		}
+
+		return InteractionResult.sidedSuccess(worldIn.isClientSide);
 	}
 
 
