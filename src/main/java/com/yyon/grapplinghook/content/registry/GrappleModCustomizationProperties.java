@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.customization.CustomizationCategory;
+import com.yyon.grapplinghook.customization.style.RopeStyle;
 import com.yyon.grapplinghook.customization.type.*;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class GrappleModCustomizationProperties {
@@ -82,11 +81,15 @@ public class GrappleModCustomizationProperties {
     public static final Entry<DoubleProperty> ROCKET_REFUEL_RATIO = property("rocket_refuel_ratio", () -> new DoubleProperty(15.0D, 15.0D, 30.0D));
     public static final Entry<DoubleProperty> ROCKET_ANGLE = property("rocket_angle", () -> new DoubleProperty(0.0D, 0.0D, 90.0D));
 
+    public static final Entry<EnumProperty<RopeStyle>> ROPE_STYLE = property("rope_style", () -> new EnumProperty<>(RopeStyle.REGULAR, RopeStyle.values()));
+
+
     public static class Entry<T extends CustomizationProperty<?>> extends AbstractRegistryReference<T> {
 
         protected Entry(ResourceLocation id, Supplier<T> factory) {
             super(id, factory);
         }
+
     }
 
 

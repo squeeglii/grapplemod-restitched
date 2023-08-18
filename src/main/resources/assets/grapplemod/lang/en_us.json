@@ -115,6 +115,13 @@
     "enum.crouch_activation.when_not_crouching": "When NOT Sneaking",
     "enum.crouch_activation.always": "Always Active",
 
+    "enum.grapplemod.rope_style.regular": "Rope-ey",
+    "enum.grapplemod.rope_style.iron": "Cable",
+    "enum.grapplemod.rope_style.ribbon": "Ribbon",
+    "enum.grapplemod.rope_style.trans_pride": "Trans Pride",
+    "enum.grapplemod.rope_style.ghostly": "Ectoplasm",
+    "enum.grapplemod.rope_style.tape_measure": "Tape Measure",
+
     "grapple_property.grapplemod.max_rope_length": "Rope Length",
     "grapple_property.grapplemod.block_phasing_rope": "Phase Rope",
     "grapple_property.grapplemod.sticky_rope": "Sticky Rope",
@@ -155,6 +162,8 @@
     "grapple_property.grapplemod.rocket_angle": "Rocket Angle",
     "grapple_property.grapplemod.rocket_depletion_ratio": "Rocket Time (s)",
     "grapple_property.grapplemod.rocket_refuel_ratio": "Rocket Refuel Time Ratio",
+
+    "grapple_property.grapplemod.rope_style": "Rope Style",
 
     "grapple_property.grapplemod.climbkey": "Dedicated Climbing Key",
 
@@ -200,6 +209,8 @@
     "grapple_property.grapplemod.rocket_depletion_ratio.desc": "The time that the rocket can be used until it has to refuel (fuel auto-regenerates when it is not being used)",
     "grapple_property.grapplemod.rocket_refuel_ratio.desc": "The ratio of the time that the rocket takes to regenerate fuel, compared to the time the rocket is used. (e.g. 2.0 means a unit of fuel that takes 1 second to use up will take 2 seconds to regenerate. Lower is better. )",
 
+    "grapple_property.grapplemod.rope_style.desc": "Change how the rope looks when thrown.",
+
     "grapple_property.grapplemod.climbkey.desc": "Ignore climb up/climb down keys unless the \"climb\" key is held",
 
 
@@ -212,7 +223,8 @@
     "grapple_category.grapplemod.magnet": "Hook Magnet",
     "grapple_category.grapplemod.double_hook": "Double Hook",
     "grapple_category.grapplemod.limits": "Limits",
-    "grapple_category.grapplemod.rocket": "Rocket",
+    "grapple_category.grapplemod.rocket": "Rocketry",
+    "grapple_category.grapplemod.style": "Style",
 
     "grapple_category.grapplemod.rope.desc": "All things ropes! Length, Material, we have it all!",
     "grapple_category.grapplemod.hook_thrower.desc": "For the throws where you need a degree in physics.",
@@ -224,6 +236,7 @@
     "grapple_category.grapplemod.double_hook.desc": "Double Trouble, Eren Yeager style!",
     "grapple_category.grapplemod.limits.desc": "Hook v2! You can now turn everything up to an 11!",
     "grapple_category.grapplemod.rocket.desc": "Rocket Science (Now Pocket-Sized!)",
+    "grapple_category.grapplemod.style.desc": "Make your Grappling Hook the most stylish hook on the block!",
 
 
     "text.autoconfig.grapplemod.title": "Grappling Hook Mod Config",

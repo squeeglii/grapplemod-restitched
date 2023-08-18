@@ -3,6 +3,9 @@ package com.yyon.grapplinghook.content.entity.grapplinghook;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.style.RopeStyle;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -53,7 +56,9 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
     private static final ResourceLocation HOOK_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/hook.png");
     private static final ResourceLocation ROPE_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/rope.png");
-    private static final RenderType ROPE_RENDER = RenderType.entitySolid(ROPE_TEXTURES);
+
+	private static final RenderType ROPE_RENDER_EMISSIVE = RenderType.entityTranslucentEmissive(ROPE_TEXTURES);
+	private static final RenderType ROPE_RENDER = RenderType.entityTranslucentCull(ROPE_TEXTURES);
 
 	private final EntityRendererProvider.Context context;
 	private final Item item;
@@ -200,11 +205,18 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		// initialize vertexBuffer (used for drawing)
 		VertexConsumer vertexBuffer = renderType.getBuffer(ROPE_RENDER);
 
+		//TODO: Figure out how to make it emissive without it rendering behind the clouds.
+		//VertexConsumer emission = renderType.getBuffer(ROPE_RENDER_EMISSIVE);
+
+		CustomizationVolume volume = hookEntity.getCurrentCustomizations();
+		RopeStyle styleId = volume.get(GrappleModCustomizationProperties.ROPE_STYLE.get());
+
 		// draw rope
 		if (ropeHandler == null) {
 			// if no segmenthandler, straight line from hand to hook
 			Vec finishRelative = this.getRelativeToEntity(hookEntity, new Vec(handPosition), partialTicks);
-			this.drawSegment(new Vec(0,0,0), finishRelative, 1.0F, vertexBuffer, poseMatrix, normalMatrix, packedLight);
+			this.drawSegment(new Vec(0,0,0), finishRelative, 1.0F, vertexBuffer, poseMatrix, normalMatrix, packedLight, styleId);
+
 
 		} else {
 			for (int i = 0; i < ropeHandler.segments.size() - 1; i++) {
@@ -220,12 +232,11 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 				from = this.getRelativeToEntity(hookEntity, from, partialTicks);
 				to = this.getRelativeToEntity(hookEntity, to, partialTicks);
 
-				double taut = 1;
-				if (i == ropeHandler.segments.size() - 2) {
-					taut = hookEntity.taut;
-				}
+				double taut = i == ropeHandler.segments.size() - 2
+						? hookEntity.taut
+						: 1.0D;
 
-				this.drawSegment(from, to, taut, vertexBuffer, poseMatrix, normalMatrix, packedLight);
+				this.drawSegment(from, to, taut, vertexBuffer, poseMatrix, normalMatrix, packedLight, styleId);
 			}
 		}
 
@@ -244,29 +255,47 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
 		up.mutableSetMagnitude(0.025);
 
-		Vec side = forward.cross(up);
-		side.mutableSetMagnitude(0.025);
+		Vec sideDir = forward.cross(up);
+		sideDir.mutableSetMagnitude(0.025);
 
-		Vec[] corners = new Vec[] {up.scale(-1).add(side.scale(-1)), up.scale(-1).add(side), up.add(side), up.add(side.scale(-1))};
-		float[][] uvs = new float[][] {{0, 0.99F}, {0, 1}, {1, 1}, {1, 0.99F}};
+		Vec[] corners = new Vec[] {
+				up.scale(-1).add(sideDir.scale(-1)),
+				up.scale(-1).add(sideDir),
+				up.add(sideDir),
+				up.add(sideDir.scale(-1))
+		};
 
-		for (int size = 0; size < 4; size++) {
-			Vec corner = corners[size];
+		float[][] uvs = new float[][] {
+				{styleId.getTextureMinBound(),  0f},
+				{styleId.getTextureMidBound(),  0f},
+				{styleId.getTextureMidBound(),  1f / 16f},
+				{styleId.getTextureMinBound(),  1f / 16f}
+		};
+
+		for (int side = 0; side < 4; side++) {
+			Vec corner = corners[side];
 			Vec normal = corner.normalize(); //.add(forward.normalize().mult(-1)).normalize();
 			Vec cornerPos = this.getRelativeToEntity(hookEntity, handPosition, partialTicks).add(corner);
-			vertexBuffer.vertex(poseMatrix, (float) cornerPos.x, (float) cornerPos.y, (float) cornerPos.z).color(255, 255, 255, 255).uv(uvs[size][0], uvs[size][1]).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normalMatrix, (float) normal.x, (float) normal.y, (float) normal.z).endVertex();
+			vertexBuffer
+					.vertex(poseMatrix, (float) cornerPos.x, (float) cornerPos.y, (float) cornerPos.z)
+					.color(255, 255, 255, 255)
+					.uv(uvs[side][0], uvs[side][1]).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+					.normal(normalMatrix, (float) normal.x, (float) normal.y, (float) normal.z)
+					.endVertex();
 		}
 
 		matrix.popPose();
 	}
 
     // draw a segment of the rope
-    public void drawSegment(Vec start, Vec finish, double taut, VertexConsumer vertexBuffer, Matrix4f poseMatrix, Matrix3f normalMatrix, int packedLight) {
-    	if (start.sub(finish).length() < 0.05) return;
+    public void drawSegment(Vec start, Vec finish, double taut, VertexConsumer vertexBuffer, Matrix4f poseMatrix, Matrix3f normalMatrix, int packedLight, RopeStyle style) {
+    	if (start.sub(finish).length() < 0.05)
+			return;
 
-        int number_squares = 16;
-        if (taut == 1.0F)
-			number_squares = 1;
+		float ropeStyleUVStart = style.getTextureMinBound();
+		float ropeStyleUVEnd = style.getTextureMaxBound();
+
+		int number_squares = taut == 1.0F ? 1 : 16;
 
     	Vec diff = finish.sub(start);
         
@@ -277,27 +306,30 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 			up = forward.cross(new Vec(0, 0, 1));
 
         up.mutableSetMagnitude(0.025);
-        Vec side = forward.cross(up);
-        side.mutableSetMagnitude(0.025);
+        Vec sideDir = forward.cross(up);
+        sideDir.mutableSetMagnitude(0.025);
         
         Vec[] corners = new Vec[] {
-				up.scale(-1).add(side.scale(-1)),
-				up.add(side.scale(-1)),
-				up.add(side),
-				up.scale(-1).add(side)
+				up.scale(-1).add(sideDir.scale(-1)),
+				up.add(sideDir.scale(-1)),
+				up.add(sideDir),
+				up.scale(-1).add(sideDir)
 		};
 
-        for (int size = 0; size < 4; size++) {
-            Vec corner1 = corners[size];
-            Vec corner2 = corners[(size + 1) % 4];
+        for (int side = 0; side < 4; side++) {
+            Vec corner1 = corners[side];
+            Vec corner2 = corners[(side + 1) % 4];
 
         	Vec normal1 = corner1.normalize();
         	Vec normal2 = corner2.normalize();
+
+			boolean flipNormal = side % 2 == 0;
             
             for (int square_num = 0; square_num < number_squares; square_num++) {
                 float squarefrac1 = (float)square_num / (float) number_squares;
                 Vec pos1 = start.add(diff.scale(squarefrac1));
                 pos1.y += - (1 - taut) * (0.25 - Math.pow((squarefrac1 - 0.5), 2)) * 1.5;
+
                 float squarefrac2 = ((float) square_num+1) / (float) number_squares;
                 Vec pos2 = start.add(diff.scale(squarefrac2));
                 pos2.y += - (1 - taut) * (0.25 - Math.pow((squarefrac2 - 0.5), 2)) * 1.5;
@@ -306,11 +338,35 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
                 Vec corner2pos1 = pos1.add(corner2);
                 Vec corner1pos2 = pos2.add(corner1);
                 Vec corner2pos2 = pos2.add(corner2);
-            	
-                vertexBuffer.vertex(poseMatrix, (float) corner1pos1.x, (float) corner1pos1.y, (float) corner1pos1.z).color(255, 255, 255, 255).uv(0, squarefrac1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normalMatrix, (float) normal1.x, (float) normal1.y, (float) normal1.z).endVertex();
-                vertexBuffer.vertex(poseMatrix, (float) corner2pos1.x, (float) corner2pos1.y, (float) corner2pos1.z).color(255, 255, 255, 255).uv(1, squarefrac1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normalMatrix, (float) normal2.x, (float) normal2.y, (float) normal2.z).endVertex();
-                vertexBuffer.vertex(poseMatrix, (float) corner2pos2.x, (float) corner2pos2.y, (float) corner2pos2.z).color(255, 255, 255, 255).uv(1, squarefrac2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normalMatrix, (float) normal2.x, (float) normal2.y, (float) normal2.z).endVertex();
-                vertexBuffer.vertex(poseMatrix, (float) corner1pos2.x, (float) corner1pos2.y, (float) corner1pos2.z).color(255, 255, 255, 255).uv(0, squarefrac2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normalMatrix, (float) normal1.x, (float) normal1.y, (float) normal1.z).endVertex();
+
+				float uLeft = flipNormal ? ropeStyleUVEnd : ropeStyleUVStart;
+				float uRight = flipNormal ? ropeStyleUVStart : ropeStyleUVEnd;
+
+                vertexBuffer
+						.vertex(poseMatrix, (float) corner1pos1.x, (float) corner1pos1.y, (float) corner1pos1.z)
+						.color(255, 255, 255, 255)
+						.uv(uLeft, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+						.normal(normalMatrix, (float) normal1.x, (float) normal1.y, (float) normal1.z)
+						.endVertex();
+                vertexBuffer
+						.vertex(poseMatrix, (float) corner2pos1.x, (float) corner2pos1.y, (float) corner2pos1.z)
+						.color(255, 255, 255, 255)
+						.uv(uRight, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+						.normal(normalMatrix, (float) normal2.x, (float) normal2.y, (float) normal2.z)
+						.endVertex();
+
+                vertexBuffer
+						.vertex(poseMatrix, (float) corner2pos2.x, (float) corner2pos2.y, (float) corner2pos2.z)
+						.color(255, 255, 255, 255)
+						.uv(uRight, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+						.normal(normalMatrix, (float) normal2.x, (float) normal2.y, (float) normal2.z)
+						.endVertex();
+				vertexBuffer
+						.vertex(poseMatrix, (float) corner1pos2.x, (float) corner1pos2.y, (float) corner1pos2.z)
+						.color(255, 255, 255, 255)
+						.uv(uLeft, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+						.normal(normalMatrix, (float) normal1.x, (float) normal1.y, (float) normal1.z)
+						.endVertex();
             }
         }
         

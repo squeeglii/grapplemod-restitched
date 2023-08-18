@@ -91,6 +91,11 @@ public class GrappleModCustomizationCategories {
             ROCKET_FUEL_DEPLETION_RATIO.get(), ROCKET_REFUEL_RATIO.get()
     ));
 
+    public static final Entry<CustomizationCategory> STYLE = category("style", () -> new CustomizationCategory(
+            null,
+            ROPE_STYLE.get()
+    ));
+
     public static Set<Entry<? extends CustomizationCategory>> getModCategories() {
         return Set.copyOf(categories.values());
     }

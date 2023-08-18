@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 @Mixin(Gui.class)
-public class GrappleCrosshairMixin {
+public abstract class GrappleCrosshairMixin {
 
     private static final double Z_LEVEL = -90.0D;
 
