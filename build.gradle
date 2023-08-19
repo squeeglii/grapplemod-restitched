@@ -5,10 +5,13 @@ plugins {
 
 group = project.maven_group
 
-String targetVersion = project.properties["mod_version"] == null || project.properties["mod_version"].toString().length() == 0
-        ? "-indev"
-        :"-v" + project.properties["mod_version"].toString()
-project.setVersion(project.properties["minecraft_version"] + targetVersion)
+boolean isModVersionDefined = project.properties["mod_version"] == null ||
+                              project.properties["mod_version"].toString().length() == 0;
+
+String modVer = isModVersionDefined
+        ? "indev"
+        : project.properties["mod_version"].toString()
+project.setVersion("%s+%s".formatted(modVer, project.properties["minecraft_version"]))
 
 loom {
     accessWidenerPath = file("src/main/resources/grapplemod.accesswidener")
