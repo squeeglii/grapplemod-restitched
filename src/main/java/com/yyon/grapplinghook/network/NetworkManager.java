@@ -74,7 +74,7 @@ public class NetworkManager {
         NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
         NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);
         NetworkManager.registerClient("grapple_detach", GrappleDetachMessage::new);
-        NetworkManager.registerClient("logged_in", LoggedInMessage::new);
+        NetworkManager.registerClient("config_sync", SyncConfigMessage::new);
         NetworkManager.registerClient("segment", SegmentMessage::new);
     }
 

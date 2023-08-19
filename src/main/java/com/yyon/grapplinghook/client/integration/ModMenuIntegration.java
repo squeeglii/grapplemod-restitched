@@ -12,7 +12,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return screen -> AutoConfig.getConfigScreen(GrappleModLegacyConfig.class, screen).get();
+        return YACLConfigScreenGenerator::getScreen;
     }
 
 }

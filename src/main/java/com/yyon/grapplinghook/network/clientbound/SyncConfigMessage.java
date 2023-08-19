@@ -29,14 +29,14 @@ import java.util.Comparator;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class LoggedInMessage extends BaseMessageClient {
+public class SyncConfigMessage extends BaseMessageClient {
     GrappleModLegacyConfig.Config conf;
 
-    public LoggedInMessage(FriendlyByteBuf buf) {
+    public SyncConfigMessage(FriendlyByteBuf buf) {
     	super(buf);
     }
     
-    public LoggedInMessage(GrappleModLegacyConfig.Config serverconf) {
+    public SyncConfigMessage(GrappleModLegacyConfig.Config serverconf) {
     	this.conf = serverconf;
     }
 
@@ -120,7 +120,7 @@ public class LoggedInMessage extends BaseMessageClient {
 
 	@Override
 	public ResourceLocation getChannel() {
-		return GrappleMod.id("logged_in");
+		return GrappleMod.id("config_sync");
 	}
 
 	@Override

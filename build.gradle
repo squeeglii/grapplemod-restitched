@@ -46,6 +46,11 @@ repositories {
     // Mod Deps
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
+
+    maven {
+        name 'Xander Maven'
+        url 'https://maven.isxander.dev/releases'
+    }
 }
 
 dependencies {
@@ -63,6 +68,8 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    modImplementation 'dev.isxander.yacl:yet-another-config-lib-fabric:3.0.0+1.20'
 
     modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
