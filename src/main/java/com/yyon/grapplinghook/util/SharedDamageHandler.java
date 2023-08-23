@@ -10,19 +10,22 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
 
 public class SharedDamageHandler {
 
-    /** @return true if the death should be cancelled. */
-    public static boolean handleDeath(Entity deadEntity) {
-        if (deadEntity.level().isClientSide) return false;
+    public static void handleDeath(Entity deadEntity) {
+        Level level = deadEntity.level();
+
+        if (level.isClientSide)
+            return;
 
         int id = deadEntity.getId();
         boolean isConnected = PhysicsContextTracker.allGrapplehookEntities.containsKey(id);
 
-        if (isConnected) return false;
+        if (isConnected) return;
 
         HashSet<GrapplinghookEntity> grapplehookEntities = PhysicsContextTracker.allGrapplehookEntities.get(id);
 
@@ -41,7 +44,7 @@ public class SharedDamageHandler {
         if(deadEntity instanceof Player)
             GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level());
 
-        return false;
+        return;
     }
 
     /** @return true if the death should be cancelled. */
