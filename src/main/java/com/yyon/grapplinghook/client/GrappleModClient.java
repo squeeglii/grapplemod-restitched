@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
@@ -28,9 +27,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -123,28 +120,6 @@ public class GrappleModClient implements ClientModInitializer {
         ClientPhysicsContextTracker.instance.startRocket(player, custom);
     }
 
-    public String getKeyname(MinecraftKey keyEnum) {
-        Options gs = Minecraft.getInstance().options;
-
-        KeyMapping binding = switch (keyEnum) {
-            case keyBindUseItem -> gs.keyUse;
-            case keyBindForward -> gs.keyUp;
-            case keyBindLeft -> gs.keyLeft;
-            case keyBindBack -> gs.keyDown;
-            case keyBindRight -> gs.keyRight;
-            case keyBindJump -> gs.keyJump;
-            case keyBindSneak -> gs.keyShift;
-            case keyBindAttack -> gs.keyAttack;
-        };
-
-        String displayName = binding.getTranslatedKeyMessage().getString();
-        return switch (displayName) {
-            case "Button 1" -> "Left Click";
-            case "Button 2" -> "Right Click";
-            default -> displayName;
-        };
-    }
-
     public void openModifierScreen(GrappleModifierBlockEntity tile) {
         Minecraft.getInstance().setScreen(new GrappleModifierBlockGUI(tile));
     }
@@ -204,22 +179,6 @@ public class GrappleModClient implements ClientModInitializer {
 
     public void resetRopeJumpTime(Level world) {
         ClientPhysicsContextTracker.prevRopeJumpTime = GrappleModUtils.getTime(world);
-    }
-
-    public boolean isKeyDown(MinecraftKey keyEnum) {
-
-        Options options = Minecraft.getInstance().options;
-
-        return switch (keyEnum) {
-            case keyBindUseItem ->  options.keyUse.isDown();
-            case keyBindForward -> options.keyUp.isDown();
-            case keyBindLeft -> options.keyLeft.isDown();
-            case keyBindBack -> options.keyDown.isDown();
-            case keyBindRight -> options.keyRight.isDown();
-            case keyBindJump -> options.keyJump.isDown();
-            case keyBindSneak -> options.keyShift.isDown();
-            case keyBindAttack -> options.keyAttack.isDown();
-        };
     }
 
     public boolean isMovingSlowly(Entity entity) {

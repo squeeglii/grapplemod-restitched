@@ -1,10 +1,11 @@
 package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -39,17 +40,17 @@ public class EnderStaffItem extends Item {
 	public EnderStaffItem() {
 		super(new Item.Properties().stacksTo(1));
 	}
-	
-	public void doRightClick(Level worldIn, Player player) {
-		if (!worldIn.isClientSide) return;
-		GrappleModClient.get().launchPlayer(player);
-	}
+
 	
     @Override
 	@NotNull
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
     	ItemStack stack = playerIn.getItemInHand(hand);
-        this.doRightClick(worldIn, playerIn);
+
+		if (!worldIn.isClientSide)
+			return InteractionResultHolder.consume(stack);
+
+		GrappleModClient.get().launchPlayer(playerIn);
 
     	return InteractionResultHolder.success(stack);
 	}
@@ -57,6 +58,8 @@ public class EnderStaffItem extends Item {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
+		Options options = Minecraft.getInstance().options;
+
 		list.add(Component
 				.translatable("grappletooltip.launcheritem.desc")
 				.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
@@ -67,9 +70,9 @@ public class EnderStaffItem extends Item {
 				.translatable("grappletooltip.controls.title")
 				.withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
 		);
-		list.add(Component
-				.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindUseItem) + Component.translatable("grappletooltip.launcheritemcontrols.desc").getString())
-				.withStyle(ChatFormatting.DARK_GRAY)
+		list.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY)
+				.append(options.keyUse.getTranslatedKeyMessage())
+				.append(Component.translatable("grappletooltip.launcheritemcontrols.desc"))
 		);
 	}
 }

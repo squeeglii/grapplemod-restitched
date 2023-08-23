@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.physics.context;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
-import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.GrappleMod;
@@ -14,6 +13,7 @@ import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -609,22 +609,23 @@ public class GrapplingHookPhysicsContext {
 	}
 
 	public void normalGround(boolean sliding) {
-		if (entity.onGround()) {
-			onGroundTimer = maxOnGroundTimer;
-		} else {
-			if (this.onGroundTimer > 0) {
-				onGroundTimer--;
-			}
+		Options options = Minecraft.getInstance().options;
+
+		if (this.entity.onGround()) {
+			this.onGroundTimer = this.maxOnGroundTimer;
+
+		} else if (this.onGroundTimer > 0) {
+			this.onGroundTimer--;
 		}
-		if (entity.onGround() || onGroundTimer > 0) {
-			if (!sliding) {
-				this.motion = Vec.motionVec(entity);
-				if (GrappleModClient.get().isKeyDown(MinecraftKey.keyBindJump)) {
-					this.motion.y += 0.05;
-				}
-			}
+
+
+		if (this.entity.onGround() || this.onGroundTimer > 0 || !sliding) {
+			this.motion = Vec.motionVec(this.entity);
+			if (options.keyJump.isDown())
+				this.motion.y += 0.05;
 		}
-		prevOnGround = entity.onGround();
+
+		this.prevOnGround = this.entity.onGround();
 	}
 
 	private double getJumpPower(Entity player, double jumppower) {

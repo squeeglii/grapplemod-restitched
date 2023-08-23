@@ -1,15 +1,13 @@
 package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
-import com.yyon.grapplinghook.client.keybind.MinecraftKey;
+import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.DroppableItem;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
-import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
@@ -22,6 +20,8 @@ import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -207,6 +207,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
 		CustomizationVolume custom = getCustomization(stack);
+		Options options = Minecraft.getInstance().options;
 
 		if (Screen.hasShiftDown()) {
 			list.add(Component.translatable("grappletooltip.controls.title").withStyle(
@@ -215,41 +216,44 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			list.add(Component.literal(""));
 
 			if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-				list.add(Component.translatable("grappletooltip.double.desc").append(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.translatable("grappletooltip.double.desc").append(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")).withStyle(ChatFormatting.DARK_GRAY));
 
 			} else {
-				list.add(Component.literal(KeyBindingManagement.key_boththrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
-			list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + ", " +
-					GrappleModClient.get().getKeyname(MinecraftKey.keyBindLeft) + ", " +
-					GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + ", " +
-					GrappleModClient.get().getKeyname(MinecraftKey.keyBindRight) +
-					" " + Component.translatable("grappletooltip.swing.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(KeyBindingManagement.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(KeyBindingManagement.key_slow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindForward) + " / " +
-					KeyBindingManagement.key_climbup.getTranslatedKeyMessage().getString() +
+			list.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY)
+					.append(options.keyUp.getTranslatedKeyMessage() + ", ")
+					.append(options.keyLeft.getTranslatedKeyMessage() + ", ")
+					.append(options.keyDown.getTranslatedKeyMessage() + ", ")
+					.append(options.keyRight.getTranslatedKeyMessage())
+					.append(" ")
+					.append(Component.translatable("grappletooltip.swing.desc"))
+			);
+			list.add(Component.literal(GrappleKey.DETACH.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+			list.add(Component.literal(GrappleKey.DAMPEN_SWING.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+			list.add(Component.literal(GrappleKey.CLIMB.getTranslatedKeyMessage().getString() + " + " + options.keyUp.getTranslatedKeyMessage() + " / " +
+					GrappleKey.CLIMB_UP.getTranslatedKeyMessage().getString() +
 					" " + Component.translatable("grappletooltip.climbup.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(KeyBindingManagement.key_climb.getTranslatedKeyMessage().getString() + " + " + GrappleModClient.get().getKeyname(MinecraftKey.keyBindBack) + " / " +
-					KeyBindingManagement.key_climbdown.getTranslatedKeyMessage().getString() +
+			list.add(Component.literal(GrappleKey.CLIMB.getTranslatedKeyMessage().getString() + " + " + options.keyDown.getTranslatedKeyMessage() + " / " +
+					GrappleKey.CLIMB_DOWN.getTranslatedKeyMessage().getString() +
 					" " + Component.translatable("grappletooltip.climbdown.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 
 			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_enderlaunch.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(GrappleKey.HOOK_ENDER_LAUNCH.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(ROCKET_ATTACHED.get())) {
-				list.add(Component.literal(KeyBindingManagement.key_rocket.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(GrappleKey.ROCKET.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(MOTOR_ATTACHED.get())) {
 
 				Component text = switch (custom.get(MOTOR_ACTIVATION.get())) {
-					case WHEN_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString());
-					case WHEN_NOT_CROUCHING -> Component.literal(KeyBindingManagement.key_motoronoff.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString());
+					case WHEN_CROUCHING -> Component.literal(GrappleKey.TOGGLE_MOTOR.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString());
+					case WHEN_NOT_CROUCHING -> Component.literal(GrappleKey.TOGGLE_MOTOR.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString());
 					default -> null;
 				};
 
@@ -259,19 +263,19 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
 				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+					list.add(Component.literal(GrappleKey.THROW_LEFT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+					list.add(Component.literal(GrappleKey.THROW_RIGHT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 				} else {
-					list.add(Component.literal(KeyBindingManagement.key_leftthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-					list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+					list.add(Component.literal(GrappleKey.THROW_LEFT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+					list.add(Component.literal(GrappleKey.THROW_RIGHT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 				}
 
 			} else {
-				list.add(Component.literal(KeyBindingManagement.key_rightthrow.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(GrappleKey.THROW_RIGHT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			if (custom.get(HOOK_REEL_IN_ON_SNEAK.get())) {
-				list.add(Component.literal(GrappleModClient.get().getKeyname(MinecraftKey.keyBindSneak) + " " + Component.translatable("grappletooltip.reelin.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(Component.literal(options.keyShift.getTranslatedKeyMessage() + " " + Component.translatable("grappletooltip.reelin.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 
 			return;
@@ -580,7 +584,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		CompoundTag tag = stack.getOrCreateTag();
 		CompoundTag nbt = template.getMetadataBlob();
 
-		tag.put("hook_template", nbt);
+		tag.put(NBT_HOOK_TEMPLATE, nbt);
 
 		stack.setTag(tag);
 	}
