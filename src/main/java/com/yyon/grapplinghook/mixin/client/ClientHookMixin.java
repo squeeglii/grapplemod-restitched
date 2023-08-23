@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
-import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
+import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
 import com.yyon.grapplinghook.content.registry.GrappleModBlocks;
@@ -35,9 +35,9 @@ public class ClientHookMixin {
                 if (Minecraft.getInstance().screen == null) {
                     // keep in same order as enum from KeypressItem
                     boolean[] keys = {
-                            KeyBindingManagement.key_enderlaunch.isDown(), KeyBindingManagement.key_leftthrow.isDown(),
-                            KeyBindingManagement.key_rightthrow.isDown(), KeyBindingManagement.key_boththrow.isDown(),
-                            KeyBindingManagement.key_rocket.isDown()
+                            GrappleKey.HOOK_ENDER_LAUNCH.isDown(), GrappleKey.THROW_LEFT_HOOK.isDown(),
+                            GrappleKey.THROW_RIGHT_HOOK.isDown(), GrappleKey.THROW_HOOKS.isDown(),
+                            GrappleKey.ROCKET.isDown()
                     };
 
                     for (int i = 0; i < keys.length; i++) {

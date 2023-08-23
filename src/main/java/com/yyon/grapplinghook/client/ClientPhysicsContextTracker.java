@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
+import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.client.sound.RocketSound;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
@@ -111,7 +111,7 @@ public class ClientPhysicsContextTracker {
 	}
 
 	public void checkSlide(Player player) {
-		if (KeyBindingManagement.key_slide.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
+		if (GrappleKey.SLIDE.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
 			this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
 		}
 	}
@@ -189,7 +189,7 @@ public class ClientPhysicsContextTracker {
 				for (Enchantment enchant : enchantments.keySet()) {
 					if (!(enchant instanceof WallRunEnchantment)) continue;
 					if (enchantments.get(enchant) < 1) continue;
-					if (KeyBindingManagement.key_jumpanddetach.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
+					if (GrappleKey.DETACH.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
 
 					BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 					if (rayTraceResult == null) {
@@ -284,7 +284,7 @@ public class ClientPhysicsContextTracker {
 	public boolean isSliding(Entity entity, Vec motion) {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
-		if (entity.onGround() && KeyBindingManagement.key_slide.isDown()) {
+		if (entity.onGround() && GrappleKey.SLIDE.isDown()) {
 			if (!ClientPhysicsContextTracker.isWearingSlidingEnchant(entity)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();

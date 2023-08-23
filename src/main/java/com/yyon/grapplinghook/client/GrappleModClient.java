@@ -2,10 +2,9 @@ package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.client.keybind.GrappleModKey;
 import com.yyon.grapplinghook.client.keybind.MinecraftKey;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
-import com.yyon.grapplinghook.client.keybind.KeyBindingManagement;
+import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
@@ -72,7 +71,7 @@ public class GrappleModClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(GrappleModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 
-        KeyBindingManagement.registerAll();
+        GrappleKey.registerAll();
         GrappleModEntityRenderLayers.registerAll();
 
         NetworkManager.registerClientPacketListeners();
@@ -193,23 +192,6 @@ public class GrappleModClient implements ClientModInitializer {
 
     public GrapplingHookPhysicsContext createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, CustomizationVolume custom) {
         return ClientPhysicsContextTracker.instance.createControl(id, hookEntityId, entityId, world, blockpos, custom);
-    }
-
-    public boolean isKeyDown(GrappleModKey key) {
-        return switch (key) {
-            case key_boththrow -> KeyBindingManagement.key_boththrow.isDown();
-            case key_leftthrow -> KeyBindingManagement.key_leftthrow.isDown();
-            case key_rightthrow -> KeyBindingManagement.key_rightthrow.isDown();
-            case key_motoronoff -> KeyBindingManagement.key_motoronoff.isDown();
-            case key_jumpanddetach -> KeyBindingManagement.key_jumpanddetach.isDown();
-            case key_slow -> KeyBindingManagement.key_slow.isDown();
-            case key_climb -> KeyBindingManagement.key_climb.isDown();
-            case key_climbup -> KeyBindingManagement.key_climbup.isDown();
-            case key_climbdown -> KeyBindingManagement.key_climbdown.isDown();
-            case key_enderlaunch -> KeyBindingManagement.key_enderlaunch.isDown();
-            case key_rocket -> KeyBindingManagement.key_rocket.isDown();
-            case key_slide -> KeyBindingManagement.key_slide.isDown();
-        };
     }
 
     public GrapplingHookPhysicsContext unregisterController(int entityId) {
