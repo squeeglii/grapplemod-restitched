@@ -39,7 +39,7 @@ public class GrapplingHookPhysicsContext {
 	public HashSet<GrapplinghookEntity> grapplehookEntities = new HashSet<>();
 	public HashSet<Integer> grapplehookEntityIds = new HashSet<>();
 	
-	public boolean attached = true;
+	public boolean isControllerActive = true;
 	
 	public Vec motion;
 	
@@ -104,7 +104,7 @@ public class GrapplingHookPhysicsContext {
 
 			} else {
 				GrappleMod.LOGGER.warn("Grappling Hook Controller without a grappling hook entity!");
-				this.unattach();
+				this.disable();
 			}
 		}
 		
@@ -113,10 +113,10 @@ public class GrapplingHookPhysicsContext {
 		}
 	}
 	
-	public void unattach() {
+	public void disable() {
 		if (GrappleModClient.get().unregisterController(this.entityId) == null) return;
 
-		this.attached = false;
+		this.isControllerActive = false;
 
 		if (this.controllerId != GrappleModUtils.AIR_FRICTION_ID) {
 			NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
@@ -126,10 +126,10 @@ public class GrapplingHookPhysicsContext {
 	
 	
 	public void doClientTick() {
-		if (!this.attached) return;
+		if (!this.isControllerActive) return;
 
 		if (this.entity == null || !this.entity.isAlive()) {
-			this.unattach();
+			this.disable();
 		} else {
 			this.updatePlayerPos();
 		}
@@ -146,11 +146,11 @@ public class GrapplingHookPhysicsContext {
 	public void updatePlayerPos() {
 		Entity entity = this.entity;
 		
-		if (!this.attached) return;
+		if (!this.isControllerActive) return;
 		if(entity == null) return;
 
 		if (entity.getVehicle() != null) {
-			this.unattach();
+			this.disable();
 			this.updateServerPos();
 			return;
 		}
@@ -216,7 +216,7 @@ public class GrapplingHookPhysicsContext {
 				if (oldspherevec.length() - remainingLength > GrappleModLegacyConfig.getConf().grapplinghook.other.rope_snap_buffer) {
 					// if rope is too long, the rope snaps
 
-					this.unattach();
+					this.disable();
 					this.updateServerPos();
 					return;
 				} else {
@@ -661,7 +661,7 @@ public class GrapplingHookPhysicsContext {
 			motion.applyAsMotionTo(player);
 		}
 		
-		this.unattach();
+		this.disable();
 		
 		this.updateServerPos();
 	}
@@ -706,7 +706,7 @@ public class GrapplingHookPhysicsContext {
 	// Vector stuff:
 	
 	public void receiveGrappleDetach() {
-		this.unattach();
+		this.disable();
 	}
 
 	public void receiveEnderLaunch(double x, double y, double z) {

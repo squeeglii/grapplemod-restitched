@@ -64,7 +64,6 @@ public class GrappleModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         GrappleModClient.clientInstance = this;
-        ClientCheck.clientLoaded = true;
 
         EntityRendererRegistry.register(GrappleModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 

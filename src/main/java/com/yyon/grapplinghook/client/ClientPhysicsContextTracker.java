@@ -76,7 +76,7 @@ public class ClientPhysicsContextTracker {
 			if (!controllers.containsKey(player.getId())) {
 				GrapplingHookPhysicsContext controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
 				if (controller.getWallDirection() == null)
-					controller.unattach();
+					controller.disable();
 			}
 			
 			if (controllers.containsKey(player.getId())) {
@@ -319,7 +319,7 @@ public class ClientPhysicsContextTracker {
 			boolean currentMulti = currentController.getCurrentCustomizations() != null && currentController.getCurrentCustomizations().get(DOUBLE_HOOK_ATTACHED.get());
 
 			if (!(thisMulti && currentMulti))
-				currentController.unattach();
+				currentController.disable();
 		}
 		
 		GrapplingHookPhysicsContext control;
@@ -369,7 +369,7 @@ public class ClientPhysicsContextTracker {
 
 	public static void registerController(int entityId, GrapplingHookPhysicsContext controller) {
 		if (controllers.containsKey(entityId))
-			controllers.get(entityId).unattach();
+			controllers.get(entityId).disable();
 		
 		controllers.put(entityId, controller);
 	}

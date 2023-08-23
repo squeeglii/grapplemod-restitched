@@ -20,7 +20,7 @@ public class BlockBreakDetectorMixin {
             if (ClientPhysicsContextTracker.controllerPos.containsKey(pos)) {
                 GrapplingHookPhysicsContext control = ClientPhysicsContextTracker.controllerPos.get(pos);
 
-                control.unattach();
+                control.disable();
 
                 ClientPhysicsContextTracker.controllerPos.remove(pos);
             }

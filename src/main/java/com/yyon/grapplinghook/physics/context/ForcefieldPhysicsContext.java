@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public class ForcefieldPhysicsContext extends GrapplingHookPhysicsContext {
+
 	public ForcefieldPhysicsContext(int grapplehookEntityId, int entityId, Level world, int id) {
 		super(grapplehookEntityId, entityId, world, id, null);
 		
@@ -14,34 +15,32 @@ public class ForcefieldPhysicsContext extends GrapplingHookPhysicsContext {
 	public void updatePlayerPos() {
 		Entity entity = this.entity;
 		
-		if (this.attached) {
-			if(entity != null) {
-				this.normalGround(false);
-				this.normalCollisions(false);
-//					this.applyAirFriction();
+		if (!this.isControllerActive) return;
+		if(entity == null) return;
 
-				Vec playerpos = Vec.positionVec(entity);
+		this.normalGround(false);
+		this.normalCollisions(false);
+//		this.applyAirFriction();
 
-//					double dist = oldspherevec.length();
+		Vec playerpos = Vec.positionVec(entity);
 
-				if (playerSneak) {
-					motion.mutableScale(0.95);
-				}
-				applyPlayerMovement();
+//		double dist = oldspherevec.length();
 
-				Vec blockpush = checkRepel(playerpos, entity.level());
-				blockpush.mutableScale(0.5);
-				blockpush = new Vec(blockpush.x*0.5, blockpush.y*2, blockpush.z*0.5);
-				this.motion.mutableAdd(blockpush);
+		if (this.playerSneak)
+			this.motion.mutableScale(0.95);
 
-				if (!entity.onGround()) {
-					motion.mutableAdd(0, -0.05, 0);
-				}
+		this.applyPlayerMovement();
 
-				motion.applyAsMotionTo(this.entity);
+		Vec blockpush = this.checkRepel(playerpos, entity.level())
+				            .mutableScale(0.5)
+				            .multiply(0.5D, 2.0D, 0.5D);
 
-				this.updateServerPos();
-			}
-		}
+		this.motion.mutableAdd(blockpush);
+
+		if (!entity.onGround())
+			this.motion.mutableAdd(0, -0.05, 0);
+
+		this.motion.applyAsMotionTo(this.entity);
+		this.updateServerPos();
 	}
 }
