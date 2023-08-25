@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.LongFallBootsItem;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
-import com.yyon.grapplinghook.physics.PhysicsContextTracker;
+import com.yyon.grapplinghook.physics.GrapplingHookEntityTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -23,11 +23,11 @@ public class SharedDamageHandler {
             return;
 
         int id = deadEntity.getId();
-        boolean isConnected = PhysicsContextTracker.allGrapplehookEntities.containsKey(id);
+        boolean isConnected = GrapplingHookEntityTracker.allGrapplehookEntities.containsKey(id);
 
         if (isConnected) return;
 
-        HashSet<GrapplinghookEntity> grapplehookEntities = PhysicsContextTracker.allGrapplehookEntities.get(id);
+        HashSet<GrapplinghookEntity> grapplehookEntities = GrapplingHookEntityTracker.allGrapplehookEntities.get(id);
 
         if(grapplehookEntities != null) {
             for (GrapplinghookEntity hookEntity : grapplehookEntities)
@@ -36,7 +36,7 @@ public class SharedDamageHandler {
             grapplehookEntities.clear();
         }
 
-        PhysicsContextTracker.attached.remove(id);
+        GrapplingHookEntityTracker.attached.remove(id);
 
         GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
         GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);

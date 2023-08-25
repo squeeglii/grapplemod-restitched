@@ -227,6 +227,7 @@ public class ClientPhysicsContextTracker {
 				() -> !player.isInLava(),
 				() -> ticksSinceLastOnGround > 3,
 				() -> this.wearingDoubleJumpEnchant(player),
+				() -> !player.getAbilities().flying,
 				() -> !alreadyUsedDoubleJump
 		);
 
@@ -247,9 +248,6 @@ public class ClientPhysicsContextTracker {
 	}
 
 	public boolean wearingDoubleJumpEnchant(Entity entity) {
-		if (entity instanceof Player player && player.getAbilities().flying)
-			return false;
-
 		for (ItemStack stack : entity.getArmorSlots()) {
 			if (stack == null) continue;
 

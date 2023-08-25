@@ -13,7 +13,7 @@ import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
 import com.yyon.grapplinghook.network.serverbound.KeypressMessage;
-import com.yyon.grapplinghook.physics.PhysicsContextTracker;
+import com.yyon.grapplinghook.physics.GrapplingHookEntityTracker;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -183,7 +183,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
 
 		if (!player.level().isClientSide) {
-			PhysicsContextTracker.attached.remove(id);
+			GrapplingHookEntityTracker.attached.remove(id);
 		}
 
 		if (grapplehookEntitiesLeft.containsKey(player)) {
@@ -494,7 +494,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		int id = entityLiving.getId();
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level());
 
-		PhysicsContextTracker.attached.remove(id);
+		GrapplingHookEntityTracker.attached.remove(id);
 	}
 	
 	public void detachLeft(LivingEntity entityLiving) {
@@ -512,7 +512,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level());
 		}
 
-		PhysicsContextTracker.attached.remove(id);
+		GrapplingHookEntityTracker.attached.remove(id);
 	}
 	
 	public void detachRight(LivingEntity entityLiving) {
@@ -530,7 +530,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level());
 		}
 
-		PhysicsContextTracker.attached.remove(id);
+		GrapplingHookEntityTracker.attached.remove(id);
 	}
 	
     public double getSingleHookAngle(LivingEntity entity, CustomizationVolume custom) {
@@ -547,7 +547,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	
 	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {
 		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomization(stack), isdouble);
-		PhysicsContextTracker.addGrapplehookEntity(entityLiving.getId(), hookEntity);
+		GrapplingHookEntityTracker.addGrapplehookEntity(entityLiving.getId(), hookEntity);
 		return hookEntity;
 	}
     

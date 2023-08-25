@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class PhysicsContextTracker {
+public class GrapplingHookEntityTracker {
 	public static HashSet<Integer> attached = new HashSet<>(); // server side
 	public static HashMap<Integer, HashSet<GrapplinghookEntity>> allGrapplehookEntities = new HashMap<>(); // server side
 

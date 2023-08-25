@@ -18,6 +18,7 @@
     "client.BlockBreakDetectorMixin",
     "client.CameraSetupHookMixin",
     "client.ClientHookMixin",
+    "client.DebugMenuMixin",
     "client.FixKeyMappingConflictsMixin",
     "client.GrappleCrosshairMixin",
     "client.KeybindingHandlerMixin",
