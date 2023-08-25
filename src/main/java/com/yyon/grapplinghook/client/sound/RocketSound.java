@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.client.sound;
 
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvent;
@@ -9,13 +9,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 
 public final class RocketSound extends AbstractTickableSoundInstance {
-    private final GrapplingHookPhysicsContext controller;
+    private final GrapplingHookPhysicsController controller;
     private final float changeSpeed;
 
     private boolean isStopping = false;
 
 
-    public RocketSound(GrapplingHookPhysicsContext controller, SoundEvent soundEvent, SoundSource soundSource) {
+    public RocketSound(GrapplingHookPhysicsController controller, SoundEvent soundEvent, SoundSource soundSource) {
         super(soundEvent, soundSource, RandomSource.create());
         this.looping = true;
         this.controller = controller;

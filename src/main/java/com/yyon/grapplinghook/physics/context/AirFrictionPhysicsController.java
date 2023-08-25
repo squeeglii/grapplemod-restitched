@@ -28,7 +28,7 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
+public class AirFrictionPhysicsController extends GrapplingHookPhysicsController {
 	
 	public int ignoreGroundCounter = 0;
 	public boolean wasSliding = false;
@@ -37,7 +37,7 @@ public class AirFrictionPhysicsContext extends GrapplingHookPhysicsContext {
 	public boolean firstTickSinceCreated = true;
 
 
-	public AirFrictionPhysicsContext(int grapplehookEntityId, int entityId, Level world, int id, CustomizationVolume custom) {
+	public AirFrictionPhysicsController(int grapplehookEntityId, int entityId, Level world, int id, CustomizationVolume custom) {
 		super(grapplehookEntityId, entityId, world, id, custom);
 	}
 

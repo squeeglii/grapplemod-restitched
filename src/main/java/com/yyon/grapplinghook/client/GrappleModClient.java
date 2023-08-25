@@ -6,9 +6,9 @@ import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
-import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsController;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntityRenderer;
 import com.yyon.grapplinghook.network.NetworkContext;
@@ -58,7 +58,7 @@ public class GrappleModClient implements ClientModInitializer {
     private static final ResourceLocation SOUND_DOUBLE_JUMP = new ResourceLocation("grapplemod", "doublejump");
     private static final  ResourceLocation SOUND_SLIDE = new ResourceLocation("grapplemod", "slide");
 
-    private ClientPhysicsContextTracker clientPhysicsContextTracker;
+    private ClientPhysicsControllerTracker clientPhysicsControllerTracker;
 
 
     @Override
@@ -72,7 +72,7 @@ public class GrappleModClient implements ClientModInitializer {
 
         NetworkManager.registerClientPacketListeners();
 
-        this.clientPhysicsContextTracker = new ClientPhysicsContextTracker();
+        this.clientPhysicsControllerTracker = new ClientPhysicsControllerTracker();
         this.registerPropertyOverride();
         this.registerResourcePacks();
     }
@@ -92,11 +92,11 @@ public class GrappleModClient implements ClientModInitializer {
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("magnet"), (stack, world, entity, seed) -> propertyEquipOverride(stack, MAGNET_ATTACHED.get()));
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("attached"), (stack, world, entity, seed) -> {
             if (entity == null) return 0;
-            return (ClientPhysicsContextTracker.controllers.containsKey(entity.getId()) && !(ClientPhysicsContextTracker.controllers.get(entity.getId()) instanceof AirFrictionPhysicsContext)) ? 1 : 0;
+            return (ClientPhysicsControllerTracker.controllers.containsKey(entity.getId()) && !(ClientPhysicsControllerTracker.controllers.get(entity.getId()) instanceof AirFrictionPhysicsController)) ? 1 : 0;
         });
         ItemProperties.register(GrappleModItems.FORCE_FIELD.get(), new ResourceLocation("attached"), (stack, world, entity, seed) -> {
             if (entity == null) return 0;
-            return (ClientPhysicsContextTracker.controllers.containsKey(entity.getId()) && ClientPhysicsContextTracker.controllers.get(entity.getId()) instanceof ForcefieldPhysicsContext) ? 1 : 0;
+            return (ClientPhysicsControllerTracker.controllers.containsKey(entity.getId()) && ClientPhysicsControllerTracker.controllers.get(entity.getId()) instanceof ForcefieldPhysicsController) ? 1 : 0;
         });
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("hook"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.get().getPropertyHook(stack) ? 1 : 0);
     }
@@ -116,7 +116,7 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     public void startRocket(Player player, CustomizationVolume custom) {
-        ClientPhysicsContextTracker.instance.startRocket(player, custom);
+        ClientPhysicsControllerTracker.instance.startRocket(player, custom);
     }
 
     public void openModifierScreen(GrappleModifierBlockEntity tile) {
@@ -141,43 +141,43 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public void resetLauncherTime(int playerId) {
-        ClientPhysicsContextTracker.instance.resetLauncherTime(playerId);
+        ClientPhysicsControllerTracker.instance.resetLauncherTime(playerId);
     }
 
     public void launchPlayer(Player player) {
-        ClientPhysicsContextTracker.instance.launchPlayer(player);
+        ClientPhysicsControllerTracker.instance.launchPlayer(player);
     }
 
     public void updateRocketRegen(double rocketActiveTime, double rocketRefuelRatio) {
-        ClientPhysicsContextTracker.instance.updateRocketRegen(rocketActiveTime, rocketRefuelRatio);
+        ClientPhysicsControllerTracker.instance.updateRocketRegen(rocketActiveTime, rocketRefuelRatio);
     }
 
     public double getRocketFunctioning() {
-        return ClientPhysicsContextTracker.instance.getRocketFunctioning();
+        return ClientPhysicsControllerTracker.instance.getRocketFunctioning();
     }
 
     public boolean isWallRunning(Entity entity, Vec motion) {
-        return ClientPhysicsContextTracker.instance.isWallRunning(entity, motion);
+        return ClientPhysicsControllerTracker.instance.isWallRunning(entity, motion);
     }
 
     public boolean isSliding(Entity entity, Vec motion) {
-        return ClientPhysicsContextTracker.instance.isSliding(entity, motion);
+        return ClientPhysicsControllerTracker.instance.isSliding(entity, motion);
     }
 
-    public GrapplingHookPhysicsContext createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, CustomizationVolume custom) {
-        return ClientPhysicsContextTracker.instance.createControl(id, hookEntityId, entityId, world, blockpos, custom);
+    public GrapplingHookPhysicsController createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, CustomizationVolume custom) {
+        return ClientPhysicsControllerTracker.instance.createControl(id, hookEntityId, entityId, world, blockpos, custom);
     }
 
-    public GrapplingHookPhysicsContext unregisterController(int entityId) {
-        return ClientPhysicsContextTracker.unregisterController(entityId);
+    public GrapplingHookPhysicsController unregisterController(int entityId) {
+        return ClientPhysicsControllerTracker.unregisterController(entityId);
     }
 
     public double getTimeSinceLastRopeJump(Level world) {
-        return GrappleModUtils.getTime(world) - ClientPhysicsContextTracker.prevRopeJumpTime;
+        return GrappleModUtils.getTime(world) - ClientPhysicsControllerTracker.prevRopeJumpTime;
     }
 
     public void resetRopeJumpTime(Level world) {
-        ClientPhysicsContextTracker.prevRopeJumpTime = GrappleModUtils.getTime(world);
+        ClientPhysicsControllerTracker.prevRopeJumpTime = GrappleModUtils.getTime(world);
     }
 
     public boolean isMovingSlowly(Entity entity) {
@@ -196,11 +196,11 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public int getWallrunTicks() {
-        return ClientPhysicsContextTracker.instance.ticksWallRunning;
+        return ClientPhysicsControllerTracker.instance.ticksWallRunning;
     }
 
     public void setWallrunTicks(int newWallrunTicks) {
-        ClientPhysicsContextTracker.instance.ticksWallRunning = newWallrunTicks;
+        ClientPhysicsControllerTracker.instance.ticksWallRunning = newWallrunTicks;
     }
 
     private static int propertyEquipOverride(ItemStack stack, BooleanProperty property) {
@@ -209,8 +209,8 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
 
-    public ClientPhysicsContextTracker getClientControllerManager() {
-        return clientPhysicsContextTracker;
+    public ClientPhysicsControllerTracker getClientControllerManager() {
+        return clientPhysicsControllerTracker;
     }
 
     private static class GrapplehookEntityRenderFactory implements EntityRendererProvider<GrapplinghookEntity> {

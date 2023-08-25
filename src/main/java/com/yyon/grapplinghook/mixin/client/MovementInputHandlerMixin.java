@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
-import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsController;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
@@ -26,14 +26,14 @@ public class MovementInputHandlerMixin {
         if (!Minecraft.getInstance().isRunning() || player == null) return;
 
         int id = player.getId();
-        if (ClientPhysicsContextTracker.controllers.containsKey(id)) {
+        if (ClientPhysicsControllerTracker.controllers.containsKey(id)) {
             Input input = this.input;
-            GrapplingHookPhysicsContext control = ClientPhysicsContextTracker.controllers.get(id);
+            GrapplingHookPhysicsController control = ClientPhysicsControllerTracker.controllers.get(id);
             control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.shiftKeyDown);
 
             boolean overrideMovement = true;
             if (Minecraft.getInstance().player.onGround()) {
-                if (!(control instanceof AirFrictionPhysicsContext) && !(control instanceof ForcefieldPhysicsContext)) {
+                if (!(control instanceof AirFrictionPhysicsController) && !(control instanceof ForcefieldPhysicsController)) {
                     overrideMovement = false;
                 }
             }

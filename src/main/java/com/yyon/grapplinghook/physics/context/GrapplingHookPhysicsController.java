@@ -31,7 +31,7 @@ import java.util.HashSet;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 
-public class GrapplingHookPhysicsContext {
+public class GrapplingHookPhysicsController {
 	public int entityId;
 	public Level world;
 	public Entity entity;
@@ -74,7 +74,7 @@ public class GrapplingHookPhysicsContext {
 
 	private final CustomizationVolume custom;
 	
-	public GrapplingHookPhysicsContext(int grapplehookEntityId, int entityId, Level world, int controllerId, CustomizationVolume custom) {
+	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, int controllerId, CustomizationVolume custom) {
 		this.entityId = entityId;
 		this.world = world;
 		this.custom = custom;

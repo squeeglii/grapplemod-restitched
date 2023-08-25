@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.type.KeypressItem;
@@ -30,7 +30,7 @@ public class ClientHookMixin {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
             if (!Minecraft.getInstance().isPaused()) {
-                ClientPhysicsContextTracker.instance.onClientTick(player);
+                ClientPhysicsControllerTracker.instance.onClientTick(player);
 
                 if (Minecraft.getInstance().screen == null) {
                     // keep in same order as enum from KeypressItem

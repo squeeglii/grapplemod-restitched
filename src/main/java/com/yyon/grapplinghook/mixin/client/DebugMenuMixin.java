@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.world.entity.player.Player;
@@ -28,9 +28,9 @@ public abstract class DebugMenuMixin {
                 ? player.getId()
                 : -1;
 
-        int controllerCount = ClientPhysicsContextTracker.controllers.size();
+        int controllerCount = ClientPhysicsControllerTracker.controllers.size();
 
-        GrapplingHookPhysicsContext ctx = ClientPhysicsContextTracker.controllers.get(playerId);
+        GrapplingHookPhysicsController ctx = ClientPhysicsControllerTracker.controllers.get(playerId);
         String controllerID = ctx != null
                 ? String.valueOf(ctx.controllerId)
                 : "?";

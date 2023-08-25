@@ -10,9 +10,9 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.client.sound.RocketSound;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
-import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsContext;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsController;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.content.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.content.enchantment.SlidingEnchantment;
 import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;
@@ -42,11 +42,11 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
-public class ClientPhysicsContextTracker {
-	public static ClientPhysicsContextTracker instance;
+public class ClientPhysicsControllerTracker {
+	public static ClientPhysicsControllerTracker instance;
 
-	public static HashMap<Integer, GrapplingHookPhysicsContext> controllers = new HashMap<>();
-	public static HashMap<BlockPos, GrapplingHookPhysicsContext> controllerPos = new HashMap<>();
+	public static HashMap<Integer, GrapplingHookPhysicsController> controllers = new HashMap<>();
+	public static HashMap<BlockPos, GrapplingHookPhysicsController> controllerPos = new HashMap<>();
 	public static long prevRopeJumpTime = 0;
 
 	public HashMap<Integer, Long> enderLaunchTimer = new HashMap<>();
@@ -62,7 +62,7 @@ public class ClientPhysicsContextTracker {
 	private boolean alreadyUsedDoubleJump = false;
 
 
-	public ClientPhysicsContextTracker() {
+	public ClientPhysicsControllerTracker() {
 		instance = this;
 	}
 
@@ -74,7 +74,7 @@ public class ClientPhysicsContextTracker {
 
 		if (this.isWallRunning(player, Vec.motionVec(player))) {
 			if (!controllers.containsKey(player.getId())) {
-				GrapplingHookPhysicsContext controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
+				GrapplingHookPhysicsController controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level(), null, null);
 				if (controller.getWallDirection() == null)
 					controller.disable();
 			}
@@ -92,7 +92,7 @@ public class ClientPhysicsContextTracker {
 		this.rocketFuel += this.rocketIncreaseTick;
 		
 		try {
-			for (GrapplingHookPhysicsContext controller : controllers.values())
+			for (GrapplingHookPhysicsController controller : controllers.values())
 				controller.doClientTick();
 
 		} catch (ConcurrentModificationException e) {
@@ -151,7 +151,7 @@ public class ClientPhysicsContextTracker {
 			}
 
 			facing.mutableScale(GrappleModLegacyConfig.getConf().enderstaff.ender_staff_strength);
-			ClientPhysicsContextTracker.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
+			ClientPhysicsControllerTracker.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
 			GrappleModClient.get().playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleModLegacyConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
 		}
 	}
@@ -238,7 +238,7 @@ public class ClientPhysicsContextTracker {
 			GrappleModClient.get().playDoubleJumpSound();
 		}
 
-		if(allConditionsMet && controllers.get(player.getId()) instanceof AirFrictionPhysicsContext ctrl) {
+		if(allConditionsMet && controllers.get(player.getId()) instanceof AirFrictionPhysicsController ctrl) {
 			this.alreadyUsedDoubleJump = true;
 			ctrl.doDoubleJump();
 			GrappleModClient.get().playDoubleJumpSound();
@@ -283,12 +283,12 @@ public class ClientPhysicsContextTracker {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
 		if (entity.onGround() && GrappleKey.SLIDE.isDown()) {
-			if (!ClientPhysicsContextTracker.isWearingSlidingEnchant(entity)) return false;
+			if (!ClientPhysicsControllerTracker.isWearingSlidingEnchant(entity)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();
 
-			GrapplingHookPhysicsContext controller = controllers.get(id);
-			if (controller instanceof AirFrictionPhysicsContext afc && afc.wasSliding) {
+			GrapplingHookPhysicsController controller = controllers.get(id);
+			if (controller instanceof AirFrictionPhysicsController afc && afc.wasSliding) {
 					wasSliding = true;
 			}
 
@@ -301,7 +301,7 @@ public class ClientPhysicsContextTracker {
 	}
 
 
-	public GrapplingHookPhysicsContext createControl(int controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, CustomizationVolume custom) {
+	public GrapplingHookPhysicsController createControl(int controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, CustomizationVolume custom) {
 		GrapplinghookEntity grapplinghookEntity;
 		if (world.getEntity(grapplehookEntityId) instanceof GrapplinghookEntity g)
 			grapplinghookEntity = g;
@@ -309,7 +309,7 @@ public class ClientPhysicsContextTracker {
 			grapplinghookEntity = null;
 		}
 
-		GrapplingHookPhysicsContext currentController = controllers.get(playerId);
+		GrapplingHookPhysicsController currentController = controllers.get(playerId);
 
 		boolean thisMulti = custom != null && custom.get(DOUBLE_HOOK_ATTACHED.get());
 
@@ -320,18 +320,18 @@ public class ClientPhysicsContextTracker {
 				currentController.disable();
 		}
 		
-		GrapplingHookPhysicsContext control;
+		GrapplingHookPhysicsController control;
 		if (controllerId == GrappleModUtils.GRAPPLE_ID) {
 			if (!thisMulti) {
-				control = new GrapplingHookPhysicsContext(grapplehookEntityId, playerId, world, controllerId, custom);
+				control = new GrapplingHookPhysicsController(grapplehookEntityId, playerId, world, controllerId, custom);
 
 			} else {
 				control = controllers.get(playerId);
 
-				GrapplingHookPhysicsContext finalControl = control;
+				GrapplingHookPhysicsController finalControl = control;
 				List<Supplier<Boolean>> conditions = List.of(
 						() -> finalControl != null,
-						() -> finalControl.getClass().equals(GrapplingHookPhysicsContext.class),
+						() -> finalControl.getClass().equals(GrapplingHookPhysicsController.class),
 						() -> finalControl.getCurrentCustomizations().get(DOUBLE_HOOK_ATTACHED.get()),
 						() -> grapplinghookEntity != null
 				);
@@ -341,21 +341,21 @@ public class ClientPhysicsContextTracker {
 					return control;
 				}
 
-				control = new GrapplingHookPhysicsContext(grapplehookEntityId, playerId, world, controllerId, custom);
+				control = new GrapplingHookPhysicsController(grapplehookEntityId, playerId, world, controllerId, custom);
 			}
 
 		} else if (controllerId == GrappleModUtils.REPEL_ID) {
-			control = new ForcefieldPhysicsContext(grapplehookEntityId, playerId, world, controllerId);
+			control = new ForcefieldPhysicsController(grapplehookEntityId, playerId, world, controllerId);
 
 		} else if (controllerId == GrappleModUtils.AIR_FRICTION_ID) {
-			control = new AirFrictionPhysicsContext(grapplehookEntityId, playerId, world, controllerId, custom);
+			control = new AirFrictionPhysicsController(grapplehookEntityId, playerId, world, controllerId, custom);
 
 		} else return null;
 
 		if (blockPos != null)
-			ClientPhysicsContextTracker.controllerPos.put(blockPos, control);
+			ClientPhysicsControllerTracker.controllerPos.put(blockPos, control);
 
-		ClientPhysicsContextTracker.registerController(playerId, control);
+		ClientPhysicsControllerTracker.registerController(playerId, control);
 		
 		Entity e = world.getEntity(playerId);
 		if (e instanceof LocalPlayer p)
@@ -365,21 +365,21 @@ public class ClientPhysicsContextTracker {
 		return control;
 	}
 
-	public static void registerController(int entityId, GrapplingHookPhysicsContext controller) {
+	public static void registerController(int entityId, GrapplingHookPhysicsController controller) {
 		if (controllers.containsKey(entityId))
 			controllers.get(entityId).disable();
 		
 		controllers.put(entityId, controller);
 	}
 
-	public static GrapplingHookPhysicsContext unregisterController(int entityId) {
+	public static GrapplingHookPhysicsController unregisterController(int entityId) {
 		if (!controllers.containsKey(entityId)) return null;
-		GrapplingHookPhysicsContext controller = controllers.get(entityId);
+		GrapplingHookPhysicsController controller = controllers.get(entityId);
 		controllers.remove(entityId);
 
 		BlockPos pos = null;
 		for (BlockPos blockpos : controllerPos.keySet()) {
-			GrapplingHookPhysicsContext otherController = controllerPos.get(blockpos);
+			GrapplingHookPhysicsController otherController = controllerPos.get(blockpos);
 			if (otherController == controller)
 				pos = blockpos;
 		}
@@ -391,19 +391,19 @@ public class ClientPhysicsContextTracker {
 	}
 
 	public static void receiveGrappleDetach(int id) {
-		GrapplingHookPhysicsContext controller = controllers.get(id);
+		GrapplingHookPhysicsController controller = controllers.get(id);
 		if (controller != null)
 			controller.receiveGrappleDetach();
 	}
 	
 	public static void receiveGrappleDetachHook(int id, int hookId) {
-		GrapplingHookPhysicsContext controller = controllers.get(id);
+		GrapplingHookPhysicsController controller = controllers.get(id);
 		if (controller != null)
 			controller.receiveGrappleDetachHook(hookId);
 	}
 
 	public static void receiveEnderLaunch(int id, double x, double y, double z) {
-		GrapplingHookPhysicsContext controller = controllers.get(id);
+		GrapplingHookPhysicsController controller = controllers.get(id);
 
 		if (controller == null) {
 			GrappleMod.LOGGER.warn("Couldn't find controller");
@@ -416,7 +416,7 @@ public class ClientPhysicsContextTracker {
 	public void startRocket(Player player, CustomizationVolume custom) {
 		if (!custom.get(ROCKET_ATTACHED.get())) return;
 		
-		GrapplingHookPhysicsContext controller;
+		GrapplingHookPhysicsController controller;
 		if (controllers.containsKey(player.getId())) {
 			controller = controllers.get(player.getId());
 			CustomizationVolume serverCustom = controller.getCurrentCustomizations();

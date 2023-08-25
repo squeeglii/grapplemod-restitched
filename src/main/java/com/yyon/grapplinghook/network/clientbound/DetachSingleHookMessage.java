@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -59,6 +59,6 @@ public class DetachSingleHookMessage extends BaseMessageClient {
     @Environment(EnvType.CLIENT)
     @Override
     public void processMessage(NetworkContext ctx) {
-    	ClientPhysicsContextTracker.receiveGrappleDetachHook(this.id, this.hookid);
+    	ClientPhysicsControllerTracker.receiveGrappleDetachHook(this.id, this.hookid);
     }
 }

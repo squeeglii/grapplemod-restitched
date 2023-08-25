@@ -4,9 +4,9 @@ import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
-public class ForcefieldPhysicsContext extends GrapplingHookPhysicsContext {
+public class ForcefieldPhysicsController extends GrapplingHookPhysicsController {
 
-	public ForcefieldPhysicsContext(int grapplehookEntityId, int entityId, Level world, int id) {
+	public ForcefieldPhysicsController(int grapplehookEntityId, int entityId, Level world, int id) {
 		super(grapplehookEntityId, entityId, world, id, null);
 		
 		this.playerMovementMult = 1;

@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -22,20 +22,20 @@ public class KeybindingHandlerMixin {
         if (!Minecraft.getInstance().isRunning() || player == null) return;
 
 
-        GrapplingHookPhysicsContext controller = null;
-        if (ClientPhysicsContextTracker.controllers.containsKey(player.getId())) {
-            controller = ClientPhysicsContextTracker.controllers.get(player.getId());
+        GrapplingHookPhysicsController controller = null;
+        if (ClientPhysicsControllerTracker.controllers.containsKey(player.getId())) {
+            controller = ClientPhysicsControllerTracker.controllers.get(player.getId());
         }
 
         if (Minecraft.getInstance().options.keyJump.isDown()) {
             if (controller != null) {
-                if (controller instanceof AirFrictionPhysicsContext && ((AirFrictionPhysicsContext) controller).wasSliding) {
+                if (controller instanceof AirFrictionPhysicsController && ((AirFrictionPhysicsController) controller).wasSliding) {
                     controller.doSlidingJump();
                 }
             }
         }
 
-        ClientPhysicsContextTracker.instance.checkSlide(Minecraft.getInstance().player);
+        ClientPhysicsControllerTracker.instance.checkSlide(Minecraft.getInstance().player);
     }
 
 }

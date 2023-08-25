@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,12 +17,12 @@ public class BlockBreakDetectorMixin {
     @Inject(method = "destroyBlock(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "HEAD", shift = At.Shift.BY, by = 1))
     public void handleBlockBreak(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (pos != null) {
-            if (ClientPhysicsContextTracker.controllerPos.containsKey(pos)) {
-                GrapplingHookPhysicsContext control = ClientPhysicsContextTracker.controllerPos.get(pos);
+            if (ClientPhysicsControllerTracker.controllerPos.containsKey(pos)) {
+                GrapplingHookPhysicsController control = ClientPhysicsControllerTracker.controllerPos.get(pos);
 
                 control.disable();
 
-                ClientPhysicsContextTracker.controllerPos.remove(pos);
+                ClientPhysicsControllerTracker.controllerPos.remove(pos);
             }
         }
     }

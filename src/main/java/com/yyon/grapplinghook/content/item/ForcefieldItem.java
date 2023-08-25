@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
@@ -34,7 +34,7 @@ public class ForcefieldItem extends Item {
 			return InteractionResultHolder.success(stack);
 
 		int playerId = playerIn.getId();
-		GrapplingHookPhysicsContext oldController = GrappleModClient.get().unregisterController(playerId);
+		GrapplingHookPhysicsController oldController = GrappleModClient.get().unregisterController(playerId);
 
 		if (oldController == null || oldController.controllerId == GrappleModUtils.AIR_FRICTION_ID) {
 			GrappleModClient.get().createControl(GrappleModUtils.REPEL_ID, -1, playerId, worldIn, new Vec(0,0,0), null, null);

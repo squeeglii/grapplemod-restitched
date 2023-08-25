@@ -2,20 +2,15 @@ package com.yyon.grapplinghook.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.ClientPhysicsContextTracker;
+import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsContext;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsContext;
+import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.util.Vec;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Player;
-import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,10 +33,10 @@ public class CameraSetupHookMixin {
         int id = player.getId();
         int targetCameraTilt = 0;
 
-        if (ClientPhysicsContextTracker.controllers.containsKey(id)) {
-            GrapplingHookPhysicsContext controller = ClientPhysicsContextTracker.controllers.get(id);
+        if (ClientPhysicsControllerTracker.controllers.containsKey(id)) {
+            GrapplingHookPhysicsController controller = ClientPhysicsControllerTracker.controllers.get(id);
 
-            if (controller instanceof AirFrictionPhysicsContext physicsContext && physicsContext.wasWallrunning) {
+            if (controller instanceof AirFrictionPhysicsController physicsContext && physicsContext.wasWallrunning) {
 
                 Vec wallDirection = physicsContext.getWallDirection();
                 if (wallDirection != null) {
