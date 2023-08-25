@@ -30,8 +30,8 @@ public class ForcefieldItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
     	ItemStack stack = playerIn.getItemInHand(hand);
 
-		if(worldIn.isClientSide)
-			return InteractionResultHolder.success(stack);
+		if(!worldIn.isClientSide)
+			return InteractionResultHolder.consume(stack);
 
 		int playerId = playerIn.getId();
 		GrapplingHookPhysicsController oldController = GrappleModClient.get().unregisterController(playerId);
@@ -40,7 +40,7 @@ public class ForcefieldItem extends Item {
 			GrappleModClient.get().createControl(GrappleModUtils.REPEL_ID, -1, playerId, worldIn, new Vec(0,0,0), null, null);
 		}
         
-    	return InteractionResultHolder.consume(stack);
+    	return InteractionResultHolder.success(stack);
 	}
     
 	@Override
