@@ -36,7 +36,7 @@ public class CameraSetupHookMixin {
         if (ClientPhysicsControllerTracker.controllers.containsKey(id)) {
             GrapplingHookPhysicsController controller = ClientPhysicsControllerTracker.controllers.get(id);
 
-            if (controller instanceof AirFrictionPhysicsController physicsContext && physicsContext.wasWallrunning) {
+            if (controller instanceof AirFrictionPhysicsController physicsContext && physicsContext.wasWallRunning()) {
 
                 Vec wallDirection = physicsContext.getWallDirection();
                 if (wallDirection != null) {

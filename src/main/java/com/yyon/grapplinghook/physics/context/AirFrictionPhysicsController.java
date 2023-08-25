@@ -30,11 +30,11 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 
 public class AirFrictionPhysicsController extends GrapplingHookPhysicsController {
 	
-	public int ignoreGroundCounter = 0;
-	public boolean wasSliding = false;
-	public boolean wasWallrunning = false;
-	public boolean wasRocket = false;
-	public boolean firstTickSinceCreated = true;
+	private int ignoreGroundCounter = 0;
+	private boolean wasSliding = false;
+	private boolean wasWallrunning = false;
+	private boolean wasRocket = false;
+	private boolean firstTickSinceCreated = true;
 
 
 	public AirFrictionPhysicsController(int grapplehookEntityId, int entityId, Level world, int id, CustomizationVolume custom) {
@@ -73,7 +73,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 			return;
 		}
 
-		if (!this.isControllerActive)
+		if (!this.isControllerActive())
 			return;
 
 		Vec additionalMotion = new Vec(0,0,0);
@@ -210,5 +210,13 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 	
 	public void playSlideSound() {
 		GrappleModClient.get().playSlideSound();
+	}
+
+	public boolean wasSliding() {
+		return this.wasSliding;
+	}
+
+	public boolean wasWallRunning() {
+		return this.wasWallrunning;
 	}
 }

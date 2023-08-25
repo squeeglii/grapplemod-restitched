@@ -15,7 +15,7 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 	public void updatePlayerPos() {
 		Entity entity = this.entity;
 		
-		if (!this.isControllerActive) return;
+		if (!this.isControllerActive()) return;
 		if(entity == null) return;
 
 		this.normalGround(false);

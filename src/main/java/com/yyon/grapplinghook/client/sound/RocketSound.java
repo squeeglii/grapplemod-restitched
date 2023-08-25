@@ -29,7 +29,7 @@ public final class RocketSound extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        if (!controller.rocketKeyDown || !controller.isControllerActive)
+        if (!controller.isRocketKeyDown() || !controller.isControllerActive())
             this.isStopping = true;
 
         float targetVolume = this.isStopping

@@ -136,8 +136,13 @@ public class Vec {
 		return this.scale(1.0 / this.length());
 	}
 	
-	public void mutableNormalize() {
-		this.mutableScale(1.0 / this.length());
+	public Vec mutableNormalize() {
+		if (this.length() == 0) {
+			GrappleMod.LOGGER.warn("normalizing vector with no length");
+			return this;
+		}
+
+		return this.mutableScale(1.0 / this.length());
 	}
 	
 	public double dot(Vec v2) {
@@ -154,12 +159,14 @@ public class Vec {
 		return this;
 	}
 	
-	public void mutableSetMagnitude(double l) {
+	public Vec mutableSetMagnitude(double l) {
 		double oldLength = this.length();
 		if (oldLength != 0) {
 			double changeFactor = l / oldLength;
 			this.mutableScale(changeFactor);
 		}
+
+		return this;
 	}
 	
 	public Vec proj(Vec v2) {

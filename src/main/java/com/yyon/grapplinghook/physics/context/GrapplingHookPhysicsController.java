@@ -36,34 +36,31 @@ public class GrapplingHookPhysicsController {
 	public Level world;
 	public Entity entity;
 	
-	public HashSet<GrapplinghookEntity> grapplehookEntities = new HashSet<>();
-	public HashSet<Integer> grapplehookEntityIds = new HashSet<>();
-	
-	public boolean isControllerActive = true;
-	
-	public Vec motion;
-	
-	public double playerForward = 0;
-	public double playerStrafe = 0;
-	public boolean playerJump = false;
-	public boolean playerSneak = false;
-	public Vec playerMovementUnrotated = new Vec(0,0,0);
-	public Vec playerMovement = new Vec(0,0,0);
+	private HashSet<GrapplinghookEntity> grapplehookEntities = new HashSet<>();
+	private HashSet<Integer> grapplehookEntityIds = new HashSet<>();
 
-	private boolean prevOnGround = false;
+	private boolean isControllerActive = true;
+	private int controllerId;
+	
+	protected Vec motion;
+	
+	protected double playerForward = 0;
+	protected double playerStrafe = 0;
+	protected boolean playerJump = false;
+	protected boolean playerSneak = false;
+	protected Vec playerMovementUnrotated = new Vec(0,0,0);
+	protected Vec playerMovement = new Vec(0,0,0);
 
-	public int onGroundTimer;
-	public int maxOnGroundTimer = 3;
-	
-	public double maxLen;
-	
-	public double playerMovementMult = 0;
+	protected int onGroundTimer;
+	protected int maxOnGroundTimer = 3;
+
+	protected double maxLen;
+
+	protected double playerMovementMult = 0;
 
 	private double repelMaxPush = 0.3;
 
-	public int controllerId;
-
-	public boolean rocketKeyDown = false;
+	private boolean rocketKeyDown = false;
 	private double rocketProgression;
 
 	private int ticksSinceLastWallrunSoundEffect = 0;
@@ -624,8 +621,6 @@ public class GrapplingHookPhysicsController {
 			if (options.keyJump.isDown())
 				this.motion.y += 0.05;
 		}
-
-		this.prevOnGround = this.entity.onGround();
 	}
 
 	private double getJumpPower(Entity player, double jumppower) {
@@ -1081,5 +1076,17 @@ public class GrapplingHookPhysicsController {
 
 	public CustomizationVolume getCurrentCustomizations() {
 		return this.custom;
+	}
+
+	public boolean isRocketKeyDown() {
+		return this.rocketKeyDown;
+	}
+
+	public boolean isControllerActive() {
+		return this.isControllerActive;
+	}
+
+	public int getControllerTypeId() {
+		return this.controllerId;
 	}
 }

@@ -68,7 +68,7 @@ public class ClientPhysicsControllerTracker {
 
 
 	public void onClientTick(Player player) {
-		if (player.onGround() || (controllers.containsKey(player.getId()) && controllers.get(player.getId()).controllerId == GrappleModUtils.GRAPPLE_ID)) {
+		if (player.onGround() || (controllers.containsKey(player.getId()) && controllers.get(player.getId()).getControllerTypeId() == GrappleModUtils.GRAPPLE_ID)) {
 			ticksWallRunning = 0;
 		}
 
@@ -288,8 +288,8 @@ public class ClientPhysicsControllerTracker {
 			int id = entity.getId();
 
 			GrapplingHookPhysicsController controller = controllers.get(id);
-			if (controller instanceof AirFrictionPhysicsController afc && afc.wasSliding) {
-					wasSliding = true;
+			if (controller instanceof AirFrictionPhysicsController afc && afc.wasSliding()) {
+				wasSliding = true;
 			}
 
 			double speed = motion.removeAlong(new Vec (0,1,0)).length();

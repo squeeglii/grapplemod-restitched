@@ -32,11 +32,11 @@ public abstract class DebugMenuMixin {
 
         GrapplingHookPhysicsController ctx = ClientPhysicsControllerTracker.controllers.get(playerId);
         String controllerID = ctx != null
-                ? String.valueOf(ctx.controllerId)
+                ? String.valueOf(ctx.getControllerTypeId())
                 : "?";
 
         String inactiveNotice = ctx != null
-                ? String.valueOf(ctx.isControllerActive)
+                ? String.valueOf(ctx.isControllerActive())
                 : "N/A";
 
         list.add("Controllers: %s#, i%s (Active: %s)".formatted(
