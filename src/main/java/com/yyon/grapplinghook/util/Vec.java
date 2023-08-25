@@ -189,7 +189,7 @@ public class Vec {
 	}
 	
 	public String toString() {
-		return "<%s,%s,%s>".formatted(this.x, this.y, this.z);
+		return "<%.02f,%.02f,%.02f>".formatted(this.x, this.y, this.z);
 	}
 
 	public Vec add(double x, double y, double z) {

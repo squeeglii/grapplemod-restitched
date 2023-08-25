@@ -20,28 +20,35 @@ public abstract class DebugMenuMixin {
             at = @At("RETURN"))
     private void getGrappleModDebugInformation(CallbackInfoReturnable<List<String>> cir) {
         List<String> list = cir.getReturnValue();
-
         list.add("-- GrappleMod Debug");
+
 
         Player player = Minecraft.getInstance().player;
         int playerId = player != null
                 ? player.getId()
                 : -1;
-
         int controllerCount = ClientPhysicsControllerTracker.controllers.size();
 
         GrapplingHookPhysicsController ctx = ClientPhysicsControllerTracker.controllers.get(playerId);
-        String controllerID = ctx != null
-                ? String.valueOf(ctx.getControllerTypeId())
-                : "?";
 
-        String inactiveNotice = ctx != null
-                ? String.valueOf(ctx.isControllerActive())
-                : "N/A";
 
-        list.add("Controllers: %s#, i%s (Active: %s)".formatted(
+        if(ctx == null) {
+            list.add("Controllers: %s#".formatted(controllerCount));
+            return;
+        }
+
+
+
+        String controllerID = String.valueOf(ctx.getControllerTypeId());
+        String inactiveNotice = ctx.isControllerActive()
+                ? ""
+                : " (inactive)";
+
+        list.add("Controller: c%s, t%s%s".formatted(
                 controllerCount, controllerID, inactiveNotice
         ));
+        list.add("Duplicates: %s".formatted(ctx.getDuplicates()));
+        list.add("Motion: %s".formatted(ctx.getCopyOfMotion()));
     }
 
 }

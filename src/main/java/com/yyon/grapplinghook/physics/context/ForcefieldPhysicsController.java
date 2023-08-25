@@ -12,6 +12,7 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 		this.playerMovementMult = 1;
 	}
 
+	@Override
 	public void updatePlayerPos() {
 		Entity entity = this.entity;
 		

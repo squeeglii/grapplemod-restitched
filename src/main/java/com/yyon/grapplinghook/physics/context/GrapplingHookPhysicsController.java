@@ -14,6 +14,7 @@ import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -35,6 +36,9 @@ public class GrapplingHookPhysicsController {
 	public int entityId;
 	public Level world;
 	public Entity entity;
+
+	private int lastTickRan = -1;
+	private int duplicates = 0;
 	
 	private HashSet<GrapplinghookEntity> grapplehookEntities = new HashSet<>();
 	private HashSet<Integer> grapplehookEntityIds = new HashSet<>();
@@ -124,6 +128,17 @@ public class GrapplingHookPhysicsController {
 	
 	public void doClientTick() {
 		if (!this.isControllerActive) return;
+
+		IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
+
+		if(server != null) {
+			int serverTick = server.getTickCount();
+
+			if(serverTick == lastTickRan) this.duplicates++;
+			else this.duplicates = 0;
+
+			this.lastTickRan = serverTick;
+		}
 
 		if (this.entity == null || !this.entity.isAlive()) {
 			this.disable();
@@ -724,7 +739,9 @@ public class GrapplingHookPhysicsController {
 	}
 	
 	public void applyPlayerMovement() {
-		motion.mutableAdd(this.playerMovement.withMagnitude(0.015 + motion.length() * 0.01).scale(this.playerMovementMult));//0.02 * playermovementmult));
+		Vec additionalMotion = this.playerMovement.withMagnitude(0.015 + this.motion.length() * 0.01)
+											      .scale(this.playerMovementMult);
+		this.motion.mutableAdd(additionalMotion);
 	}
 
 	public void addHookEntity(GrapplinghookEntity hookEntity) {
@@ -1088,5 +1105,13 @@ public class GrapplingHookPhysicsController {
 
 	public int getControllerTypeId() {
 		return this.controllerId;
+	}
+
+	public Vec getCopyOfMotion() {
+		return new Vec(this.motion);
+	}
+
+	public int getDuplicates() {
+		return this.duplicates;
 	}
 }
