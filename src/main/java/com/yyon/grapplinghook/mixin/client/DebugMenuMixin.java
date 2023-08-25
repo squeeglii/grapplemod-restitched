@@ -35,7 +35,13 @@ public abstract class DebugMenuMixin {
                 ? String.valueOf(ctx.controllerId)
                 : "?";
 
-        list.add("Controllers: %s#, i%s".formatted(controllerCount, controllerID));
+        String inactiveNotice = ctx != null
+                ? String.valueOf(ctx.isControllerActive)
+                : "N/A";
+
+        list.add("Controllers: %s#, i%s (Active: %s)".formatted(
+                controllerCount, controllerID, inactiveNotice
+        ));
     }
 
 }
