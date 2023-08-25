@@ -621,8 +621,6 @@ public class GrapplingHookPhysicsController {
 	}
 
 	public void normalGround(boolean sliding) {
-		Options options = Minecraft.getInstance().options;
-
 		if (this.entity.onGround()) {
 			this.onGroundTimer = this.maxOnGroundTimer;
 
@@ -630,9 +628,12 @@ public class GrapplingHookPhysicsController {
 			this.onGroundTimer--;
 		}
 
+		boolean touchingGround = this.entity.onGround() || this.onGroundTimer > 0;
 
-		if (this.entity.onGround() || this.onGroundTimer > 0 || !sliding) {
+		if (touchingGround && !sliding) {
 			this.motion = Vec.motionVec(this.entity);
+			Options options = Minecraft.getInstance().options;
+
 			if (options.keyJump.isDown())
 				this.motion.y += 0.05;
 		}
