@@ -9,6 +9,16 @@
         "frame": "goal"
     },
 
+    "rewards": {
+        "recipes": [
+            "grapplemod:grappling_hook",
+            "grapplemod:base_upgrade_item",
+            "grapplemod:block_grapple_modifier",
+            "grapplemod:ender_staff",
+            "grapplemod:forcefield"
+        ]
+    },
+
     "criteria": {
         "grappling_hook_acquired": {
             "trigger": "minecraft:inventory_changed",

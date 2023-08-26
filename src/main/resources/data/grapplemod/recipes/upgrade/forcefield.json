@@ -1,14 +1,15 @@
 {
 	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
 	"ingredients": [
 		{
 			"item": "grapplemod:baseupgradeitem"
 		}, 
 		{
-			"item": "minecraft:bow"
+			"item": "grapplemod:repeller"
 		}
 	],
 	"result": {
-		"item": "grapplemod:throwupgradeitem"
+		"item": "grapplemod:forcefieldupgradeitem"
 	}
 }

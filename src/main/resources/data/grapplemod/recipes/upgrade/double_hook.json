@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"ingredients": [
+		{
+			"item": "grapplemod:baseupgradeitem"
+		}, 
+		{
+			"item": "grapplemod:grapplinghook"
+		},
+		{
+			"item": "grapplemod:grapplinghook"
+		}
+	],
+	"result": {
+		"item": "grapplemod:doubleupgradeitem"
+	}
+}

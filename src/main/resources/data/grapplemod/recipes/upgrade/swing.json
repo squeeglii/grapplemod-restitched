@@ -1,14 +1,18 @@
 {
 	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
 	"ingredients": [
 		{
 			"item": "grapplemod:baseupgradeitem"
 		}, 
 		{
-			"item": "minecraft:lead"
+			"item": "minecraft:leather_boots"
+		},
+		{
+			"item": "minecraft:feather"
 		}
 	],
 	"result": {
-		"item": "grapplemod:ropeupgradeitem"
+		"item": "grapplemod:swingupgradeitem"
 	}
 }

@@ -1,17 +1,15 @@
 {
 	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
 	"ingredients": [
 		{
 			"item": "grapplemod:baseupgradeitem"
 		}, 
 		{
-			"item": "grapplemod:grapplinghook"
-		},
-		{
-			"item": "grapplemod:grapplinghook"
+			"item": "minecraft:compass"
 		}
 	],
 	"result": {
-		"item": "grapplemod:doubleupgradeitem"
+		"item": "grapplemod:magnetupgradeitem"
 	}
 }

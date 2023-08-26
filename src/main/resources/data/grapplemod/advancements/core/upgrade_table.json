@@ -6,6 +6,22 @@
         "icon": { "item": "grapplemod:block_grapple_modifier" },
         "frame": "goal"
     },
+
+    "rewards": {
+        "recipes": [
+            "grapplemod:upgrade/double_hook",
+            "grapplemod:upgrade/ender_staff",
+            "grapplemod:upgrade/forcefield",
+            "grapplemod:upgrade/hook_thrower",
+            "grapplemod:upgrade/limits",
+            "grapplemod:upgrade/magnet",
+            "grapplemod:upgrade/motor",
+            "grapplemod:upgrade/rocket",
+            "grapplemod:upgrade/rope",
+            "grapplemod:upgrade/swing"
+        ]
+    },
+
     "criteria": {
         "used_modification_table": {
             "trigger": "minecraft:item_used_on_block",
@@ -25,6 +41,7 @@
             }
         }
     },
+
     "requirements": [
         [
             "used_modification_table"
