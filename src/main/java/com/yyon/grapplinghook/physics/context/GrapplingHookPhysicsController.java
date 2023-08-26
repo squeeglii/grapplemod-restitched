@@ -236,9 +236,9 @@ public class GrapplingHookPhysicsController {
 				}
 			}
 
-			double dist = oldspherevec.length();
+			double playerToAnchorDist = oldspherevec.length();
 
-			this.applyCalculatedTaut(dist, hookEntity);
+			this.applyCalculatedTaut(playerToAnchorDist, hookEntity);
 
 			// handle keyboard input (jumping and climbing)
 			if (entity instanceof Player player) {
@@ -269,43 +269,16 @@ public class GrapplingHookPhysicsController {
 				}
 
 				if ((GrappleKey.CLIMB.isDown() || GrappleKey.CLIMB_UP.isDown() || GrappleKey.CLIMB_DOWN.isDown()) && !motor) {
+					Vec climbMotion = anchor.y != playerPos.y
+							? this.calculateClimbingMotion(hookEntity, playerToAnchorDist, distToAnchor, spherevec)
+							: new Vec(0, 0, 0);
+
 					isClimbing = true;
-					if (anchor.y > playerPos.y) {
-						// climb up/down rope
-						double climbDelta = 0;
-
-						if (GrappleKey.CLIMB.isDown()) {
-							climbDelta = this.playerForward;
-
-							if (GrappleModClient.get().isMovingSlowly(this.entity))
-								climbDelta /= 0.3D;
-
-							climbDelta = Mth.clamp(climbDelta, -1.0D, 1.0D);
-
-						}
-						else if (GrappleKey.CLIMB_UP.isDown()) { climbDelta = 1.0D; }
-						else if (GrappleKey.CLIMB_DOWN.isDown()) { climbDelta = -1.0D; }
-
-
-						if (climbDelta != 0) {
-							if (dist + distToAnchor < maxLen || climbDelta > 0 || maxLen == 0) {
-								hookEntity.ropeLength = dist + distToAnchor;
-								hookEntity.ropeLength -= climbDelta* GrappleModLegacyConfig.getConf().grapplinghook.other.climb_speed;
-								if (hookEntity.ropeLength < distToAnchor) {
-									hookEntity.ropeLength = dist + distToAnchor;
-								}
-
-								Vec additionalmovementdown = spherevec.withMagnitude(-climbDelta * GrappleModLegacyConfig.getConf().grapplinghook.other.climb_speed).proj(new Vec(0,1,0));
-								if (additionalmovementdown.y < 0) {
-									additionalMotion.mutableAdd(additionalmovementdown);
-								}
-							}
-						}
-					}
+					additionalMotion.mutableAdd(climbMotion);
 				}
 			}
 
-			if (dist + distToAnchor < 2) {
+			if (playerToAnchorDist + distToAnchor < 2) {
 				close = true;
 			}
 
@@ -364,6 +337,45 @@ public class GrapplingHookPhysicsController {
 		entity.setDeltaMovement(newmotion.x, newmotion.y, newmotion.z);
 
 		this.updateServerPos();
+	}
+
+	private Vec calculateClimbingMotion(GrapplinghookEntity hook, double dist, double distToAnchor, Vec spherevec) {
+		// climb up/down rope
+		double climbDelta = 0;
+
+		if (GrappleKey.CLIMB.isDown()) {
+			climbDelta = this.playerForward;
+
+			if (GrappleModClient.get().isMovingSlowly(this.entity))
+				climbDelta /= 0.3D;
+
+			climbDelta = Mth.clamp(climbDelta, -1.0D, 1.0D);
+
+		}
+		else if (GrappleKey.CLIMB_UP.isDown()) { climbDelta = 1.0D; }
+		else if (GrappleKey.CLIMB_DOWN.isDown()) { climbDelta = -1.0D; }
+
+
+		if (climbDelta == 0) return new Vec(0, 0, 0);
+
+		double climbSpeed = GrappleModLegacyConfig.getConf().grapplinghook.other.climb_speed;
+
+		if (!(dist + distToAnchor < this.maxLen || climbDelta > 0 || this.maxLen == 0))
+			return new Vec(0, 0, 0);
+
+		hook.ropeLength = dist + distToAnchor;
+		hook.ropeLength -= climbDelta * climbSpeed;
+
+		if (hook.ropeLength < distToAnchor) {
+			hook.ropeLength = dist + distToAnchor;
+		}
+
+		Vec up = new Vec(0,1,0);
+		Vec additionalDownwardMovement = spherevec.withMagnitude(-climbDelta * climbSpeed).proj(up);
+
+		return additionalDownwardMovement.y < 0
+				? additionalDownwardMovement
+				: new Vec(0, 0, 0);
 	}
 
 	private void processMotorPhysics(Vec playerPos, Vec facing, Entity entity, Vec gravity, boolean close) {
