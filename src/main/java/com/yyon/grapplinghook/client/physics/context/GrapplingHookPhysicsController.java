@@ -141,8 +141,7 @@ public class GrapplingHookPhysicsController {
 		// Not null & player
 		// Reset server-side physics tracking.
 		if(this.entity == clientPlayer && !alreadyDisabled) {
-			UUID id = this.entity.getUUID();
-			NetworkManager.packetToServer(new PhysicsUpdateMessage(id));
+			NetworkManager.packetToServer(new PhysicsUpdateMessage());
 		}
 
 		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.entityId) == null)
@@ -197,7 +196,7 @@ public class GrapplingHookPhysicsController {
 		if(this.entity != clientPlayer)
 			return;
 
-		PlayerPhysicsFrame frame = new PlayerPhysicsFrame(this.entity.getUUID())
+		PlayerPhysicsFrame frame = new PlayerPhysicsFrame()
 				.setPhysicsControllerType(this.getType())
 				.setSpeed(this.motion.length());
 

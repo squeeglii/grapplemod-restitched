@@ -15,18 +15,12 @@ import java.util.UUID;
  */
 public final class PlayerPhysicsFrame {
 
-    private final UUID playerUuid;
-
     private ResourceLocation physicsControllerType;
 
     private double speed;
 
 
-    public PlayerPhysicsFrame(UUID playerId) {
-        if(playerId == null)
-            throw new IllegalArgumentException("Player ID must not be null");
-
-        this.playerUuid = playerId;
+    public PlayerPhysicsFrame() {
         this.physicsControllerType = GrappleMod.id("none");
         this.speed = 0.0D;
     }
@@ -41,9 +35,6 @@ public final class PlayerPhysicsFrame {
         return this;
     }
 
-    public UUID getPlayerUuid() {
-        return this.playerUuid;
-    }
 
     public ResourceLocation getPhysicsControllerType() {
         return this.physicsControllerType;
@@ -55,16 +46,14 @@ public final class PlayerPhysicsFrame {
 
     @Override
     public String toString() {
-        return "PhysFrame { ID: %s, Type: %s, Speed: %.02f }".formatted(
-                this.getPlayerUuid(),
+        return "PhysFrame { Type: %s, Speed: %.02f }".formatted(
                 this.getPhysicsControllerType(),
                 this.getSpeed()
         );
     }
 
     public static PlayerPhysicsFrame fromBuffer(FriendlyByteBuf buf) {
-        UUID playerUUID = buf.readUUID();
-        PlayerPhysicsFrame frame = new PlayerPhysicsFrame(playerUUID);
+        PlayerPhysicsFrame frame = new PlayerPhysicsFrame();
 
         frame.setPhysicsControllerType(buf.readResourceLocation())
              .setSpeed(buf.readDouble());

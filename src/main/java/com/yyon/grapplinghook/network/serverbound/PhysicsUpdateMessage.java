@@ -21,8 +21,8 @@ public class PhysicsUpdateMessage extends BaseMessageServer {
         this.frame = frame;
     }
 
-    public PhysicsUpdateMessage(UUID playerID) {
-        this.frame = new PlayerPhysicsFrame(playerID);
+    public PhysicsUpdateMessage() {
+        this.frame = new PlayerPhysicsFrame();
     }
 
     @Override
@@ -32,7 +32,6 @@ public class PhysicsUpdateMessage extends BaseMessageServer {
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeUUID(this.frame.getPlayerUuid());
         buf.writeResourceLocation(this.frame.getPhysicsControllerType());
         buf.writeDouble(this.frame.getSpeed());
     }
@@ -47,7 +46,7 @@ public class PhysicsUpdateMessage extends BaseMessageServer {
         ctx.getServer().execute(() -> GrappleMod
                 .get()
                 .getServerPhysicsObserver()
-                .receiveNewFrame(this.frame)
+                .receiveNewFrame(ctx.getSender(), this.frame)
         );
     }
 }

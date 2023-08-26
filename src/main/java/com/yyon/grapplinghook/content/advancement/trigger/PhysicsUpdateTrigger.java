@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.advancement.trigger;
 
 import com.google.gson.JsonObject;
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
@@ -28,8 +29,8 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
     }
 
 
-    public void trigger(ServerPlayer player) {
-        this.trigger(player, triggerInstance -> triggerInstance.matches());
+    public void trigger(ServerPlayer player, PlayerPhysicsFrame frame) {
+        this.trigger(player, triggerInstance -> triggerInstance.matches(frame));
     }
 
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
@@ -38,7 +39,7 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
             super(ID, contextAwarePredicate);
         }
 
-        public boolean matches() {
+        public boolean matches(PlayerPhysicsFrame frame) {
             return true; //TODO: salkjdjlksjdlka
         }
     }
