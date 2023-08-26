@@ -754,49 +754,53 @@ public class GrapplingHookPhysicsController {
 	
     // repel stuff
     public Vec checkRepel(Vec p, Level w) {
-    	p = p.add(0.0, 0.75, 0.0);
-    	Vec v = new Vec(0, 0, 0);
+    	Vec centerOfMass = p.add(0.0, 0.75, 0.0);
+    	Vec repelForce = new Vec(0, 0, 0);
     	
     	double t = (1.0 + Math.sqrt(5.0)) / 2.0;
     	
 		BlockPos pos = BlockPos.containing(p.x, p.y, p.z);
 
 		if (hasBlock(pos, w)) {
-			v.mutableAdd(0, 1, 0);
+			repelForce.mutableAdd(0, 1, 0);
 
 		} else {
-	    	v.mutableAdd(vecDist(p, new Vec(-1,  t,  0), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 1,  t,  0), w));
-	    	v.mutableAdd(vecDist(p, new Vec(-1, -t,  0), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 1, -t,  0), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 0, -1,  t), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 0,  1,  t), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 0,  1,  t), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 0, -1, -t), w));
-	    	v.mutableAdd(vecDist(p, new Vec( 0,  1, -t), w));
-	    	v.mutableAdd(vecDist(p, new Vec( t,  0, -1), w));
-	    	v.mutableAdd(vecDist(p, new Vec( t,  0,  1), w));
-	    	v.mutableAdd(vecDist(p, new Vec(-t,  0, -1), w));
-	    	v.mutableAdd(vecDist(p, new Vec(-t,  0,  1), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec(-1,  t,  0), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( 1,  t,  0), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec(-1, -t,  0), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( 1, -t,  0), w));
+
+			repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( 0,  1,  t), w));
+			repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( 0, -1,  t), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( 0, -1, -t), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( 0,  1, -t), w));
+
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( t,  0, -1), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec( t,  0,  1), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec(-t,  0, -1), w));
+	    	repelForce.mutableAdd(this.castRepelForceRay(centerOfMass, new Vec(-t,  0,  1), w));
 		}
     	
-    	if (v.length() > repelMaxPush) {
-    		v.mutableSetMagnitude(repelMaxPush);
+    	if (repelForce.length() > this.repelMaxPush) {
+    		repelForce.mutableSetMagnitude(this.repelMaxPush);
     	}
     	
-		return v;
+		return repelForce;
 	}
     
-    public Vec vecDist(Vec p, Vec v, Level w) {
+    public Vec castRepelForceRay(Vec origin, Vec direction, Level w) {
     	for (double i = 0.5; i < 10; i += 0.5) {
-    		Vec v2 = v.withMagnitude(i);
-    		BlockPos pos = BlockPos.containing(p.x + v2.x, p.y + v2.y, p.z + v2.z);
+    		Vec v2 = direction.withMagnitude(i);
+    		BlockPos pos = BlockPos.containing(origin.x + v2.x, origin.y + v2.y, origin.z + v2.z);
 
-    		if (this.hasBlock(pos, w)) {
-    			Vec v3 = new Vec(pos.getX() + 0.5 - p.x, pos.getY() + 0.5 - p.y, pos.getZ() + 0.5 - p.z);
-    			v3.mutableSetMagnitude(-1 / Math.pow(v3.length(), 2));
-    			return v3;
-    		}
+    		if (!this.hasBlock(pos, w))
+				continue;
+
+			Vec v3 = new Vec(pos)
+					.mutableSub(origin)
+					.add(0.5D, 0.5D, 0.5D);
+
+			return v3.mutableSetMagnitude(-1 / Math.pow(v3.length(), 2));
     	}
     	
     	return new Vec(0, 0, 0);

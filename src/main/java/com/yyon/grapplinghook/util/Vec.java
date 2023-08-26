@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.GrappleMod;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -14,7 +15,13 @@ public class Vec {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		
+		this.checkNaN();
+	}
+
+	public Vec(BlockPos vec) {
+		this.x = vec.getX();
+		this.y = vec.getY();
+		this.z = vec.getZ();
 		this.checkNaN();
 	}
 
@@ -22,22 +29,13 @@ public class Vec {
 		this.x = vec.x;
 		this.y = vec.y;
 		this.z = vec.z;
-
 		this.checkNaN();
-	}
-	
-	public void checkNaN() {
-		if (Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z)) {
-			GrappleMod.LOGGER.error("Error: vector contains NaN");
-			this.x = 0; this.y = 0; this.z = 0;
-		}
 	}
 	
 	public Vec(Vec3 vec3d) {
 		this.x = vec3d.x;
 		this.y = vec3d.y;
 		this.z = vec3d.z;
-		
 		this.checkNaN();
 	}
 	
@@ -46,6 +44,7 @@ public class Vec {
 		this.y = vec.y;
 		this.z = vec.z;
 	}
+
 
 	public Vec3 toVec3d() {
 		return new Vec3(this.x, this.y, this.z);
@@ -225,6 +224,13 @@ public class Vec {
 	public void applyAsMotionTo(Entity e) {
 		this.checkNaN();
 		e.setDeltaMovement(this.toVec3d());
+	}
+
+	public void checkNaN() {
+		if (Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z)) {
+			GrappleMod.LOGGER.error("Error: vector contains NaN");
+			this.x = 0; this.y = 0; this.z = 0;
+		}
 	}
 
 	public double getX() {

@@ -9,7 +9,7 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 	public ForcefieldPhysicsController(int grapplehookEntityId, int entityId, Level world, int id) {
 		super(grapplehookEntityId, entityId, world, id, null);
 		
-		this.playerMovementMult = 1;
+		this.playerMovementMult = 1f;
 	}
 
 	@Override
@@ -21,25 +21,21 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 
 		this.normalGround(false);
 		this.normalCollisions(false);
-//		this.applyAirFriction();
 
-		Vec playerpos = Vec.positionVec(entity);
-
-//		double dist = oldspherevec.length();
+		Vec playerPos = Vec.positionVec(entity);
 
 		if (this.playerSneak)
 			this.motion.mutableScale(0.95);
 
 		this.applyPlayerMovement();
 
-		Vec blockpush = this.checkRepel(playerpos, entity.level())
-				            .mutableScale(0.5)
+		Vec blockPush = this.checkRepel(playerPos, entity.level())
+				            .mutableScale(0.5D)
 				            .multiply(0.5D, 2.0D, 0.5D);
-
-		this.motion.mutableAdd(blockpush);
+		this.motion.mutableAdd(blockPush);
 
 		if (!entity.onGround())
-			this.motion.mutableAdd(0, -0.05, 0);
+			this.motion.mutableAdd(0, -0.05D, 0);
 
 		this.motion.applyAsMotionTo(this.entity);
 		this.updateServerPos();
