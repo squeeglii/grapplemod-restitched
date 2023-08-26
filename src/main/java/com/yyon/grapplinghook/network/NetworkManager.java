@@ -83,5 +83,6 @@ public class NetworkManager {
         NetworkManager.registerServer("grapple_modifier", GrappleModifierMessage::new);
         NetworkManager.registerServer("keypress", KeypressMessage::new);
         NetworkManager.registerServer("player_movement", PlayerMovementMessage::new);
+        NetworkManager.registerServer("physics_update", PhysicsUpdateMessage::new);
     }
 }

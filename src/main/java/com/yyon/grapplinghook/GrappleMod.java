@@ -42,8 +42,13 @@ public class GrappleMod implements ModInitializer {
     public static final String MOD_ID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    private static GrappleMod instance;
+
+    private ServerPhysicsObserver serverPhysicsObserver;
+
     @Override
     public void onInitialize() {
+        instance = this;
 
         try {
             this.initConfig();
@@ -62,6 +67,8 @@ public class GrappleMod implements ModInitializer {
         GrappleModCustomizationCategories.registerAll(); // Categories must always go after items + properties.
 
         NetworkManager.registerPacketListeners();
+
+        this.serverPhysicsObserver = new ServerPhysicsObserver();
     }
 
     private void initConfig() {
@@ -78,6 +85,14 @@ public class GrappleMod implements ModInitializer {
         });
     }
 
+    public ServerPhysicsObserver getServerPhysicsObserver() {
+        return this.serverPhysicsObserver;
+    }
+
+
+    public static GrappleMod get() {
+        return instance;
+    }
 
     public static ResourceLocation id(String id) {
         return new ResourceLocation(MOD_ID, id);

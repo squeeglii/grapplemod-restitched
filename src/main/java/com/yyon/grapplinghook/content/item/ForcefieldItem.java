@@ -37,12 +37,16 @@ public class ForcefieldItem extends Item {
 			return InteractionResultHolder.consume(stack);
 
 		int playerId = playerIn.getId();
-		GrapplingHookPhysicsController oldController = GrappleModClient.get().unregisterController(playerId);
+		GrapplingHookPhysicsController oldController = GrappleModClient.get()
+				.getClientControllerManager()
+				.getController(playerId);
 
 		if (oldController == null || oldController.getType() == AIR_FRICTION_CONTROLLER) {
 			GrappleModClient.get()
 					.getClientControllerManager()
 					.createControl(FORCEFIELD_CONTROLLER, -1, playerId, worldIn, null, null);
+		} else {
+			oldController.disable();
 		}
         
     	return InteractionResultHolder.success(stack);

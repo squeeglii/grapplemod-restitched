@@ -165,10 +165,6 @@ public class GrappleModClient implements ClientModInitializer {
         return this.getClientControllerManager().isSliding(entity, motion);
     }
 
-    public GrapplingHookPhysicsController unregisterController(int entityId) {
-        return this.getClientControllerManager().unregisterController(entityId);
-    }
-
     public double getTimeSinceLastRopeJump(Level world) {
         return world.getGameTime() - ClientPhysicsControllerTracker.prevRopeJumpTime;
     }

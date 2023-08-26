@@ -372,11 +372,12 @@ public class ClientPhysicsControllerTracker {
 	}
 
 	public GrapplingHookPhysicsController unregisterController(int entityId) {
-		if (!controllers.containsKey(entityId))
+		if (!this.controllers.containsKey(entityId))
 			return null;
 
 		GrapplingHookPhysicsController controller = this.controllers.get(entityId);
 		controllers.remove(entityId);
+		controller.disable(); // TODO: Fix this up and force everything through disable so it's predictable.
 
 		BlockPos pos = null;
 		for (BlockPos blockpos : this.controllerPos.keySet()) {
@@ -389,6 +390,10 @@ public class ClientPhysicsControllerTracker {
 			this.controllerPos.remove(pos);
 
 		return controller;
+	}
+
+	public GrapplingHookPhysicsController getController(int entityId) {
+		return this.controllers.get(entityId);
 	}
 
 	public void receiveGrappleDetach(int id) {

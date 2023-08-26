@@ -133,10 +133,19 @@ public class GrapplingHookPhysicsController {
 	public void disable() {
 		// Error'ed controllers should just be removed with no extra
 		// conntrollers applied - they should be 'disabled' already.
-		boolean isCleanUp = this.isControllerActive;
+		boolean alreadyDisabled = this.isControllerActive;
 		this.isControllerActive = false;
 
-		if (GrappleModClient.get().unregisterController(this.entityId) == null)
+		Player clientPlayer = Minecraft.getInstance().player;
+
+		// Not null & player
+		// Reset server-side physics tracking.
+		if(this.entity == clientPlayer && !alreadyDisabled) {
+			UUID id = this.entity.getUUID();
+			NetworkManager.packetToServer(new PhysicsUpdateMessage(id));
+		}
+
+		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.entityId) == null)
 			return;
 
 		if (this.getType() == AIR_FRICTION_CONTROLLER)
@@ -144,7 +153,7 @@ public class GrapplingHookPhysicsController {
 
 		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
 
-		if(!isCleanUp)
+		if(!alreadyDisabled)
 			GrappleModClient.get()
 					.getClientControllerManager()
 					.createControl(AIR_FRICTION_CONTROLLER, -1, this.entityId, this.entity.level(), null, this.custom);
@@ -172,7 +181,27 @@ public class GrapplingHookPhysicsController {
 			this.disable();
 		} else {
 			this.updatePlayerPos();
+			this.transmitServerPhysicsUpdate();
 		}
+	}
+
+	public void transmitServerPhysicsUpdate() {
+		if(!this.isControllerActive)
+			return;
+
+		Player clientPlayer = Minecraft.getInstance().player;
+
+		if(this.entity == null)
+			return;
+
+		if(this.entity != clientPlayer)
+			return;
+
+		PlayerPhysicsFrame frame = new PlayerPhysicsFrame(this.entity.getUUID())
+				.setPhysicsControllerType(this.getType())
+				.setSpeed(this.motion.length());
+
+		NetworkManager.packetToServer(new PhysicsUpdateMessage(frame));
 	}
 		
 	public void receivePlayerMovementMessage(float strafe, float forward, boolean sneak) {
