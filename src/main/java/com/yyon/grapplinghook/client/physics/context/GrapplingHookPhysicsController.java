@@ -8,14 +8,17 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
+import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateMessage;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,11 +31,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.HashSet;
+import java.util.UUID;
 
+import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 
 public class GrapplingHookPhysicsController {
+
+	public static final ResourceLocation GRAPPLING_HOOK_CONTROLLER = GrappleMod.id("grappling_hook");
+
 	public int entityId;
 	public Level world;
 	public Entity entity;
@@ -44,7 +52,6 @@ public class GrapplingHookPhysicsController {
 	private HashSet<Integer> grapplehookEntityIds = new HashSet<>();
 
 	private boolean isControllerActive = true;
-	private int controllerId;
 	
 	protected Vec motion;
 	
@@ -75,7 +82,7 @@ public class GrapplingHookPhysicsController {
 
 	private final CustomizationVolume custom;
 	
-	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, int controllerId, CustomizationVolume custom) {
+	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, CustomizationVolume custom) {
 		this.entityId = entityId;
 		this.world = world;
 		this.custom = custom;
@@ -84,8 +91,6 @@ public class GrapplingHookPhysicsController {
 			this.playerMovementMult = this.custom.get(MOVE_SPEED_MULTIPLIER.get());
 			this.maxLen = custom.get(MAX_ROPE_LENGTH.get());
 		}
-		
-		this.controllerId = controllerId;
 		
 		this.entity = world.getEntity(entityId);
 
@@ -120,6 +125,10 @@ public class GrapplingHookPhysicsController {
 			GrappleModClient.get().updateRocketRegen(custom.get(ROCKET_FUEL_DEPLETION_RATIO.get()), custom.get(ROCKET_REFUEL_RATIO.get()));
 		}
 	}
+
+	public ResourceLocation getType() {
+		return GRAPPLING_HOOK_CONTROLLER;
+	}
 	
 	public void disable() {
 		// Error'ed controllers should just be removed with no extra
@@ -130,13 +139,15 @@ public class GrapplingHookPhysicsController {
 		if (GrappleModClient.get().unregisterController(this.entityId) == null)
 			return;
 
-		if (this.controllerId == GrappleModUtils.AIR_FRICTION_ID)
+		if (this.getType() == AIR_FRICTION_CONTROLLER)
 			return;
 
 		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
 
 		if(!isCleanUp)
-			GrappleModClient.get().createControl(GrappleModUtils.AIR_FRICTION_ID, -1, this.entityId, this.entity.level(), new Vec(0,0,0), null, this.custom);
+			GrappleModClient.get()
+					.getClientControllerManager()
+					.createControl(AIR_FRICTION_CONTROLLER, -1, this.entityId, this.entity.level(), null, this.custom);
 	}
 	
 	
@@ -1136,10 +1147,6 @@ public class GrapplingHookPhysicsController {
 
 	public boolean isControllerActive() {
 		return this.isControllerActive;
-	}
-
-	public int getControllerTypeId() {
-		return this.controllerId;
 	}
 
 	public Vec getCopyOfMotion() {

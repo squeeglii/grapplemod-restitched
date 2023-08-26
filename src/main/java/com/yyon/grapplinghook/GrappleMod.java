@@ -3,6 +3,7 @@ package com.yyon.grapplinghook;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.content.registry.*;
+import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;

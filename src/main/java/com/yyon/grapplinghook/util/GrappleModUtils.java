@@ -25,11 +25,6 @@ import java.util.function.Supplier;
 
 public class GrappleModUtils {
 
-	private static int controllerid = 0;
-	public static final int GRAPPLE_ID = controllerid++;
-	public static final int REPEL_ID = controllerid++;
-	public static final int AIR_FRICTION_ID = controllerid++;
-
 	public static void sendToCorrectClient(BaseMessageClient message, int playerid, Level w) {
 		Entity entity = w.getEntity(playerid);
 		if (entity instanceof ServerPlayer player) {

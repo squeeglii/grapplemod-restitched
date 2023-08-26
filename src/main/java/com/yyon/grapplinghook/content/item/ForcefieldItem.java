@@ -20,6 +20,9 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
+import static com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController.FORCEFIELD_CONTROLLER;
+
 public class ForcefieldItem extends Item {
 	public ForcefieldItem() {
 		super(new Item.Properties().stacksTo(1));
@@ -36,8 +39,10 @@ public class ForcefieldItem extends Item {
 		int playerId = playerIn.getId();
 		GrapplingHookPhysicsController oldController = GrappleModClient.get().unregisterController(playerId);
 
-		if (oldController == null || oldController.getControllerTypeId() == GrappleModUtils.AIR_FRICTION_ID) {
-			GrappleModClient.get().createControl(GrappleModUtils.REPEL_ID, -1, playerId, worldIn, new Vec(0,0,0), null, null);
+		if (oldController == null || oldController.getType() == AIR_FRICTION_CONTROLLER) {
+			GrappleModClient.get()
+					.getClientControllerManager()
+					.createControl(FORCEFIELD_CONTROLLER, -1, playerId, worldIn, null, null);
 		}
         
     	return InteractionResultHolder.success(stack);

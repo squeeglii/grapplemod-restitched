@@ -165,10 +165,6 @@ public class GrappleModClient implements ClientModInitializer {
         return this.getClientControllerManager().isSliding(entity, motion);
     }
 
-    public GrapplingHookPhysicsController createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, CustomizationVolume custom) {
-        return this.getClientControllerManager().createControl(id, hookEntityId, entityId, world, blockpos, custom);
-    }
-
     public GrapplingHookPhysicsController unregisterController(int entityId) {
         return this.getClientControllerManager().unregisterController(entityId);
     }

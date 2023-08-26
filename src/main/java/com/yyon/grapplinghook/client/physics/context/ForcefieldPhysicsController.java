@@ -1,15 +1,24 @@
 package com.yyon.grapplinghook.client.physics.context;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public class ForcefieldPhysicsController extends GrapplingHookPhysicsController {
 
-	public ForcefieldPhysicsController(int grapplehookEntityId, int entityId, Level world, int id) {
-		super(grapplehookEntityId, entityId, world, id, null);
+	public static final ResourceLocation FORCEFIELD_CONTROLLER = GrappleMod.id("forcefield");
+
+	public ForcefieldPhysicsController(int grapplehookEntityId, int entityId, Level world) {
+		super(grapplehookEntityId, entityId, world, null);
 		
 		this.playerMovementMult = 1f;
+	}
+
+	@Override
+	public ResourceLocation getType() {
+		return FORCEFIELD_CONTROLLER;
 	}
 
 	@Override

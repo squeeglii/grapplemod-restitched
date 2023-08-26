@@ -19,6 +19,8 @@ import net.minecraft.world.level.Level;
 
 import java.util.LinkedList;
 
+import static com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController.GRAPPLING_HOOK_CONTROLLER;
+
 /*
  * This file is part of GrappleMod.
 
@@ -42,7 +44,6 @@ public class GrappleAttachMessage extends BaseMessageClient {
 	public double x;
 	public double y;
 	public double z;
-	public int controlId;
 	public int entityId;
 	public BlockPos blockPos;
 	public LinkedList<Vec> segments;
@@ -54,12 +55,11 @@ public class GrappleAttachMessage extends BaseMessageClient {
     	super(buf);
     }
 
-    public GrappleAttachMessage(int id, double x, double y, double z, int controlid, int entityid, BlockPos blockpos, LinkedList<Vec> segments, LinkedList<Direction> segmenttopsides, LinkedList<Direction> segmentbottomsides, CustomizationVolume custom) {
+    public GrappleAttachMessage(int id, double x, double y, double z, int entityid, BlockPos blockpos, LinkedList<Vec> segments, LinkedList<Direction> segmenttopsides, LinkedList<Direction> segmentbottomsides, CustomizationVolume custom) {
     	this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
-        this.controlId = controlid;
         this.entityId = entityid;
         this.blockPos = blockpos;
         this.segments = segments;
@@ -74,7 +74,6 @@ public class GrappleAttachMessage extends BaseMessageClient {
         this.x = buf.readDouble();
         this.y = buf.readDouble();
         this.z = buf.readDouble();
-        this.controlId = buf.readInt();
         this.entityId = buf.readInt();
         int blockx = buf.readInt();
         int blocky = buf.readInt();
@@ -110,7 +109,6 @@ public class GrappleAttachMessage extends BaseMessageClient {
         buf.writeDouble(this.x);
         buf.writeDouble(this.y);
         buf.writeDouble(this.z);
-        buf.writeInt(this.controlId);
         buf.writeInt(this.entityId);
         buf.writeInt(this.blockPos.getX());
         buf.writeInt(this.blockPos.getY());
@@ -161,6 +159,8 @@ public class GrappleAttachMessage extends BaseMessageClient {
         	segmentHandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
     	}
     	            	
-    	GrappleModClient.get().createControl(this.controlId, this.id, this.entityId, world, new Vec(this.x, this.y, this.z), this.blockPos, this.custom);
+    	GrappleModClient.get()
+                .getClientControllerManager()
+                .createControl(GRAPPLING_HOOK_CONTROLLER, this.id, this.entityId, world, this.blockPos, this.custom);
     }
 }

@@ -447,7 +447,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.firstAttach = true;
 		GrapplingHookEntityTracker.attached.add(this.shootingEntityID);
 		
-		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
+		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
 		
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
 		NetworkManager.packetToClient(msg, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) this.level(), new Vec(this.position())));
@@ -468,10 +468,6 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
         return this.customization.get(HOOK_GRAVITY_MULTIPLIER.get()).floatValue() * 0.1F;
     }
-	
-	public int getControlId() {
-		return GrappleModUtils.GRAPPLE_ID;
-	}
 
 	public void setAttachPos(double x, double y, double z) {
 		this.setPosRaw(x, y, z);

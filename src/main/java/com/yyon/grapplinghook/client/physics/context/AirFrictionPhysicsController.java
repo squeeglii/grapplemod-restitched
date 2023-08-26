@@ -1,10 +1,12 @@
 package com.yyon.grapplinghook.client.physics.context;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -29,6 +31,8 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
  */
 
 public class AirFrictionPhysicsController extends GrapplingHookPhysicsController {
+
+	public static final ResourceLocation AIR_FRICTION_CONTROLLER = GrappleMod.id("air_friction");
 	
 	private int ignoreGroundCounter = 0;
 	private boolean wasSliding = false;
@@ -37,10 +41,14 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 	private boolean firstTickSinceCreated = true;
 
 
-	public AirFrictionPhysicsController(int grapplehookEntityId, int entityId, Level world, int id, CustomizationVolume custom) {
-		super(grapplehookEntityId, entityId, world, id, custom);
+	public AirFrictionPhysicsController(int grapplehookEntityId, int entityId, Level world, CustomizationVolume custom) {
+		super(grapplehookEntityId, entityId, world, custom);
 	}
 
+	@Override
+	public ResourceLocation getType() {
+		return AIR_FRICTION_CONTROLLER;
+	}
 
 	@Override
 	public void updatePlayerPos() {
