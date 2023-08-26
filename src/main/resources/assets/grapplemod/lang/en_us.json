@@ -586,5 +586,12 @@
     "grapplemod.subtitle.slide": "Player slides",
     "grapplemod.subtitle.doublejump": "Player double-jumps",
     "grapplemod.subtitle.rocket": "Rocket propels",
-    "grapplemod.subtitle.enderstaff": "Ender Staff propels"
+    "grapplemod.subtitle.enderstaff": "Ender Staff propels",
+
+    "advancement.grapplemod.core.root.title": "Grappling Hook!",
+    "advancement.grapplemod.core.root.description": "Hey Mabel, could you get the light?",
+    "advancement.grapplemod.core.upgrade_table.title": "Upgrades people, upgrades!",
+    "advancement.grapplemod.core.upgrade_table.description": "Use a Grappling Hook Modification Station.",
+    "advancement.grapplemod.core.long_fall_boots.title": "Thinking with Fall Damage",
+    "advancement.grapplemod.core.long_fall_boots.description": "Equip a pair of Aperture Science™ Long Fall Boots"
 }

@@ -1,0 +1,33 @@
+{
+    "parent": "grapplemod:core/root",
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.upgrade_table.title" },
+        "description": { "translate": "advancement.grapplemod.core.upgrade_table.description" },
+        "icon": { "item": "grapplemod:block_grapple_modifier" },
+        "frame": "goal"
+    },
+    "criteria": {
+        "used_modification_table": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [
+                    {
+                        "condition": "minecraft:location_check",
+                        "predicate": {
+                            "block": {
+                                "blocks": [
+                                    "grapplemod:block_grapple_modifier"
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "used_modification_table"
+        ]
+    ]
+}

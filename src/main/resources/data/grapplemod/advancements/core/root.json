@@ -1,0 +1,28 @@
+{
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.root.title" },
+        "description": { "translate": "advancement.grapplemod.core.root.description" },
+        "icon": { "item": "grapplemod:grapplinghook" },
+        "background": "grapplemod:textures/gui/advancements/bg/core.png",
+        "announce_to_chat": true,
+        "show_toast": true,
+        "frame": "goal"
+    },
+
+    "criteria": {
+        "grappling_hook_acquired": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [ "grapplemod:grapplinghook" ]
+                    }
+                ]
+            }
+        }
+    },
+
+    "requirements": [
+        [ "grappling_hook_acquired" ]
+    ]
+}

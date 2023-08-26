@@ -1,0 +1,32 @@
+{
+    "parent": "grapplemod:core/root",
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.long_fall_boots.title" },
+        "description": { "translate": "advancement.grapplemod.core.long_fall_boots.description" },
+        "icon": { "item": "grapplemod:longfallboots" },
+        "frame": "task"
+    },
+
+    "criteria": {
+        "wearing_long_fall_boots": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "player": {
+                    "equipment": {
+                        "feet": {
+                            "items": [
+                                "grapplemod:longfallboots"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "requirements": [
+        [
+            "wearing_long_fall_boots"
+        ]
+    ]
+}
