@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsController;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
@@ -25,29 +26,32 @@ public class MovementInputHandlerMixin {
         Player player = Minecraft.getInstance().player;
         if (!Minecraft.getInstance().isRunning() || player == null) return;
 
+        ClientPhysicsControllerTracker physManager = GrappleModClient.get().getClientControllerManager();
+
         int id = player.getId();
-        if (ClientPhysicsControllerTracker.controllers.containsKey(id)) {
-            Input input = this.input;
-            GrapplingHookPhysicsController control = ClientPhysicsControllerTracker.controllers.get(id);
-            control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.shiftKeyDown);
+        if (!physManager.controllers.containsKey(id))
+            return;
 
-            boolean overrideMovement = true;
-            if (Minecraft.getInstance().player.onGround()) {
-                if (!(control instanceof AirFrictionPhysicsController) && !(control instanceof ForcefieldPhysicsController)) {
-                    overrideMovement = false;
-                }
-            }
+        Input input = this.input;
+        GrapplingHookPhysicsController control = physManager.controllers.get(id);
+        control.receivePlayerMovementMessage(input.leftImpulse, input.forwardImpulse, input.shiftKeyDown);
 
-            if (overrideMovement) {
-                input.jumping = false;
-                input.down = false;
-                input.up = false;
-                input.left = false;
-                input.right = false;
-                input.forwardImpulse = 0;
-                input.leftImpulse = 0;
-//				input.sneak = false; // fix alternate throw angles
+        boolean overrideMovement = true;
+        if (player.onGround()) {
+            if (!(control instanceof AirFrictionPhysicsController) && !(control instanceof ForcefieldPhysicsController)) {
+                overrideMovement = false;
             }
+        }
+
+        if (overrideMovement) {
+            input.jumping = false;
+            input.down = false;
+            input.up = false;
+            input.left = false;
+            input.right = false;
+            input.forwardImpulse = 0;
+            input.leftImpulse = 0;
+			//input.sneak = false; // fix alternate throw angles
         }
     }
 }

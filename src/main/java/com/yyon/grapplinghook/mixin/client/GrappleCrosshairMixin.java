@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
@@ -87,7 +88,7 @@ public abstract class GrappleCrosshairMixin {
             }
         }
 
-        double rocketFuel = ClientPhysicsControllerTracker.instance.rocketFuel;
+        double rocketFuel = GrappleModClient.get().getClientControllerManager().rocketFuel;
 
         if (rocketFuel < 1) {
             Window resolution = this.minecraft.getWindow();

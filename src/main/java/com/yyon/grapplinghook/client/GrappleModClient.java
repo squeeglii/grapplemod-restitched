@@ -92,11 +92,11 @@ public class GrappleModClient implements ClientModInitializer {
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("magnet"), (stack, world, entity, seed) -> propertyEquipOverride(stack, MAGNET_ATTACHED.get()));
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("attached"), (stack, world, entity, seed) -> {
             if (entity == null) return 0;
-            return (ClientPhysicsControllerTracker.controllers.containsKey(entity.getId()) && !(ClientPhysicsControllerTracker.controllers.get(entity.getId()) instanceof AirFrictionPhysicsController)) ? 1 : 0;
+            return (this.getClientControllerManager().controllers.containsKey(entity.getId()) && !(this.getClientControllerManager().controllers.get(entity.getId()) instanceof AirFrictionPhysicsController)) ? 1 : 0;
         });
         ItemProperties.register(GrappleModItems.FORCE_FIELD.get(), new ResourceLocation("attached"), (stack, world, entity, seed) -> {
             if (entity == null) return 0;
-            return (ClientPhysicsControllerTracker.controllers.containsKey(entity.getId()) && ClientPhysicsControllerTracker.controllers.get(entity.getId()) instanceof ForcefieldPhysicsController) ? 1 : 0;
+            return (this.getClientControllerManager().controllers.containsKey(entity.getId()) && this.getClientControllerManager().controllers.get(entity.getId()) instanceof ForcefieldPhysicsController) ? 1 : 0;
         });
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("hook"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.get().getPropertyHook(stack) ? 1 : 0);
     }
@@ -116,7 +116,7 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     public void startRocket(Player player, CustomizationVolume custom) {
-        ClientPhysicsControllerTracker.instance.startRocket(player, custom);
+        this.getClientControllerManager().startRocket(player, custom);
     }
 
     public void openModifierScreen(GrappleModifierBlockEntity tile) {
@@ -141,35 +141,35 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public void resetLauncherTime(int playerId) {
-        ClientPhysicsControllerTracker.instance.resetLauncherTime(playerId);
+        this.getClientControllerManager().resetLauncherTime(playerId);
     }
 
     public void launchPlayer(Player player) {
-        ClientPhysicsControllerTracker.instance.launchPlayer(player);
+        this.getClientControllerManager().launchPlayer(player);
     }
 
     public void updateRocketRegen(double rocketActiveTime, double rocketRefuelRatio) {
-        ClientPhysicsControllerTracker.instance.updateRocketRegen(rocketActiveTime, rocketRefuelRatio);
+        this.getClientControllerManager().updateRocketRegen(rocketActiveTime, rocketRefuelRatio);
     }
 
     public double getRocketFunctioning() {
-        return ClientPhysicsControllerTracker.instance.getRocketFunctioning();
+        return this.getClientControllerManager().getRocketFunctioning();
     }
 
     public boolean isWallRunning(Entity entity, Vec motion) {
-        return ClientPhysicsControllerTracker.instance.isWallRunning(entity, motion);
+        return this.getClientControllerManager().isWallRunning(entity, motion);
     }
 
     public boolean isSliding(Entity entity, Vec motion) {
-        return ClientPhysicsControllerTracker.instance.isSliding(entity, motion);
+        return this.getClientControllerManager().isSliding(entity, motion);
     }
 
     public GrapplingHookPhysicsController createControl(int id, int hookEntityId, int entityId, Level world, Vec pos, BlockPos blockpos, CustomizationVolume custom) {
-        return ClientPhysicsControllerTracker.instance.createControl(id, hookEntityId, entityId, world, blockpos, custom);
+        return this.getClientControllerManager().createControl(id, hookEntityId, entityId, world, blockpos, custom);
     }
 
     public GrapplingHookPhysicsController unregisterController(int entityId) {
-        return ClientPhysicsControllerTracker.unregisterController(entityId);
+        return this.getClientControllerManager().unregisterController(entityId);
     }
 
     public double getTimeSinceLastRopeJump(Level world) {
@@ -192,15 +192,25 @@ public class GrappleModClient implements ClientModInitializer {
         Player player = Minecraft.getInstance().player;
         if(player == null) return;
 
-        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(loc, SoundSource.PLAYERS, volume, 1.0F, RandomSource.create(),false, 0, SoundInstance.Attenuation.NONE, player.getX(), player.getY(), player.getZ(), false));
+        SimpleSoundInstance sound = new SimpleSoundInstance(
+                loc, SoundSource.PLAYERS, volume, 1.0F, RandomSource.create(),
+                false, 0,
+                SoundInstance.Attenuation.NONE,
+                player.getX(), player.getY(), player.getZ(),
+                false
+        );
+
+        Minecraft.getInstance()
+                .getSoundManager()
+                .play(sound);
     }
 
     public int getWallrunTicks() {
-        return ClientPhysicsControllerTracker.instance.ticksWallRunning;
+        return this.getClientControllerManager().ticksWallRunning;
     }
 
     public void setWallrunTicks(int newWallrunTicks) {
-        ClientPhysicsControllerTracker.instance.ticksWallRunning = newWallrunTicks;
+        this.getClientControllerManager().ticksWallRunning = newWallrunTicks;
     }
 
     private static int propertyEquipOverride(ItemStack stack, BooleanProperty property) {

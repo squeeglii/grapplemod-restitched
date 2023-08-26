@@ -122,7 +122,7 @@ public final class CustomizationVolume {
 		this.values.remove(property);
 	}
 
-	public <T> void syncPropertyFrom(CustomizationVolume volume, CustomizationProperty<T> property) {
+	public <T> void copyPropertyFrom(CustomizationVolume volume, CustomizationProperty<T> property) {
 		this.set(property, volume.get(property));
 	}
 

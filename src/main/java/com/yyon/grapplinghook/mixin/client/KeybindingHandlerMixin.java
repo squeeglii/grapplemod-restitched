@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.KeyboardHandler;
@@ -17,25 +18,23 @@ public class KeybindingHandlerMixin {
 
     @Inject(method = "keyPress(JIIII)V", at = @At("TAIL"))
     public void handleModKeybindings(long pWindowPointer, int pKey, int pScanCode, int pAction, int pModifiers, CallbackInfo ci) {
-        if(pWindowPointer != Minecraft.getInstance().getWindow().getWindow()) return;
+        if(pWindowPointer != Minecraft.getInstance().getWindow().getWindow())
+            return;
+
         Player player = Minecraft.getInstance().player;
-        if (!Minecraft.getInstance().isRunning() || player == null) return;
 
+        if (!Minecraft.getInstance().isRunning() || player == null)
+            return;
 
-        GrapplingHookPhysicsController controller = null;
-        if (ClientPhysicsControllerTracker.controllers.containsKey(player.getId())) {
-            controller = ClientPhysicsControllerTracker.controllers.get(player.getId());
-        }
+        ClientPhysicsControllerTracker physManager = GrappleModClient.get().getClientControllerManager();
+        GrapplingHookPhysicsController controller = physManager.controllers.get(player.getId());
 
         if (Minecraft.getInstance().options.keyJump.isDown()) {
-            if (controller != null) {
-                if (controller instanceof AirFrictionPhysicsController && ((AirFrictionPhysicsController) controller).wasSliding()) {
-                    controller.doSlidingJump();
-                }
-            }
+            if (controller instanceof AirFrictionPhysicsController ctrl && ctrl.wasSliding())
+                controller.doSlidingJump();
         }
 
-        ClientPhysicsControllerTracker.instance.checkSlide(Minecraft.getInstance().player);
+        physManager.checkSlide(Minecraft.getInstance().player);
     }
 
 }

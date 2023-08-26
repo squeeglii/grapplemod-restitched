@@ -43,10 +43,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 public class ClientPhysicsControllerTracker {
-	public static ClientPhysicsControllerTracker instance;
 
-	public static HashMap<Integer, GrapplingHookPhysicsController> controllers = new HashMap<>();
-	public static HashMap<BlockPos, GrapplingHookPhysicsController> controllerPos = new HashMap<>();
+
+	public HashMap<Integer, GrapplingHookPhysicsController> controllers = new HashMap<>();
+	public HashMap<BlockPos, GrapplingHookPhysicsController> controllerPos = new HashMap<>();
+
 	public static long prevRopeJumpTime = 0;
 
 	public HashMap<Integer, Long> enderLaunchTimer = new HashMap<>();
@@ -60,11 +61,6 @@ public class ClientPhysicsControllerTracker {
 	private boolean prevJumpButton = false;
 	private int ticksSinceLastOnGround = 0;
 	private boolean alreadyUsedDoubleJump = false;
-
-
-	public ClientPhysicsControllerTracker() {
-		instance = this;
-	}
 
 
 	public void onClientTick(Player player) {
@@ -102,8 +98,8 @@ public class ClientPhysicsControllerTracker {
 		if (this.rocketFuel > 1) {this.rocketFuel = 1;}
 		
 		if (player.onGround()) {
-			if (enderLaunchTimer.containsKey(player.getId())) {
-				long timer = GrappleModUtils.getTime(player.level()) - enderLaunchTimer.get(player.getId());
+			if (this.enderLaunchTimer.containsKey(player.getId())) {
+				long timer = player.level().getGameTime() - this.enderLaunchTimer.get(player.getId());
 				if (timer > 10)
 					this.resetLauncherTime(player.getId());
 			}
@@ -117,8 +113,8 @@ public class ClientPhysicsControllerTracker {
 	}
 
 	public void launchPlayer(Player player) {
-		long previousTime = enderLaunchTimer.containsKey(player.getId())
-				? enderLaunchTimer.get(player.getId())
+		long previousTime = this.enderLaunchTimer.containsKey(player.getId())
+				? this.enderLaunchTimer.get(player.getId())
 				: 0 ;
 
 		long timer = GrappleModUtils.getTime(player.level()) - previousTime;
@@ -137,7 +133,7 @@ public class ClientPhysicsControllerTracker {
 			ItemStack usedStack = isMainHolding ? mainHandStack : offHandStack;
 			Item usedItem = isMainHolding ? mainHandItem : offHandItem;
 
-			enderLaunchTimer.put(player.getId(), GrappleModUtils.getTime(player.level()));
+			this.enderLaunchTimer.put(player.getId(), GrappleModUtils.getTime(player.level()));
 
 			Vec facing = Vec.lookVec(player);
 
@@ -151,14 +147,14 @@ public class ClientPhysicsControllerTracker {
 			}
 
 			facing.mutableScale(GrappleModLegacyConfig.getConf().enderstaff.ender_staff_strength);
-			ClientPhysicsControllerTracker.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
-			GrappleModClient.get().playSound(new ResourceLocation("grapplemod", "enderstaff"), GrappleModLegacyConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
+			this.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
+			GrappleModClient.get().playSound(GrappleMod.id("enderstaff"), GrappleModLegacyConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
 		}
 	}
 	
 	public void resetLauncherTime(int playerId) {
-		if (enderLaunchTimer.containsKey(playerId))
-			enderLaunchTimer.put(playerId, (long) 0);
+		if (this.enderLaunchTimer.containsKey(playerId))
+			this.enderLaunchTimer.put(playerId, (long) 0);
 	}
 
 	public void updateRocketRegen(double rocketActiveTime, double rocketRefuelRatio) {
@@ -353,9 +349,9 @@ public class ClientPhysicsControllerTracker {
 		} else return null;
 
 		if (blockPos != null)
-			ClientPhysicsControllerTracker.controllerPos.put(blockPos, control);
+			this.controllerPos.put(blockPos, control);
 
-		ClientPhysicsControllerTracker.registerController(playerId, control);
+		this.registerController(playerId, control);
 		
 		Entity e = world.getEntity(playerId);
 		if (e instanceof LocalPlayer p)
@@ -365,48 +361,50 @@ public class ClientPhysicsControllerTracker {
 		return control;
 	}
 
-	public static void registerController(int entityId, GrapplingHookPhysicsController controller) {
-		if (controllers.containsKey(entityId))
-			controllers.get(entityId).disable();
-		
-		controllers.put(entityId, controller);
+	public void registerController(int entityId, GrapplingHookPhysicsController controller) {
+		if (this.controllers.containsKey(entityId))
+			this.controllers.get(entityId).disable();
+
+		this.controllers.put(entityId, controller);
 	}
 
-	public static GrapplingHookPhysicsController unregisterController(int entityId) {
-		if (!controllers.containsKey(entityId)) return null;
-		GrapplingHookPhysicsController controller = controllers.get(entityId);
+	public GrapplingHookPhysicsController unregisterController(int entityId) {
+		if (!controllers.containsKey(entityId))
+			return null;
+
+		GrapplingHookPhysicsController controller = this.controllers.get(entityId);
 		controllers.remove(entityId);
 
 		BlockPos pos = null;
-		for (BlockPos blockpos : controllerPos.keySet()) {
-			GrapplingHookPhysicsController otherController = controllerPos.get(blockpos);
+		for (BlockPos blockpos : this.controllerPos.keySet()) {
+			GrapplingHookPhysicsController otherController = this.controllerPos.get(blockpos);
 			if (otherController == controller)
 				pos = blockpos;
 		}
 
 		if (pos != null)
-			controllerPos.remove(pos);
+			this.controllerPos.remove(pos);
 
 		return controller;
 	}
 
-	public static void receiveGrappleDetach(int id) {
-		GrapplingHookPhysicsController controller = controllers.get(id);
+	public void receiveGrappleDetach(int id) {
+		GrapplingHookPhysicsController controller = this.controllers.get(id);
 		if (controller != null)
 			controller.receiveGrappleDetach();
 	}
 	
-	public static void receiveGrappleDetachHook(int id, int hookId) {
-		GrapplingHookPhysicsController controller = controllers.get(id);
+	public void receiveGrappleDetachHook(int id, int hookId) {
+		GrapplingHookPhysicsController controller = this.controllers.get(id);
 		if (controller != null)
 			controller.receiveGrappleDetachHook(hookId);
 	}
 
-	public static void receiveEnderLaunch(int id, double x, double y, double z) {
-		GrapplingHookPhysicsController controller = controllers.get(id);
+	public void receiveEnderLaunch(int id, double x, double y, double z) {
+		GrapplingHookPhysicsController controller = this.controllers.get(id);
 
 		if (controller == null) {
-			GrappleMod.LOGGER.warn("Couldn't find controller");
+			GrappleMod.LOGGER.warn("Couldn't find a  controller for handling Ender-Launch (id: %s)".formatted(id));
 			return;
 		}
 
@@ -426,10 +424,10 @@ public class ClientPhysicsControllerTracker {
 				if (serverCustom == null)
 					serverCustom = custom;
 
-				serverCustom.syncPropertyFrom(custom, ROCKET_ATTACHED.get());
-				serverCustom.syncPropertyFrom(custom, ROCKET_FUEL_DEPLETION_RATIO.get());
-				serverCustom.syncPropertyFrom(custom, ROCKET_FORCE.get());
-				serverCustom.syncPropertyFrom(custom, ROCKET_REFUEL_RATIO.get());
+				serverCustom.copyPropertyFrom(custom, ROCKET_ATTACHED.get());
+				serverCustom.copyPropertyFrom(custom, ROCKET_FUEL_DEPLETION_RATIO.get());
+				serverCustom.copyPropertyFrom(custom, ROCKET_FORCE.get());
+				serverCustom.copyPropertyFrom(custom, ROCKET_REFUEL_RATIO.get());
 				this.updateRocketRegen(custom.get(ROCKET_FUEL_DEPLETION_RATIO.get()), custom.get(ROCKET_REFUEL_RATIO.get()));
 			}
 
@@ -441,4 +439,6 @@ public class ClientPhysicsControllerTracker {
 		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
 		Minecraft.getInstance().getSoundManager().play(sound);
 	}
+
+
 }

@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
@@ -33,8 +34,10 @@ public class CameraSetupHookMixin {
         int id = player.getId();
         int targetCameraTilt = 0;
 
-        if (ClientPhysicsControllerTracker.controllers.containsKey(id)) {
-            GrapplingHookPhysicsController controller = ClientPhysicsControllerTracker.controllers.get(id);
+        ClientPhysicsControllerTracker physManager = GrappleModClient.get().getClientControllerManager();
+
+        if (physManager.controllers.containsKey(id)) {
+            GrapplingHookPhysicsController controller = physManager.controllers.get(id);
 
             if (controller instanceof AirFrictionPhysicsController physicsContext && physicsContext.wasWallRunning()) {
 
