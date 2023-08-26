@@ -117,7 +117,7 @@ public class ClientPhysicsControllerTracker {
 				? this.enderLaunchTimer.get(player.getId())
 				: 0 ;
 
-		long timer = GrappleModUtils.getTime(player.level()) - previousTime;
+		long timer = player.level().getGameTime() - previousTime;
 
 		if (timer > GrappleModLegacyConfig.getConf().enderstaff.ender_staff_recharge) {
 			ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
@@ -133,7 +133,7 @@ public class ClientPhysicsControllerTracker {
 			ItemStack usedStack = isMainHolding ? mainHandStack : offHandStack;
 			Item usedItem = isMainHolding ? mainHandItem : offHandItem;
 
-			this.enderLaunchTimer.put(player.getId(), GrappleModUtils.getTime(player.level()));
+			this.enderLaunchTimer.put(player.getId(), player.level().getGameTime());
 
 			Vec facing = Vec.lookVec(player);
 

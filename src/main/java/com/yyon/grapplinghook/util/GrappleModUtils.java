@@ -48,10 +48,6 @@ public class GrappleModUtils {
 				: null;
 	}
 
-	public static long getTime(Level w) {
-		return w.getGameTime();
-	}
-
 	@SafeVarargs
 	public static boolean and(Supplier<Boolean>... conditions) {
 		boolean failed = Arrays.stream(conditions).anyMatch(bool -> !bool.get());

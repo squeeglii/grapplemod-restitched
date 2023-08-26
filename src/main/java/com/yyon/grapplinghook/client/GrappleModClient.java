@@ -27,6 +27,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.SharedConstants;
+import net.minecraft.WorldVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -173,11 +175,11 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public double getTimeSinceLastRopeJump(Level world) {
-        return GrappleModUtils.getTime(world) - ClientPhysicsControllerTracker.prevRopeJumpTime;
+        return world.getGameTime() - ClientPhysicsControllerTracker.prevRopeJumpTime;
     }
 
     public void resetRopeJumpTime(Level world) {
-        ClientPhysicsControllerTracker.prevRopeJumpTime = GrappleModUtils.getTime(world);
+        ClientPhysicsControllerTracker.prevRopeJumpTime = world.getGameTime();
     }
 
     public boolean isMovingSlowly(Entity entity) {
@@ -220,7 +222,7 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     public ClientPhysicsControllerTracker getClientControllerManager() {
-        return clientPhysicsControllerTracker;
+        return this.clientPhysicsControllerTracker;
     }
 
     private static class GrapplehookEntityRenderFactory implements EntityRendererProvider<GrapplinghookEntity> {
