@@ -232,7 +232,7 @@ public class GrapplingHookPhysicsController {
 					this.updateServerPos();
 					return;
 				} else {
-					additionalMotion = spherechange;
+					additionalMotion = spherechange.scale(0.8f);
 				}
 			}
 
@@ -360,7 +360,7 @@ public class GrapplingHookPhysicsController {
 
 		double climbSpeed = GrappleModLegacyConfig.getConf().grapplinghook.other.climb_speed;
 
-		if (!(dist + distToAnchor < this.maxLen || climbDelta > 0 || this.maxLen == 0))
+		if (dist + distToAnchor >= this.maxLen && climbDelta <= 0 && this.maxLen != 0)
 			return new Vec(0, 0, 0);
 
 		hook.ropeLength = dist + distToAnchor;
@@ -371,11 +371,12 @@ public class GrapplingHookPhysicsController {
 		}
 
 		Vec up = new Vec(0,1,0);
-		Vec additionalDownwardMovement = spherevec.withMagnitude(-climbDelta * climbSpeed).proj(up);
+		Vec additionalVerticalMovement = spherevec.withMagnitude(-climbDelta * climbSpeed).project(up);
 
-		return additionalDownwardMovement.y < 0
-				? additionalDownwardMovement
-				: new Vec(0, 0, 0);
+		if(additionalVerticalMovement.y > 0)
+			additionalVerticalMovement.mutableScale(0.66f);
+
+		return additionalVerticalMovement;
 	}
 
 	private void processMotorPhysics(Vec playerPos, Vec facing, Entity entity, Vec gravity, boolean close) {
@@ -428,8 +429,8 @@ public class GrapplingHookPhysicsController {
 				if (this.custom.get(SMART_MOTOR.get()) && this.grapplehookEntities.size() > 1) {
 					Vec facingxy = new Vec(facing.x, 0, facing.z);
 					Vec facingside = facingxy.cross(new Vec(0, 1, 0)).normalize();
-					Vec sideways = pull.proj(facingside);
-					Vec currentsideways = motion.proj(facingside);
+					Vec sideways = pull.project(facingside);
+					Vec currentsideways = motion.project(facingside);
 					sideways.mutableAdd(currentsideways);
 					double sidewayspull = sideways.dot(facingside);
 
@@ -464,8 +465,8 @@ public class GrapplingHookPhysicsController {
 				if (pull.dot(facing) > 0 || this.custom.get(MOTOR_WORKS_BACKWARDS.get())) {
 					Vec facingxy = new Vec(facing.x, 0, facing.z);
 					Vec facingside = facingxy.cross(new Vec(0, 1, 0)).normalize();
-					Vec sideways = pull.proj(facingside);
-					Vec currentsideways = motion.proj(facingside);
+					Vec sideways = pull.project(facingside);
+					Vec currentsideways = motion.project(facingside);
 					sideways.mutableAdd(currentsideways);
 					double sidewayspull = sideways.dot(facingside);
 
@@ -496,8 +497,8 @@ public class GrapplingHookPhysicsController {
 		if (this.custom.get(SMART_MOTOR.get()) && totalPull.y > 0 && !(this.onGroundTimer > 0 || entity.onGround())) {
 			Vec pullxzvector = new Vec(totalPull.x, 0, totalPull.z);
 			double pullxz = pullxzvector.length();
-			double motionxz = motion.proj(pullxzvector).dot(pullxzvector.normalize());
-			double facingxz = facing.proj(pullxzvector).dot(pullxzvector.normalize());
+			double motionxz = motion.project(pullxzvector).dot(pullxzvector.normalize());
+			double facingxz = facing.project(pullxzvector).dot(pullxzvector.normalize());
 
 			pullmult = (facingxz * (motion.y + gravity.y) - motionxz * facing.y)/(facing.y * pullxz - facingxz * totalPull.y); // (gravity.y * facingxz) / (facing.y * pullxz - facingxz * totalpull.y);
 
@@ -521,8 +522,8 @@ public class GrapplingHookPhysicsController {
 
 		// Prevent motor from moving too fast (motormaxspeed)
 		if (this.motion.dot(totalPull) > 0) {
-			if (this.motion.proj(totalPull).length() + totalPull.scale(pullmult).length() > this.custom.get(MAX_MOTOR_SPEED.get())) {
-				pullmult = Math.max(0, (this.custom.get(MAX_MOTOR_SPEED.get()) - this.motion.proj(totalPull).length()) / totalPull.length());
+			if (this.motion.project(totalPull).length() + totalPull.scale(pullmult).length() > this.custom.get(MAX_MOTOR_SPEED.get())) {
+				pullmult = Math.max(0, (this.custom.get(MAX_MOTOR_SPEED.get()) - this.motion.project(totalPull).length()) / totalPull.length());
 			}
 		}
 
@@ -693,7 +694,7 @@ public class GrapplingHookPhysicsController {
 		double maxjump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_power;
 		Vec jump = new Vec(0, maxjump, 0);
 		if (spherevec != null && !GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_at_angle) {
-			jump = jump.proj(spherevec);
+			jump = jump.project(spherevec);
 		}
 		double jumppower = jump.y;
 		
@@ -717,7 +718,7 @@ public class GrapplingHookPhysicsController {
 	}
 
 	public Vec dampenMotion(Vec motion, Vec forward) {
-		Vec newmotion = motion.proj(forward);
+		Vec newmotion = motion.project(forward);
 		double dampening = 0.05;
 		return newmotion.scale(dampening).add(motion.scale(1-dampening));
 	}

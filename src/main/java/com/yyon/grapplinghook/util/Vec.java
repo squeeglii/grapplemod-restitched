@@ -168,10 +168,10 @@ public class Vec {
 		return this;
 	}
 	
-	public Vec proj(Vec v2) {
-		Vec v3 = v2.normalize();
-		double dot = this.dot(v3);
-		return v3.withMagnitude(dot);
+	public Vec project(Vec v2) {
+		Vec directionVector = v2.normalize();
+		double similarity = this.dot(directionVector);
+		return directionVector.withMagnitude(similarity);
 	}
 	
 	public double distanceAlong(Vec v2) {
@@ -180,7 +180,7 @@ public class Vec {
 	}
 	
 	public Vec removeAlong(Vec v2) {
-		return this.sub(this.proj(v2));
+		return this.sub(this.project(v2));
 	}
 	
 	public void print(){
