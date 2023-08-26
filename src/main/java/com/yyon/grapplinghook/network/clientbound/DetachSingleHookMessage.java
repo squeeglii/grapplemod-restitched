@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.fabricmc.api.EnvType;

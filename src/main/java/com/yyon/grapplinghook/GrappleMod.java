@@ -55,6 +55,7 @@ public class GrappleMod implements ModInitializer {
         GrappleModEntities.registerAllEntities();
         GrappleModEnchantments.registerAllEnchantments();
         GrappleModBlockEntities.registerAllBlockEntities();
+        GrappleModAdvancementTriggers.registerAllTriggers();
 
         GrappleModCustomizationProperties.registerAll();
         GrappleModCustomizationCategories.registerAll(); // Categories must always go after items + properties.

@@ -1,14 +1,15 @@
 package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
-import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsController;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntityRenderer;
 import com.yyon.grapplinghook.network.NetworkContext;
@@ -27,8 +28,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.SharedConstants;
-import net.minecraft.WorldVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;

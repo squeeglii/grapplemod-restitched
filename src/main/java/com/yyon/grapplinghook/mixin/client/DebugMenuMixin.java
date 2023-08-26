@@ -1,10 +1,11 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,13 +36,10 @@ public abstract class DebugMenuMixin {
 
         GrapplingHookPhysicsController ctx = physManager.controllers.get(playerId);
 
-
         if(ctx == null) {
             list.add("Controllers: %s#".formatted(controllerCount));
             return;
         }
-
-
 
         String controllerID = String.valueOf(ctx.getControllerTypeId());
         String inactiveNotice = ctx.isControllerActive()

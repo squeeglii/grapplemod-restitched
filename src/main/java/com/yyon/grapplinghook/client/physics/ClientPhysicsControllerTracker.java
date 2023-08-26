@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.client;
+package com.yyon.grapplinghook.client.physics;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -7,12 +7,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.client.sound.RocketSound;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
-import com.yyon.grapplinghook.physics.context.ForcefieldPhysicsController;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.content.enchantment.DoubleJumpEnchantment;
 import com.yyon.grapplinghook.content.enchantment.SlidingEnchantment;
 import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;

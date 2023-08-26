@@ -2,11 +2,11 @@ package com.yyon.grapplinghook.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yyon.grapplinghook.client.ClientPhysicsControllerTracker;
+import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.physics.context.AirFrictionPhysicsController;
-import com.yyon.grapplinghook.physics.context.GrapplingHookPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
+import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;

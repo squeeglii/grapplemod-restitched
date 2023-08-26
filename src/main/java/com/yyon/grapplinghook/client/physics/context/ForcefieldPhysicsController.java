@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.physics.context;
+package com.yyon.grapplinghook.client.physics.context;
 
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.world.entity.Entity;
