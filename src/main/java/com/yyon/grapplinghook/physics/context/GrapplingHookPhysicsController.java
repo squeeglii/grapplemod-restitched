@@ -88,7 +88,14 @@ public class GrapplingHookPhysicsController {
 		this.controllerId = controllerId;
 		
 		this.entity = world.getEntity(entityId);
-		this.motion = Vec.motionVec(entity);
+
+		if(this.entity == null || !this.entity.isAlive()) {
+			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is missing an expected holder entity!");
+			this.disable();
+			return;
+		}
+
+		this.motion = Vec.motionVec(this.entity);
 		
 		// undo friction
 		Vec newmotion = new Vec(entity.position().x - entity.xOld, entity.position().y - entity.yOld, entity.position().z - entity.zOld);
@@ -104,7 +111,7 @@ public class GrapplingHookPhysicsController {
 				this.addHookEntity(grapple);
 
 			} else {
-				GrappleMod.LOGGER.warn("Grappling Hook Controller without a grappling hook entity!");
+				GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is missing an expected hook entity!");
 				this.disable();
 			}
 		}
@@ -115,19 +122,29 @@ public class GrapplingHookPhysicsController {
 	}
 	
 	public void disable() {
-		if (GrappleModClient.get().unregisterController(this.entityId) == null) return;
-
+		// Error'ed controllers should just be removed with no extra
+		// conntrollers applied - they should be 'disabled' already.
+		boolean isCleanUp = this.isControllerActive;
 		this.isControllerActive = false;
 
-		if (this.controllerId != GrappleModUtils.AIR_FRICTION_ID) {
-			NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
+		if (GrappleModClient.get().unregisterController(this.entityId) == null)
+			return;
+
+		if (this.controllerId == GrappleModUtils.AIR_FRICTION_ID)
+			return;
+
+		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
+
+		if(!isCleanUp)
 			GrappleModClient.get().createControl(GrappleModUtils.AIR_FRICTION_ID, -1, this.entityId, this.entity.level(), new Vec(0,0,0), null, this.custom);
-		}
 	}
 	
 	
 	public void doClientTick() {
-		if (!this.isControllerActive) return;
+		if (!this.isControllerActive) {
+			this.disable();
+			return;
+		}
 
 		IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
 
