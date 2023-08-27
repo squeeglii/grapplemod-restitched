@@ -76,6 +76,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 		);
 
 		if (shouldCancel) {
+			GrappleMod.LOGGER.info("Cancel because it's in air and don't override");
 			this.motion = Vec.motionVec(entity);
 			this.disable();
 			return;

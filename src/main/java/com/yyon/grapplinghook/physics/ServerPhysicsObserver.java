@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.physics;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.GrappleModAdvancementTriggers;
 import net.minecraft.server.level.ServerPlayer;
 
