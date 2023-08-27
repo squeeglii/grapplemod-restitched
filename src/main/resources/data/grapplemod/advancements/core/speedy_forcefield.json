@@ -1,0 +1,31 @@
+{
+    "parent": "grapplemod:core/root",
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.speedy_forcefield.title" },
+        "description": { "translate": "advancement.grapplemod.core.speedy_forcefield.description" },
+        "icon": { "item": "grapplemod:repeller" },
+        "frame": "challenge"
+    },
+
+    "criteria": {
+        "too_fast": {
+            "trigger": "grapplemod:grapple_physics_changed",
+            "conditions": {
+                "physics": {
+                    "controller_types": [
+                        "grapplemod:forcefield"
+                    ],
+                    "speed": {
+                        "min": 2.778
+                    }
+                }
+            }
+        }
+    },
+
+    "requirements": [
+        [
+            "too_fast"
+        ]
+    ]
+}
