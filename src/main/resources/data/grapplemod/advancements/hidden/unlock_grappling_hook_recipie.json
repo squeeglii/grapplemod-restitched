@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:story/root",
+    "rewards": {
+        "recipes": [ "grapplemod:grappling_hook" ]
+    },
+
+    "criteria": {
+        "auto_unlock": {
+            "trigger": "minecraft:location"
+        }
+    }
+}
