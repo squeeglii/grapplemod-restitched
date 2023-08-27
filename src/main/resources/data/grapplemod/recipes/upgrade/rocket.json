@@ -6,7 +6,7 @@
 			"item": "grapplemod:baseupgradeitem"
 		}, 
 		{
-			"item": "minecraft:firework_rocket"
+			"item": "grapplemod:rocket"
 		}
 	],
 	"result": {

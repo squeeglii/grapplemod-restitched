@@ -15,6 +15,7 @@
             "grapplemod:base_upgrade_item",
             "grapplemod:block_grapple_modifier",
             "grapplemod:ender_staff",
+            "grapplemod:rocket",
             "grapplemod:forcefield"
         ]
     },

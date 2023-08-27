@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "equipment",
+	"pattern": [
+		"2",
+		"4",
+		"2"
+	],
+	"key": {
+		"2": {
+			"item": "minecraft:iron_ingot"
+		},
+		"4": {
+			"item": "minecraft:firework_rocket"
+		}
+	},
+	"result": {
+		"item": "grapplemod:rocket"
+	}
+}

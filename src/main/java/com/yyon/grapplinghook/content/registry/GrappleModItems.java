@@ -1,11 +1,8 @@
 package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.content.item.*;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
-import com.yyon.grapplinghook.content.item.EnderStaffItem;
-import com.yyon.grapplinghook.content.item.ForcefieldItem;
-import com.yyon.grapplinghook.content.item.GrapplehookItem;
-import com.yyon.grapplinghook.content.item.LongFallBootsItem;
 import com.yyon.grapplinghook.content.item.upgrade.*;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
@@ -37,6 +34,7 @@ public final class GrappleModItems {
     public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new, ItemEntry.populateHookVariantsInTab());
     public static final ItemEntry<EnderStaffItem> ENDER_STAFF = GrappleModItems.item("launcheritem", EnderStaffItem::new);
     public static final ItemEntry<ForcefieldItem> FORCE_FIELD = GrappleModItems.item("repeller", ForcefieldItem::new);
+    public static final ItemEntry<RocketItem> ROCKET = GrappleModItems.item("rocket", RocketItem::new);
 
     public static final ItemEntry<BaseUpgradeItem> BASE_UPGRADE = GrappleModItems.item("baseupgradeitem", BaseUpgradeItem::new);
     public static final ItemEntry<DoubleUpgradeItem> DOUBLE_UPGRADE = GrappleModItems.item("doubleupgradeitem", DoubleUpgradeItem::new);
