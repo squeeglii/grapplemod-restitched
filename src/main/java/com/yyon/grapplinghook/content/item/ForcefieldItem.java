@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.content.item;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.util.GrappleModUtils;
+import com.yyon.grapplinghook.util.TextUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -56,7 +57,6 @@ public class ForcefieldItem extends Item {
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
 		Options options = Minecraft.getInstance().options;
-		Component keyUseTranslation = options.keyUse.getTranslatedKeyMessage();
 
 		list.add(Component.translatable("grappletooltip.repelleritem.desc")
 				  .withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
@@ -66,25 +66,12 @@ public class ForcefieldItem extends Item {
 		list.add(Component.translatable("grappletooltip.controls.title")
 				  .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
 		);
-		list.add(Component.empty().withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
-				.append(keyUseTranslation)
-				.append(Component.translatable("grappletooltip.repelleritemon.desc"))
-		);
-		list.add(Component.empty().withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
-				.append(keyUseTranslation)
-				.append(Component.translatable("grappletooltip.repelleritemoff.desc")
-		));
-		list.add(Component.empty().withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
-				.append(options.keyShift.getTranslatedKeyMessage())
-				.append(Component.translatable("grappletooltip.repelleritemslow.desc"))
-		);
-		list.add(Component.empty().withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
-				.append(options.keyUp.getTranslatedKeyMessage() + ", ")
-				.append(options.keyLeft.getTranslatedKeyMessage() + ", ")
-				.append(options.keyDown.getTranslatedKeyMessage() + ", ")
-				.append(options.keyRight.getTranslatedKeyMessage())
-				.append(" ")
-				.append(Component.translatable("grappletooltip.repelleritemmove.desc"))
+
+		list.add(TextUtils.keybinding("grappletooltip.repelleritemon.desc", options.keyUse));
+		list.add(TextUtils.keybinding("grappletooltip.repelleritemoff.desc", options.keyUse));
+		list.add(TextUtils.keybinding("grappletooltip.repelleritemslow.desc", options.keyShift));
+		list.add(TextUtils.keybinding("grappletooltip.repelleritemmove.desc",
+				options.keyUp, options.keyLeft, options.keyDown, options.keyRight)
 		);
 	}
 }

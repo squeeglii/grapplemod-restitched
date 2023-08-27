@@ -16,10 +16,12 @@ import com.yyon.grapplinghook.network.serverbound.KeypressMessage;
 import com.yyon.grapplinghook.physics.GrapplingHookEntityTracker;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
+import com.yyon.grapplinghook.util.TextUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
@@ -210,50 +212,68 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		Options options = Minecraft.getInstance().options;
 
 		if (Screen.hasShiftDown()) {
+			list.add(Component.literal(""));
 			list.add(Component.translatable("grappletooltip.controls.title").withStyle(
 					ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
 			));
-			list.add(Component.literal(""));
 
-			if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-				list.add(Component.literal(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throw.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-				list.add(Component.literal(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.release.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-				list.add(Component.translatable("grappletooltip.double.desc").append(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage()).append(" ").append(Component.translatable("grappletooltip.releaseandthrow.desc")).withStyle(ChatFormatting.DARK_GRAY));
+			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
+				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
+					list.add(TextUtils.keybinding("grappletooltip.throw_double_both.desc", GrappleKey.THROW_HOOKS));
+					list.add(TextUtils.keybinding("grappletooltip.throw_double_left.desc", GrappleKey.THROW_LEFT_HOOK));
+					list.add(TextUtils.keybinding("grappletooltip.throw_double_right.desc", GrappleKey.THROW_RIGHT_HOOK));
+				} else {
+					list.add(TextUtils.keybinding("grappletooltip.throw_double_both_hold.desc", GrappleKey.THROW_HOOKS));
+					list.add(TextUtils.keybinding("grappletooltip.throw_double_left_hold.desc", GrappleKey.THROW_LEFT_HOOK));
+					list.add(TextUtils.keybinding("grappletooltip.throw_double_right_hold.desc", GrappleKey.THROW_RIGHT_HOOK));
+				}
 
 			} else {
-				list.add(Component.literal(GrappleKey.THROW_HOOKS.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwhold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
+					list.add(TextUtils.keybinding("grappletooltip.throw.desc", GrappleKey.THROW_HOOKS));
+					list.add(TextUtils.keybinding("grappletooltip.release.desc", GrappleKey.THROW_HOOKS));
+				} else {
+					list.add(TextUtils.keybinding("grappletooltip.throw_hold.desc", GrappleKey.THROW_HOOKS));
+				}
 			}
 
-			list.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY)
-					.append(options.keyUp.getTranslatedKeyMessage() + ", ")
-					.append(options.keyLeft.getTranslatedKeyMessage() + ", ")
-					.append(options.keyDown.getTranslatedKeyMessage() + ", ")
-					.append(options.keyRight.getTranslatedKeyMessage())
-					.append(" ")
-					.append(Component.translatable("grappletooltip.swing.desc"))
+
+
+			list.add(TextUtils.keybinding("grappletooltip.swing.desc",
+					options.keyUp, options.keyLeft, options.keyDown, options.keyRight
+			));
+
+			list.add(TextUtils.keybinding("grappletooltip.jump.desc", GrappleKey.DETACH));
+			list.add(TextUtils.keybinding("grappletooltip.slow.desc", GrappleKey.DAMPEN_SWING));
+
+			list.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)
+					.append(GrappleKey.CLIMB.getTranslatedKeyMessage()).append("+")
+					.append(options.keyUp.getTranslatedKeyMessage())
+					.append(" / ")
+					.append(GrappleKey.CLIMB_UP.getTranslatedKeyMessage())
+					.append(" - ").append(Component.translatable("grappletooltip.climbup.desc"))
 			);
-			list.add(Component.literal(GrappleKey.DETACH.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.jump.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(GrappleKey.DAMPEN_SWING.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.slow.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(GrappleKey.CLIMB.getTranslatedKeyMessage().getString() + " + " + options.keyUp.getTranslatedKeyMessage() + " / " +
-					GrappleKey.CLIMB_UP.getTranslatedKeyMessage().getString() +
-					" " + Component.translatable("grappletooltip.climbup.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			list.add(Component.literal(GrappleKey.CLIMB.getTranslatedKeyMessage().getString() + " + " + options.keyDown.getTranslatedKeyMessage() + " / " +
-					GrappleKey.CLIMB_DOWN.getTranslatedKeyMessage().getString() +
-					" " + Component.translatable("grappletooltip.climbdown.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+
+			list.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)
+					.append(GrappleKey.CLIMB.getTranslatedKeyMessage()).append("+")
+					.append(options.keyDown.getTranslatedKeyMessage())
+					.append(" / ")
+					.append(GrappleKey.CLIMB_DOWN.getTranslatedKeyMessage())
+					.append(" - ").append(Component.translatable("grappletooltip.climbdown.desc"))
+			);
 
 			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
-				list.add(Component.literal(GrappleKey.HOOK_ENDER_LAUNCH.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.enderlaunch.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(TextUtils.keybinding("grappletooltip.enderlaunch.desc", GrappleKey.HOOK_ENDER_LAUNCH));
 			}
 
 			if (custom.get(ROCKET_ATTACHED.get())) {
-				list.add(Component.literal(GrappleKey.ROCKET.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.rocket.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(TextUtils.keybinding("grappletooltip.rocket.desc", GrappleKey.ROCKET));
 			}
 
 			if (custom.get(MOTOR_ATTACHED.get())) {
-
 				Component text = switch (custom.get(MOTOR_ACTIVATION.get())) {
-					case WHEN_CROUCHING -> Component.literal(GrappleKey.TOGGLE_MOTOR.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoron.desc").getString());
-					case WHEN_NOT_CROUCHING -> Component.literal(GrappleKey.TOGGLE_MOTOR.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.motoroff.desc").getString());
+					case WHEN_CROUCHING -> TextUtils.keybinding("grappletooltip.motoron.desc", GrappleKey.TOGGLE_MOTOR);
+					case WHEN_NOT_CROUCHING -> TextUtils.keybinding("grappletooltip.motoroff.desc", GrappleKey.TOGGLE_MOTOR);
 					default -> null;
 				};
 
@@ -261,21 +281,8 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 					list.add(text.copy().withStyle(ChatFormatting.DARK_GRAY));
 			}
 
-			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
-				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-					list.add(Component.literal(GrappleKey.THROW_LEFT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwleft.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-					list.add(Component.literal(GrappleKey.THROW_RIGHT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwright.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-				} else {
-					list.add(Component.literal(GrappleKey.THROW_LEFT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwlefthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-					list.add(Component.literal(GrappleKey.THROW_RIGHT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwrighthold.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-				}
-
-			} else {
-				list.add(Component.literal(GrappleKey.THROW_RIGHT_HOOK.getTranslatedKeyMessage().getString() + " " + Component.translatable("grappletooltip.throwalt.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
-			}
-
 			if (custom.get(HOOK_REEL_IN_ON_SNEAK.get())) {
-				list.add(Component.literal(options.keyShift.getTranslatedKeyMessage() + " " + Component.translatable("grappletooltip.reelin.desc").getString()).withStyle(ChatFormatting.DARK_GRAY));
+				list.add(TextUtils.keybinding("grappletooltip.reelin.desc", options.keyShift));
 			}
 
 			return;

@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.util.TextUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -70,9 +71,6 @@ public class EnderStaffItem extends Item {
 				.translatable("grappletooltip.controls.title")
 				.withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
 		);
-		list.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY)
-				.append(options.keyUse.getTranslatedKeyMessage())
-				.append(Component.translatable("grappletooltip.launcheritemcontrols.desc"))
-		);
+		list.add(TextUtils.keybinding("grappletooltip.launcheritemcontrols.desc", options.keyUse));
 	}
 }
