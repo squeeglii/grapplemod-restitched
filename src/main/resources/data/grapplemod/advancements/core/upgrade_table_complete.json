@@ -1,0 +1,165 @@
+{
+    "parent": "grapplemod:core/upgrade_table",
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.upgrade_table_complete.title" },
+        "description": { "translate": "advancement.grapplemod.core.upgrade_table_complete.description" },
+        "icon": { "item": "minecraft:nether_star" },
+        "frame": "challenge"
+    },
+
+    "criteria": {
+        "limits_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:limits\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "rope_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:rope\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "hook_thrower_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:hook_thrower\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "motor_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:motor\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "swing_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:swing\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "ender_staff_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:ender_staff\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "forcefield_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:forcefield\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "magnet_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:magnet\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "double_hook_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:double_hook\":1b}}"
+                        }
+                    }
+                }]
+            }
+        },
+        "rocket_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "nbt": "{unlocked:{\"grapplemod:rocket\":1b}}"
+                        }
+                    }
+                }]
+            }
+        }
+    },
+
+    "requirements": [
+        [ "rope_unlocked" ],
+        [ "limits_unlocked" ],
+        [ "hook_thrower_unlocked" ],
+        [ "motor_unlocked" ],
+        [ "swing_unlocked" ],
+        [ "ender_staff_unlocked" ],
+        [ "forcefield_unlocked" ],
+        [ "magnet_unlocked" ],
+        [ "double_hook_unlocked" ],
+        [ "rocket_unlocked" ]
+    ]
+}

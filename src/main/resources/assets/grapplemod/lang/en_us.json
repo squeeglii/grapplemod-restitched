@@ -601,5 +601,7 @@
     "advancement.grapplemod.core.rocket_forcefield_combo.title": "Physics 101",
     "advancement.grapplemod.core.rocket_forcefield_combo.description": "Activate a rocket while using a Forcefield Generator",
     "advancement.grapplemod.core.speedy_forcefield.title": "Floating With Purpose",
-    "advancement.grapplemod.core.speedy_forcefield.description": "Reach over 500 km/h while using the Forcefield Generator."
+    "advancement.grapplemod.core.speedy_forcefield.description": "Reach over 500 km/h while using the Forcefield Generator.",
+    "advancement.grapplemod.core.upgrade_table_complete.title": "Fully Upgraded!",
+    "advancement.grapplemod.core.upgrade_table_complete.description": "Use a Grappling Hook Modification Station with all upgrades unlocked!"
 }
