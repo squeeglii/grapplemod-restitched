@@ -61,6 +61,7 @@
     "feedback.grapplemod.modifier.applied_configuration": "Applied modifier tweaks to your Grappling Hook! ⛏",
 
     "item.grapplemod.grapplinghook": "Grappling Hook",
+    "item.grapplemod.blueprint": "Blueprint",
     "item.grapplemod.launcheritem": "Ender Staff",
     "item.grapplemod.repeller": "Magnetic Forcefield",
     "item.grapplemod.rocket": "Porta-Rocket",
@@ -81,6 +82,7 @@
     "item.grapplemod.rocketupgradeitem": "Rocket Grappling Hook Upgrade",
 
     "block.grapplemod.block_grapple_modifier": "Grappling Hook Modifier",
+    "block.grapplemod.template_table": "Template Table",
 
     "enchantment.grapplemod.wallrunenchantment": "Wall-Running",
     "enchantment.grapplemod.doublejumpenchantment": "Double-Jump",
