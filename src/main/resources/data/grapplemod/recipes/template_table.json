@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"pattern": [
+		"2",
+		"B"
+	],
+	"key": {
+		"2": {
+			"item": "grapplemod:blueprint"
+		}, 
+		"B": {
+			"item": "minecraft:bookshelf"
+		}
+	},
+	"result": {
+		"item": "grapplemod:template_table"
+	}
+}

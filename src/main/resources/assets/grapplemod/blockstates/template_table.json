@@ -1,0 +1,84 @@
+{
+    "variants": {
+        "facing=north,shelves_filled=0": {
+            "model": "grapplemod:block/template_table/empty"
+        },
+        "facing=south,shelves_filled=0": {
+            "model": "grapplemod:block/template_table/empty",
+            "y": 180
+        },
+        "facing=east,shelves_filled=0": {
+            "model": "grapplemod:block/template_table/empty",
+            "y": 90
+        },
+        "facing=west,shelves_filled=0": {
+            "model": "grapplemod:block/template_table/empty",
+            "y": 270
+        },
+
+        "facing=north,shelves_filled=1": {
+            "model": "grapplemod:block/template_table/1"
+        },
+        "facing=south,shelves_filled=1": {
+            "model": "grapplemod:block/template_table/1",
+            "y": 180
+        },
+        "facing=east,shelves_filled=1": {
+            "model": "grapplemod:block/template_table/1",
+            "y": 90
+        },
+        "facing=west,shelves_filled=1": {
+            "model": "grapplemod:block/template_table/1",
+            "y": 270
+        },
+
+        "facing=north,shelves_filled=2": {
+            "model": "grapplemod:block/template_table/2"
+        },
+        "facing=south,shelves_filled=2": {
+            "model": "grapplemod:block/template_table/2",
+            "y": 180
+        },
+        "facing=east,shelves_filled=2": {
+            "model": "grapplemod:block/template_table/2",
+            "y": 90
+        },
+        "facing=west,shelves_filled=2": {
+            "model": "grapplemod:block/template_table/2",
+            "y": 270
+        },
+
+        "facing=north,shelves_filled=3": {
+            "model": "grapplemod:block/template_table/3"
+        },
+        "facing=south,shelves_filled=3": {
+            "model": "grapplemod:block/template_table/3",
+            "y": 180
+        },
+        "facing=east,shelves_filled=3": {
+            "model": "grapplemod:block/template_table/3",
+            "y": 90
+        },
+        "facing=west,shelves_filled=3": {
+            "model": "grapplemod:block/template_table/3",
+            "y": 270
+        },
+
+
+        "facing=north,shelves_filled=4": {
+            "model": "grapplemod:block/template_table/4"
+        },
+        "facing=south,shelves_filled=4": {
+            "model": "grapplemod:block/template_table/4",
+            "y": 180
+        },
+        "facing=east,shelves_filled=4": {
+            "model": "grapplemod:block/template_table/4",
+            "y": 90
+        },
+        "facing=west,shelves_filled=4": {
+            "model": "grapplemod:block/template_table/4",
+            "y": 270
+        }
+    }
+}

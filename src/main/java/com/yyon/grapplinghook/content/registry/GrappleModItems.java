@@ -50,8 +50,12 @@ public final class GrappleModItems {
 
     public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("longfallboots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND));
 
+    public static final ItemEntry<BlueprintItem> BLUEPRINT = GrappleModItems.item("blueprint", BlueprintItem::new);
+
+
 
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
+    public static final GrappleModBlocks.BlockItemEntry<BlockItem> TEMPLATE_TABLE_BLOCK = reserve();
 
     private static final CreativeModeTab.DisplayItemsGenerator MOD_TAB_GENERATOR = (displayParameters, output) -> {
 

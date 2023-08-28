@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.block.modifierblock;
+package com.yyon.grapplinghook.content.block;
 
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;

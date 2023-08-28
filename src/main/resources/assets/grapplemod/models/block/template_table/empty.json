@@ -1,0 +1,14 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "particle": "grapplemod:block/template_table/side",
+
+        "down": "minecraft:block/mangrove_planks",
+        "up": "grapplemod:block/template_table/top",
+
+        "east": "grapplemod:block/template_table/side",
+        "west": "grapplemod:block/template_table/side",
+        "south": "grapplemod:block/template_table/side",
+        "north": "grapplemod:block/template_table/front_empty"
+    }
+}

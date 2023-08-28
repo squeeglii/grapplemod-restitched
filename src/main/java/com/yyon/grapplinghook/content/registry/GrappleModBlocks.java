@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.content.registry;
 
-import com.google.common.collect.ImmutableMap;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.block.modifierblock.GrappleModifierBlock;
+import com.yyon.grapplinghook.content.block.GrappleModifierBlock;
+import com.yyon.grapplinghook.content.block.TemplateTableBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -49,6 +49,11 @@ public class GrappleModBlocks {
     public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks
             .block("block_grapple_modifier", GrappleModifierBlock::new)
             .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
+            .define();
+
+    public static final BlockEntry<TemplateTableBlock> TEMPLATE_TABLE = GrappleModBlocks
+            .block("template_table", TemplateTableBlock::new)
+            .withConfiguredItem(GrappleModItems.TEMPLATE_TABLE_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 
 

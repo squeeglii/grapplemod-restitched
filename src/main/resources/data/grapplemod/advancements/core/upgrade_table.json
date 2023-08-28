@@ -9,6 +9,8 @@
 
     "rewards": {
         "recipes": [
+            "grapplemod:template_table",
+            "grapplemod:blueprint",
             "grapplemod:upgrade/double_hook",
             "grapplemod:upgrade/ender_staff",
             "grapplemod:upgrade/forcefield",

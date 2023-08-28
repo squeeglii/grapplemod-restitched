@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
+import com.yyon.grapplinghook.content.blockentity.TemplateTableBlockEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,18 @@ public class GrappleModBlockEntities {
     static {
         blockEntities = new HashMap<>();
     }
+
+    public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = GrappleModBlockEntities
+            .blockEntity("block_grapple_modifier",() -> BlockEntityType.Builder
+                    .of(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
+                    .build(null));
+
+    public static final BlockEntityEntry<BlockEntityType<TemplateTableBlockEntity>> TEMPLATE_TABLE = GrappleModBlockEntities
+            .blockEntity("template_table",() -> BlockEntityType.Builder
+                    .of(TemplateTableBlockEntity::new, GrappleModBlocks.TEMPLATE_TABLE.get())
+                    .build(null));
+
+
 
     public static <E extends BlockEntityType<?>> BlockEntityEntry<E> blockEntity(String id, Supplier<E> type) {
         ResourceLocation qualId = GrappleMod.id(id);
@@ -36,11 +49,6 @@ public class GrappleModBlockEntities {
             data.finalize(Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, it));
         }
     }
-
-    public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = GrappleModBlockEntities
-            .blockEntity("block_grapple_modifier",() -> BlockEntityType.Builder
-                    .of(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
-                    .build(null));
 
 
     public static class BlockEntityEntry<T extends BlockEntityType<?>> extends AbstractRegistryReference<T> {
