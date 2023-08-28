@@ -16,7 +16,7 @@
                         "grapplemod:forcefield"
                     ],
                     "speed": {
-                        "min": 2.778
+                        "min": 5.0
                     }
                 }
             }
