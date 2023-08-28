@@ -84,6 +84,9 @@ public class GrappleModCustomizationProperties {
     public static final Entry<EnumProperty<RopeStyle>> ROPE_STYLE = property("rope_style", () -> new EnumProperty<>(RopeStyle.REGULAR, RopeStyle.values()));
     public static final Entry<BooleanProperty> GLOWING_ROPE = property("glowing_rope", () -> new BooleanProperty(false));
 
+    // Internal - Should not be tied to a category.
+    public static final Entry<BooleanProperty> IS_EQUIPMENT_OVERRIDE = property("is_equipment_override", () -> new BooleanProperty(false));
+
 
     public static class Entry<T extends CustomizationProperty<?>> extends AbstractRegistryReference<T> {
 

@@ -423,8 +423,8 @@ public class ClientPhysicsControllerTracker {
 		if (!custom.get(ROCKET_ATTACHED.get())) return;
 		
 		GrapplingHookPhysicsController controller;
-		if (controllers.containsKey(player.getId())) {
-			controller = controllers.get(player.getId());
+		if (this.controllers.containsKey(player.getId())) {
+			controller = this.controllers.get(player.getId());
 			CustomizationVolume serverCustom = controller.getCurrentCustomizations();
 
 			// Syncing controller's rocket property
@@ -432,11 +432,14 @@ public class ClientPhysicsControllerTracker {
 				if (serverCustom == null)
 					serverCustom = custom;
 
+				serverCustom.copyPropertyFrom(custom, IS_EQUIPMENT_OVERRIDE.get());
 				serverCustom.copyPropertyFrom(custom, ROCKET_ATTACHED.get());
 				serverCustom.copyPropertyFrom(custom, ROCKET_FUEL_DEPLETION_RATIO.get());
 				serverCustom.copyPropertyFrom(custom, ROCKET_FORCE.get());
 				serverCustom.copyPropertyFrom(custom, ROCKET_REFUEL_RATIO.get());
 				this.updateRocketRegen(custom.get(ROCKET_FUEL_DEPLETION_RATIO.get()), custom.get(ROCKET_REFUEL_RATIO.get()));
+
+				controller.overrideCustomizations(serverCustom);
 			}
 
 		} else {
@@ -444,7 +447,7 @@ public class ClientPhysicsControllerTracker {
 		}
 
 		controller.resetRocketProgression();
-		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
+		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(GrappleMod.id("rocket")), SoundSource.PLAYERS);
 		Minecraft.getInstance().getSoundManager().play(sound);
 	}
 

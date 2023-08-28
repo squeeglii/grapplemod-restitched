@@ -80,7 +80,7 @@ public class GrapplingHookPhysicsController {
 	private Vec wallDirection = null;
 	private BlockHitResult wallrunRaytraceResult = null;
 
-	private final CustomizationVolume custom;
+	private CustomizationVolume custom;
 	
 	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, CustomizationVolume custom) {
 		this.entityId = entityId;
@@ -905,7 +905,12 @@ public class GrapplingHookPhysicsController {
 	}
 
 	public Vec rocket(Entity entity) {
-		if (!GrappleKey.ROCKET.isDown()) {
+		Options options = Minecraft.getInstance().options;
+
+		boolean overrideKey = this.areControlsOverridenByEquipment();
+		boolean isRocketActivated = GrappleKey.ROCKET.isDown() || (overrideKey && options.keyUse.isDown());
+
+		if (!isRocketActivated) {
 			this.rocketKeyDown = false;
 			this.rocketProgression = 0F;
 			return new Vec(0,0,0);
@@ -1170,6 +1175,10 @@ public class GrapplingHookPhysicsController {
 		return this.custom;
 	}
 
+	public void overrideCustomizations(CustomizationVolume volume) {
+		this.custom = volume;
+	}
+
 	public boolean isRocketKeyDown() {
 		return this.rocketKeyDown;
 	}
@@ -1184,5 +1193,10 @@ public class GrapplingHookPhysicsController {
 
 	public int getDuplicates() {
 		return this.duplicates;
+	}
+
+	public boolean areControlsOverridenByEquipment() {
+		if(this.custom == null) return false;
+		return this.custom.get(IS_EQUIPMENT_OVERRIDE.get());
 	}
 }

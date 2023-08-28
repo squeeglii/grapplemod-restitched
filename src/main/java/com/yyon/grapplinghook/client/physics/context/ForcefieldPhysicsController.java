@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
+
 public class ForcefieldPhysicsController extends GrapplingHookPhysicsController {
 
 	public static final ResourceLocation FORCEFIELD_CONTROLLER = GrappleMod.id("forcefield");
@@ -45,6 +47,17 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 
 		if (!entity.onGround())
 			this.motion.mutableAdd(0, -0.05D, 0);
+
+		boolean doesrocket = false;
+		if (this.getCurrentCustomizations() != null) {
+			if (this.getCurrentCustomizations().get(ROCKET_ATTACHED.get())) {
+				Vec rocket = this.rocket(entity);
+				this.motion.mutableAdd(rocket);
+				if (rocket.length() > 0) {
+					doesrocket = true;
+				}
+			}
+		}
 
 		this.motion.applyAsMotionTo(this.entity);
 		this.updateServerPos();

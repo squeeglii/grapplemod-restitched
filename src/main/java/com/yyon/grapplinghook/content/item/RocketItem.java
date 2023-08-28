@@ -1,6 +1,8 @@
 package com.yyon.grapplinghook.content.item;
 
+import com.google.common.collect.ImmutableSet;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.TextUtils;
 import net.fabricmc.api.EnvType;
@@ -9,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +22,11 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
+import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
+import static com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController.FORCEFIELD_CONTROLLER;
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.IS_EQUIPMENT_OVERRIDE;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
 
 /*
@@ -41,11 +48,10 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 
 public class RocketItem extends Item {
 
-	private static final CustomizationVolume ROCKET_CUSTOMIZATIONS = new CustomizationVolume();
-
-	static {
-		ROCKET_CUSTOMIZATIONS.set(ROCKET_ATTACHED.get(), true);
-	}
+	private static final Set<ResourceLocation> SUPPORTED_TYPES = ImmutableSet.of(
+			AIR_FRICTION_CONTROLLER,
+			FORCEFIELD_CONTROLLER
+	);
 
 	public RocketItem() {
 		super(new Properties().stacksTo(1));
@@ -60,9 +66,29 @@ public class RocketItem extends Item {
 		if (!worldIn.isClientSide)
 			return InteractionResultHolder.consume(stack);
 
-		GrappleModClient.get().startRocket(playerIn, ROCKET_CUSTOMIZATIONS);
+		GrapplingHookPhysicsController controller = GrappleModClient.get()
+				.getClientControllerManager()
+				.getController(playerIn.getId());
 
-    	return InteractionResultHolder.success(stack);
+		if(controller != null && !SUPPORTED_TYPES.contains(controller.getType()))
+			return InteractionResultHolder.pass(stack);
+
+		// If we've already created/modified a controller for this item, we don't want
+		// to create another one as this'll just mess with regen time.
+		boolean foundClashingController = controller != null &&
+										  controller.areControlsOverridenByEquipment();
+
+		if(foundClashingController)
+			return InteractionResultHolder.pass(stack);
+
+
+		CustomizationVolume volume = new CustomizationVolume();
+		volume.set(ROCKET_ATTACHED.get(), true);
+		volume.set(IS_EQUIPMENT_OVERRIDE.get(), true);
+
+		GrappleModClient.get().getClientControllerManager().startRocket(playerIn, volume);
+		return InteractionResultHolder.success(stack);
+
 	}
     
 	@Override
@@ -80,6 +106,6 @@ public class RocketItem extends Item {
 				.translatable("grappletooltip.controls.title")
 				.withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
 		);
-		list.add(TextUtils.keybinding("grappletooltip.rocket_item.controls", options.keyUse));
+		list.add(TextUtils.keybinding("grapple_tooltip.rocket_item.controls", options.keyUse));
 	}
 }
