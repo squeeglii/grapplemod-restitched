@@ -16,6 +16,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
@@ -46,7 +47,8 @@ public class GrappleModifierBlockGUI extends Screen {
 	protected int guiTop;
 
 	private int widgetPosYIncrementor;
-	private boolean customizationsReset;
+
+	private Component noticeMessage;
 
 	private HashMap<AbstractWidget, CustomizationProperty<?>> options;
 	private CustomizationVolume customization;
@@ -56,7 +58,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	public GrappleModifierBlockGUI(GrappleModifierBlockEntity blockEntity) {
 		super(Component.translatable("grapple_modifier.title"));
 
-		this.customizationsReset = false;
+		this.noticeMessage = null;
 
 		this.blockEntity = blockEntity;
 		this.customization = blockEntity.getCurrentCustomizations();
@@ -98,7 +100,13 @@ public class GrappleModifierBlockGUI extends Screen {
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (keyCode == 256 && !this.shouldCloseOnEsc()) {
-			this.showMainScreenLayout();
+
+			Component notice = switch (this.currentView) {
+				case CATEGORY_PROPERTIES -> Component.translatable("grapple_modifier.notice.saved_customizations");
+				default -> null;
+			};
+
+			this.showMainScreenLayout(notice);
 			return true;
 		}
 
@@ -107,17 +115,21 @@ public class GrappleModifierBlockGUI extends Screen {
 
 
 	// -- GUI Screens
-
 	public void showMainScreenLayout() {
+		this.showMainScreenLayout(null);
+	}
+
+	public void showMainScreenLayout(Component noticeMessage) {
 		this.resetScreenLayout();
 		this.currentView = ModifierGUILayoutView.MAIN;
+
+		this.noticeMessage = noticeMessage;
 
 		this.addRenderableWidget(Button.builder(
 						Component.translatable("grapple_modifier.reset_button"),
 						button -> {
 							this.customization = new CustomizationVolume();
-							this.customizationsReset = true;
-							this.showMainScreenLayout();
+							this.showMainScreenLayout(Component.translatable("grapple_modifier.notice.reset_customizations"));
 						})
 				.pos(
 						this.guiLeft + OUTER_PADDING_X,
@@ -149,16 +161,18 @@ public class GrappleModifierBlockGUI extends Screen {
 				.build()
 		);
 
-		if(this.customizationsReset) {
-			this.customizationsReset = false;
-
-			this.addRenderableWidget(new MultiLineTextWidget(
+		if(this.noticeMessage != null) {
+			this.addRenderableWidget(new FadingMultiLineTextWidget(
 					this.guiLeft + OUTER_PADDING_X,
 					this.guiTop + FULL_SIZE_Y - CONTROL_BUTTON_HEIGHT - 15 - OUTER_PADDING_Y,
-					Component.translatable("grapple_modifier.reset_customizations.desc")
-							.withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC),
-					font
+					Component.empty()
+							.withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC)
+							.append(this.noticeMessage),
+					40,
+					this.font
 			));
+
+			this.noticeMessage = null;
 		}
 
 		int columnCount = Mth.positiveCeilDiv(GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.size(), MAX_ROWS);
@@ -210,7 +224,6 @@ public class GrappleModifierBlockGUI extends Screen {
 		int posY = this.guiTop + OUTER_PADDING_Y;
 
 		String categoryName = "\"%s\"".formatted(this.currentActiveCategory.getName().getString());
-		Component itemUnlockName = new ItemStack(this.currentActiveCategory.getUpgradeItem()).getDisplayName();
 
 		MultiLineTextWidget title = new MultiLineTextWidget(
 				posX, posY,
@@ -222,7 +235,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		MultiLineTextWidget description = new MultiLineTextWidget(
 				posX,
 				posY + title.getHeight() + 10,
-				Component.translatable("grapple_modifier.category_unlock.desc", itemUnlockName),
+				Component.translatable("grapple_modifier.category_unlock.desc"),
 				this.font
 		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));
 
@@ -266,7 +279,9 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.currentView = ModifierGUILayoutView.CATEGORY_PROPERTIES;
 
 		this.addRenderableWidget(
-				Button.builder(Component.translatable("grapple_modifier.back_button"), actionGoBack)
+				Button.builder(Component.translatable("grapple_modifier.back_button"), action ->
+								this.showMainScreenLayout(Component.translatable("grapple_modifier.notice.saved_customizations"))
+						)
 						.pos(this.guiLeft + OUTER_PADDING_X, this.guiTop + FULL_SIZE_Y - 20 - OUTER_PADDING_Y)
 						.size(50, 20)
 						.build()

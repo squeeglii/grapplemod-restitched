@@ -101,9 +101,10 @@
     "grapple_modifier.reset_button": "Reset",
     "grapple_modifier.back_button": "Back",
     "grapple_modifier.help_button": "Help",
-    "grapple_modifier.reset_customizations.desc": "All customizations have been reset!",
+    "grapple_modifier.notice.reset_customizations": "All customizations have been reset!",
+    "grapple_modifier.notice.saved_customizations": "Saved customizations!",
     "grapple_modifier.category_unlock.title": "Category not unlocked: %s!",
-    "grapple_modifier.category_unlock.desc": "Please right click this block with the item %s to unlock it.",
+    "grapple_modifier.category_unlock.desc": "Please right click this block with the right upgrade item to unlock it.",
     "grapple_modifier.help.title": "Grappling Hook Tips!",
     "grapple_modifier.help.desc": " - Right-Click the block with a Grappling Hook to apply.\n\n - Right-Click the block with Feather-Falling IV Diamond Boots to get Long Fall Boots.\n\n - Hooks can be repaired with leather or the mending enchantment.\n\n - Hold Shift when viewing item tooltip for controls",
 

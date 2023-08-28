@@ -1,8 +1,10 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
 import com.yyon.grapplinghook.GrappleMod;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +22,7 @@ public class BackgroundWidget extends AbstractWidget {
     }
 
     public BackgroundWidget(int x, int y, int w, int h) {
-        this(x, y, w, h, Component.literal(""));
+        this(x, y, w, h, GameNarrator.NO_TITLE);
     }
 
     @Override
@@ -30,5 +32,7 @@ public class BackgroundWidget extends AbstractWidget {
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) { }
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+        narrationElementOutput.add(NarratedElementType.TITLE, this.createNarrationMessage());
+    }
 }
