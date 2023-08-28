@@ -1,5 +1,5 @@
 {
-    "parent": "grapplemod:core/root",
+    "parent": "grapplemod:core/rocket_forcefield_combo",
     "display": {
         "title": { "translate": "advancement.grapplemod.core.speedy_forcefield.title" },
         "description": { "translate": "advancement.grapplemod.core.speedy_forcefield.description" },
@@ -16,7 +16,7 @@
                         "grapplemod:forcefield"
                     ],
                     "speed": {
-                        "min": 5.0
+                        "min": 6.944
                     }
                 }
             }

@@ -6,8 +6,6 @@ import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.UUID;
-
 public class PhysicsUpdateMessage extends BaseMessageServer {
 
     private PlayerPhysicsFrame frame;
@@ -32,8 +30,7 @@ public class PhysicsUpdateMessage extends BaseMessageServer {
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.frame.getPhysicsControllerType());
-        buf.writeDouble(this.frame.getSpeed());
+        this.frame.writeToBuffer(buf);
     }
 
     @Override

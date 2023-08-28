@@ -1,10 +1,11 @@
-package com.yyon.grapplinghook.physics;
+package com.yyon.grapplinghook.content.advancement;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -17,10 +18,12 @@ public class PhysicsFramePredicate {
 
     private Set<ResourceLocation> controllerTypes;
     private MinMaxBounds.Doubles speed;
+    private Boolean isUsingRocket;
 
     private PhysicsFramePredicate() {
         this.controllerTypes = null;
         this.speed = MinMaxBounds.Doubles.ANY;
+        this.isUsingRocket = null;
     }
 
 
@@ -31,6 +34,9 @@ public class PhysicsFramePredicate {
         }
 
         if(!this.speed.matches(frame.getSpeed()))
+            return false;
+
+        if(this.isUsingRocket != null && this.isUsingRocket != frame.isUsingRocket())
             return false;
 
         return true;
@@ -44,6 +50,9 @@ public class PhysicsFramePredicate {
         JsonObject root = GsonHelper.convertToJsonObject(json, "physics");
 
         predicate.speed = MinMaxBounds.Doubles.fromJson(root.get("speed"));
+        predicate.isUsingRocket = root.has("is_using_rocket")
+                ? root.get("is_using_rocket").getAsBoolean()
+                : null;
 
         JsonArray jsonArray = GsonHelper.getAsJsonArray(root, "controller_types", null);
         if (jsonArray != null) {
@@ -68,6 +77,7 @@ public class PhysicsFramePredicate {
         JsonObject root = new JsonObject();
 
         root.add("speed", this.speed.serializeToJson());
+        root.addProperty("is_using_rocket", this.isUsingRocket);
 
         if (this.controllerTypes != null) {
             JsonArray controllerTypesJson = new JsonArray();

@@ -1,0 +1,29 @@
+{
+    "parent": "grapplemod:core/root",
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.rocket_forcefield_combo.title" },
+        "description": { "translate": "advancement.grapplemod.core.rocket_forcefield_combo.description" },
+        "icon": { "item": "grapplemod:rocket" },
+        "frame": "task"
+    },
+
+    "criteria": {
+        "combining_forces": {
+            "trigger": "grapplemod:grapple_physics_changed",
+            "conditions": {
+                "physics": {
+                    "controller_types": [
+                        "grapplemod:forcefield"
+                    ],
+                    "is_using_rocket": true
+                }
+            }
+        }
+    },
+
+    "requirements": [
+        [
+            "combining_forces"
+        ]
+    ]
+}

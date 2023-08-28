@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.advancement.trigger;
 
 import com.google.gson.JsonObject;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.physics.PhysicsFramePredicate;
+import com.yyon.grapplinghook.content.advancement.PhysicsFramePredicate;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;

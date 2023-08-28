@@ -4,8 +4,6 @@ import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.UUID;
-
 /**
  * Side: Both
  *
@@ -18,11 +16,13 @@ public final class PlayerPhysicsFrame {
     private ResourceLocation physicsControllerType;
 
     private double speed;
+    private boolean isUsingRocket;
 
 
     public PlayerPhysicsFrame() {
         this.physicsControllerType = GrappleMod.id("none");
         this.speed = 0.0D;
+        this.isUsingRocket = false;
     }
 
     public PlayerPhysicsFrame setPhysicsControllerType(ResourceLocation physicsControllerType) {
@@ -35,6 +35,10 @@ public final class PlayerPhysicsFrame {
         return this;
     }
 
+    public PlayerPhysicsFrame setUsingRocket(boolean usingRocket) {
+        this.isUsingRocket = usingRocket;
+        return this;
+    }
 
     public ResourceLocation getPhysicsControllerType() {
         return this.physicsControllerType;
@@ -42,6 +46,10 @@ public final class PlayerPhysicsFrame {
 
     public double getSpeed() {
         return this.speed;
+    }
+
+    public boolean isUsingRocket() {
+        return this.isUsingRocket;
     }
 
     @Override
@@ -52,11 +60,18 @@ public final class PlayerPhysicsFrame {
         );
     }
 
+    public void writeToBuffer(FriendlyByteBuf buf) {
+        buf.writeResourceLocation(this.getPhysicsControllerType());
+        buf.writeDouble(this.getSpeed());
+        buf.writeBoolean(this.isUsingRocket());
+    }
+
     public static PlayerPhysicsFrame fromBuffer(FriendlyByteBuf buf) {
         PlayerPhysicsFrame frame = new PlayerPhysicsFrame();
 
         frame.setPhysicsControllerType(buf.readResourceLocation())
-             .setSpeed(buf.readDouble());
+             .setSpeed(buf.readDouble())
+             .setUsingRocket(buf.readBoolean());
 
         return frame;
     }

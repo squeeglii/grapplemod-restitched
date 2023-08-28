@@ -200,7 +200,8 @@ public class GrapplingHookPhysicsController {
 
 		PlayerPhysicsFrame frame = new PlayerPhysicsFrame()
 				.setPhysicsControllerType(this.getType())
-				.setSpeed(this.motion.length());
+				.setSpeed(this.motion.length())
+				.setUsingRocket(this.rocketKeyDown);
 
 		NetworkManager.packetToServer(new PhysicsUpdateMessage(frame));
 	}
