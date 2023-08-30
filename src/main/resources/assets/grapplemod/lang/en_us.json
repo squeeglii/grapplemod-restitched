@@ -246,6 +246,9 @@
     "grapple_category.grapplemod.style.desc": "Make your Grappling Hook the most stylish hook on the block!",
 
 
+    "grapple_template.author.default": "GrappleMod",
+
+
     "text.autoconfig.grapplemod.title": "Grappling Hook Mod Config",
 
     "text.autoconfig.grapplemod.option.options": "options",

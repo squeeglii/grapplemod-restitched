@@ -21,12 +21,13 @@ import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -66,8 +67,6 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 public class GrapplehookItem extends Item implements KeypressItem, DroppableItem {
 
 	public static final String NBT_HOOK_CUSTOMIZATIONS = "custom";
-	public static final String NBT_HOOK_TEMPLATE = "hook_template";
-	public static final String NBT_TEMPLATE_DISPLAY_NAME = "display_name";
 
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
@@ -354,12 +353,12 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	}
 
 	public Component getTemplateDisplayName(ItemStack stack) {
-		CompoundTag templateDisplayTag = stack.getTagElement(NBT_HOOK_TEMPLATE);
+		CompoundTag templateDisplayTag = stack.getTagElement(GrapplingHookTemplate.NBT_HOOK_TEMPLATE);
 
 		if(templateDisplayTag == null)
 			return null;
 
-		String nameJson = templateDisplayTag.getString(NBT_TEMPLATE_DISPLAY_NAME);
+		String nameJson = templateDisplayTag.getString(GrapplingHookTemplate.NBT_TEMPLATE_DISPLAY_NAME);
 
 		if(nameJson.isEmpty())
 			return null;
@@ -582,16 +581,16 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		CompoundTag nbt = custom.writeToNBT();
 		
 		tag.put(NBT_HOOK_CUSTOMIZATIONS, nbt);
-		tag.remove(NBT_HOOK_TEMPLATE);
+		tag.remove(GrapplingHookTemplate.NBT_HOOK_TEMPLATE);
 		
 		stack.setTag(tag);
 	}
 
-	public void applyHookTemplateName(ItemStack stack, GrapplingHookTemplate template) {
+	public void applyTemplateMetadata(ItemStack stack, GrapplingHookTemplate template) {
 		CompoundTag tag = stack.getOrCreateTag();
-		CompoundTag nbt = template.getMetadataBlob();
+		CompoundTag nbt = template.saveMetadataToNBT();
 
-		tag.put(NBT_HOOK_TEMPLATE, nbt);
+		tag.put(GrapplingHookTemplate.NBT_HOOK_TEMPLATE, nbt);
 
 		stack.setTag(tag);
 	}
@@ -599,6 +598,25 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	public static Vec applyHolderRotation(Vec angleVec, LivingEntity holder) {
 		Vec newVec = angleVec.rotatePitch(Math.toRadians(-holder.getViewXRot(1.0F)));
 		return newVec.rotateYaw(Math.toRadians(holder.getViewYRot(1.0F)));
+	}
+
+	private Optional<Component> getTemplateAuthor(ItemStack stack) {
+		CompoundTag tag = stack.getTag();
+
+		if(tag == null)
+			return Optional.empty();
+
+		Tag metaTag = tag.get(GrapplingHookTemplate.NBT_HOOK_TEMPLATE);
+		if(!(metaTag instanceof CompoundTag))
+			return Optional.empty();
+
+		Tag authorTag = tag.get(GrapplingHookTemplate.NBT_TEMPLATE_AUTHOR);
+		if(!(authorTag instanceof StringTag))
+			return Optional.empty();
+
+		Component author = Component.Serializer.fromJson(authorTag.getAsString());
+
+		return Optional.of(author);
 	}
 
 	public boolean getPropertyHook(ItemStack stack) {

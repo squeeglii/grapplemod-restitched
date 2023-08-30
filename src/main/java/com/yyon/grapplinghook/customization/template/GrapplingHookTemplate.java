@@ -17,6 +17,12 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 // These mimic the old recipes, automatically checking if a given template is valid.
 public class GrapplingHookTemplate {
 
+    public static final String NBT_HOOK_TEMPLATE = "hook_template";
+
+    public static final String NBT_TEMPLATE_DISPLAY_NAME = "display_name";
+    public static final String NBT_TEMPLATE_AUTHOR = "author";
+
+
     private static final Map<String, GrapplingHookTemplate> defaultTemplates = new LinkedHashMap<>();
 
     private static GrapplingHookTemplate register(GrapplingHookTemplate template) {
@@ -137,15 +143,23 @@ public class GrapplingHookTemplate {
 
     private final String identifier;
     private final Component displayName;
+    private final Component author;
+
     private final Set<PropertyOverride<?>> properties;
+
 
     private GrapplingHookTemplate(String identifier, PropertyOverride<?>... properties) {
         this(identifier, null, properties);
     }
 
     private GrapplingHookTemplate(String identifier, Component displayName, PropertyOverride<?>... properties) {
+        this(identifier, displayName, Component.translatable("grapple_template.author.default"), properties);
+    }
+
+    private GrapplingHookTemplate(String identifier, Component displayName, Component author, PropertyOverride<?>... properties) {
         this.identifier = identifier;
         this.displayName = displayName;
+        this.author = author;
         this.properties = Set.of(properties);
     }
 
@@ -156,6 +170,11 @@ public class GrapplingHookTemplate {
     public Component getDisplayName() {
         return this.displayName;
     }
+
+    public Component getAuthor() {
+        return this.author;
+    }
+
 
     public boolean isEnabled() {
         return properties.stream()
@@ -171,15 +190,14 @@ public class GrapplingHookTemplate {
 
     public ItemStack getAsStack() {
         ItemStack itemStack = GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance();
-        GrapplehookItem hook = GrappleModItems.GRAPPLING_HOOK.get();
-
-        hook.applyCustomizations(itemStack, this.getCustomizations());
-        hook.applyHookTemplateName(itemStack, this);
-
-        return itemStack;
+        return this.saveNBTToStack(itemStack);
     }
 
-    public CompoundTag getMetadataBlob() {
+    /**
+     * Encodes metadata details of a template (name, author, etc.)
+     * and saves it to an NBT Compound tag.
+     */
+    public CompoundTag saveMetadataToNBT() {
         CompoundTag data = new CompoundTag();
 
         data.putString("id", this.identifier);
@@ -189,6 +207,24 @@ public class GrapplingHookTemplate {
             data.putString("display_name", json);
         }
 
+        if(this.author != null) {
+            String json = Component.Serializer.toJson(this.author);
+            data.putString("author", json);
+        }
+
         return data;
+    }
+
+    /**
+     * Overwrites the NBT of an itemstack with the contents of the
+     * template.
+     */
+    public ItemStack saveNBTToStack(ItemStack stack) {
+        GrapplehookItem hook = GrappleModItems.GRAPPLING_HOOK.get();
+
+        hook.applyCustomizations(stack, this.getCustomizations());
+        hook.applyTemplateMetadata(stack, this);
+
+        return stack;
     }
 }
