@@ -12,7 +12,7 @@ import java.util.Optional;
 public class TemplateUtils {
 
     public static final String NBT_HOOK_CUSTOMIZATIONS = "customization";
-    public static final String NBT_HOOK_TEMPLATE = "hook_template";
+    public static final String NBT_HOOK_TEMPLATE = "template";
 
     public static final String NBT_TEMPLATE_IDENTIFIER = "id";
     public static final String NBT_TEMPLATE_DISPLAY_NAME = "display_name";

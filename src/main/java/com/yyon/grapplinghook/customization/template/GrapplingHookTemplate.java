@@ -155,9 +155,9 @@ public class GrapplingHookTemplate {
         this(identifier, displayName, Component.translatable("grapple_template.author.default"), properties);
     }
 
-    private GrapplingHookTemplate(String identifier, Component displayName, Component author, PropertyOverride<?>... properties) {
+    public GrapplingHookTemplate(String identifier, Component displayName, Component author, PropertyOverride<?>... properties) {
         this.identifier = identifier == null
-                ? UUID.randomUUID().toString()
+                ? "user-generated"
                 : identifier;
         this.displayName = displayName;
         this.author = author;

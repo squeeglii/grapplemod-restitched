@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.BlueprintItem;
+import com.yyon.grapplinghook.content.item.IAuthorable;
 import com.yyon.grapplinghook.content.item.ICustomizationAppliable;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
@@ -162,16 +163,14 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		CustomizationVolume custom = blockEntity.getCurrentCustomizations();
 
-		if(heldStack.getCount() > 1) {
-			ItemStack newStack = heldStack.split(1);
-			item.applyCustomizations(newStack, custom);
+		ItemStack newStack = heldStack.split(1);
+		item.applyCustomizations(newStack, custom);
 
-			if(!playerIn.addItem(newStack))
-				playerIn.drop(newStack, true);
+		if(item instanceof IAuthorable authorable)
+			authorable.commit(newStack, null, playerIn);
 
-		} else {
-			item.applyCustomizations(heldStack, custom);
-		}
+		if(!playerIn.addItem(newStack))
+			playerIn.drop(newStack, true);
 
 		Component msg = item.getOverwriteMessage();
 

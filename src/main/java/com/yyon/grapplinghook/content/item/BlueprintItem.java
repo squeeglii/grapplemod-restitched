@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.ChatFormatting;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Optional;
 
-public class BlueprintItem extends Item implements ICustomizationAppliable {
+public class BlueprintItem extends Item implements ICustomizationAppliable, IAuthorable {
 
     public BlueprintItem() {
         super(new Item.Properties().stacksTo(64));
@@ -54,6 +55,16 @@ public class BlueprintItem extends Item implements ICustomizationAppliable {
         return SoundEvents.VILLAGER_WORK_LIBRARIAN;
     }
 
+    @Override
+    public void commit(ItemStack stack, Component displayName, Component author) {
+        GrapplingHookTemplate template = new GrapplingHookTemplate(null, displayName, author);
+        CompoundTag metadata = template.saveMetadataToNBT();
+
+        CompoundTag base = stack.getOrCreateTag();
+        base.put(TemplateUtils.NBT_HOOK_TEMPLATE, metadata);
+
+        stack.setTag(base);
+    }
 
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> text, TooltipFlag isAdvanced) {
@@ -62,7 +73,7 @@ public class BlueprintItem extends Item implements ICustomizationAppliable {
         boolean isTemplateMetaPresent = TemplateUtils.getTemplateMetadataTag(stack).isPresent();
         boolean areCustomizationsPresent = optCustomizations.isPresent();
         Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
-        Optional<Component> templateName = TemplateUtils.getTemplateAuthor(stack);
+        Optional<Component> templateName = TemplateUtils.getTemplateDisplayName(stack);
 
 
         // Blueprint item has no template NBT soooooo, it's probably not a template.
