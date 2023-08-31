@@ -248,4 +248,12 @@ public final class CustomizationVolume {
 	public Set<CustomizationProperty<?>> getPropertiesPresent() {
 		return Collections.unmodifiableSet(this.values.keySet());
 	}
+
+
+	public static CustomizationVolume fromNBT(CompoundTag compound) {
+		CustomizationVolume volume = new CustomizationVolume();
+		volume.loadFromNBT(compound);
+		return volume;
+	}
+
 }

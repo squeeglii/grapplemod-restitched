@@ -142,7 +142,7 @@ public class ClientPhysicsControllerTracker {
 
 			CustomizationVolume custom = null;
 			if (usedItem instanceof GrapplehookItem grapple)
-				custom = grapple.getCustomization(usedStack);
+				custom = grapple.getCustomizations(usedStack);
 
 			if (!controllers.containsKey(player.getId())) {
 				player.setOnGround(false);

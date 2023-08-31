@@ -57,7 +57,7 @@
      - "hook_template"
        - "id": value 
        - "display_name": value
-     - "custom"
+     - "customization"
        - "properties"
          - "property1": value
          - "property2": value
