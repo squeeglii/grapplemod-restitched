@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.content.item;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
@@ -28,6 +29,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -210,6 +212,23 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		CustomizationVolume custom = getCustomization(stack);
 		Options options = Minecraft.getInstance().options;
 
+		Optional<Component> templateAuthor = this.getTemplateAuthor(stack);
+
+		if(templateAuthor.isPresent()) {
+			Component author = templateAuthor.get()
+					.copy()
+					.withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
+
+			list.add(Component.empty()
+					.withStyle(ChatFormatting.DARK_GRAY)
+					.append(Component.translatable("grapple_tooltip.template_author"))
+					.append(Component.literal(" "))
+					.append(author)
+			);
+
+			list.add(Component.literal(" "));
+		}
+
 		if (Screen.hasShiftDown()) {
 			list.add(Component.literal(""));
 			list.add(Component.translatable("grappletooltip.controls.title").withStyle(
@@ -345,85 +364,9 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	@NotNull
 	@Override
 	public Component getName(ItemStack stack) {
-		Component templateDisplayName = this.getTemplateDisplayName(stack);
+		Optional<Component> templateDisplayName = this.getTemplateDisplayName(stack);
 
-		return templateDisplayName == null
-				? super.getName(stack)
-				: templateDisplayName;
-	}
-
-	public Component getTemplateDisplayName(ItemStack stack) {
-		CompoundTag templateDisplayTag = stack.getTagElement(GrapplingHookTemplate.NBT_HOOK_TEMPLATE);
-
-		if(templateDisplayTag == null)
-			return null;
-
-		String nameJson = templateDisplayTag.getString(GrapplingHookTemplate.NBT_TEMPLATE_DISPLAY_NAME);
-
-		if(nameJson.isEmpty())
-			return null;
-
-		try {
-            return Component.Serializer.fromJson(nameJson);
-		} catch (Exception exception) {
-			return null;
-		}
-	}
-
-	public boolean hasHookEntity(Entity entity) {
-		GrapplinghookEntity hookLeft = getHookEntityLeft(entity);
-		GrapplinghookEntity hookRight = getHookEntityRight(entity);
-		return (hookLeft != null) || (hookRight != null);
-	}
-
-	public void setHookEntityLeft(Entity entity, GrapplinghookEntity hookEntity) {
-		GrapplehookItem.grapplehookEntitiesLeft.put(entity, hookEntity);
-	}
-	public void setHookEntityRight(Entity entity, GrapplinghookEntity hookEntity) {
-		GrapplehookItem.grapplehookEntitiesRight.put(entity, hookEntity);
-	}
-
-	public GrapplinghookEntity getHookEntityLeft(Entity entity) {
-		if (!GrapplehookItem.grapplehookEntitiesLeft.containsKey(entity)) return null;
-
-		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesLeft.get(entity);
-		if (hookEntity != null && hookEntity.isAlive())
-			return hookEntity;
-
-		return null;
-	}
-
-	public GrapplinghookEntity getHookEntityRight(Entity entity) {
-		if (!GrapplehookItem.grapplehookEntitiesRight.containsKey(entity)) return null;
-
-		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesRight.get(entity);
-		if (hookEntity != null && hookEntity.isAlive())
-			return hookEntity;
-
-		return null;
-	}
-
-	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean rightHand) {
-		if (this.hasHookEntity(entityLiving)) {
-			detachBoth(entityLiving);
-    		return;
-		}
-
-		stack.hurtAndBreak(1, (ServerPlayer) entityLiving, (p) -> {});
-		if (stack.getCount() <= 0) return;
-
-    	CustomizationVolume custom = this.getCustomization(stack);
-  		double angle = this.getSingleHookAngle(entityLiving, custom);
-
-	    boolean shouldThrowLeft = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
-
-    	if (!shouldThrowLeft) {
-    		this.throwLeft(stack, worldIn, entityLiving);
-    	}
-
-		this.throwRight(stack, worldIn, entityLiving, rightHand);
-
-		entityLiving.level().playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
+		return templateDisplayName.orElseGet(() -> super.getName(stack));
 	}
 
 	public Vec calculateThrowDirectionVector(Vec angleVec) {
@@ -438,8 +381,29 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		return Math.max(0.0D, Vec.motionVec(holder).distanceAlong(directionVec));
 	}
 
+	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean rightHand) {
+		if (this.hasHookEntity(entityLiving)) {
+			detachBoth(entityLiving);
+			return;
+		}
 
-	
+		stack.hurtAndBreak(1, (ServerPlayer) entityLiving, (p) -> {});
+		if (stack.getCount() <= 0) return;
+
+		CustomizationVolume custom = this.getCustomization(stack);
+		double angle = this.getSingleHookAngle(entityLiving, custom);
+
+		boolean shouldThrowLeft = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
+
+		if (!shouldThrowLeft) {
+			this.throwLeft(stack, worldIn, entityLiving);
+		}
+
+		this.throwRight(stack, worldIn, entityLiving, rightHand);
+
+		entityLiving.level().playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
+	}
+
 	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
     	CustomizationVolume custom = this.getCustomization(stack);
 
@@ -539,38 +503,14 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		GrapplingHookEntityTracker.attached.remove(id);
 	}
 	
-    public double getSingleHookAngle(LivingEntity entity, CustomizationVolume custom) {
-		return entity.isCrouching()
-				? custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get())
-				: custom.get(HOOK_THROW_ANGLE.get());
-    }
-
-	public double getDoubleHookAngle(LivingEntity entity, CustomizationVolume custom) {
-		return entity.isCrouching()
-				? custom.get(DOUBLE_HOOK_ANGLE_ON_SNEAK.get())
-				: custom.get(DOUBLE_HOOK_ANGLE.get());
-	}
-	
 	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {
 		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomization(stack), isdouble);
 		GrapplingHookEntityTracker.addGrapplehookEntity(entityLiving.getId(), hookEntity);
 		return hookEntity;
 	}
-    
-    public CustomizationVolume getCustomization(ItemStack itemstack) {
-    	CompoundTag tag = itemstack.getOrCreateTag();
-    	
-    	if (!tag.contains(NBT_HOOK_CUSTOMIZATIONS)) {
-			return this.resetCustomizations(itemstack);
-    	}
-
-		CustomizationVolume custom = new CustomizationVolume();
-		custom.loadFromNBT(tag.getCompound(NBT_HOOK_CUSTOMIZATIONS));
-		return custom;
-    }
 
 	private CustomizationVolume resetCustomizations(ItemStack stack) {
-		CustomizationVolume custom = this.getDefaultCustomization();
+		CustomizationVolume custom = new CustomizationVolume();
 		this.applyCustomizations(stack, custom);
 
 		return custom;
@@ -600,30 +540,123 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		return newVec.rotateYaw(Math.toRadians(holder.getViewYRot(1.0F)));
 	}
 
-	private Optional<Component> getTemplateAuthor(ItemStack stack) {
+
+	public void setHookEntityLeft(Entity entity, GrapplinghookEntity hookEntity) {
+		GrapplehookItem.grapplehookEntitiesLeft.put(entity, hookEntity);
+	}
+	public void setHookEntityRight(Entity entity, GrapplinghookEntity hookEntity) {
+		GrapplehookItem.grapplehookEntitiesRight.put(entity, hookEntity);
+	}
+
+
+	public boolean hasHookEntity(Entity entity) {
+		GrapplinghookEntity hookLeft = getHookEntityLeft(entity);
+		GrapplinghookEntity hookRight = getHookEntityRight(entity);
+		return (hookLeft != null) || (hookRight != null);
+	}
+
+	public GrapplinghookEntity getHookEntityLeft(Entity entity) {
+		if (!GrapplehookItem.grapplehookEntitiesLeft.containsKey(entity)) return null;
+
+		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesLeft.get(entity);
+		if (hookEntity != null && hookEntity.isAlive())
+			return hookEntity;
+
+		return null;
+	}
+
+	public GrapplinghookEntity getHookEntityRight(Entity entity) {
+		if (!GrapplehookItem.grapplehookEntitiesRight.containsKey(entity)) return null;
+
+		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesRight.get(entity);
+		if (hookEntity != null && hookEntity.isAlive())
+			return hookEntity;
+
+		return null;
+	}
+
+	public double getSingleHookAngle(LivingEntity entity, CustomizationVolume custom) {
+		return entity.isCrouching()
+				? custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get())
+				: custom.get(HOOK_THROW_ANGLE.get());
+	}
+
+	public double getDoubleHookAngle(LivingEntity entity, CustomizationVolume custom) {
+		return entity.isCrouching()
+				? custom.get(DOUBLE_HOOK_ANGLE_ON_SNEAK.get())
+				: custom.get(DOUBLE_HOOK_ANGLE.get());
+	}
+
+	private Optional<CompoundTag> getTemplateMetadataTag(ItemStack stack) {
 		CompoundTag tag = stack.getTag();
 
 		if(tag == null)
 			return Optional.empty();
 
 		Tag metaTag = tag.get(GrapplingHookTemplate.NBT_HOOK_TEMPLATE);
-		if(!(metaTag instanceof CompoundTag))
+		if(!(metaTag instanceof CompoundTag metaCompound))
 			return Optional.empty();
 
-		Tag authorTag = tag.get(GrapplingHookTemplate.NBT_TEMPLATE_AUTHOR);
+		return Optional.of(metaCompound);
+	}
+
+	public Optional<Component> getTemplateDisplayName(ItemStack stack) {
+		Optional<CompoundTag> template = this.getTemplateMetadataTag(stack);
+
+		if(template.isEmpty())
+			return Optional.empty();
+
+		Tag nameTag = template.get().get(GrapplingHookTemplate.NBT_TEMPLATE_DISPLAY_NAME);
+		if(!(nameTag instanceof StringTag))
+			return Optional.empty();
+
+		try {
+			Component name = Component.Serializer.fromJson(nameTag.getAsString());
+			return name != null
+					? Optional.of(name)
+					: Optional.empty();
+
+		} catch (Exception exception) {
+			GrappleMod.LOGGER.error(exception);
+			return Optional.empty();
+		}
+	}
+
+	private Optional<Component> getTemplateAuthor(ItemStack stack) {
+		Optional<CompoundTag> template = this.getTemplateMetadataTag(stack);
+
+		if(template.isEmpty())
+			return Optional.empty();
+
+		Tag authorTag = template.get().get(GrapplingHookTemplate.NBT_TEMPLATE_AUTHOR);
 		if(!(authorTag instanceof StringTag))
 			return Optional.empty();
 
-		Component author = Component.Serializer.fromJson(authorTag.getAsString());
+		try {
+			Component author = Component.Serializer.fromJson(authorTag.getAsString());
+			return author != null
+					? Optional.of(author)
+					: Optional.empty();
 
-		return Optional.of(author);
+		} catch (Exception exception) {
+			GrappleMod.LOGGER.error(exception);
+			return Optional.empty();
+		}
 	}
 
-	public boolean getPropertyHook(ItemStack stack) {
-    	return stack.getOrCreateTag().contains("hook");
+	public CustomizationVolume getCustomization(ItemStack itemstack) {
+		CompoundTag tag = itemstack.getOrCreateTag();
+
+		if (!tag.contains(NBT_HOOK_CUSTOMIZATIONS)) {
+			return this.resetCustomizations(itemstack);
+		}
+
+		CustomizationVolume custom = new CustomizationVolume();
+		custom.loadFromNBT(tag.getCompound(NBT_HOOK_CUSTOMIZATIONS));
+		return custom;
 	}
 
-	public CustomizationVolume getDefaultCustomization() {
-		return new CustomizationVolume();
+	public boolean shouldDisplayAsHookOnly(ItemStack stack) {
+		return stack.getOrCreateTag().contains("hook");
 	}
 }

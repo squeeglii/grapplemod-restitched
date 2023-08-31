@@ -53,6 +53,7 @@
     "grappletooltip.negate.desc": "No",
     "grapple_tooltip.rocket_item.description": "Propels you forward with the power of rockets!",
     "grapple_tooltip.rocket_item.controls": "Activate Rocket (Hold)",
+    "grapple_tooltip.template_author": "Designed by:",
 
     "feedback.grapplemod.modifier.long_fall_boots": "Retrofitted your boots into Aperture Science Grade Long-Fall Boots™",
     "feedback.grapplemod.modifier.long_fall_boots.disabled": "You are not permitted to make Long Fall Boots at a workbench.",
