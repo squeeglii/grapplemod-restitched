@@ -68,16 +68,11 @@ public class BlueprintItem extends Item implements ICustomizationAppliable, IAut
 
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> text, TooltipFlag isAdvanced) {
-        Optional<CustomizationVolume> optCustomizations = this.getCustomizations(stack);
-
-        boolean isTemplateMetaPresent = TemplateUtils.getTemplateMetadataTag(stack).isPresent();
-        boolean areCustomizationsPresent = optCustomizations.isPresent();
         Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
         Optional<Component> templateName = TemplateUtils.getTemplateDisplayName(stack);
 
-
         // Blueprint item has no template NBT soooooo, it's probably not a template.
-        if(!isTemplateMetaPresent && !areCustomizationsPresent) {
+        if(this.isBlank(stack)) {
             text.add(Component.translatable("tooltip.blueprint.unused_hint")
                               .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             return;
@@ -115,7 +110,10 @@ public class BlueprintItem extends Item implements ICustomizationAppliable, IAut
             return;
         }
 
-        if(!areCustomizationsPresent) {
+
+        Optional<CustomizationVolume> optCustomizations = this.getCustomizations(stack);
+
+        if(optCustomizations.isEmpty()) {
             text.add(Component.literal(""));
             text.add(Component.translatable("tooltip.blueprint.no_customizations")
                     .withStyle(ChatFormatting.ITALIC, ChatFormatting.RED));
@@ -151,5 +149,13 @@ public class BlueprintItem extends Item implements ICustomizationAppliable, IAut
         return customizationsTag instanceof CompoundTag customizationsCompound
                 ? Optional.of(CustomizationVolume.fromNBT(customizationsCompound))
                 : Optional.empty();
+    }
+
+    public boolean isBlank(ItemStack itemStack) {
+        Optional<CustomizationVolume> optCustomizations = this.getCustomizations(itemStack);
+
+        boolean isTemplateMetaMissing = TemplateUtils.getTemplateMetadataTag(itemStack).isEmpty();
+        boolean areCustomizationsMissing = optCustomizations.isEmpty();
+        return isTemplateMetaMissing && areCustomizationsMissing;
     }
 }

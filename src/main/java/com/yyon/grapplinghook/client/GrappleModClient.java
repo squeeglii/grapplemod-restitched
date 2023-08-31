@@ -98,6 +98,7 @@ public class GrappleModClient implements ClientModInitializer {
             return (this.getClientControllerManager().controllers.containsKey(entity.getId()) && this.getClientControllerManager().controllers.get(entity.getId()) instanceof ForcefieldPhysicsController) ? 1 : 0;
         });
         ItemProperties.register(GrappleModItems.GRAPPLING_HOOK.get(), new ResourceLocation("hook"), (stack, world, entity, seed) -> GrappleModItems.GRAPPLING_HOOK.get().shouldDisplayAsHookOnly(stack) ? 1 : 0);
+        ItemProperties.register(GrappleModItems.BLUEPRINT.get(), GrappleMod.id("written"), (stack, world, entity, seed) -> GrappleModItems.BLUEPRINT.get().isBlank(stack) ? 0 : 1);
     }
 
     public void registerResourcePacks() {

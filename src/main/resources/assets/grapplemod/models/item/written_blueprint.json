@@ -1,0 +1,6 @@
+{
+    "parent": "grapplemod:item/blueprint",
+    "textures": {
+        "layer0": "grapplemod:items/written_blueprint"
+    }
+}

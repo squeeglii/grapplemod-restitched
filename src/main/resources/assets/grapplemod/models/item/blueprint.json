@@ -8,16 +8,25 @@
         "thirdperson_righthand": {
             "translation": [ 0, 1.5, 1.5 ],
             "rotation": [ 0, 0, -45 ],
-            "scale": [ 0.5, 0.5, 0.5 ]
+            "scale": [ 0.75, 0.75, 0.75 ]
         },
         "thirdperson_lefthand": {
             "translation": [ 0, 1.5, 1.5 ],
             "rotation": [ 0, 0, 45 ],
-            "scale": [ 0.5, 0.5, 0.5 ]
+            "scale": [ 0.75, 0.75, 0.75 ]
         },
         "ground": {
             "translation": [ 0, 2, 0 ],
-            "scale":[ 0.5, 0.5, 0.5 ]
+            "scale":[ 0.75, 0.75, 0.75 ]
         }
-    }
+    },
+
+    "overrides": [
+        {
+            "model": "grapplemod:item/written_blueprint",
+            "predicate": {
+                "grapplemod:written": 1
+            }
+        }
+    ]
 }
