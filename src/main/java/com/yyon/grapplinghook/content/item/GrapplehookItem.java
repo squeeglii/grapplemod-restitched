@@ -31,6 +31,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -64,7 +65,7 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrapplehookItem extends Item implements KeypressItem, DroppableItem {
+public class GrapplehookItem extends Item implements KeypressItem, DroppableItem, ICustomizationAppliable {
 
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
@@ -205,7 +206,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		CustomizationVolume custom = getCustomizations(stack);
+		CustomizationVolume custom = this.getCustomizations(stack);
 		Options options = Minecraft.getInstance().options;
 
 		Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
@@ -217,7 +218,7 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 			list.add(Component.empty()
 					.withStyle(ChatFormatting.DARK_GRAY)
-					.append(Component.translatable("grapple_tooltip.template_author"))
+					.append(Component.translatable("grapple_tooltip.template.author"))
 					.append(Component.literal(" "))
 					.append(author)
 			);
@@ -349,10 +350,10 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 			list.add(Component.literal(""));
 		}
 
-		list.add(Component.translatable("grappletooltip.shiftcontrols.desc").withStyle(
+		list.add(Component.translatable("grapple_tooltip.controls.hint").withStyle(
 				ChatFormatting.ITALIC, ChatFormatting.GRAY
 		));
-		list.add(Component.translatable("grappletooltip.controlconfiguration.desc").withStyle(
+		list.add(Component.translatable("grapple_tooltip.configuration.hint").withStyle(
 				ChatFormatting.ITALIC, ChatFormatting.GRAY
 		));
 	}
@@ -361,9 +362,42 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	@Override
 	public Component getName(ItemStack stack) {
 		Optional<Component> templateDisplayName = TemplateUtils.getTemplateDisplayName(stack);
-
 		return templateDisplayName.orElseGet(() -> super.getName(stack));
 	}
+
+	@Override
+	public Component getOverwriteMessage() {
+		return Component.translatable("feedback.grapplemod.modifier.applied_configuration");
+	}
+
+	@Override
+	public SoundEvent getOverwriteSoundEffect() {
+		return SoundEvents.VILLAGER_WORK_TOOLSMITH;
+	}
+
+	@Override
+	public CustomizationVolume resetCustomizations(ItemStack stack) {
+		CustomizationVolume custom = new CustomizationVolume();
+		this.applyCustomizations(stack, custom);
+
+		return custom;
+	}
+
+	/**
+	 * Applies customizations and removes the template metadata.
+	 * To retain the metadata, call #applyTemplateMetadata(...) after calling this.
+	 */
+	@Override
+	public void applyCustomizations(ItemStack stack, CustomizationVolume custom) {
+		CompoundTag tag = stack.getOrCreateTag();
+		CompoundTag nbt = custom.writeToNBT();
+
+		tag.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, nbt);
+		tag.remove(TemplateUtils.NBT_HOOK_TEMPLATE);
+
+		stack.setTag(tag);
+	}
+
 
 	public Vec calculateThrowDirectionVector(Vec angleVec) {
 		float velx = -Mth.sin((float) angleVec.getYaw() * 0.017453292F) * Mth.cos((float) angleVec.getPitch() * 0.017453292F);
@@ -503,27 +537,6 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomizations(stack), isdouble);
 		GrapplingHookEntityTracker.addGrapplehookEntity(entityLiving.getId(), hookEntity);
 		return hookEntity;
-	}
-
-	private CustomizationVolume resetCustomizations(ItemStack stack) {
-		CustomizationVolume custom = new CustomizationVolume();
-		this.applyCustomizations(stack, custom);
-
-		return custom;
-	}
-
-	/**
-	 * Applies customizations and removes the template metadata.
-	 * To retain the metadata, call #applyTemplateMetadata(...) after calling this.
-	 */
-	public void applyCustomizations(ItemStack stack, CustomizationVolume custom) {
-		CompoundTag tag = stack.getOrCreateTag();
-		CompoundTag nbt = custom.writeToNBT();
-		
-		tag.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, nbt);
-		tag.remove(TemplateUtils.NBT_HOOK_TEMPLATE);
-		
-		stack.setTag(tag);
 	}
 
 	public void applyTemplateMetadata(ItemStack stack, GrapplingHookTemplate template) {

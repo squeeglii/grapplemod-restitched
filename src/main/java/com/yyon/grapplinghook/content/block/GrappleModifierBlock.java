@@ -3,10 +3,11 @@ package com.yyon.grapplinghook.content.block;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.content.item.BlueprintItem;
+import com.yyon.grapplinghook.content.item.ICustomizationAppliable;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.Vec;
@@ -89,8 +90,8 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		if (heldItem instanceof BaseUpgradeItem upgradeItem)
 			return this.handleUpgradeItem(worldIn, pos, playerIn, hand, upgradeItem);
 
-		if (heldItem instanceof GrapplehookItem)
-			return this.handleGrappleHookItem(worldIn, pos, playerIn, heldStack);
+		if (heldItem instanceof ICustomizationAppliable customItem)
+			return this.handleApplyCustomizations(customItem, worldIn, pos, playerIn, heldStack);
 
 		if (heldItem == Items.DIAMOND_BOOTS)
 			return this.handleDiamondBoots(worldIn, pos, playerIn, hand, heldStack);
@@ -150,22 +151,32 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return InteractionResult.CONSUME;
 	}
 
-	private InteractionResult handleGrappleHookItem(Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
+	private InteractionResult handleApplyCustomizations(ICustomizationAppliable item, Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
 		if (worldIn.isClientSide)
 			return InteractionResult.SUCCESS;
 
 		BlockEntity ent = worldIn.getBlockEntity(pos);
 
-		if (!(ent instanceof GrappleModifierBlockEntity tile))
+		if (!(ent instanceof GrappleModifierBlockEntity blockEntity))
 			return InteractionResult.FAIL;
 
-		CustomizationVolume custom = tile.getCurrentCustomizations();
-		GrappleModItems.GRAPPLING_HOOK.get().applyCustomizations(heldStack, custom);
+		CustomizationVolume custom = blockEntity.getCurrentCustomizations();
 
-		Component msg = Component.translatable("feedback.grapplemod.modifier.applied_configuration");
+		if(heldStack.getCount() > 1) {
+			ItemStack newStack = heldStack.split(1);
+			item.applyCustomizations(newStack, custom);
+
+			if(!playerIn.addItem(newStack))
+				playerIn.drop(newStack, true);
+
+		} else {
+			item.applyCustomizations(heldStack, custom);
+		}
+
+		Component msg = item.getOverwriteMessage();
 
 		playerIn.sendSystemMessage(msg);
-		worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_TOOLSMITH, SoundSource.BLOCKS, 1f, 1.0f);
+		worldIn.playSound(null, pos, item.getOverwriteSoundEffect(), SoundSource.BLOCKS, 1f, 1.0f);
 
 		return InteractionResult.CONSUME;
 	}
