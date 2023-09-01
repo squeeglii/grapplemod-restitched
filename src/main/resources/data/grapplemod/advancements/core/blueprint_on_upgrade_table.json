@@ -1,0 +1,43 @@
+{
+    "parent": "grapplemod:core/upgrade_table",
+    "display": {
+        "title": { "translate": "advancement.grapplemod.core.blueprint_on_upgrade_table.title" },
+        "description": { "translate": "advancement.grapplemod.core.blueprint_on_upgrade_table.description" },
+        "icon": { "item": "grapplemod:blueprint" },
+        "frame": "task"
+    },
+
+    "criteria": {
+        "used_modification_table_with_blueprint": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [
+                    {
+                        "condition": "minecraft:match_tool",
+                        "predicate": {
+                            "items": [
+                                "grapplemod:blueprint"
+                            ]
+                        }
+                    },
+                    {
+                        "condition": "minecraft:location_check",
+                        "predicate": {
+                            "block": {
+                                "blocks": [
+                                    "grapplemod:block_grapple_modifier"
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+
+    "requirements": [
+        [
+            "used_modification_table_with_blueprint"
+        ]
+    ]
+}

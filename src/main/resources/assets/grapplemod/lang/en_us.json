@@ -68,6 +68,7 @@
 
     "item.grapplemod.grapplinghook": "Grappling Hook",
     "item.grapplemod.blueprint": "Blueprint",
+    "item.grapplemod.blank_blueprint": "Blank Blueprint",
     "item.grapplemod.launcheritem": "Ender Staff",
     "item.grapplemod.repeller": "Magnetic Forcefield",
     "item.grapplemod.rocket": "Porta-Rocket",
@@ -606,6 +607,8 @@
     "advancement.grapplemod.core.root.description": "Hey Mabel, could you get the light?",
     "advancement.grapplemod.core.upgrade_table.title": "Upgrades People, Upgrades!",
     "advancement.grapplemod.core.upgrade_table.description": "Use a Grappling Hook Modification Station.",
+    "advancement.grapplemod.core.blueprint_on_upgrade_table.title": "The Tinkerer",
+    "advancement.grapplemod.core.blueprint_on_upgrade_table.description": "Copy your customizations from a Modification Table to Blueprint.",
     "advancement.grapplemod.core.long_fall_boots.title": "Thinking With Fall Damage",
     "advancement.grapplemod.core.long_fall_boots.description": "Equip a pair of Aperture Science™ Long Fall Boots",
     "advancement.grapplemod.core.long_fall_boots_big_fall.title": "Good Work, Boots!",

@@ -16,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,14 @@ public class BlueprintItem extends Item implements ICustomizationAppliable, IAut
         base.put(TemplateUtils.NBT_HOOK_TEMPLATE, metadata);
 
         stack.setTag(base);
+    }
+
+    @NotNull
+    @Override
+    public Component getName(ItemStack stack) {
+        return this.isBlank(stack)
+                ? Component.translatable("item.grapplemod.blank_blueprint")
+                : super.getName(stack);
     }
 
     @Override
