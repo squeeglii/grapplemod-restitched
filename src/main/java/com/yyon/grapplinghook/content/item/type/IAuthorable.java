@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.item;
+package com.yyon.grapplinghook.content.item.type;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

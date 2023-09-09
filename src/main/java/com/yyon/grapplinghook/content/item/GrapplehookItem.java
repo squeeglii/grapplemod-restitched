@@ -4,8 +4,9 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
-import com.yyon.grapplinghook.content.item.type.DroppableItem;
-import com.yyon.grapplinghook.content.item.type.KeypressItem;
+import com.yyon.grapplinghook.content.item.type.IDropHandling;
+import com.yyon.grapplinghook.content.item.type.ICustomizationAppliable;
+import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
@@ -65,7 +66,7 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrapplehookItem extends Item implements KeypressItem, DroppableItem, ICustomizationAppliable {
+public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHandling, ICustomizationAppliable {
 
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
@@ -99,16 +100,16 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	}
 
 	@Override
-	public void onCustomKeyDown(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
+	public void onCustomKeyDown(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean ismainhand) {
 		if (player.level().isClientSide) {
-			if (key == KeypressItem.Keys.LAUNCHER) {
+			if (key == IGlobalKeyObserver.Keys.LAUNCHER) {
 				if (this.getCustomizations(stack).get(ENDER_STAFF_ATTACHED.get()))
 					GrappleModClient.get().launchPlayer(player);
 
-			} else if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
+			} else if (key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT || key == IGlobalKeyObserver.Keys.THROWBOTH) {
 				NetworkManager.packetToServer(new KeypressMessage(key, true));
 
-			} else if (key == KeypressItem.Keys.ROCKET) {
+			} else if (key == IGlobalKeyObserver.Keys.ROCKET) {
 				CustomizationVolume custom = this.getCustomizations(stack);
 				if (custom.get(ROCKET_ATTACHED.get()))
 					GrappleModClient.get().startRocket(player, custom);
@@ -119,9 +120,9 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 
 		CustomizationVolume custom = this.getCustomizations(stack);
 
-		boolean isEitherSingleHandThrowKeyDown = key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT;
+		boolean isEitherSingleHandThrowKeyDown = key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT;
 
-		if (key == KeypressItem.Keys.THROWBOTH || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && isEitherSingleHandThrowKeyDown)) {
+		if (key == IGlobalKeyObserver.Keys.THROWBOTH || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && isEitherSingleHandThrowKeyDown)) {
 			throwBoth(stack, player.level(), player, ismainhand);
 			return;
 		}
@@ -153,9 +154,9 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	}
 	
 	@Override
-	public void onCustomKeyUp(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
+	public void onCustomKeyUp(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean ismainhand) {
 		if (player.level().isClientSide) {
-			if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
+			if (key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT || key == IGlobalKeyObserver.Keys.THROWBOTH) {
 				NetworkManager.packetToServer(new KeypressMessage(key, false));
 			}
 
@@ -166,11 +167,11 @@ public class GrapplehookItem extends Item implements KeypressItem, DroppableItem
 	    		GrapplinghookEntity hookLeft = getHookEntityLeft(player);
 	    		GrapplinghookEntity hookRight = getHookEntityRight(player);
 	    		
-				if (key == KeypressItem.Keys.THROWBOTH) {
+				if (key == IGlobalKeyObserver.Keys.THROWBOTH) {
 					detachBoth(player);
-				} else if (key == KeypressItem.Keys.THROWLEFT) {
+				} else if (key == IGlobalKeyObserver.Keys.THROWLEFT) {
 		    		if (hookLeft != null) detachLeft(player);
-				} else if (key == KeypressItem.Keys.THROWRIGHT) {
+				} else if (key == IGlobalKeyObserver.Keys.THROWRIGHT) {
 		    		if (hookRight != null) detachRight(player);
 				}
 	    	}

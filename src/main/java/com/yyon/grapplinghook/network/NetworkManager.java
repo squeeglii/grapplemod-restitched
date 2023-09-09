@@ -76,6 +76,7 @@ public class NetworkManager {
         NetworkManager.registerClient("grapple_detach", GrappleDetachMessage::new);
         NetworkManager.registerClient("logged_in", LoggedInMessage::new);
         NetworkManager.registerClient("segment", SegmentMessage::new);
+        NetworkManager.registerClient("restore_grapple_state", RestoreGrappleStateMessage::new);
     }
 
     public static void registerPacketListeners() {
@@ -84,5 +85,6 @@ public class NetworkManager {
         NetworkManager.registerServer("keypress", KeypressMessage::new);
         NetworkManager.registerServer("player_movement", PlayerMovementMessage::new);
         NetworkManager.registerServer("physics_update", PhysicsUpdateMessage::new);
+        NetworkManager.registerServer("save_grapple_state", SaveGrappleStateMessage::new);
     }
 }

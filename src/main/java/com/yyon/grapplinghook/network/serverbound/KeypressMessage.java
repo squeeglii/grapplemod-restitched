@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.item.type.KeypressItem;
+import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -28,21 +28,21 @@ import net.minecraft.world.item.ItemStack;
 
 public class KeypressMessage extends BaseMessageServer {
 	
-	KeypressItem.Keys key;
+	IGlobalKeyObserver.Keys key;
 	boolean isDown;
 
     public KeypressMessage(FriendlyByteBuf buf) {
     	super(buf);
     }
 
-    public KeypressMessage(KeypressItem.Keys thekey, boolean isDown) {
+    public KeypressMessage(IGlobalKeyObserver.Keys thekey, boolean isDown) {
     	this.key = thekey;
     	this.isDown = isDown;
     }
 
 	@Override
     public void decode(FriendlyByteBuf buf) {
-    	this.key = KeypressItem.Keys.values()[buf.readInt()];
+    	this.key = IGlobalKeyObserver.Keys.values()[buf.readInt()];
     	this.isDown = buf.readBoolean();
     }
 
@@ -64,22 +64,22 @@ public class KeypressMessage extends BaseMessageServer {
 		ctx.getServer().execute(() -> {
 			if (player != null) {
 				ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-				if (stack.getItem() instanceof KeypressItem keypressItem) {
+				if (stack.getItem() instanceof IGlobalKeyObserver IGlobalKeyObserver) {
 					if (isDown) {
-						keypressItem.onCustomKeyDown(stack, player, key, true);
+						IGlobalKeyObserver.onCustomKeyDown(stack, player, key, true);
 					} else {
-						keypressItem.onCustomKeyUp(stack, player, key, true);
+						IGlobalKeyObserver.onCustomKeyUp(stack, player, key, true);
 					}
 
 					return;
 				}
 
 				stack = player.getItemInHand(InteractionHand.OFF_HAND);
-				if (stack.getItem() instanceof KeypressItem keypressItem) {
+				if (stack.getItem() instanceof IGlobalKeyObserver IGlobalKeyObserver) {
 					if (isDown) {
-						keypressItem.onCustomKeyDown(stack, player, key, false);
+						IGlobalKeyObserver.onCustomKeyDown(stack, player, key, false);
 					} else {
-						keypressItem.onCustomKeyUp(stack, player, key, false);
+						IGlobalKeyObserver.onCustomKeyUp(stack, player, key, false);
 					}
 				}
 			}

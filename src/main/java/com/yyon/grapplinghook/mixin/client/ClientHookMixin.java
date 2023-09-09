@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.content.item.type.KeypressItem;
+import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.content.registry.GrappleModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -54,15 +54,15 @@ public class ClientHookMixin {
             boolean prevKey = ClientHookMixin.keyPressHistory[i];
 
             if (isKeyDown != prevKey) {
-                KeypressItem.Keys key = KeypressItem.Keys.values()[i];
+                IGlobalKeyObserver.Keys key = IGlobalKeyObserver.Keys.values()[i];
 
                 ItemStack stack = this.getKeypressStack(player);
                 if (stack != null) {
                     if (!this.isLookingAtModifierBlock(player)) {
                         if (isKeyDown) {
-                            ((KeypressItem) stack.getItem()).onCustomKeyDown(stack, player, key, true);
+                            ((IGlobalKeyObserver) stack.getItem()).onCustomKeyDown(stack, player, key, true);
                         } else {
-                            ((KeypressItem) stack.getItem()).onCustomKeyUp(stack, player, key, true);
+                            ((IGlobalKeyObserver) stack.getItem()).onCustomKeyUp(stack, player, key, true);
                         }
                     }
                 }
@@ -86,10 +86,10 @@ public class ClientHookMixin {
         ItemStack stack;
 
         stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if (stack.getItem() instanceof KeypressItem) return stack;
+        if (stack.getItem() instanceof IGlobalKeyObserver) return stack;
 
         stack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (stack.getItem() instanceof KeypressItem) return stack;
+        if (stack.getItem() instanceof IGlobalKeyObserver) return stack;
 
         return null;
     }

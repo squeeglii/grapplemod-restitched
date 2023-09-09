@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.content.item.type.DroppableItem;
+import com.yyon.grapplinghook.content.item.type.IDropHandling;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +15,7 @@ public class PlayerDropHandlerMixin {
     @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/item/ItemEntity;setPickUpDelay(I)V"))
     public void handleDrop(ItemStack droppedItem, boolean dropAround, boolean includeThrowerName, CallbackInfoReturnable<ItemEntity> cir) {
-        if(droppedItem.getItem() instanceof DroppableItem item) {
+        if(droppedItem.getItem() instanceof IDropHandling item) {
             item.onDroppedByPlayer(droppedItem, (Player) (Object) this);
         }
     }

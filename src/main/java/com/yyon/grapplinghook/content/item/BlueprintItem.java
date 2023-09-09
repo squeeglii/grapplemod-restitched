@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.content.item;
 
-import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.content.item.type.IAuthorable;
+import com.yyon.grapplinghook.content.item.type.ICustomizationAppliable;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
