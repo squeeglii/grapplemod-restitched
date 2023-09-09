@@ -10,7 +10,7 @@ import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
-import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntityRenderer;
+import com.yyon.grapplinghook.client.render.entity.GrapplinghookEntityRenderer;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;

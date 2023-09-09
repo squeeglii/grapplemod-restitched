@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.util;
 
-public interface FriendlyNameProvider {
+public interface IFriendlyNameProvider {
 
     String getFriendlyName();
 

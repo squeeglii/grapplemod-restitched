@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.util.FriendlyNameProvider;
+import com.yyon.grapplinghook.util.IFriendlyNameProvider;
 import net.minecraft.client.KeyMapping;
 
-public enum CrouchToggle implements FriendlyNameProvider {
+public enum CrouchToggle implements IFriendlyNameProvider {
 
     ALWAYS, WHEN_CROUCHING, WHEN_NOT_CROUCHING;
 
