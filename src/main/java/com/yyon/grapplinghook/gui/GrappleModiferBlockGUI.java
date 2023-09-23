@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.util.GrappleCustomization;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,7 +42,7 @@ public class GrappleModiferBlockGUI extends Screen {
 	GrappleCustomization.UpgradeCategories category = null;
 
 	public GrappleModiferBlockGUI(GrappleModifierBlockEntity tile) {
-		super(Component.translatable("grapplemodifier.title.desc"));
+		super(GameNarrator.NO_TITLE);
 
 		this.tile = tile;
 		customization = tile.customization;
@@ -179,7 +179,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 			Minecraft minecraft = Minecraft.getInstance();
 			Font fontRenderer = minecraft.font;
-			RenderSystem.setShaderTexture(0,WIDGETS_LOCATION);
+			//RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
