@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
-import com.yyon.grapplinghook.content.item.type.ICustomizationAppliable;
+import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
@@ -89,7 +89,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		if (heldItem instanceof BaseUpgradeItem upgradeItem)
 			return this.handleUpgradeItem(worldIn, pos, playerIn, hand, upgradeItem);
 
-		if (heldItem instanceof ICustomizationAppliable customItem)
+		if (heldItem instanceof ICustomizationApplicable customItem)
 			return this.handleApplyCustomizations(customItem, worldIn, pos, playerIn, heldStack);
 
 		if (heldItem == Items.DIAMOND_BOOTS)
@@ -150,7 +150,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return InteractionResult.CONSUME;
 	}
 
-	private InteractionResult handleApplyCustomizations(ICustomizationAppliable item, Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
+	private InteractionResult handleApplyCustomizations(ICustomizationApplicable item, Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
 		if (worldIn.isClientSide)
 			return InteractionResult.SUCCESS;
 

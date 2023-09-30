@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
-import com.yyon.grapplinghook.content.item.type.ICustomizationAppliable;
+import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
@@ -66,7 +66,7 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHandling, ICustomizationAppliable {
+public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHandling, ICustomizationApplicable {
 
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
@@ -364,6 +364,11 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	public Component getName(ItemStack stack) {
 		Optional<Component> templateDisplayName = TemplateUtils.getTemplateDisplayName(stack);
 		return templateDisplayName.orElseGet(() -> super.getName(stack));
+	}
+
+	@Override
+	public boolean shouldAllowQuickOverwrite() {
+		return true;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
-import com.yyon.grapplinghook.content.item.type.ICustomizationAppliable;
+import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
@@ -22,12 +22,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class BlueprintItem extends Item implements ICustomizationAppliable, IAuthorable {
+public class BlueprintItem extends Item implements ICustomizationApplicable, IAuthorable {
 
     public BlueprintItem() {
         super(new Item.Properties().stacksTo(64));
     }
 
+    @Override
+    public boolean shouldAllowQuickOverwrite() {
+        return false;
+    }
 
     @Override
     public void applyCustomizations(ItemStack stack, CustomizationVolume customizations) {
