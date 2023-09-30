@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Grappling Hook Mod",
   "description": "Fabric port of the Grappling Hook Mod",
-  "authors": ["Yyon", "Nyfaria", "Mayesnake", "CG360"],
+  "authors": [ "Yyon", "Nyfaria", "Mayesnake", "CG360" ],
   "contact": {},
   "license": "GPL-3.0",
   "icon": "assets/grapplemod/icon.png",
@@ -21,7 +21,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version_long}",
+    "minecraft": "${minecraft_version_support_range}",
     "cloth-config": ">=${clothconfig_version}"
   },
   "recommends": {
