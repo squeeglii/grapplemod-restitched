@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,10 +34,11 @@ public abstract class GrappleCrosshairMixin {
     @Final @Shadow
     private Minecraft minecraft;
 
-    @Final @Shadow
-    private static ResourceLocation GUI_ICONS_LOCATION;
+    @Shadow @Final private static ResourceLocation CROSSHAIR_SPRITE;
 
-    @Inject(method = "renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V", shift = At.Shift.AFTER, ordinal = 0))
+
+    @Inject(method = "renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V", shift = At.Shift.AFTER, ordinal = 0))
     public void renderModCrosshair(GuiGraphics guiGraphics, CallbackInfo ci) {
 
         LocalPlayer player = this.minecraft.player;
@@ -106,12 +108,14 @@ public abstract class GrappleCrosshairMixin {
     }
 
 
+    @Unique
     private void drawCrosshair(GuiGraphics guiGraphics, int x, int y) {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        guiGraphics.blit(GUI_ICONS_LOCATION, (int) (x - (15.0F/2)), (int) (y - (15.0F/2)), 0, 0, 15, 15);
+        guiGraphics.blitSprite(CROSSHAIR_SPRITE, (int) (x - (15.0F/2)), (int) (y - (15.0F/2)), 15, 15);
         RenderSystem.defaultBlendFunc();
     }
 
+    @Unique
     public void drawRect(int x, int y, int width, int height, int g, int a)
     {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);

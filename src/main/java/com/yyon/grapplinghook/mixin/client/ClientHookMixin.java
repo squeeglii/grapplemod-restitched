@@ -72,7 +72,7 @@ public class ClientHookMixin {
         }
     }
 
-    @Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V",
+    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V"))
     public void handleLogOut(Screen pScreen, CallbackInfo ci) {
         GrappleModLegacyConfig.setServerOptions(null);

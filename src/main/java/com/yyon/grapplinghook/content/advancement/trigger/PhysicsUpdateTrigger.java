@@ -9,20 +9,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
-public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTrigger.TriggerInstance> {
+import java.util.Optional;
 
-    private static final ResourceLocation ID = GrappleMod.id("grapple_physics_changed");
+public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTrigger.TriggerInstance> {
     private static final String PHYSICS_PREDICATE = "physics";
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
-        return ID;
-    }
-
-    @NotNull
-    @Override
-    protected TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate contextAwarePredicate, DeserializationContext deserializationContext) {
+    protected TriggerInstance createInstance(JsonObject jsonObject, Optional<ContextAwarePredicate> contextAwarePredicate, DeserializationContext deserializationContext) {
         PhysicsFramePredicate predicate = PhysicsFramePredicate.fromJson(jsonObject.get(PHYSICS_PREDICATE));
         return new TriggerInstance(contextAwarePredicate, predicate);
     }
@@ -36,8 +30,8 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
 
         private final PhysicsFramePredicate physics;
 
-        private TriggerInstance(ContextAwarePredicate contextAwarePredicate, PhysicsFramePredicate predicate) {
-            super(ID, contextAwarePredicate);
+        private TriggerInstance(Optional<ContextAwarePredicate> optContextAwarePred, PhysicsFramePredicate predicate) {
+            super(optContextAwarePred);
             this.physics = predicate;
         }
 
@@ -47,8 +41,8 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
 
         @NotNull
         @Override
-        public JsonObject serializeToJson(SerializationContext context) {
-            JsonObject base = super.serializeToJson(context);
+        public JsonObject serializeToJson() {
+            JsonObject base = super.serializeToJson();
             base.add(PHYSICS_PREDICATE, this.physics.toJson());
             return base;
         }
