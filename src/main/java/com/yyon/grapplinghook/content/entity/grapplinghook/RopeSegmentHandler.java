@@ -13,22 +13,27 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class RopeSegmentHandler {
+
+	private static final double BEND_OFFSET = 0.05d;
+	private static final double INTO_BLOCK = 0.05d;
+
+	public GrapplinghookEntity hookEntity;
+	private final Level world;
 
 	public LinkedList<Vec> segments;
 	public LinkedList<Direction> segmentBottomSides;
 	public LinkedList<Direction> segmentTopSides;
-	public Level world;
-	public GrapplinghookEntity hookEntity;
-	
-	Vec prevHookPos = null;
-	Vec prevPlayerPos = null;
-	
-	final double bendOffset = 0.05;
-	final double intoBlock = 0.05;
-	
+
+	private Vec prevHookPos;
+	private Vec prevPlayerPos;
+
+	private double ropeLen;
+
 	public RopeSegmentHandler(Level w, GrapplinghookEntity hookEntity, Vec hookpos, Vec playerpos) {
 		segments = new LinkedList<>();
 		segments.add(hookpos);
@@ -51,104 +56,100 @@ public class RopeSegmentHandler {
     	this.segments.set(0, new Vec(hookpos));
     	this.segments.set(this.segments.size() - 1, new Vec(playerpos));
 	}
-	
-	double ropeLen;
-	
+
 	public void updatePos(Vec hookpos, Vec playerpos, double ropelen) {
-		segments.set(0, hookpos);
-		segments.set(segments.size() - 1, playerpos);
+		this.segments.set(0, hookpos);
+		this.segments.set(this.segments.size() - 1, playerpos);
 		this.ropeLen = ropelen;
 	}
 	
 	public void update(Vec hookpos, Vec playerpos, double ropelen, boolean movinghook) {
-		if (prevHookPos == null) {
-	        prevHookPos = hookpos;
-	        prevPlayerPos = playerpos;
+		if (this.prevHookPos == null) {
+			this.prevHookPos = hookpos;
+			this.prevPlayerPos = playerpos;
 		}
-		
-		segments.set(0, hookpos);
-		segments.set(segments.size() - 1, playerpos);
+
+		this.segments.set(0, hookpos);
+		this.segments.set(this.segments.size() - 1, playerpos);
 		this.ropeLen = ropelen;
 		
-		
-		Vec closest = segments.get(segments.size()-2);
+		Vec closest = this.segments.get(this.segments.size() - 2);
 		
 		while (true) {
-			if (segments.size() == 2) {
+			if (this.segments.size() == 2)
 				break;
-			}
-			
-			int index = segments.size()-2;
-			closest = segments.get(index);
-			Direction bottomside = segmentBottomSides.get(index);
-			Direction topside = segmentTopSides.get(index);
+
+			int index = this.segments.size() - 2;
+			closest = this.segments.get(index);
+			Direction bottomside = this.segmentBottomSides.get(index);
+			Direction topside = this.segmentTopSides.get(index);
 			Vec ropevec = playerpos.sub(closest);
 			
-			Vec beforepoint = segments.get(index-1);
+			Vec beforepoint = this.segments.get(index-1);
 			
-			Vec edgevec = getNormal(bottomside).cross(getNormal(topside));
+			Vec edgevec = this.getNormal(bottomside).cross(this.getNormal(topside));
 			Vec planenormal = beforepoint.sub(closest).cross(edgevec);
 			
 			if (ropevec.dot(planenormal) > 0) {
 				this.removeSegment(index);
-			} else {
-				break;
-			}
+
+			} else break;
 		}
 		
 		Vec farthest;
 		
 		if (movinghook) {
 			while (true) {
-				if (segments.size() == 2) {
-					break;
-				}
+				if (this.segments.size() == 2) break;
 				
 				int index = 1;
-				farthest = segments.get(index);
-				Direction bottomside = segmentBottomSides.get(index);
-				Direction topside = segmentTopSides.get(index);
+				farthest = this.segments.get(index);
+				Direction bottomside = this.segmentBottomSides.get(index);
+				Direction topside = this.segmentTopSides.get(index);
 				Vec ropevec = farthest.sub(hookpos);
 				
-				Vec beforepoint = segments.get(index+1);
+				Vec beforepoint = this.segments.get(index+1);
 				
-				Vec edgevec = getNormal(bottomside).cross(getNormal(topside));
+				Vec edgevec = this.getNormal(bottomside).cross(this.getNormal(topside));
 				Vec planenormal = beforepoint.sub(farthest).cross(edgevec);
 				
 				if (ropevec.dot(planenormal) > 0 || ropevec.length() < 0.1) {
 					this.removeSegment(index);
-				} else {
-					break;
-				}
+
+				} else break;
+
 			}
 			
 			while (true) {
 				if (this.getDistToFarthest() > ropelen) {
 					this.removeSegment(1);
-				} else {
-					break;
-				}
+
+				} else break;
 			}
 		}
 		
 		if (movinghook) {
-			farthest = segments.get(1);
+			farthest = this.segments.get(1);
 			Vec prevfarthest = farthest;
-			if (segments.size() == 2) {
-				prevfarthest = prevPlayerPos;
+
+			if (this.segments.size() == 2) {
+				prevfarthest = this.prevPlayerPos;
 			}
-			updateSegment(hookpos, prevHookPos, farthest, prevfarthest, 1, 0);
+
+			this.updateSegment(hookpos, this.prevHookPos, farthest, prevfarthest, 1, 0);
 		}
-		
+
 		Vec prevclosest = closest;
-		if (segments.size() == 2) {
-			prevclosest = prevHookPos;
-		}
-		updateSegment(closest, prevclosest, playerpos, prevPlayerPos, segments.size() - 1, 0);
-		
-		
-        prevHookPos = hookpos;
-        prevPlayerPos = playerpos;
+
+		if (this.segments.size() == 2)
+			prevclosest = this.prevHookPos;
+
+
+		this.updateSegment(closest, prevclosest, playerpos, this.prevPlayerPos, this.segments.size() - 1, 0);
+
+
+		this.prevHookPos = hookpos;
+		this.prevPlayerPos = playerpos;
 	}
 	
 	public void removeSegment(int index) {
@@ -182,7 +183,7 @@ public class RopeSegmentHandler {
             // calculate where bottomhitvec was along the rope in the previous tick
             double prevropelen = prevtop.sub(prevbottom).length();
             
-            Vec cornerbound1 = bottomhitvec.add(bottomnormal.withMagnitude(-intoBlock));
+            Vec cornerbound1 = bottomhitvec.add(bottomnormal.withMagnitude(-INTO_BLOCK));
             
             Vec bound_option1 = linePlaneIntersection(prevtop, prevbottom, cornerbound1, bottomnormal);
             Vec bound_option2 = linePlaneIntersection(top, prevtop, cornerbound1, bottomnormal);
@@ -201,8 +202,8 @@ public class RopeSegmentHandler {
                 	
                 	if (!(cornerside == bottomside || cornerside.getOpposite() == bottomside)) {
                 		// add a bend around the corner
-                		Vec actualcorner = cornerhitpos.add(bottomnormal.withMagnitude(intoBlock));
-                		Vec bend = actualcorner.add(bottomnormal.withMagnitude(bendOffset)).add(getNormal(cornerside).withMagnitude(bendOffset));
+                		Vec actualcorner = cornerhitpos.add(bottomnormal.withMagnitude(INTO_BLOCK));
+                		Vec bend = actualcorner.add(bottomnormal.withMagnitude(BEND_OFFSET)).add(getNormal(cornerside).withMagnitude(BEND_OFFSET));
                 		Vec topropevec = bend.sub(top);
                 		Vec bottomropevec = bend.sub(bottom);
                 		
@@ -269,8 +270,8 @@ public class RopeSegmentHandler {
 	
 	public BlockPos getBendBlock(int index) {
 		Vec bendpos = this.segments.get(index);
-		bendpos.mutableAdd(this.getNormal(this.segmentBottomSides.get(index)).withMagnitude(-this.intoBlock * 2));
-		bendpos.mutableAdd(this.getNormal(this.segmentTopSides.get(index)).withMagnitude(-this.intoBlock * 2));
+		bendpos.mutableAdd(this.getNormal(this.segmentBottomSides.get(index)).withMagnitude(-this.INTO_BLOCK * 2));
+		bendpos.mutableAdd(this.getNormal(this.segmentTopSides.get(index)).withMagnitude(-this.INTO_BLOCK * 2));
 		return BlockPos.containing(bendpos.toVec3d());
 	}
 	
@@ -362,5 +363,10 @@ public class RopeSegmentHandler {
 		}
 
 		return new AABB(minvec.x, minvec.y, minvec.z, maxvec.x, maxvec.y, maxvec.z);
+	}
+
+
+	public List<Vec> getSegments() {
+		return Collections.unmodifiableList(this.segments);
 	}
 }

@@ -71,7 +71,7 @@ public class GrappleEndMessage extends BaseMessageServer {
 
 		ctx.getServer().execute(() -> {
 			if (player == null) return;
-			ServerHookEntityTracker.receiveGrappleEnd(id, player.level(), this.hookEntityIds);
+			ServerHookEntityTracker.handleGrappleEndFromClient(id, player.level(), this.hookEntityIds);
 		});
     }
 }

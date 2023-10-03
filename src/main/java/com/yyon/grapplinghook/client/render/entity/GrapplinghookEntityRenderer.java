@@ -105,7 +105,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		if (!holder.isAlive()) return;
 		
 		// is right hand?
-		int handDirection = (holder.getMainArm() == HumanoidArm.RIGHT ? 1 : -1) * (hookEntity.rightHand ? 1 : -1);
+		int handDirection = (holder.getMainArm() == HumanoidArm.RIGHT ? 1 : -1) * (hookEntity.isHeldInMainHand() ? 1 : -1);
 		
 		// attack/swing progress
 		float completion = holder.getAttackAnim(partialTicks);
@@ -188,7 +188,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
 		attachDirection.mutableNormalize();
 
-		if (hookEntity.attached && hookEntity.attachDirection != null)
+		if (hookEntity.isAttachedToSurface && hookEntity.attachDirection != null)
 			attachDirection = hookEntity.attachDirection;
 
 		hookEntity.attachDirection = attachDirection;

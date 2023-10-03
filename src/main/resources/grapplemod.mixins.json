@@ -11,7 +11,7 @@
     "PlayerDropHandlerMixin",
     "SendExtraEntityDataMixin",
     "ServerConfigSyncMixin",
-    "ServerPlayerDeathHandlerMixin",
+    "ServerPlayerMixin",
     "ServerStartMixin"
   ],
   "client": [

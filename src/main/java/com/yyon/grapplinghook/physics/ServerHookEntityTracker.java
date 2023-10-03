@@ -2,6 +2,12 @@ package com.yyon.grapplinghook.physics;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.util.NBTHelper;
+import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -41,6 +47,10 @@ public class ServerHookEntityTracker {
 		allGrapplehookEntities.get(ownerId).add(hookEntity);
 	}
 
+	/**
+	 * Adds a grappling hook entity to be tracked.
+	 * @param ownerEntity the thrower of the hook
+	 */
 	public static void removeAllHooksFor(Entity ownerEntity) {
 		ServerHookEntityTracker.checkOwnerTypeWarning(ownerEntity);
 		ServerHookEntityTracker.removeAllHooksFor(ownerEntity.getId());
@@ -48,7 +58,7 @@ public class ServerHookEntityTracker {
 
 	/**
 	 * Adds a grappling hook entity to be tracked.
-	 * @param ownerId the thrower of the hook
+	 * @param ownerId the id of the hook thrower
 	 */
 	public static void removeAllHooksFor(int ownerId) {
 		if (!allGrapplehookEntities.containsKey(ownerId)) {
@@ -66,7 +76,7 @@ public class ServerHookEntityTracker {
 		allGrapplehookEntities.put(ownerId, new HashSet<>());
 	}
 	
-	public static void receiveGrappleEnd(int ownerId, Level world, HashSet<Integer> hookEntityIds) {
+	public static void handleGrappleEndFromClient(int ownerId, Level world, HashSet<Integer> hookEntityIds) {
 		
 		for (int hookEntityId : hookEntityIds) {
 	      	Entity grapple = world.getEntity(hookEntityId);
@@ -82,8 +92,64 @@ public class ServerHookEntityTracker {
   		ServerHookEntityTracker.removeAllHooksFor(ownerId);
 	}
 
-	public void saveStateToPlayer() {
+	public static void savePlayerHookState(ServerPlayer hookHolder, CompoundTag saveTarget) {
+		Set<GrapplinghookEntity> hooks = ServerHookEntityTracker.getHooksThrownBy(hookHolder);
 
+		if(hooks.isEmpty())
+			return;
+
+		CompoundTag grapplemodState = new CompoundTag();
+		ListTag hookStates = new ListTag();
+
+		CustomizationVolume volumeToSave = null;
+		long lastChecksum = -1;
+
+		for(GrapplinghookEntity hook: hooks) {
+			CustomizationVolume currentVol = hook.getCurrentCustomizations();
+			long currentChecksum = currentVol.getChecksum();
+
+			// The saving is only intended to stop players from falling when they join a game
+			// so saving hooks that aren't attached isn't necessary.
+			// - if motion data is added and physics are accurate, feel free to remove this.
+			if(!hook.isAttachedToSurface())
+				continue;
+
+			if(volumeToSave == null) {
+				volumeToSave = currentVol;
+				lastChecksum = currentChecksum;
+
+			} else if(currentChecksum != lastChecksum) {
+				GrappleMod.LOGGER.warn("Holder's hooks have different customization checksums - they should match?");
+				continue;
+			}
+
+			CompoundTag hookData = new CompoundTag();
+			CompoundTag ropeData = new CompoundTag();
+			ListTag hookPos = NBTHelper.newDoubleList(hook.getX(), hook.getY(), hook.getZ());
+
+			//TODO: Rope Segment encoding
+
+			hookData.put("Pos", hookPos);
+			hookData.put("RopeShape", ropeData);
+			hookData.putDouble("RopeLength", hook.getCurrentRopeLength());
+			hookStates.add(hookData);
+		}
+
+		if(hookStates.isEmpty())
+			return;
+
+		if(volumeToSave == null)
+			volumeToSave = new CustomizationVolume();
+
+		CompoundTag customizations = volumeToSave.writeToNBT();
+
+		grapplemodState.put("hooks", hookStates);
+		grapplemodState.put("customization", customizations);
+
+		if(grapplemodState.isEmpty())
+			return;
+
+		saveTarget.put("grapplemod", grapplemodState);
 	}
 
 
