@@ -15,7 +15,7 @@ import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
 import com.yyon.grapplinghook.network.serverbound.KeypressMessage;
-import com.yyon.grapplinghook.physics.GrapplingHookEntityTracker;
+import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.TextUtils;
@@ -184,7 +184,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
 
 		if (!player.level().isClientSide) {
-			GrapplingHookEntityTracker.attached.remove(id);
+			ServerHookEntityTracker.attached.remove(id);
 		}
 
 		if (grapplehookEntitiesLeft.containsKey(player)) {
@@ -500,7 +500,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		int id = entityLiving.getId();
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level());
 
-		GrapplingHookEntityTracker.attached.remove(id);
+		ServerHookEntityTracker.attached.remove(id);
 	}
 	
 	public void detachLeft(LivingEntity entityLiving) {
@@ -518,7 +518,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level());
 		}
 
-		GrapplingHookEntityTracker.attached.remove(id);
+		ServerHookEntityTracker.attached.remove(id);
 	}
 	
 	public void detachRight(LivingEntity entityLiving) {
@@ -536,12 +536,12 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level());
 		}
 
-		GrapplingHookEntityTracker.attached.remove(id);
+		ServerHookEntityTracker.attached.remove(id);
 	}
 	
 	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {
 		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomizations(stack), isdouble);
-		GrapplingHookEntityTracker.addGrapplehookEntity(entityLiving.getId(), hookEntity);
+		ServerHookEntityTracker.addGrappleEntity(entityLiving.getId(), hookEntity);
 		return hookEntity;
 	}
 

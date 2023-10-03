@@ -4,15 +4,17 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.LongFallBootsItem;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
-import com.yyon.grapplinghook.physics.GrapplingHookEntityTracker;
+import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class SharedDamageHandler {
 
@@ -22,29 +24,22 @@ public class SharedDamageHandler {
         if (level.isClientSide)
             return;
 
+        if(deadEntity instanceof GrapplinghookEntity)
+            return;
+
+        if (ServerHookEntityTracker.isAttachedToHooks(deadEntity))
+            return;
+
+        ServerHookEntityTracker.removeAllHooksFor(deadEntity);
+
         int id = deadEntity.getId();
-        boolean isConnected = GrapplingHookEntityTracker.allGrapplehookEntities.containsKey(id);
 
-        if (isConnected) return;
-
-        HashSet<GrapplinghookEntity> grapplehookEntities = GrapplingHookEntityTracker.allGrapplehookEntities.get(id);
-
-        if(grapplehookEntities != null) {
-            for (GrapplinghookEntity hookEntity : grapplehookEntities)
-                hookEntity.removeServer();
-
-            grapplehookEntities.clear();
-        }
-
-        GrapplingHookEntityTracker.attached.remove(id);
-
+        ServerHookEntityTracker.attached.remove(id);
         GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
         GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
 
         if(deadEntity instanceof Player)
             GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level());
-
-        return;
     }
 
     /** @return true if the death should be cancelled. */

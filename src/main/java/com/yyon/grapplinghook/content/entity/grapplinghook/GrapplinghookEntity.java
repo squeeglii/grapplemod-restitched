@@ -9,7 +9,7 @@ import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.physics.GrapplingHookEntityTracker;
+import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -445,7 +445,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
         
         this.thisPos = Vec.positionVec(this);
 		this.firstAttach = true;
-		GrapplingHookEntityTracker.attached.add(this.shootingEntityID);
+		ServerHookEntityTracker.attached.add(this.shootingEntityID);
 		
 		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
 		
