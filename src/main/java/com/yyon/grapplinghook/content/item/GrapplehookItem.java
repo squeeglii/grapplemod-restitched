@@ -183,10 +183,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		int id = player.getId();
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
 
-		if (!player.level().isClientSide) {
-			ServerHookEntityTracker.attached.remove(id);
-		}
-
 		if (grapplehookEntitiesLeft.containsKey(player)) {
 			GrapplinghookEntity hookLeft = grapplehookEntitiesLeft.get(player);
 			setHookEntityLeft(player, null);
@@ -499,8 +495,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 		int id = entityLiving.getId();
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level());
-
-		ServerHookEntityTracker.attached.remove(id);
 	}
 	
 	public void detachLeft(LivingEntity entityLiving) {
@@ -517,8 +511,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		} else {
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level());
 		}
-
-		ServerHookEntityTracker.attached.remove(id);
 	}
 	
 	public void detachRight(LivingEntity entityLiving) {
@@ -535,8 +527,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		} else {
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level());
 		}
-
-		ServerHookEntityTracker.attached.remove(id);
 	}
 	
 	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {

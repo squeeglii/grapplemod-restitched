@@ -15,9 +15,6 @@ import java.util.Set;
  */
 public class ServerHookEntityTracker {
 
-
-
-	public static HashSet<Integer> attached = new HashSet<>();
 	private static final HashMap<Integer, HashSet<GrapplinghookEntity>> allGrapplehookEntities = new HashMap<>();
 
 
@@ -70,7 +67,6 @@ public class ServerHookEntityTracker {
 	}
 	
 	public static void receiveGrappleEnd(int ownerId, Level world, HashSet<Integer> hookEntityIds) {
-		attached.remove(ownerId);
 		
 		for (int hookEntityId : hookEntityIds) {
 	      	Entity grapple = world.getEntity(hookEntityId);
@@ -80,11 +76,10 @@ public class ServerHookEntityTracker {
 		}
   		
   		Entity entity = world.getEntity(ownerId);
-  		if (entity != null) {
-      		entity.fallDistance = 0;
-  		}
+  		if (entity != null) entity.fallDistance = 0;
+
   		
-  		removeAllHooksFor(ownerId);
+  		ServerHookEntityTracker.removeAllHooksFor(ownerId);
 	}
 
 	public void saveStateToPlayer() {

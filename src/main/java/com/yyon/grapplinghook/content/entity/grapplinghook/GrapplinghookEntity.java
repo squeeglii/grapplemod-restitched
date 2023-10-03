@@ -445,7 +445,6 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
         
         this.thisPos = Vec.positionVec(this);
 		this.firstAttach = true;
-		ServerHookEntityTracker.attached.add(this.shootingEntityID);
 		
 		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
 		

@@ -31,15 +31,14 @@ public class SharedDamageHandler {
             return;
 
         ServerHookEntityTracker.removeAllHooksFor(deadEntity);
-
-        int id = deadEntity.getId();
-
-        ServerHookEntityTracker.attached.remove(id);
         GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
         GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
 
-        if(deadEntity instanceof Player)
-            GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, deadEntity.level());
+        if(deadEntity instanceof Player) {
+            int id = deadEntity.getId();
+            GrappleDetachMessage detachPacket = new GrappleDetachMessage(id);
+            GrappleModUtils.sendToCorrectClient(detachPacket, id, level);
+        }
     }
 
     /** @return true if the death should be cancelled. */
