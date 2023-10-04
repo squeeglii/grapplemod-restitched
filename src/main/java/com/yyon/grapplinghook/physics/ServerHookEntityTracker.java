@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.physics.io.HookSnapshot;
+import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.physics.io.SerializableHookState;
 import com.yyon.grapplinghook.util.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -12,10 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Handles server-side tracking and aggregation of grappling hook
@@ -107,12 +105,29 @@ public class ServerHookEntityTracker {
 		saveTarget.put("grapplemod", grapplemodState);
 	}
 
-	public static void initFromSavedHookState(ServerPlayer player) {
-		//TODO: Decode
+	public static void applyFromSavedHookState(ServerPlayer player) {
+		IHookStateHolder stateHolder = (IHookStateHolder) player;
+		SerializableHookState state = stateHolder.grapplemod$getLastHookState().orElseThrow();
+
+		//TODO: Apply
 	}
 
+	/**
+	 * Does the hook state still respect physics (the players position hasn't been changed?)
+	 * and is there still a hook in the player's inventory
+	 * For checking integrity of a Compound Tag, {@link SerializableHookState#isValidNBT(CompoundTag)}
+	 */
 	public static boolean isSavedHookStateValid(ServerPlayer player) {
-		//TODO: Decode
+
+		IHookStateHolder stateHolder = (IHookStateHolder) player;
+		Optional<SerializableHookState> optState = stateHolder.grapplemod$getLastHookState();
+
+		if(optState.isEmpty())
+			return false;
+
+		//TODO: PROPERLY CHECK VALIDITY !!!!!!!!!!
+
+		return true;
 	}
 
 

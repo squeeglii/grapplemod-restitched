@@ -84,4 +84,8 @@ public class SerializableHookState {
     public static SerializableHookState serializeFrom(CompoundTag tag) {
         return new SerializableHookState(tag);
     }
+
+    public static boolean isValidNBT(CompoundTag tag) {
+
+    }
 }
