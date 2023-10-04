@@ -124,13 +124,13 @@ public class ServerHookEntityTracker {
 			}
 
 			CompoundTag hookData = new CompoundTag();
-			CompoundTag ropeData = new CompoundTag();
 			ListTag hookPos = NBTHelper.newDoubleList(hook.getX(), hook.getY(), hook.getZ());
+			ListTag ropeShape = hook.getSegmentHandler().saveToNBT();
 
 			//TODO: Rope Segment encoding
 
 			hookData.put("Pos", hookPos);
-			hookData.put("RopeShape", ropeData);
+			hookData.put("RopeShape", ropeShape);
 			hookData.putDouble("RopeLength", hook.getCurrentRopeLength());
 			hookStates.add(hookData);
 		}

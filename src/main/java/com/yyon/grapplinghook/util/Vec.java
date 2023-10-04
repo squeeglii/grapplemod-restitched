@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -50,14 +51,18 @@ public class Vec {
 		return new Vec3(this.x, this.y, this.z);
 	}
 
+	public ListTag toNBT() {
+		return NBTHelper.newDoubleList(this.x, this.y, this.z);
+	}
+
 	public static Vec positionVec(Entity e) {
 		return new Vec(e.position());
 	}
-	
+
 	public static Vec partialPositionVec(Entity e, double partialTicks) {
 		return new Vec(lerp(partialTicks, e.xo, e.getX()), lerp(partialTicks, e.yo, e.getY()), lerp(partialTicks, e.zo, e.getZ()));
 	}
-	
+
 	public static double lerp(double frac, double from, double to) {
 		return (from * (1-frac)) + (to * frac);
 	}
@@ -181,10 +186,6 @@ public class Vec {
 	
 	public Vec removeAlong(Vec v2) {
 		return this.sub(this.project(v2));
-	}
-	
-	public void print(){
-		GrappleMod.LOGGER.warn(this.toString());
 	}
 	
 	public String toString() {
