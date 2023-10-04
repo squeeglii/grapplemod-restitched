@@ -26,7 +26,7 @@ public class RopeSegmentHandler {
 	private static final double INTO_BLOCK = 0.05d;
 
 	public GrapplinghookEntity hookEntity;
-	private final Level world;
+	private Level world;
 
 	public LinkedList<Vec> segments;
 	public LinkedList<Direction> segmentBottomSides;
@@ -51,6 +51,9 @@ public class RopeSegmentHandler {
 		this.prevPlayerPos = new Vec(playerpos);
 	}
 
+	public RopeSegmentHandler(CompoundTag tag) {
+		//TODO: Decode
+	}
 
 	private void pushSegment(Vec segment, Direction topSide, Direction bottomSide) {
 		this.segments.add(segment);

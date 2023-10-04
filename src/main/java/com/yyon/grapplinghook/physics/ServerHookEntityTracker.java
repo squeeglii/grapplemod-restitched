@@ -3,8 +3,9 @@ package com.yyon.grapplinghook.physics;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.physics.io.HookSnapshot;
+import com.yyon.grapplinghook.physics.io.SerializableHookState;
 import com.yyon.grapplinghook.util.NBTHelper;
-import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -93,63 +94,25 @@ public class ServerHookEntityTracker {
 	}
 
 	public static void savePlayerHookState(ServerPlayer hookHolder, CompoundTag saveTarget) {
-		Set<GrapplinghookEntity> hooks = ServerHookEntityTracker.getHooksThrownBy(hookHolder);
 
-		if(hooks.isEmpty())
+		if(ServerHookEntityTracker.isAttachedToHooks(hookHolder))
 			return;
 
-		CompoundTag grapplemodState = new CompoundTag();
-		ListTag hookStates = new ListTag();
-
-		CustomizationVolume volumeToSave = null;
-		long lastChecksum = -1;
-
-		for(GrapplinghookEntity hook: hooks) {
-			CustomizationVolume currentVol = hook.getCurrentCustomizations();
-			long currentChecksum = currentVol.getChecksum();
-
-			// The saving is only intended to stop players from falling when they join a game
-			// so saving hooks that aren't attached isn't necessary.
-			// - if motion data is added and physics are accurate, feel free to remove this.
-			if(!hook.isAttachedToSurface())
-				continue;
-
-			if(volumeToSave == null) {
-				volumeToSave = currentVol;
-				lastChecksum = currentChecksum;
-
-			} else if(currentChecksum != lastChecksum) {
-				GrappleMod.LOGGER.warn("Holder's hooks have different customization checksums - they should match?");
-				continue;
-			}
-
-			CompoundTag hookData = new CompoundTag();
-			ListTag hookPos = NBTHelper.newDoubleList(hook.getX(), hook.getY(), hook.getZ());
-			ListTag ropeShape = hook.getSegmentHandler().saveToNBT();
-
-			//TODO: Rope Segment encoding
-
-			hookData.put("Pos", hookPos);
-			hookData.put("RopeShape", ropeShape);
-			hookData.putDouble("RopeLength", hook.getCurrentRopeLength());
-			hookStates.add(hookData);
-		}
-
-		if(hookStates.isEmpty())
-			return;
-
-		if(volumeToSave == null)
-			volumeToSave = new CustomizationVolume();
-
-		CompoundTag customizations = volumeToSave.writeToNBT();
-
-		grapplemodState.put("hooks", hookStates);
-		grapplemodState.put("customization", customizations);
+		SerializableHookState holderHookState = SerializableHookState.saveNewFrom(hookHolder);
+		CompoundTag grapplemodState = holderHookState.toNBT();
 
 		if(grapplemodState.isEmpty())
 			return;
 
 		saveTarget.put("grapplemod", grapplemodState);
+	}
+
+	public static void initFromSavedHookState(ServerPlayer player) {
+		//TODO: Decode
+	}
+
+	public static boolean isSavedHookStateValid(ServerPlayer player) {
+		//TODO: Decode
 	}
 
 

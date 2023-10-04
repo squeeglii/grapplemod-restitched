@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.mixin;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.LoggedInMessage;
+import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
@@ -13,12 +14,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerList.class)
-public class ServerConfigSyncMixin {
+public class PlayerJoinMixin {
 
     @Inject(method = "placeNewPlayer(Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/server/network/CommonListenerCookie;)V",
             at = @At("TAIL"))
     public void onLogin(Connection connection, ServerPlayer player, CommonListenerCookie commonListenerCookie, CallbackInfo ci) {
         NetworkManager.packetToClient(new LoggedInMessage(GrappleModLegacyConfig.getConf()), player);
+
+        //TODO: Add something to the additional loading data for parsing the serializablehookstate.
+        // Data should've loaded by the time this code is hit so we can just fetch the most recent
+        // SerializableHookState from the serverplayer
+
+        if(ServerHookEntityTracker.isSavedHookStateValid(player))
+            ServerHookEntityTracker.initFromSavedHookState(player);
     }
 
 }

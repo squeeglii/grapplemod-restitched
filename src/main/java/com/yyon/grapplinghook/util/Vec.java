@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -44,6 +45,20 @@ public class Vec {
 		this.x = vec.x;
 		this.y = vec.y;
 		this.z = vec.z;
+	}
+
+	public Vec(ListTag tag) {
+		if(tag.size() != 3)
+			throw new IllegalArgumentException("Expected list tag of 3 elements, got: %s".formatted(tag.size()));
+
+		try {
+			this.x = tag.getDouble(0);
+			this.y = tag.getDouble(1);
+			this.z = tag.getDouble(2);
+
+		} catch (ClassCastException err) {
+			throw new IllegalArgumentException("Expected list tag with 3 doubles, threw: "+err.getMessage());
+		}
 	}
 
 
