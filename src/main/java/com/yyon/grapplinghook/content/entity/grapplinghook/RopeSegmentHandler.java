@@ -3,15 +3,14 @@ package com.yyon.grapplinghook.content.entity.grapplinghook;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.SegmentMessage;
+import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
-import com.yyon.grapplinghook.util.NBTHelper;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -25,7 +24,7 @@ public class RopeSegmentHandler {
 	private static final double BEND_OFFSET = 0.05d;
 	private static final double INTO_BLOCK = 0.05d;
 
-	public GrapplinghookEntity hookEntity;
+	private GrapplinghookEntity hookEntity;
 	private Level world;
 
 	public LinkedList<Vec> segments;
@@ -33,11 +32,11 @@ public class RopeSegmentHandler {
 	public LinkedList<Direction> segmentTopSides;
 
 	private Vec prevHookPos;
-	private Vec prevPlayerPos;
+	private Vec prevHolderPos;
 
 	private double ropeLen;
 
-	public RopeSegmentHandler(Level w, GrapplinghookEntity hookEntity, Vec hookpos, Vec playerpos) {
+	public RopeSegmentHandler(GrapplinghookEntity hookEntity, Vec hookpos, Vec playerpos) {
 		this.segments = new LinkedList<>();
 		this.segmentTopSides = new LinkedList<>();
 		this.segmentBottomSides = new LinkedList<>();
@@ -45,15 +44,18 @@ public class RopeSegmentHandler {
 		this.pushSegment(hookpos, null, null);
 		this.pushSegment(playerpos, null, null);
 
-		this.world = w;
+		this.world = hookEntity.level();
 		this.hookEntity = hookEntity;
 		this.prevHookPos = new Vec(hookpos);
-		this.prevPlayerPos = new Vec(playerpos);
+		this.prevHolderPos = new Vec(playerpos);
 	}
 
-	public RopeSegmentHandler(CompoundTag tag) {
-		//TODO: Decode
+	public RopeSegmentHandler(GrapplinghookEntity hookEntity, Entity holder, RopeSnapshot ropeSnapshot) {
+		this.world = hookEntity.level();
+		this.hookEntity = hookEntity;
+		this.ho
 	}
+
 
 	private void pushSegment(Vec segment, Direction topSide, Direction bottomSide) {
 		this.segments.add(segment);
@@ -70,7 +72,7 @@ public class RopeSegmentHandler {
 	
 	public void forceSetPos(Vec hookpos, Vec playerpos) {
 		this.prevHookPos = new Vec(hookpos);
-		this.prevPlayerPos = new Vec(playerpos);
+		this.prevHolderPos = new Vec(playerpos);
     	this.segments.set(0, new Vec(hookpos));
     	this.segments.set(this.segments.size() - 1, new Vec(playerpos));
 	}
@@ -84,7 +86,7 @@ public class RopeSegmentHandler {
 	public void update(Vec hookpos, Vec playerpos, double ropelen, boolean movinghook) {
 		if (this.prevHookPos == null) {
 			this.prevHookPos = hookpos;
-			this.prevPlayerPos = playerpos;
+			this.prevHolderPos = playerpos;
 		}
 
 		this.segments.set(0, hookpos);
@@ -151,7 +153,7 @@ public class RopeSegmentHandler {
 			Vec prevfarthest = farthest;
 
 			if (this.segments.size() == 2) {
-				prevfarthest = this.prevPlayerPos;
+				prevfarthest = this.prevHolderPos;
 			}
 
 			this.updateSegment(hookpos, this.prevHookPos, farthest, prevfarthest, 1, 0);
@@ -163,11 +165,11 @@ public class RopeSegmentHandler {
 			prevclosest = this.prevHookPos;
 
 
-		this.updateSegment(closest, prevclosest, playerpos, this.prevPlayerPos, this.segments.size() - 1, 0);
+		this.updateSegment(closest, prevclosest, playerpos, this.prevHolderPos, this.segments.size() - 1, 0);
 
 
 		this.prevHookPos = hookpos;
-		this.prevPlayerPos = playerpos;
+		this.prevHolderPos = playerpos;
 	}
 	
 	public void removeSegment(int index) {
@@ -292,27 +294,6 @@ public class RopeSegmentHandler {
 		}
 	}
 
-	public ListTag saveToNBT() {
-		ListTag listTag = new ListTag();
-
-		for(int i = 0; i < this.segments.size(); i++) {
-			Vec segment = this.segments.get(i);
-			Direction topDir = this.segmentTopSides.get(i);
-			Direction bottomDir = this.segmentBottomSides.get(i);
-
-			CompoundTag entry = new CompoundTag();
-			ListTag posTag = segment.toNBT();
-
-			entry.put("Pos", posTag);
-			entry.putString("Top", topDir.getName());
-			entry.putString("Bottom", bottomDir.getName());
-
-			listTag.add(entry);
-		}
-
-		return listTag;
-	}
-
 
 	public Vec getNormal(Direction facing) {
 		Vec3i facingvec = facing.getNormal();
@@ -394,5 +375,17 @@ public class RopeSegmentHandler {
 
 	public List<Vec> getSegments() {
 		return Collections.unmodifiableList(this.segments);
+	}
+
+	public List<Direction> getTopSides() {
+		return Collections.unmodifiableList(this.segmentTopSides);
+	}
+
+	public List<Direction> getBottomSides() {
+		return Collections.unmodifiableList(this.segmentBottomSides);
+	}
+
+	public double getCurrentRopeLength() {
+		return this.ropeLen;
 	}
 }

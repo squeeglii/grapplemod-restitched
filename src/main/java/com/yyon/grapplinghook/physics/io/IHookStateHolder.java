@@ -1,7 +1,5 @@
 package com.yyon.grapplinghook.physics.io;
 
-import org.spongepowered.asm.mixin.Unique;
-
 import java.util.Optional;
 
 public interface IHookStateHolder {

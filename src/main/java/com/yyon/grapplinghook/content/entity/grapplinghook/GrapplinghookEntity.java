@@ -95,7 +95,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	public GrapplinghookEntity(EntityType<? extends GrapplinghookEntity> type, Level world) {
 		super(type, world);
 
-		this.segmentHandler = new RopeSegmentHandler(this.level(), this, Vec.positionVec(this), Vec.positionVec(this));
+		this.segmentHandler = new RopeSegmentHandler(this, Vec.positionVec(this), Vec.positionVec(this));
 		this.customization = new CustomizationVolume();
 
 		this.isAttachedToMainHand = true;
@@ -111,7 +111,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		
 		Vec pos = Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0));
 
-		this.segmentHandler = new RopeSegmentHandler(this.level(), this, new Vec(pos), new Vec(pos));
+		this.segmentHandler = new RopeSegmentHandler(this, new Vec(pos), new Vec(pos));
 
 		this.customization = customization;
 		this.ropeLength = customization.get(MAX_ROPE_LENGTH.get());

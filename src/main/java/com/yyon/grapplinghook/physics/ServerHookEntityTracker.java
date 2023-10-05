@@ -110,6 +110,10 @@ public class ServerHookEntityTracker {
 		SerializableHookState state = stateHolder.grapplemod$getLastHookState().orElseThrow();
 
 		//TODO: Apply
+
+		// Right so apply the stare
+		// Rope handler still needs code but I think the rest is done
+		// oh and add the checks pls
 	}
 
 	/**

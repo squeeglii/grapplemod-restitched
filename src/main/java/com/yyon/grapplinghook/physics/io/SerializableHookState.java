@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.LinkedList;
@@ -14,8 +15,8 @@ import java.util.Set;
 
 public class SerializableHookState {
 
-    private List<HookSnapshot> hooks;
-    private CustomizationVolume volume;
+    private final List<HookSnapshot> hooks;
+    private final CustomizationVolume volume;
 
 
     private SerializableHookState(ServerPlayer holder) {
@@ -53,8 +54,27 @@ public class SerializableHookState {
         this.hooks = hookList;
     }
 
+
     private SerializableHookState(CompoundTag tag) {
-        //TODO: Decode
+        CompoundTag customizationTag = tag.getCompound("Customization");
+        ListTag hooksTag = tag.getList("Hooks", ListTag.TAG_COMPOUND);
+
+        LinkedList<HookSnapshot> hooks = new LinkedList<>();
+
+        for(int i = 0; i < hooksTag.size(); i++) {
+            CompoundTag hookTag = hooksTag.getCompound(i);
+
+            if(!HookSnapshot.isTagValid(hookTag))
+                continue;
+
+            HookSnapshot snapshot = new HookSnapshot(hookTag);
+            hooks.add(snapshot);
+        }
+
+        CustomizationVolume vol = CustomizationVolume.fromNBT(customizationTag);
+
+        this.hooks = hooks;
+        this.volume = vol;
     }
 
 
@@ -69,8 +89,8 @@ public class SerializableHookState {
         if (hookStates.isEmpty())
             return finalTag;
 
-        finalTag.put("customization", this.volume.writeToNBT());
-        finalTag.put("hooks", hookStates);
+        finalTag.put("Customization", this.volume.writeToNBT());
+        finalTag.put("Hooks", hookStates);
 
         return finalTag;
     }
@@ -86,6 +106,9 @@ public class SerializableHookState {
     }
 
     public static boolean isValidNBT(CompoundTag tag) {
+        if(!tag.contains("Customization", Tag.TAG_COMPOUND)) return false;
+        if(!tag.contains("Hooks", Tag.TAG_LIST)) return false;
 
+        return true;
     }
 }

@@ -1,18 +1,22 @@
 package com.yyon.grapplinghook.physics.io;
 
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
-import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.util.NBTHelper;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 
 public class HookSnapshot {
 
-    private Vec hookPos;
-    private double ropeLength;
-    private RopeSegmentHandler segmentHandler;
+    private final Vec hookPos;
+    private final RopeSnapshot segmentHandler;
 
+
+    public HookSnapshot(GrapplinghookEntity source) {
+        this.hookPos = new Vec(source.position());
+        this.segmentHandler = new RopeSnapshot(source.getSegmentHandler());
+    }
 
     public HookSnapshot(CompoundTag source) {
         if(!isTagValid(source))
@@ -22,25 +26,18 @@ public class HookSnapshot {
         CompoundTag ropeSegHandlerTag = source.getCompound("RopeShape");
 
         this.hookPos = new Vec(posTag);
-        this.ropeLength = source.getDouble("RopeLength");
-        this.segmentHandler = new RopeSegmentHandler(ropeSegHandlerTag);
-    }
-
-    public HookSnapshot(GrapplinghookEntity source) {
-        this.hookPos = new Vec(source.position());
-        this.ropeLength = source.getCurrentRopeLength();
-        this.segmentHandler = source.getSegmentHandler();
+        this.segmentHandler = new RopeSnapshot(ropeSegHandlerTag);
     }
 
 
     public CompoundTag saveToNBT() {
         CompoundTag hookData = new CompoundTag();
+
         ListTag hookPos = NBTHelper.newDoubleList(this.getX(), this.getY(), this.getZ());
-        ListTag ropeShape = this.segmentHandler.saveToNBT();
+        CompoundTag ropeShape = this.segmentHandler.toNBT();
 
         hookData.put("Pos", hookPos);
         hookData.put("RopeShape", ropeShape);
-        hookData.putDouble("RopeLength", this.getRopeLength());
 
         return hookData;
     }
@@ -58,16 +55,12 @@ public class HookSnapshot {
         return this.hookPos.z;
     }
 
-    public double getRopeLength() {
-        return this.ropeLength;
-    }
 
     public static boolean isTagValid(CompoundTag tag) {
         if(tag == null) return false;
 
-        if(!tag.contains("Pos")) return false;
-        if(!tag.contains("RopeShape")) return false;
-        if(!tag.contains("RopeLength")) return false;
+        if(!tag.contains("Pos", Tag.TAG_LIST)) return false;
+        if(!tag.contains("RopeShape", Tag.TAG_COMPOUND)) return false;
 
         return true;
     }
