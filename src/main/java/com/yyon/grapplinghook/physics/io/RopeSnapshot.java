@@ -49,8 +49,12 @@ public class RopeSnapshot {
             String topSide = entry.getString("Top");
             String bottomSide = entry.getString("Bottom");
 
-            Direction topSideDir = Direction.byName(topSide);
-            Direction bottomSideDir = Direction.byName(bottomSide);
+            Direction topSideDir = !topSide.equalsIgnoreCase("null")
+                    ? Direction.byName(topSide)
+                    : null;
+            Direction bottomSideDir = !bottomSide.equalsIgnoreCase("null")
+                    ? Direction.byName(bottomSide)
+                    : null;
 
             this.pushSegment(pos, topSideDir, bottomSideDir);
         }
@@ -70,8 +74,17 @@ public class RopeSnapshot {
             ListTag posTag = segment.toNBT();
 
             entry.put("Pos", posTag);
-            entry.putString("Top", topDir.getName());
-            entry.putString("Bottom", bottomDir.getName());
+
+            String topVal = topDir != null
+                    ? topDir.getName()
+                    : "null";
+
+            String bottomVal = bottomDir != null
+                    ? bottomDir.getName()
+                    : "null";
+
+            entry.putString("Top", topVal);
+            entry.putString("Bottom", bottomVal);
 
             segmentsTag.add(entry);
         }
@@ -80,10 +93,6 @@ public class RopeSnapshot {
         snapshotTag.putDouble("RopeLength", this.ropeLength);
 
         return snapshotTag;
-    }
-
-    public void restore(GrapplinghookEntity hook) {
-
     }
 
 
@@ -106,4 +115,7 @@ public class RopeSnapshot {
         return Collections.unmodifiableList(this.bottomSides);
     }
 
+    public double getRopeLength() {
+        return this.ropeLength;
+    }
 }

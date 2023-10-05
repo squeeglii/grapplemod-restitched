@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.physics.io.SerializableHookState;
@@ -35,6 +36,8 @@ public class ServerPlayerMixin implements IHookStateHolder {
     public void saveLastGrappleState(CompoundTag compound, CallbackInfo ci) {
         this.grapplemod$resetLastHookState(); // Not necessary but peace of mind.
         ServerHookEntityTracker.savePlayerHookState((ServerPlayer) (Object) this, compound);
+
+        GrappleMod.LOGGER.info(this.lastHookState);
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",

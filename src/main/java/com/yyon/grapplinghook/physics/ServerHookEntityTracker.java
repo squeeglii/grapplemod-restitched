@@ -2,13 +2,10 @@ package com.yyon.grapplinghook.physics;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.physics.io.SerializableHookState;
-import com.yyon.grapplinghook.util.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -23,7 +20,7 @@ public class ServerHookEntityTracker {
 	private static final HashMap<Integer, HashSet<GrapplinghookEntity>> allGrapplehookEntities = new HashMap<>();
 
 
-	private static void checkOwnerTypeWarning(Entity entity) {
+	public static void checkOwnerIsNotHookElseWarn(Entity entity) {
 		if(!(entity instanceof GrapplinghookEntity)) return;
 
 		// If someone needs to throw a hook from a hook, what the hell are you doing???
@@ -51,7 +48,7 @@ public class ServerHookEntityTracker {
 	 * @param ownerEntity the thrower of the hook
 	 */
 	public static void removeAllHooksFor(Entity ownerEntity) {
-		ServerHookEntityTracker.checkOwnerTypeWarning(ownerEntity);
+		ServerHookEntityTracker.checkOwnerIsNotHookElseWarn(ownerEntity);
 		ServerHookEntityTracker.removeAllHooksFor(ownerEntity.getId());
 	}
 
@@ -93,7 +90,7 @@ public class ServerHookEntityTracker {
 
 	public static void savePlayerHookState(ServerPlayer hookHolder, CompoundTag saveTarget) {
 
-		if(ServerHookEntityTracker.isAttachedToHooks(hookHolder))
+		if(!ServerHookEntityTracker.isAttachedToHooks(hookHolder))
 			return;
 
 		SerializableHookState holderHookState = SerializableHookState.saveNewFrom(hookHolder);
@@ -103,6 +100,8 @@ public class ServerHookEntityTracker {
 			return;
 
 		saveTarget.put("grapplemod", grapplemodState);
+
+		GrappleMod.LOGGER.info("save target: " + NbtUtils.prettyPrint(saveTarget));
 	}
 
 	public static void applyFromSavedHookState(ServerPlayer player) {
@@ -136,7 +135,7 @@ public class ServerHookEntityTracker {
 
 
 	public static Set<GrapplinghookEntity> getHooksThrownBy(Entity ownerEntity) {
-		ServerHookEntityTracker.checkOwnerTypeWarning(ownerEntity);
+		ServerHookEntityTracker.checkOwnerIsNotHookElseWarn(ownerEntity);
 		return ServerHookEntityTracker.getHooksThrownBy(ownerEntity.getId());
 	}
 
@@ -148,7 +147,7 @@ public class ServerHookEntityTracker {
 	}
 
 	public static boolean isAttachedToHooks(Entity ownerEntity) {
-		ServerHookEntityTracker.checkOwnerTypeWarning(ownerEntity);
+		ServerHookEntityTracker.checkOwnerIsNotHookElseWarn(ownerEntity);
 		return ServerHookEntityTracker.isAttachedToHooks(ownerEntity.getId());
 	}
 

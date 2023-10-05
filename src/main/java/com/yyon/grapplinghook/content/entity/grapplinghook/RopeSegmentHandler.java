@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.content.entity.grapplinghook;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.SegmentMessage;
+import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -51,9 +52,22 @@ public class RopeSegmentHandler {
 	}
 
 	public RopeSegmentHandler(GrapplinghookEntity hookEntity, Entity holder, RopeSnapshot ropeSnapshot) {
+		ServerHookEntityTracker.checkOwnerIsNotHookElseWarn(holder);
+
+		this.segments = new LinkedList<>();
+		this.segmentTopSides = new LinkedList<>();
+		this.segmentBottomSides = new LinkedList<>();
+
+		this.segments.addAll(ropeSnapshot.getSegments());
+		this.segmentTopSides.addAll(ropeSnapshot.getTopSides());
+		this.segmentBottomSides.addAll(ropeSnapshot.getBottomSides());
+
+		this.ropeLen = ropeSnapshot.getRopeLength();
+
 		this.world = hookEntity.level();
 		this.hookEntity = hookEntity;
-		this.ho
+		this.prevHookPos = Vec.positionVec(hookEntity);
+		this.prevHolderPos = Vec.positionVec(holder);
 	}
 
 
