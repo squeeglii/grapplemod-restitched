@@ -188,7 +188,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
 		attachDirection.mutableNormalize();
 
-		if (hookEntity.isAttachedToSurface && hookEntity.attachDirection != null)
+		if (hookEntity.isAttachedToSurface() && hookEntity.attachDirection != null)
 			attachDirection = hookEntity.attachDirection;
 
 		hookEntity.attachDirection = attachDirection;

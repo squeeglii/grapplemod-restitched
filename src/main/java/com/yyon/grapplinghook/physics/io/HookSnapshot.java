@@ -59,6 +59,10 @@ public class HookSnapshot {
         return this.ropeSnapshot;
     }
 
+    public boolean isAttached() {
+        return true;
+    }
+
     public static boolean isTagValid(CompoundTag tag) {
         if(tag == null) return false;
 

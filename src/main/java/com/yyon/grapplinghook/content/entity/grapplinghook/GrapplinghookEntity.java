@@ -72,7 +72,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	private boolean isAttachedToMainHand = true;
 	private boolean isFirstAttach = false;
-	public boolean isAttachedToSurface = false;
+	private boolean isAttachedToSurface;
 	public Vec attachDirection = null;
 
 	public double pull;
@@ -101,6 +101,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.customization = new CustomizationVolume();
 
 		this.isAttachedToMainHand = true;
+		this.isAttachedToSurface = false;
 	}
 
 	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean isAttachedToMainHand, CustomizationVolume customization, boolean isInDoublePair) {
@@ -119,6 +120,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.ropeLength = customization.get(MAX_ROPE_LENGTH.get());
 		
 		this.isAttachedToMainHand = isAttachedToMainHand;
+		this.isAttachedToSurface = false;
 	}
 
 	public GrapplinghookEntity(HookSnapshot snapshot, CustomizationVolume volume, Entity shootingEntity, boolean isMainHook, boolean isInPair) {
@@ -146,6 +148,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	    data.writeInt(this.shootingEntity != null ? this.shootingEntity.getId() : 0);
 	    data.writeBoolean(this.isAttachedToMainHand);
 	    data.writeBoolean(this.isInDoublePair);
+		data.writeBoolean(this.isAttachedToSurface);
 	    if (this.customization == null) {
 	    	GrappleMod.LOGGER.warn("error: customization null");
 	    }
@@ -158,6 +161,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	    this.shootingEntity = this.level().getEntity(this.shootingEntityID);
 	    this.isAttachedToMainHand = data.readBoolean();
 	    this.isInDoublePair = data.readBoolean();
+		this.isAttachedToSurface = data.readBoolean();
 	    this.customization = new CustomizationVolume();
 	    this.customization.readFromBuf(data);
     }
@@ -186,7 +190,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	@Override
 	protected float getGravity() {
-		if (this.isAttachedToSurface) return 0.0F;
+		if (this.isAttachedToSurface)
+			return 0.0F;
 
 		return this.customization.get(HOOK_GRAVITY_MULTIPLIER.get()).floatValue() * 0.1F;
 	}

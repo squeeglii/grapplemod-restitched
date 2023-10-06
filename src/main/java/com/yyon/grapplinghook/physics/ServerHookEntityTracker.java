@@ -100,8 +100,6 @@ public class ServerHookEntityTracker {
 			return;
 
 		saveTarget.put("grapplemod", grapplemodState);
-
-		GrappleMod.LOGGER.info("save target: " + NbtUtils.prettyPrint(saveTarget));
 	}
 
 	public static void applyFromSavedHookState(ServerPlayer player) {

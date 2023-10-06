@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.LoggedInMessage;
@@ -26,6 +27,10 @@ public class PlayerJoinMixin {
             at = @At("TAIL"))
     public void onLogin(Connection connection, ServerPlayer player, CommonListenerCookie commonListenerCookie, CallbackInfo ci) {
         NetworkManager.packetToClient(new LoggedInMessage(GrappleModLegacyConfig.getConf()), player);
+
+        // Sanity check
+        if(player.level().isClientSide)
+            return;
 
         if(ServerHookEntityTracker.isSavedHookStateValid(player))
             ServerHookEntityTracker.applyFromSavedHookState(player);

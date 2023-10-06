@@ -1,9 +1,6 @@
 package com.yyon.grapplinghook.client.physics;
 
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 import com.yyon.grapplinghook.GrappleMod;
@@ -89,14 +86,9 @@ public class ClientPhysicsControllerTracker {
 		this.checkSlide(player);
 		
 		this.rocketFuel += this.rocketIncreaseTick;
-		
-		try {
-			for (GrapplingHookPhysicsController controller : controllers.values())
-				controller.doClientTick();
 
-		} catch (ConcurrentModificationException e) {
-			GrappleMod.LOGGER.warn("ConcurrentModificationException caught");
-		}
+		for (GrapplingHookPhysicsController controller : new LinkedList<>(controllers.values()))
+			controller.doClientTick();
 
 		if (this.rocketFuel > 1) {this.rocketFuel = 1;}
 		

@@ -36,8 +36,6 @@ public class ServerPlayerMixin implements IHookStateHolder {
     public void saveLastGrappleState(CompoundTag compound, CallbackInfo ci) {
         this.grapplemod$resetLastHookState(); // Not necessary but peace of mind.
         ServerHookEntityTracker.savePlayerHookState((ServerPlayer) (Object) this, compound);
-
-        GrappleMod.LOGGER.info(this.lastHookState);
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -45,10 +43,12 @@ public class ServerPlayerMixin implements IHookStateHolder {
     public void readLastGrappleState(CompoundTag compound, CallbackInfo ci) {
         CompoundTag hookState = compound.getCompound("grapplemod");
 
-        if(!SerializableHookState.isValidNBT(hookState))
+        if(!SerializableHookState.isValidNBT(hookState)) {
+            this.grapplemod$resetLastHookState();
             return;
+        }
 
-        this.lastHookState = SerializableHookState.serializeFrom(compound);
+        this.lastHookState = SerializableHookState.serializeFrom(hookState);
     }
 
 

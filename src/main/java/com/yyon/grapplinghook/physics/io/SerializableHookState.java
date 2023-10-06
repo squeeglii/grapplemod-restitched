@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
