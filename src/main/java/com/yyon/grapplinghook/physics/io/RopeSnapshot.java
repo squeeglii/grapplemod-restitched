@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.physics.io;
 
-import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.Direction;

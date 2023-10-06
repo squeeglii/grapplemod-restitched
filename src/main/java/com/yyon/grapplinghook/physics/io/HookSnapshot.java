@@ -10,12 +10,12 @@ import net.minecraft.nbt.Tag;
 public class HookSnapshot {
 
     private final Vec hookPos;
-    private final RopeSnapshot segmentHandler;
+    private final RopeSnapshot ropeSnapshot;
 
 
     public HookSnapshot(GrapplinghookEntity source) {
         this.hookPos = new Vec(source.position());
-        this.segmentHandler = new RopeSnapshot(source.getSegmentHandler());
+        this.ropeSnapshot = new RopeSnapshot(source.getSegmentHandler());
     }
 
     public HookSnapshot(CompoundTag source) {
@@ -26,7 +26,7 @@ public class HookSnapshot {
         CompoundTag ropeSegHandlerTag = source.getCompound("RopeShape");
 
         this.hookPos = new Vec(posTag);
-        this.segmentHandler = new RopeSnapshot(ropeSegHandlerTag);
+        this.ropeSnapshot = new RopeSnapshot(ropeSegHandlerTag);
     }
 
 
@@ -34,7 +34,7 @@ public class HookSnapshot {
         CompoundTag hookData = new CompoundTag();
 
         ListTag hookPos = NBTHelper.newDoubleList(this.getX(), this.getY(), this.getZ());
-        CompoundTag ropeShape = this.segmentHandler.toNBT();
+        CompoundTag ropeShape = this.ropeSnapshot.toNBT();
 
         hookData.put("Pos", hookPos);
         hookData.put("RopeShape", ropeShape);
@@ -55,6 +55,9 @@ public class HookSnapshot {
         return this.hookPos.z;
     }
 
+    public RopeSnapshot getRopeSnapshot() {
+        return this.ropeSnapshot;
+    }
 
     public static boolean isTagValid(CompoundTag tag) {
         if(tag == null) return false;

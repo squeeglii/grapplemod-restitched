@@ -425,9 +425,12 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		CustomizationVolume custom = this.getCustomizations(stack);
 		double angle = this.getSingleHookAngle(entityLiving, custom);
 
-		boolean shouldThrowLeft = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
+		// not (  no double attached  OR angle == 0)
+		// angle != 0 &&
 
-		if (!shouldThrowLeft) {
+		boolean shouldThrowOffHand = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle == 0;
+
+		if (shouldThrowOffHand) {
 			this.throwLeft(stack, worldIn, entityLiving);
 		}
 

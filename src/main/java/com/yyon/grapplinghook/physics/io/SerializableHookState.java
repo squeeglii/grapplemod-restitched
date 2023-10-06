@@ -2,14 +2,16 @@ package com.yyon.grapplinghook.physics.io;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +81,6 @@ public class SerializableHookState {
     }
 
 
-
     public CompoundTag toNBT() {
         CompoundTag finalTag = new CompoundTag();
         ListTag hookStates = new ListTag();
@@ -94,6 +95,33 @@ public class SerializableHookState {
         finalTag.put("Hooks", hookStates);
 
         return finalTag;
+    }
+
+
+    public void applyTo(ServerPlayer player) {
+        List<GrapplinghookEntity> hookEntities = new LinkedList<>();
+
+        boolean isFirstHook = true;
+
+        for (HookSnapshot snapshot: this.hooks) {
+            CustomizationVolume newVolume = CustomizationVolume.copyAllFrom(this.volume);
+            GrapplinghookEntity e = new GrapplinghookEntity(snapshot, newVolume, player, isFirstHook, this.hooks.size() > 1);
+            ServerHookEntityTracker.addGrappleEntity(player.getId(), e);
+
+            HashMap<Entity, GrapplinghookEntity> grapplehookClientEntityTracker = isFirstHook
+                    ? GrapplehookItem.grapplehookEntitiesRight
+                    : GrapplehookItem.grapplehookEntitiesLeft;
+
+            grapplehookClientEntityTracker.put(player, e);
+
+
+            hookEntities.add(e);
+            player.level().addFreshEntity(e);
+
+            isFirstHook = false;
+        }
+
+
     }
 
 

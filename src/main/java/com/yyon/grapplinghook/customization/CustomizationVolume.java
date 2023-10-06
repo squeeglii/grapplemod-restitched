@@ -256,4 +256,10 @@ public final class CustomizationVolume {
 		return volume;
 	}
 
+	public static CustomizationVolume copyAllFrom(CustomizationVolume volume) {
+		CustomizationVolume newVol = new CustomizationVolume();
+		volume.values.forEach(newVol::setUnsafe);
+		return newVol;
+	}
+
 }

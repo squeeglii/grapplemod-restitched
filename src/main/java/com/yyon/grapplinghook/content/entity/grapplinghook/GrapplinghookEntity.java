@@ -10,6 +10,8 @@ import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.physics.io.HookSnapshot;
+import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -117,6 +119,24 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.ropeLength = customization.get(MAX_ROPE_LENGTH.get());
 		
 		this.isAttachedToMainHand = isAttachedToMainHand;
+	}
+
+	public GrapplinghookEntity(HookSnapshot snapshot, CustomizationVolume volume, Entity shootingEntity, boolean isMainHook, boolean isInPair) {
+		super(GrappleModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
+
+		RopeSnapshot rope = snapshot.getRopeSnapshot();
+
+		this.shootingEntity = shootingEntity;
+		this.shootingEntityID = shootingEntity.getId();
+
+		this.segmentHandler = new RopeSegmentHandler(this, shootingEntity, rope);
+
+		this.customization = volume;
+		this.ropeLength = rope.getRopeLength();
+		this.isAttachedToMainHand = isMainHook;
+		this.isInDoublePair = isInPair;
+
+		GrappleMod.LOGGER.info("GRAPPLING HOOK ENTITY SLAY");
 	}
 
 
