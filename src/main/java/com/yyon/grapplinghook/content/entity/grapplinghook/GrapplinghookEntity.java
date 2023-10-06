@@ -136,7 +136,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isAttachedToMainHand = isMainHook;
 		this.isInDoublePair = isInPair;
 
-		GrappleMod.LOGGER.info("GRAPPLING HOOK ENTITY SLAY");
+		this.isAttachedToSurface = snapshot.isAttached();
 	}
 
 
@@ -223,132 +223,134 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		super.tick();
 
-		boolean hookIsAttached = !this.level().isClientSide &&
+		boolean hookIsDetached = !this.level().isClientSide &&
 				                  this.shootingEntity != null &&
 				                 !this.isAttachedToSurface;
 
-		if (hookIsAttached) {
+		if(!hookIsDetached) return;
 
-			if (this.segmentHandler.hookPastBend(this.ropeLength)) {
-				Vec farthest = this.segmentHandler.getFarthest();
-				this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
-			}
-
-			if (!this.customization.get(BLOCK_PHASE_ROPE.get())) {
-				this.segmentHandler.update(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.ropeLength, true);
-
-				if (this.customization.get(STICKY_ROPE.get())) {
-					List<Vec> segments = this.segmentHandler.getSegments();
-
-					if (segments.size() > 2) {
-						int bendnumber = segments.size() - 2;
-						Vec closest = segments.get(bendnumber);
-						BlockPos blockpos = this.segmentHandler.getBendBlock(bendnumber);
-
-						for (int i = 1; i <= bendnumber; i++)
-							this.segmentHandler.removeSegment(1);
-
-						this.serverAttach(blockpos, closest, null);
-					}
-				}
-
-			} else {
-				this.segmentHandler.updatePos(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.ropeLength);
-			}
-
+		if (this.segmentHandler.hookPastBend(this.ropeLength)) {
 			Vec farthest = this.segmentHandler.getFarthest();
-			double distToFarthest = this.segmentHandler.getDistToFarthest();
+			this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
+		}
 
-			Vec ropevec = Vec.positionVec(this).sub(farthest);
-			double d = ropevec.length();
+		if (!this.customization.get(BLOCK_PHASE_ROPE.get())) {
+			this.segmentHandler.update(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.ropeLength, true);
 
-			if (this.customization.get(HOOK_REEL_IN_ON_SNEAK.get()) && this.shootingEntity.isCrouching()) {
-				double newdist = d + distToFarthest - 0.4;
-				if (newdist > 1 && newdist <= this.customization.get(MAX_ROPE_LENGTH.get())) {
-					this.ropeLength = newdist;
+			if (this.customization.get(STICKY_ROPE.get())) {
+				List<Vec> segments = this.segmentHandler.getSegments();
+
+				if (segments.size() > 2) {
+					int bendnumber = segments.size() - 2;
+					Vec closest = segments.get(bendnumber);
+					BlockPos blockpos = this.segmentHandler.getBendBlock(bendnumber);
+
+					for (int i = 1; i <= bendnumber; i++)
+						this.segmentHandler.removeSegment(1);
+
+					this.serverAttach(blockpos, closest, null);
 				}
 			}
 
+		} else {
+			this.segmentHandler.updatePos(Vec.positionVec(this), Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0)), this.ropeLength);
+		}
 
-			if (d + distToFarthest > this.ropeLength) {
-				Vec motion = Vec.motionVec(this);
+		Vec farthest = this.segmentHandler.getFarthest();
+		double distToFarthest = this.segmentHandler.getDistToFarthest();
 
-				if (motion.dot(ropevec) > 0) {
-					motion = motion.removeAlong(ropevec);
-				}
+		Vec ropevec = Vec.positionVec(this).sub(farthest);
+		double d = ropevec.length();
 
-				this.setVelocityActually(motion.x, motion.y, motion.z);
+		if (this.customization.get(HOOK_REEL_IN_ON_SNEAK.get()) && this.shootingEntity.isCrouching()) {
+			double newdist = d + distToFarthest - 0.4;
+			if (newdist > 1 && newdist <= this.customization.get(MAX_ROPE_LENGTH.get())) {
+				this.ropeLength = newdist;
+			}
+		}
 
-				ropevec.mutableSetMagnitude(this.ropeLength - distToFarthest);
-				Vec newpos = ropevec.add(farthest);
 
-				this.setPos(newpos.x, newpos.y, newpos.z);
+		if (d + distToFarthest > this.ropeLength) {
+			Vec motion = Vec.motionVec(this);
+
+			if (motion.dot(ropevec) > 0) {
+				motion = motion.removeAlong(ropevec);
 			}
 
+			this.setVelocityActually(motion.x, motion.y, motion.z);
+
+			ropevec.mutableSetMagnitude(this.ropeLength - distToFarthest);
+			Vec newpos = ropevec.add(farthest);
+
+			this.setPos(newpos.x, newpos.y, newpos.z);
 		}
 
 		// magnet attraction
-		if (!this.isAttachedToSurface && this.customization.get(MAGNET_ATTACHED.get()) && Vec.positionVec(this).sub(Vec.positionVec(this.shootingEntity)).length() > this.customization.get(MAGNET_RADIUS.get())) {
-			if (this.shootingEntity == null) {return;}
-			if (!this.foundBlock) {
-				if (!this.level().isClientSide) {
-					Vec playerpos = Vec.positionVec(this.shootingEntity);
-					Vec pos = Vec.positionVec(this);
-					if (magnetBlock == null) {
-						if (prevPos != null) {
-							HashMap<BlockPos, Boolean> checkedset = new HashMap<>();
-							Vec vector = pos.sub(prevPos);
-							if (vector.length() > 0) {
-								Vec normvector = vector.normalize();
-								for (int i = 0; i < vector.length(); i++) {
-									double dist = prevPos.sub(playerpos).length();
-									int radius = (int) dist / 4;
-									BlockPos found = this.check(prevPos, checkedset);
-									if (found != null) {
-//				    					if (wasinair) {
-										Vec distvec = new Vec(found.getX(), found.getY(), found.getZ());
-										distvec.mutableSub(prevPos);
-										if (distvec.length() < radius) {
-											this.setPosRaw(prevPos.x, prevPos.y, prevPos.z);
-											pos = prevPos;
 
-											magnetBlock = found;
+		boolean shouldAttactMagnet = this.customization.get(MAGNET_ATTACHED.get()) &&
+				Vec.positionVec(this).sub(Vec.positionVec(this.shootingEntity)).length() >
+						this.customization.get(MAGNET_RADIUS.get());
 
-											break;
-										}
-//				    					}
-									} else {
-										wasInAir = true;
-									}
+		if (shouldAttactMagnet) handleMagnetAttraction();
+	}
 
-									prevPos.mutableAdd(normvector);
-								}
+	private void handleMagnetAttraction() {
+		if (this.foundBlock) return;
+
+		Vec playerpos = Vec.positionVec(this.shootingEntity);
+		Vec pos = Vec.positionVec(this);
+		if (magnetBlock == null) {
+			if (prevPos != null) {
+				HashMap<BlockPos, Boolean> checkedset = new HashMap<>();
+				Vec vector = pos.sub(prevPos);
+				if (vector.length() > 0) {
+					Vec normvector = vector.normalize();
+					for (int i = 0; i < vector.length(); i++) {
+						double dist = prevPos.sub(playerpos).length();
+						int radius = (int) dist / 4;
+						BlockPos found = this.check(prevPos, checkedset);
+						if (found != null) {
+							//if (wasinair) {
+							Vec distvec = new Vec(found.getX(), found.getY(), found.getZ());
+							distvec.mutableSub(prevPos);
+							if (distvec.length() < radius) {
+								this.setPosRaw(prevPos.x, prevPos.y, prevPos.z);
+								pos = prevPos;
+
+								magnetBlock = found;
+
+								break;
 							}
+							//}
+						} else {
+							wasInAir = true;
 						}
+
+						prevPos.mutableAdd(normvector);
 					}
-
-					if (magnetBlock != null) {
-						BlockState blockstate = this.level().getBlockState(magnetBlock);
-						VoxelShape BB = blockstate.getCollisionShape(this.level(), magnetBlock);
-
-						Vec blockvec = new Vec(magnetBlock.getX() + (BB.max(Axis.X) + BB.min(Axis.X)) / 2, magnetBlock.getY() + (BB.max(Axis.Y) + BB.min(Axis.Y)) / 2, magnetBlock.getZ() + (BB.max(Axis.Z) + BB.min(Axis.Z)) / 2);
-						Vec newvel = blockvec.sub(pos);
-
-						double l = newvel.length();
-
-						newvel.withMagnitude(this.getSpeed());
-
-						this.setDeltaMovement(newvel.x, newvel.y, newvel.z);
-
-						if (l < 0.2) {
-							this.serverAttach(magnetBlock, blockvec, Direction.UP);
-						}
-					}
-
-					prevPos = pos;
 				}
 			}
 		}
+
+		if (magnetBlock != null) {
+			BlockState blockstate = this.level().getBlockState(magnetBlock);
+			VoxelShape BB = blockstate.getCollisionShape(this.level(), magnetBlock);
+
+			Vec blockvec = new Vec(magnetBlock.getX() + (BB.max(Axis.X) + BB.min(Axis.X)) / 2, magnetBlock.getY() + (BB.max(Axis.Y) + BB.min(Axis.Y)) / 2, magnetBlock.getZ() + (BB.max(Axis.Z) + BB.min(Axis.Z)) / 2);
+			Vec newvel = blockvec.sub(pos);
+
+			double l = newvel.length();
+
+			newvel.withMagnitude(this.getSpeed());
+
+			this.setDeltaMovement(newvel.x, newvel.y, newvel.z);
+
+			if (l < 0.2) {
+				this.serverAttach(magnetBlock, blockvec, Direction.UP);
+			}
+		}
+
+		prevPos = pos;
 	}
 
 	@Override
