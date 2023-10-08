@@ -78,14 +78,20 @@ public class TemplateTableBlock extends BaseEntityBlock {
 		ItemStack heldStack = playerIn.getItemInHand(hand);
 		Item heldItem = heldStack.getItem();
 
+
+
 		if(templateTableBlockEntity.isEmpty()) {
+			if(worldIn.isClientSide) return InteractionResult.PASS;
+
 			// TODO: Open UI - there is no 'primary blueprint' to quick-apply from.
-			return InteractionResult.sidedSuccess(worldIn.isClientSide);
+			return InteractionResult.CONSUME;
 		}
 
 		if(!(heldItem instanceof ICustomizationApplicable customizationReciever)) {
+			if(worldIn.isClientSide) return InteractionResult.PASS;
+
 			// TODO: Open UI - item can't recieve upgrades
-			return InteractionResult.sidedSuccess(worldIn.isClientSide);
+			return InteractionResult.CONSUME;
 		}
 
 		// TODO : Apply main blueprint

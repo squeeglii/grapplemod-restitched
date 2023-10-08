@@ -75,6 +75,11 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	private boolean isAttachedToSurface;
 	public Vec attachDirection = null;
 
+	private BlockPos lastBlockCollision = null;
+	private Direction lastBlockCollisionSide = null;
+	private Vec lastSubCollisionPos = null;
+
+
 	public double pull;
 
 	public double taut = 1;
@@ -138,7 +143,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isAttachedToMainHand = isMainHook;
 		this.isInDoublePair = isInPair;
 
-		this.isAttachedToSurface = snapshot.isAttached();
+		//this.isAttachedToSurface = snapshot.isAttached();
 	}
 
 
@@ -445,13 +450,16 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit) {
-		if (this.isAttachedToSurface) {
+		if (this.isAttachedToSurface)
 			return;
-		}
-		if (this.shootingEntity == null || this.shootingEntityID == 0) {
+
+		if (this.shootingEntity == null || this.shootingEntityID == 0)
 			return;
-		}
+
 		this.isAttachedToSurface = true;
+		this.lastBlockCollision = blockpos;
+		this.lastSubCollisionPos = pos;
+		this.lastBlockCollisionSide = sideHit;
 
 		if (blockpos != null) {
 			Block block = this.level().getBlockState(blockpos).getBlock();
@@ -464,27 +472,22 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		Vec vec3 = Vec.positionVec(this);
 		vec3.mutableAdd(Vec.motionVec(this));
+
 		if (pos != null) {
             vec3 = pos;
-
             this.setPosRaw(vec3.x, vec3.y, vec3.z);
 		}
 
 		//west -x
 		//north -z
 		Vec curpos = Vec.positionVec(this);
-		if (sideHit == Direction.DOWN) {
-			curpos.y -= 0.3;
-		} else if (sideHit == Direction.WEST) {
-			curpos.x -= 0.05;
-		} else if (sideHit == Direction.NORTH) {
-			curpos.z -= 0.05;
-		} else if (sideHit == Direction.SOUTH) {
-			curpos.z += 0.05;
-		} else if (sideHit == Direction.EAST) {
-			curpos.x += 0.05;
-		} else if (sideHit == Direction.UP) {
-			curpos.y += 0.05;
+		switch (sideHit) {
+			case DOWN  -> curpos.y -= 0.3f;
+			case WEST  -> curpos.x -= 0.05f;
+			case NORTH -> curpos.z -= 0.05f;
+			case SOUTH -> curpos.z += 0.05f;
+			case EAST  -> curpos.x += 0.05f;
+			case UP    -> curpos.y += 0.05f;
 		}
 		curpos.applyAsPositionTo(this);
 
@@ -589,5 +592,17 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	public double getCurrentRopeLength() {
 		return this.ropeLength;
+	}
+
+	public BlockPos getLastBlockCollision() {
+		return this.lastBlockCollision;
+	}
+
+	public Vec getLastSubCollisionPos() {
+		return this.lastSubCollisionPos;
+	}
+
+	public Direction getLastBlockCollisionSide() {
+		return this.lastBlockCollisionSide;
 	}
 }

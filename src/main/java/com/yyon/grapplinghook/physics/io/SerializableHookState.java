@@ -118,6 +118,11 @@ public class SerializableHookState {
 
             hookEntities.add(e);
             player.level().addFreshEntity(e);
+            e.serverAttach(
+                    snapshot.getLastBlockCollidedWith(),
+                    snapshot.getLastSubCollisionPos(),
+                    snapshot.getLastBlockCollisionSide()
+            );
 
             isFirstHook = false;
         }

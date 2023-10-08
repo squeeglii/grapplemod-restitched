@@ -7,12 +7,16 @@ import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -20,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class TemplateTableBlockEntity extends BlockEntity implements Container {
+public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
 
     public static int MAX_CAPACITY = 15;
 
@@ -31,6 +35,17 @@ public class TemplateTableBlockEntity extends BlockEntity implements Container {
         this.storedTemplates = NonNullList.createWithCapacity(MAX_CAPACITY);
     }
 
+
+    @NotNull
+    @Override
+    protected Component getDefaultName() {
+        return Component.translatable("template_table.title.default");
+    }
+
+    @Override
+    protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
+        return null;
+    }
 
     @Override
     public void load(CompoundTag tag) {

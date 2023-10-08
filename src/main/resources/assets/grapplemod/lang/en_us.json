@@ -103,6 +103,8 @@
     "hook_template.grapplemod.rocket_hook": "Rocket Grappling Hook",
     "hook_template.grapplemod.double_rocket_motor_hook": "Dual Motorized Rocket Grappling Hooks",
 
+    "template_table.title.default": "Template Table",
+
 
     "grapple_modifier.title": "Grapple Hook Modifier Table",
 
