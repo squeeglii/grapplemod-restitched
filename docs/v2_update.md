@@ -1,6 +1,49 @@
 # V2 Changelist Guide
 
-### User facing changes
+## Additions
+
+### Blueprints & Template Table
+
+ - Added Blueprints
+   - Stores the properties from a Grappling Hook Modification Bench onto an item
+   - Can be used to restore a configuration or to modify a grappling hook
+   - Allows for customizations to be shared and transported a little easier.
+ - Added the Template Table for storing blueprints
+   - Right-clicking the table with a hook copies the properties of the starred blueprint
+   - The texture updates to indicate how full it is
+
+
+### Hook State is now saved.
+
+ - Hooks now remain hooked to blocks after leaving and joining a world.
+   - When hooked to a block, the state of the hooks are stored
+   - Saved to NBT so states persist across restarts.
+   - Should work in server crashes too if hooked for long enough.
+
+### More Customizations!
+
+ - Added the 'Style' category
+   - Allows for you to customize the texture of your rope
+   - Allows you to make your rope glow in the dark.
+
+### Advancements
+
+ - Added 8 new advancements to follow mod progression
+   - Cover the path to customizing your first Grappling Hook
+   - Highlights items like the Long Fall Boots, Forcefield, + Porta-Rocket
+   - Has a few little challenges using all the items
+
+
+### Plus Other Stuff Like...
+
+ - Added the 'Porta-Rocket' to match items like the Ender Staff + Forcefield.
+ - Added data-driven access to hook physics data
+ - You can now always climb towards the hook on a forcefield hook.
+
+
+## Changes
+
+### User-Facing
 
  - Improved the Grappling Hook Modification Bench
    - The block has seen a re-texture to put it in line with vanilla
@@ -8,16 +51,17 @@
  - Merged some boolean customizations into multi-option customizations
    - They now have a button in the customization screen that cycles
    - This should be a bit more user-friendly
- - Revamped the config
-   - Everything should be organised a bit better.
+ - Item Tooltips (The text you see on hover) have been cleaned up.
+   - More consistent formatting + colouring
+   - Controls should be a bit clearer.
 
 
-### Resource Pack Changes
+### Resource Packs
 
  - Most customization translation keys have changed.
 
 
-### Internal Customization Rewrite:
+### Internal Rewrite of Customizations:
 
  - Properties & Categories now use a registry, thus they're much more extensible.
 
@@ -73,4 +117,11 @@
        - "unlocked"
            - "namespaced:id1": true
            - "namespaced:id2": false
-       -  "customization": <see new grapple hook "custom">
+       -  "customization": <see new grapple hook "custom"
+
+
+### Other Internal Changes Like
+
+ - Grappling Hook Physics Controllers now have ResourceLocation ids
+ - Key Enums have been replaced with just vanilla KeyMappings
+ - Cleaned Up + Refactored a lot of the older classes.
