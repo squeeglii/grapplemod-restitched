@@ -20,6 +20,12 @@
    - Saved to NBT so states persist across restarts.
    - Should work in server crashes too if hooked for long enough.
 
+### Compatibility API
+
+ - To make solving conflicts with mods easier, there's a new compatability API!
+   - It grants access to basic utility actions like enabling + disabling hooks
+   - It has events for mods to listen in on which should help reducing physics issues.
+
 ### More Customizations!
 
  - Added the 'Style' category

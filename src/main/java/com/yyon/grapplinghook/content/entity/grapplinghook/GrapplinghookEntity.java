@@ -1,7 +1,9 @@
 package com.yyon.grapplinghook.content.entity.grapplinghook;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.config.ConfigUtility;
 import com.yyon.grapplinghook.network.NetworkManager;
@@ -153,6 +155,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.restoreCollision = true;
 
 		//this.isAttachedToSurface = snapshot.isAttached();
+
+		GrappleModServerEvents.HOOK_THROW.invoker().onHookThrown(this.shootingEntity, this);
 	}
 
 
@@ -534,6 +538,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
 		NetworkManager.packetToClient(msg, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) this.level(), new Vec(this.position())));
+
+		GrappleModServerEvents.HOOK_ATTACH.invoker().onHookAttach(this.shootingEntity, this);
 	}
 
 	public void clientAttach(double x, double y, double z) {
@@ -542,6 +548,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		if (this.shootingEntity instanceof Player) {
 			GrappleModClient.get().resetLauncherTime(this.shootingEntityID);
 		}
+
+		GrappleModClientEvents.HOOK_ATTACH.invoker().onHookAttach(this.shootingEntity, this);
 	}
 
 	public void setAttachPos(double x, double y, double z) {

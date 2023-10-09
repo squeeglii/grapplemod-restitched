@@ -112,7 +112,7 @@ public class SerializableHookState {
     private void applyHookSnapshot(HookSnapshot snapshot, ServerPlayer player) {
         CustomizationVolume newVolume = CustomizationVolume.copyAllFrom(this.volume);
         GrapplinghookEntity e = new GrapplinghookEntity(snapshot, newVolume, player, this.hooks.size() > 1);
-        ServerHookEntityTracker.addGrappleEntity(player.getId(), e);
+        ServerHookEntityTracker.addGrappleEntity(player, e);
 
         HashMap<Entity, GrapplinghookEntity> grapplehookClientEntityTracker = e.isHeldInMainHand()
                 ? GrapplehookItem.grapplehookEntitiesRight

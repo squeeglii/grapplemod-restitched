@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.mixin.client;
 
+import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
@@ -24,6 +25,8 @@ public class BlockBreakDetectorMixin {
             GrapplingHookPhysicsController control = physManager.controllerPos.get(pos);
             control.disable();
             physManager.controllerPos.remove(pos);
+
+            GrappleModClientEvents.HOOK_DETACH.invoker().onHookDetach(control.entity);
         }
     }
 

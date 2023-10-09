@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.physics;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.IHookStateHolder;
@@ -41,15 +42,16 @@ public class ServerHookEntityTracker {
 
 
 	/**
-	 * Adds a grappling hook entity to be tracked.
-	 * @param ownerId the thrower of the hook
+	 * Adds a grappling hook entity to be tracked
 	 * @param hookEntity the entity instance of the hook thrown
 	 */
-	public static void addGrappleEntity(int ownerId, GrapplinghookEntity hookEntity) {
-		if (!allGrapplehookEntities.containsKey(ownerId))
-			allGrapplehookEntities.put(ownerId, new HashSet<>());
+	public static void addGrappleEntity(Entity thrower, GrapplinghookEntity hookEntity) {
+		int id = thrower.getId();
+		if (!allGrapplehookEntities.containsKey(id))
+			allGrapplehookEntities.put(id, new HashSet<>());
 
-		allGrapplehookEntities.get(ownerId).add(hookEntity);
+		allGrapplehookEntities.get(id).add(hookEntity);
+		GrappleModServerEvents.HOOK_THROW.invoker().onHookThrown(thrower, hookEntity);
 	}
 
 	/**

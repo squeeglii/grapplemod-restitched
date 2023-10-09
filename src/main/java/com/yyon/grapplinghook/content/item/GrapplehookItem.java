@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.content.item;
 
+import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
@@ -451,8 +452,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
         hookEntity.shoot(direction, hookEntity.getSpeed() + extraSpeed, 0.0F);
         
 		worldIn.addFreshEntity(hookEntity);
-		setHookEntityLeft(entityLiving, hookEntity);    			
-		
+		setHookEntityLeft(entityLiving, hookEntity);
 		return true;
 	}
 	
@@ -483,55 +483,59 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		return true;
 	}
 	
-	public void detachBoth(LivingEntity entityLiving) {
-		GrapplinghookEntity hookLeft = getHookEntityLeft(entityLiving);
-		GrapplinghookEntity hookRight = getHookEntityRight(entityLiving);
+	public void detachBoth(LivingEntity thrower) {
+		GrapplinghookEntity hookLeft = getHookEntityLeft(thrower);
+		GrapplinghookEntity hookRight = getHookEntityRight(thrower);
 
-		setHookEntityLeft(entityLiving, null);
-		setHookEntityRight(entityLiving, null);
+		setHookEntityLeft(thrower, null);
+		setHookEntityRight(thrower, null);
 		
 		if (hookLeft != null) hookLeft.removeServer();
 		if (hookRight != null) hookRight.removeServer();
 
-		int id = entityLiving.getId();
-		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), entityLiving.getId(), entityLiving.level());
+		int id = thrower.getId();
+		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), thrower.getId(), thrower.level());
 	}
 	
-	public void detachLeft(LivingEntity entityLiving) {
-		GrapplinghookEntity hookLeft = getHookEntityLeft(entityLiving);
-		setHookEntityLeft(entityLiving, null);
+	public void detachLeft(LivingEntity thrower) {
+
+		GrapplinghookEntity hookLeft = getHookEntityLeft(thrower);
+		setHookEntityLeft(thrower, null);
 		
 		if (hookLeft != null) hookLeft.removeServer();
 
-		int id = entityLiving.getId();
+		int id = thrower.getId();
+		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
 		
 		// remove controller if hook is attached
-		if (getHookEntityRight(entityLiving) == null) {
-			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level());
+		if (getHookEntityRight(thrower) == null) {
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, thrower.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, entityLiving.level());
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, thrower.level());
 		}
 	}
 	
-	public void detachRight(LivingEntity entityLiving) {
-		GrapplinghookEntity hookRight = getHookEntityRight(entityLiving);
-		setHookEntityRight(entityLiving, null);
+	public void detachRight(LivingEntity thrower) {
+		GrapplinghookEntity hookRight = getHookEntityRight(thrower);
+		setHookEntityRight(thrower, null);
 		
 		if (hookRight != null) hookRight.removeServer();
 		
-		int id = entityLiving.getId();
-		
+		int id = thrower.getId();
+
+		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
 		// remove controller if hook is attached
-		if (getHookEntityLeft(entityLiving) == null) {
-			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, entityLiving.level());
+		if (getHookEntityLeft(thrower) == null) {
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, thrower.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, entityLiving.level());
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, thrower.level());
 		}
 	}
 	
 	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {
 		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomizations(stack), isdouble);
-		ServerHookEntityTracker.addGrappleEntity(entityLiving.getId(), hookEntity);
+		ServerHookEntityTracker.addGrappleEntity(entityLiving, hookEntity);
 		return hookEntity;
 	}
 
