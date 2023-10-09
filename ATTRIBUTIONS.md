@@ -7,20 +7,23 @@ __**Grappling Hook Mod**__
 - [License @ Fork Point](https://github.com/yyon/grapplemod/blob/61dd2af68a403dc9f6dbb6e659bfffa4b9bbad5f/COPYING)
 - Copyright (C) 2007 Free Software Foundation, Inc. http://fsf.org/ under the GNU General Public License v3.0
 - Change summary as required by the license:
-    - Port to versions 1.18.2, 1.19.2, & 1.19.3 onwards
+    - Support for versions 1.18.x, 1.19.x, 1.20.x onwards
     - Port to the Fabric toolchain involving
       - Modifying how network messages are sent
       - Replacing old registries with newer, more modular structures
       - Replacing Forge Hooks with Mixins (and occasional fabric hooks)
     - Refactors including
       - Package restructuring
-      - Cleaning up nested branches and loops
-      - Renaming variables and classes to adhere to proper camel case
+      - Using modern Java 17 features where applicable.
+      - Renaming variables and classes for clarity + to adhere to proper camel case
       - Unpacking nested classes for readability
-    - And new features including
-      - Revamped config
-      - Moddable upgrades (Mods can add them with registries)
-      - New UI for Modification Table
+    - Rewriting components like
+      - Templates (Creative Menu Hooks, but it's now a survival feature)
+      - Customizations (Now registry-backed)
+    - Added new features including
+      - Template Table & Blueprints
+      - Style Customizations
+      - Advancements
     - + More as this document won't get updated regularly
 
 
