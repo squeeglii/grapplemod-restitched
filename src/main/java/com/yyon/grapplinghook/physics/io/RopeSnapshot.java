@@ -13,11 +13,18 @@ import java.util.List;
 
 public class RopeSnapshot {
 
-    private LinkedList<Vec> segments;
-    private LinkedList<Direction> topSides;
-    private LinkedList<Direction> bottomSides;
+    private static final String NBT_SEGMENTS_LIST = "segments";
+    private static final String NBT_ROPE_LENGTH = "rope_length";
 
-    private double ropeLength;
+    private static final String NBT_TOP = "top";
+    private static final String NBT_BOTTOM = "bottom";
+    private static final String NBT_POS = "pos";
+
+    private final LinkedList<Vec> segments;
+    private final LinkedList<Direction> topSides;
+    private final LinkedList<Direction> bottomSides;
+
+    private final double ropeLength;
 
 
     public RopeSnapshot(RopeSegmentHandler segmentHandler) {
@@ -36,17 +43,17 @@ public class RopeSnapshot {
         this.topSides = new LinkedList<>();
         this.bottomSides = new LinkedList<>();
 
-        this.ropeLength = nbt.getDouble("RopeLength");
-        ListTag segmentsTag = nbt.getList("Segments", Tag.TAG_COMPOUND);
+        this.ropeLength = nbt.getDouble(NBT_ROPE_LENGTH);
+        ListTag segmentsTag = nbt.getList(NBT_SEGMENTS_LIST, Tag.TAG_COMPOUND);
 
         for(int i = 0; i < segmentsTag.size(); i++) {
             CompoundTag entry = segmentsTag.getCompound(i);
 
-            ListTag posTag = entry.getList("Pos", Tag.TAG_DOUBLE);
+            ListTag posTag = entry.getList(NBT_POS, Tag.TAG_DOUBLE);
 
             Vec pos = new Vec(posTag);
-            String topSide = entry.getString("Top");
-            String bottomSide = entry.getString("Bottom");
+            String topSide = entry.getString(NBT_TOP);
+            String bottomSide = entry.getString(NBT_BOTTOM);
 
             Direction topSideDir = !topSide.equalsIgnoreCase("null")
                     ? Direction.byName(topSide)
@@ -72,7 +79,7 @@ public class RopeSnapshot {
             CompoundTag entry = new CompoundTag();
             ListTag posTag = segment.toNBT();
 
-            entry.put("Pos", posTag);
+            entry.put(NBT_POS, posTag);
 
             String topVal = topDir != null
                     ? topDir.getName()
@@ -82,14 +89,14 @@ public class RopeSnapshot {
                     ? bottomDir.getName()
                     : "null";
 
-            entry.putString("Top", topVal);
-            entry.putString("Bottom", bottomVal);
+            entry.putString(NBT_TOP, topVal);
+            entry.putString(NBT_BOTTOM, bottomVal);
 
             segmentsTag.add(entry);
         }
 
-        snapshotTag.put("Segments", segmentsTag);
-        snapshotTag.putDouble("RopeLength", this.ropeLength);
+        snapshotTag.put(NBT_SEGMENTS_LIST, segmentsTag);
+        snapshotTag.putDouble(NBT_ROPE_LENGTH, this.ropeLength);
 
         return snapshotTag;
     }

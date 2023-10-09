@@ -12,6 +12,12 @@ import net.minecraft.nbt.Tag;
 
 public class HookSnapshot {
 
+    private static final String NBT_POS = "pos";
+    private static final String NBT_ROPE_SHAPE = "rope_shape";
+    private static final String NBT_COLLISION = "last_collision";
+    private static final String NBT_SUB_POS = "sub_pos";
+    private static final String NBT_DIRECTION = "direction";
+
     private final Vec hookPos;
     private final RopeSnapshot ropeSnapshot;
 
@@ -33,13 +39,13 @@ public class HookSnapshot {
         if(!isTagValid(source))
             throw new IllegalArgumentException("Tag passed is missing required data for hook.");
 
-        ListTag posTag = source.getList("Pos", ListTag.TAG_DOUBLE);
-        CompoundTag ropeSegHandlerTag = source.getCompound("RopeShape");
-        CompoundTag collisionTag = source.getCompound("Collision");
+        ListTag posTag = source.getList(NBT_POS, ListTag.TAG_DOUBLE);
+        CompoundTag ropeSegHandlerTag = source.getCompound(NBT_ROPE_SHAPE);
+        CompoundTag collisionTag = source.getCompound(NBT_COLLISION);
 
-        CompoundTag collisionPosTag = collisionTag.getCompound("Pos");
-        ListTag lastSubCollisionPosTag = collisionTag.getList("SubPos", Tag.TAG_DOUBLE);
-        String directionString = collisionTag.getString("Direction");
+        CompoundTag collisionPosTag = collisionTag.getCompound(NBT_POS);
+        ListTag lastSubCollisionPosTag = collisionTag.getList(NBT_SUB_POS, Tag.TAG_DOUBLE);
+        String directionString = collisionTag.getString(NBT_DIRECTION);
 
         BlockPos collisionPos = NbtUtils.readBlockPos(collisionPosTag);
         Vec collisionSubPos = new Vec(lastSubCollisionPosTag);
@@ -69,13 +75,13 @@ public class HookSnapshot {
                 ? this.lastBlockCollisionSide.getSerializedName()
                 : "null";
 
-        collision.put("Pos", collisionPosTag);
-        collision.put("SubPos", collisionSubPosTag);
-        collision.putString("Direction", directionString);
+        collision.put(NBT_POS, collisionPosTag);
+        collision.put(NBT_SUB_POS, collisionSubPosTag);
+        collision.putString(NBT_DIRECTION, directionString);
 
-        hookData.put("Pos", hookPos);
-        hookData.put("RopeShape", ropeShape);
-        hookData.put("Collision", collision);
+        hookData.put(NBT_POS, hookPos);
+        hookData.put(NBT_ROPE_SHAPE, ropeShape);
+        hookData.put(NBT_COLLISION, collision);
 
         return hookData;
     }
@@ -116,10 +122,10 @@ public class HookSnapshot {
     public static boolean isTagValid(CompoundTag tag) {
         if(tag == null) return false;
 
-        if(!tag.contains("Pos", Tag.TAG_LIST)) return false;
-        if(!tag.contains("RopeShape", Tag.TAG_COMPOUND)) return false;
+        if(!tag.contains(NBT_POS, Tag.TAG_LIST)) return false;
+        if(!tag.contains(NBT_ROPE_SHAPE, Tag.TAG_COMPOUND)) return false;
 
-        if(!tag.contains("Collision", Tag.TAG_COMPOUND)) return false;
+        if(!tag.contains(NBT_COLLISION, Tag.TAG_COMPOUND)) return false;
 
         return true;
     }

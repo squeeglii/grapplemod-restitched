@@ -7,7 +7,6 @@ import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +17,9 @@ import java.util.List;
 import java.util.Set;
 
 public class SerializableHookState {
+
+    private static final String NBT_HOOKS = "hooks";
+    private static final String NBT_CUSTOMIZATIONS = "customization";
 
     private final List<HookSnapshot> hooks;
     private final CustomizationVolume volume;
@@ -60,8 +62,8 @@ public class SerializableHookState {
 
 
     private SerializableHookState(CompoundTag tag) {
-        CompoundTag customizationTag = tag.getCompound("Customization");
-        ListTag hooksTag = tag.getList("Hooks", ListTag.TAG_COMPOUND);
+        CompoundTag customizationTag = tag.getCompound(NBT_CUSTOMIZATIONS);
+        ListTag hooksTag = tag.getList(NBT_HOOKS, ListTag.TAG_COMPOUND);
 
         LinkedList<HookSnapshot> hooks = new LinkedList<>();
 
@@ -92,8 +94,8 @@ public class SerializableHookState {
         if (hookStates.isEmpty())
             return finalTag;
 
-        finalTag.put("Customization", this.volume.writeToNBT());
-        finalTag.put("Hooks", hookStates);
+        finalTag.put(NBT_CUSTOMIZATIONS, this.volume.writeToNBT());
+        finalTag.put(NBT_HOOKS, hookStates);
 
         return finalTag;
     }
@@ -135,8 +137,8 @@ public class SerializableHookState {
     }
 
     public static boolean isValidNBT(CompoundTag tag) {
-        if(!tag.contains("Customization", Tag.TAG_COMPOUND)) return false;
-        if(!tag.contains("Hooks", Tag.TAG_LIST)) return false;
+        if(!tag.contains(NBT_CUSTOMIZATIONS, Tag.TAG_COMPOUND)) return false;
+        if(!tag.contains(NBT_HOOKS, Tag.TAG_LIST)) return false;
 
         return true;
     }

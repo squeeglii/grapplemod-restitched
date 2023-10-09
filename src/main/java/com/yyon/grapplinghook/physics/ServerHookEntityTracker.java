@@ -17,6 +17,8 @@ import java.util.*;
  */
 public class ServerHookEntityTracker {
 
+	public static final String NBT_HOOK_STATE = "grapplemod:hook_state";
+
 	private static final HashMap<Integer, HashSet<GrapplinghookEntity>> allGrapplehookEntities = new HashMap<>();
 
 
@@ -99,7 +101,7 @@ public class ServerHookEntityTracker {
 		if(grapplemodState.isEmpty())
 			return;
 
-		saveTarget.put("grapplemod", grapplemodState);
+		saveTarget.put(NBT_HOOK_STATE, grapplemodState);
 	}
 
 	public static void applyFromSavedHookState(ServerPlayer player) {
