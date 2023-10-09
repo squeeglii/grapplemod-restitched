@@ -8,13 +8,9 @@ import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class SharedDamageHandler {
 

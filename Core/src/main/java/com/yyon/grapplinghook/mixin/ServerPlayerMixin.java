@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.physics.io.SerializableHookState;

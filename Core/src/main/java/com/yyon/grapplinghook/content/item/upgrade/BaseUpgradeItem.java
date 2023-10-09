@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.content.item.upgrade;
 
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;

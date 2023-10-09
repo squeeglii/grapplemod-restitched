@@ -5,7 +5,10 @@ import com.yyon.grapplinghook.customization.CustomizationCategory;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;

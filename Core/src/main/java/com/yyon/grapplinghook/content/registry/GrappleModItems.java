@@ -2,8 +2,8 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.item.*;
-import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.content.item.upgrade.*;
+import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

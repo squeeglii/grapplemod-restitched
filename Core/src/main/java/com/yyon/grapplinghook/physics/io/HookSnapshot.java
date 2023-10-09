@@ -144,8 +144,6 @@ public class HookSnapshot {
         if(!tag.contains(NBT_ROPE_SHAPE, Tag.TAG_COMPOUND)) return false;
         if(!tag.contains(NBT_MAIN_HOOK, Tag.TAG_BYTE)) return false;
 
-        if(!tag.contains(NBT_COLLISION, Tag.TAG_COMPOUND)) return false;
-
-        return true;
+        return tag.contains(NBT_COLLISION, Tag.TAG_COMPOUND);
     }
 }

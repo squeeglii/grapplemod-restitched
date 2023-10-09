@@ -4,7 +4,10 @@ import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashSet;

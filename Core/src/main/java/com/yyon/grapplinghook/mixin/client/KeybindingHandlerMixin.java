@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
-import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.KeyboardHandler;

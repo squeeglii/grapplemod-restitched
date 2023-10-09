@@ -36,10 +36,7 @@ public class PhysicsFramePredicate {
         if(!this.speed.matches(frame.getSpeed()))
             return false;
 
-        if(this.isUsingRocket != null && this.isUsingRocket != frame.isUsingRocket())
-            return false;
-
-        return true;
+        return this.isUsingRocket == null || this.isUsingRocket == frame.isUsingRocket();
     }
 
     public static PhysicsFramePredicate fromJson(JsonElement json) {

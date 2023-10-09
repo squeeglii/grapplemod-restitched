@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;

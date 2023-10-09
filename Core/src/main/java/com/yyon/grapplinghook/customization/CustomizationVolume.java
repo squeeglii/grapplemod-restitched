@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-
 import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;

@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +41,7 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
         return Component.translatable("template_table.title.default");
     }
 
+    @NotNull
     @Override
     protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
         return null;

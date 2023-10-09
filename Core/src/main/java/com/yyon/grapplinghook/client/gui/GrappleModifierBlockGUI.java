@@ -16,8 +16,6 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -261,16 +259,16 @@ public class GrappleModifierBlockGUI extends Screen {
 				Component.translatable("grapple_modifier.help.title")
 						.withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
 				this.font
-		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));;
+		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));
 
-		MultiLineTextWidget guide = new MultiLineTextWidget(
+        MultiLineTextWidget guide = new MultiLineTextWidget(
 				this.guiLeft + OUTER_PADDING_X,
 				this.guiTop + OUTER_PADDING_Y + title.getHeight() + 10,
 				Component.translatable("grapple_modifier.help.desc"),
 				this.font
-		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));;
+		).setMaxWidth(FULL_SIZE_X - (3 * OUTER_PADDING_X));
 
-		this.addRenderableWidget(title);
+        this.addRenderableWidget(title);
 		this.addRenderableWidget(guide);
 	}
 

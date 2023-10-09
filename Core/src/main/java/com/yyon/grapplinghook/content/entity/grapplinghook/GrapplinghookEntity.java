@@ -4,29 +4,25 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.config.ConfigUtility;
-import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
-import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
+import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.network.NetworkManager;
+import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
+import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-
-import java.util.HashMap;
-import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -45,6 +41,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
@@ -214,6 +213,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		return this.customization.get(HOOK_GRAVITY_MULTIPLIER.get()).floatValue() * 0.1F;
 	}
 
+	@NotNull
 	@Override
 	public AABB getBoundingBoxForCulling() {
 		if (this.shootingEntity == null) {

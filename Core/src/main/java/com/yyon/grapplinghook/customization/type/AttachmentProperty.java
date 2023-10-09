@@ -1,14 +1,8 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class AttachmentProperty extends BooleanProperty {
 

@@ -9,8 +9,8 @@
     "CreativeTabForceUpdateMixin",
     "LivingEntityDamageHandlerMixin",
     "PlayerDropHandlerMixin",
-    "SendExtraEntityDataMixin",
     "PlayerJoinMixin",
+    "SendExtraEntityDataMixin",
     "ServerPlayerMixin",
     "ServerStartMixin"
   ],

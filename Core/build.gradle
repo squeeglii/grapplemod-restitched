@@ -6,7 +6,7 @@ plugins {
 group = project.maven_group
 
 boolean isModVersionDefined = project.properties["mod_version"] == null ||
-                              project.properties["mod_version"].toString().length() == 0;
+                              project.properties["mod_version"].toString().length() == 0
 
 String modVer = isModVersionDefined
         ? "indev"

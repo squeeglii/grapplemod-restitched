@@ -6,8 +6,12 @@ import com.yyon.grapplinghook.util.model.ModelPath;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
@@ -42,11 +46,13 @@ public class LongFallBootsModel<T extends LivingEntity> extends AgeableListModel
         return LayerDefinition.create(mesh, 64, 32);
     }
 
+    @NotNull
     @Override
     protected Iterable<ModelPart> headParts() {
         return ImmutableList.of();
     }
 
+    @NotNull
     @Override
     protected Iterable<ModelPart> bodyParts() {
         return ImmutableList.of(this.leftBoot, this.rightBoot);

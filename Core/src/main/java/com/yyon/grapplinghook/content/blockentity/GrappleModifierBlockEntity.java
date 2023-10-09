@@ -1,12 +1,12 @@
 package com.yyon.grapplinghook.content.blockentity;
 
+import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
-import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

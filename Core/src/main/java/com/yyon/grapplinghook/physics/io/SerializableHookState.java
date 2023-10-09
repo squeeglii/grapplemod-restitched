@@ -137,8 +137,6 @@ public class SerializableHookState {
 
     public static boolean isValidNBT(CompoundTag tag) {
         if(!tag.contains(NBT_CUSTOMIZATIONS, Tag.TAG_COMPOUND)) return false;
-        if(!tag.contains(NBT_HOOKS, Tag.TAG_LIST)) return false;
-
-        return true;
+        return tag.contains(NBT_HOOKS, Tag.TAG_LIST);
     }
 }

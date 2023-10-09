@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.network;
 
-import com.mojang.authlib.GameProfile;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.clientbound.*;
 import com.yyon.grapplinghook.network.serverbound.*;

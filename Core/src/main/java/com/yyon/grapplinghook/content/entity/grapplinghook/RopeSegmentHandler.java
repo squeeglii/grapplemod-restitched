@@ -25,8 +25,8 @@ public class RopeSegmentHandler {
 	private static final double BEND_OFFSET = 0.05d;
 	private static final double INTO_BLOCK = 0.05d;
 
-	private GrapplinghookEntity hookEntity;
-	private Level world;
+	private final GrapplinghookEntity hookEntity;
+	private final Level world;
 
 	public LinkedList<Vec> segments;
 	public LinkedList<Direction> segmentBottomSides;

@@ -1,16 +1,16 @@
 package com.yyon.grapplinghook.client.physics.context;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
-import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
+import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
 import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateMessage;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -31,7 +31,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.HashSet;
-import java.util.UUID;
 
 import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
@@ -48,8 +47,8 @@ public class GrapplingHookPhysicsController {
 	private int lastTickRan = -1;
 	private int duplicates = 0;
 	
-	private HashSet<GrapplinghookEntity> grapplehookEntities = new HashSet<>();
-	private HashSet<Integer> grapplehookEntityIds = new HashSet<>();
+	private final HashSet<GrapplinghookEntity> grapplehookEntities = new HashSet<>();
+	private final HashSet<Integer> grapplehookEntityIds = new HashSet<>();
 
 	private boolean isControllerActive = true;
 	
@@ -69,7 +68,7 @@ public class GrapplingHookPhysicsController {
 
 	protected double playerMovementMult = 0;
 
-	private double repelMaxPush = 0.3;
+	private final double repelMaxPush = 0.3;
 
 	private boolean rocketKeyDown = false;
 	private double rocketProgression;

@@ -6,9 +6,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class GrappleModAdvancementTriggers {

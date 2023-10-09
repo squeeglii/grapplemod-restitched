@@ -2,9 +2,7 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
-import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.TextUtils;
-import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -18,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class ForcefieldItem extends Item {
 	}
 
 
+	@NotNull
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
     	ItemStack stack = playerIn.getItemInHand(hand);
