@@ -415,24 +415,21 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean rightHand) {
 		if (this.hasHookEntity(entityLiving)) {
-			detachBoth(entityLiving);
+			this.detachBoth(entityLiving);
 			return;
 		}
 
 		stack.hurtAndBreak(1, (ServerPlayer) entityLiving, (p) -> {});
-		if (stack.getCount() <= 0) return;
+		if (stack.getCount() <= 0)
+			return;
 
 		CustomizationVolume custom = this.getCustomizations(stack);
 		double angle = this.getSingleHookAngle(entityLiving, custom);
+		boolean shouldThrowOffHand = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle != 0;
 
-		// not (  no double attached  OR angle == 0)
-		// angle != 0 &&
+		if (shouldThrowOffHand)
+            this.throwLeft(stack, worldIn, entityLiving);
 
-		boolean shouldThrowOffHand = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle == 0;
-
-		if (shouldThrowOffHand) {
-			this.throwLeft(stack, worldIn, entityLiving);
-		}
 
 		this.throwRight(stack, worldIn, entityLiving, rightHand);
 
