@@ -1,0 +1,98 @@
+
+apply plugin: 'base'
+
+
+static def formatAsBadgeSafe(var val) {
+    if(!(val instanceof String))
+        return val
+
+    // Badges break if hyphens are present.
+    return ((String) val).replaceAll("[- /]", "_")
+}
+
+
+tasks.register('updateDocTemplates', Copy) {
+    group = "squee-gradle"
+    description = "Takes documents from a folder, expands any template variables, and then copies them to the root."
+    doNotTrackState("Stops gradle from screaming - It doesn't let files get copied to the root if tracking state.")
+
+    Map filteredSrc = project.properties.collectEntries {
+        k, v -> [(k): formatAsBadgeSafe(v) ]
+    }
+
+    from "/template_docs"
+
+    into "/"
+    include "**"
+    exclude "media/**"
+
+    expand filteredSrc
+}
+
+
+def collectJars = tasks.register('collect-jars', Copy) {
+    group = "squee-gradle"
+    description = "Used to gather all the jars that can be published"
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    dependsOn subprojects.collect({
+        def discovered = it.tasks.findAll {
+            it.name == "remapSourcesJar" || it.name == "remapJar"
+        }
+
+        return discovered == null
+                ? []
+                : discovered;
+    })
+
+    def jarHolderDirs = []
+
+    allprojects.each {
+        File target = new File(it.buildDir, "libs")
+        jarHolderDirs.add(target)
+    }
+
+    from jarHolderDirs
+    include("*-release.jar")
+    include("*-compat.jar")
+    rename { String name -> {
+        if(name.endsWith("-release.jar")) return name.substring(0, name.length() - 12) + ".jar"
+        if(name.endsWith("-compat.jar")) return "compat/" + name.substring(0, name.length() - 11) + ".jar"
+
+        return name
+    }}
+    into "$buildDir"
+}
+
+def cleanAll = tasks.register('clean-all') {
+    group = "squee-gradle"
+    description = "Runs a clean operation on every project"
+    dependsOn allprojects.collect({
+        Task t = it.tasks.findByName('clean')
+        return t == null
+                ? new ArrayList<>()
+                : t
+    })
+
+    delete "build"
+}
+
+def packageCompatModules = tasks.register('bundle-compat-modules') {
+    group = "squee-gradle"
+    description = "Takes the built compatability modules and includes them in the jar"
+    dependsOn collectJars
+
+
+
+    doLast {
+        String modFileName = file(buildDir).listFiles().toList()
+                .stream()
+                .filter { it.name.toLowerCase().startsWith("grapplemod")}
+                .findFirst()
+                .orElseThrow().name
+
+        exec {
+            workingDir buildDir
+            commandLine 'jar', 'uf', modFileName, 'compat/*'
+        }
+    }
+}

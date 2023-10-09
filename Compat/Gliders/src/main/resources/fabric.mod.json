@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "grapplemodcompat-vc-gliders",
+  "version": "${version}",
+  "name": "Gliders Compatibility Module",
+  "description": "Provides compatibility for the Gliders mod",
+  "authors": [ "CG360" ],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/grapplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "*",
+    "vc_gliders": "${gliders_version_range}"
+  }
+}

@@ -1,0 +1,43 @@
+plugins {
+    id 'fabric-loom' version '1.2.7'
+    id 'maven-publish'
+}
+
+loom {
+    // This is here to ensure the environment sources just stay in
+    // one place. It was splitting them for some reason.
+    mods {
+        gliders {
+            sourceSet sourceSets.main
+        }
+    }
+
+    runs {
+        client {
+            runDir "run/client"
+        }
+
+        server {
+            runDir "run/server"
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.layered() {
+        officialMojangMappings()
+
+        if(project.parchment_version != "")
+            parchment("org.parchmentmc.data:${project.parchment_version}@zip")
+    }
+
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    implementation project(":Core")
+}
+
+remapJar {
+    archiveClassifier.set("compat")
+}

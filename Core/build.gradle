@@ -3,7 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-group = project.maven_group
 
 boolean isModVersionDefined = project.properties["mod_version"] == null ||
                               project.properties["mod_version"].toString().length() == 0
@@ -11,7 +10,9 @@ boolean isModVersionDefined = project.properties["mod_version"] == null ||
 String modVer = isModVersionDefined
         ? "indev"
         : project.properties["mod_version"].toString()
-project.setVersion("%s+%s".formatted(modVer, project.properties["minecraft_version"]))
+
+group = project.maven_group
+version = "%s+%s.fabric".formatted(modVer, project.properties["minecraft_version"])
 
 loom {
     accessWidenerPath = file("src/main/resources/grapplemod.accesswidener")
@@ -116,30 +117,6 @@ jar {
     }
 }
 
-
-static def formatAsBadgeSafe(var val) {
-    if(!(val instanceof String))
-        return val
-
-    // Badges break if hyphens are present.
-    return ((String) val).replaceAll("[- /]", "_")
-}
-
-
-tasks.register('updateDocTemplates', Copy) {
-    group = "mod-utils"
-    description = "Takes documents from a folder, expands any template variables, and then copies them to the root."
-    doNotTrackState("Stops gradle from screaming - It doesn't let files get copied to the root if tracking state.")
-
-    Map filteredSrc = project.properties.collectEntries {
-        k, v -> [(k): formatAsBadgeSafe(v) ]
-    }
-
-    from "/template_docs"
-
-    into "/"
-    include "**"
-    exclude "media/**"
-
-    expand filteredSrc
+remapJar {
+    archiveClassifier.set("release")
 }

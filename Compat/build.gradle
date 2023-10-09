@@ -1,0 +1,76 @@
+subprojects {
+    apply plugin: 'java'
+
+    group = project.maven_group
+
+    boolean isModVersionDefined = project.properties["mod_version"] == null ||
+            project.properties["mod_version"].toString().length() == 0
+
+    String modVer = isModVersionDefined
+            ? "indev"
+            : project.properties["mod_version"].toString()
+    project.setVersion("%s+%s".formatted(modVer, project.properties["minecraft_version"]))
+
+    repositories {
+        // Mappings
+        maven {
+            name = 'ParchmentMC'
+            url = "https://maven.parchmentmc.org/"
+        }
+
+        // Mod Deps
+        maven { url "https://maven.shedaniel.me/" }
+        maven { url "https://maven.terraformersmc.com/releases/" }
+    }
+
+
+    processResources {
+        inputs.property "version", project.version
+        filteringCharset "UTF-8"
+
+        // Trying to update to 1.19.4-rc3 was problematic because the mappings had
+        // a slightly different version to the dependency (rc3 vs rc.3)
+
+        // This just adds a workaround so the dependency version can be ignored when
+        // developing for a snapshot.
+        HashMap modifiedSrc = new HashMap<>(project.properties)
+        filesMatching("fabric.mod.json") {
+            expand modifiedSrc
+        }
+    }
+
+
+    def targetJavaVersion = 17
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+            it.options.release.set(targetJavaVersion)
+        }
+
+        // Shows details related to the xlint "unchecked" and "derecation" warning notes.
+        if(project.properties["show_dev_warnings"] == "true") {
+            it.options.deprecation = true
+            it.options.compilerArgs << '-Xlint:unchecked'
+        }
+    }
+
+    java {
+        def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        if (JavaVersion.current() < javaVersion) {
+            toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+
+        archivesBaseName = project.archives_base_name
+
+        // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+        // if it is present.
+        // If you remove this line, sources will not be generated.
+        withSourcesJar()
+    }
+
+    jar {
+        from("LICENSE") {
+            rename { "${it}_${project.archivesBaseName}" }
+        }
+    }
+}
