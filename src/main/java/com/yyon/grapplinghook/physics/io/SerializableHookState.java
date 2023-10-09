@@ -11,10 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class SerializableHookState {
 
@@ -122,10 +119,11 @@ public class SerializableHookState {
 
             isFirstHook = false;
         }
-
-
     }
 
+    public List<HookSnapshot> getHooks() {
+        return Collections.unmodifiableList(this.hooks);
+    }
 
 
     public static SerializableHookState saveNewFrom(ServerPlayer player) {

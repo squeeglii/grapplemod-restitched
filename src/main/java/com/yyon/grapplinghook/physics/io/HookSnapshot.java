@@ -99,6 +99,10 @@ public class HookSnapshot {
         return this.hookPos.z;
     }
 
+    public Vec getHookPos() {
+        return new Vec(this.hookPos);
+    }
+
     public RopeSnapshot getRopeSnapshot() {
         return this.ropeSnapshot;
     }

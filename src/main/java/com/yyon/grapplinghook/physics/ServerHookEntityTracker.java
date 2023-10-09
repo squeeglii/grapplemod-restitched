@@ -2,13 +2,18 @@ package com.yyon.grapplinghook.physics;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.physics.io.SerializableHookState;
+import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
@@ -16,6 +21,8 @@ import java.util.*;
  * Handles server-side tracking and aggregation of grappling hook
  */
 public class ServerHookEntityTracker {
+
+	private static final float HOOK_DISTANCE_LENIENCY = 1.2f;
 
 	public static final String NBT_HOOK_STATE = "grapplemod:hook_state";
 
@@ -123,7 +130,31 @@ public class ServerHookEntityTracker {
 		if(optState.isEmpty())
 			return false;
 
-		//TODO: PROPERLY CHECK VALIDITY !!!!!!!!!!
+		SerializableHookState state = optState.get();
+		List<HookSnapshot> hooks = state.getHooks();
+
+		Vec playerPos = Vec.positionVec(player);
+
+		for(HookSnapshot snapshot: hooks) {
+			Vec hookPos = snapshot.getHookPos();
+			Vec delta = hookPos.sub(playerPos);
+
+			// lengthSquared is more efficient? - this just makes sure the distance between the player and the
+			// hook hasn't changed *unreasonably*. A bit of innacuracy should be fine.
+			double maxDist = Math.pow(snapshot.getRopeSnapshot().getRopeLength(), 2) * HOOK_DISTANCE_LENIENCY;
+			double distSq = delta.lengthSquared();
+
+			if(distSq > maxDist)
+				return false;
+
+			// Check that the block the player is hooked to hasn't been nuked since they left.
+			BlockPos lastBlock = snapshot.getLastBlockCollidedWith();
+			Direction collideFace = snapshot.getLastBlockCollisionSide();
+			boolean cannotHookOn = !player.level().loadedAndEntityCanStandOnFace(lastBlock, player, collideFace);
+
+			if(cannotHookOn)
+				return false;
+		}
 
 		return true;
 	}
