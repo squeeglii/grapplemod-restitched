@@ -99,26 +99,27 @@ public class SerializableHookState {
 
 
     public void applyTo(ServerPlayer player) {
-        List<GrapplinghookEntity> hookEntities = new LinkedList<>();
+        // Main hooks need to be spawned first.
+        this.hooks.stream()
+                .sorted((s1, s2) -> {
+                    if(s1.isMainHook() == s2.isMainHook()) return 0;
+                    return s1.isMainHook() ? 1 : -1;
+                })
+                .forEach(snapshot -> this.applyHookSnapshot(snapshot, player));
 
-        boolean isFirstHook = true;
+    }
 
-        for (HookSnapshot snapshot: this.hooks) {
-            CustomizationVolume newVolume = CustomizationVolume.copyAllFrom(this.volume);
-            GrapplinghookEntity e = new GrapplinghookEntity(snapshot, newVolume, player, isFirstHook, this.hooks.size() > 1);
-            ServerHookEntityTracker.addGrappleEntity(player.getId(), e);
+    private void applyHookSnapshot(HookSnapshot snapshot, ServerPlayer player) {
+        CustomizationVolume newVolume = CustomizationVolume.copyAllFrom(this.volume);
+        GrapplinghookEntity e = new GrapplinghookEntity(snapshot, newVolume, player, this.hooks.size() > 1);
+        ServerHookEntityTracker.addGrappleEntity(player.getId(), e);
 
-            HashMap<Entity, GrapplinghookEntity> grapplehookClientEntityTracker = isFirstHook
-                    ? GrapplehookItem.grapplehookEntitiesRight
-                    : GrapplehookItem.grapplehookEntitiesLeft;
+        HashMap<Entity, GrapplinghookEntity> grapplehookClientEntityTracker = e.isHeldInMainHand()
+                ? GrapplehookItem.grapplehookEntitiesRight
+                : GrapplehookItem.grapplehookEntitiesLeft;
 
-            grapplehookClientEntityTracker.put(player, e);
-
-            hookEntities.add(e);
-            player.level().addFreshEntity(e);
-
-            isFirstHook = false;
-        }
+        grapplehookClientEntityTracker.put(player, e);
+        player.level().addFreshEntity(e);
     }
 
     public List<HookSnapshot> getHooks() {

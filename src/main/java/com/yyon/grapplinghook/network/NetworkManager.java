@@ -98,10 +98,8 @@ public class NetworkManager {
             if(player.level().isClientSide)
                 return;
 
-            if(ServerHookEntityTracker.isSavedHookStateValid(player)) {
+            if(ServerHookEntityTracker.isSavedHookStateValid(player))
                 ServerHookEntityTracker.applyFromSavedHookState(player);
-                GrappleMod.LOGGER.info("#3!");
-            }
 
             IHookStateHolder hookStateHolder = (IHookStateHolder) player;
             hookStateHolder.grapplemod$resetLastHookState();

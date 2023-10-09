@@ -17,9 +17,12 @@ public class HookSnapshot {
     private static final String NBT_COLLISION = "last_collision";
     private static final String NBT_SUB_POS = "sub_pos";
     private static final String NBT_DIRECTION = "direction";
+    private static final String NBT_MAIN_HOOK = "is_main";
 
     private final Vec hookPos;
     private final RopeSnapshot ropeSnapshot;
+
+    private final boolean isMainHook;
 
     private final BlockPos lastBlockCollision;
     private final Direction lastBlockCollisionSide;
@@ -29,6 +32,8 @@ public class HookSnapshot {
     public HookSnapshot(GrapplinghookEntity source) {
         this.hookPos = new Vec(source.position());
         this.ropeSnapshot = new RopeSnapshot(source.getSegmentHandler());
+
+        this.isMainHook = source.isHeldInMainHand();
 
         this.lastBlockCollision = source.getLastBlockCollision();
         this.lastBlockCollisionSide = source.getLastBlockCollisionSide();
@@ -43,6 +48,8 @@ public class HookSnapshot {
         CompoundTag ropeSegHandlerTag = source.getCompound(NBT_ROPE_SHAPE);
         CompoundTag collisionTag = source.getCompound(NBT_COLLISION);
 
+        boolean isInMainHand = source.getBoolean(NBT_MAIN_HOOK);
+
         CompoundTag collisionPosTag = collisionTag.getCompound(NBT_POS);
         ListTag lastSubCollisionPosTag = collisionTag.getList(NBT_SUB_POS, Tag.TAG_DOUBLE);
         String directionString = collisionTag.getString(NBT_DIRECTION);
@@ -55,6 +62,8 @@ public class HookSnapshot {
 
         this.hookPos = new Vec(posTag);
         this.ropeSnapshot = new RopeSnapshot(ropeSegHandlerTag);
+
+        this.isMainHook = isInMainHand;
 
         this.lastBlockCollision = collisionPos;
         this.lastSubCollisionPos = collisionSubPos;
@@ -79,6 +88,7 @@ public class HookSnapshot {
         collision.put(NBT_SUB_POS, collisionSubPosTag);
         collision.putString(NBT_DIRECTION, directionString);
 
+        hookData.putBoolean(NBT_MAIN_HOOK, this.isMainHook);
         hookData.put(NBT_POS, hookPos);
         hookData.put(NBT_ROPE_SHAPE, ropeShape);
         hookData.put(NBT_COLLISION, collision);
@@ -108,7 +118,11 @@ public class HookSnapshot {
     }
 
     public boolean isAttached() {
-        return true;
+        return this.lastBlockCollision != null;
+    }
+
+    public boolean isMainHook() {
+        return this.isMainHook;
     }
 
     public BlockPos getLastBlockCollidedWith() {
@@ -128,6 +142,7 @@ public class HookSnapshot {
 
         if(!tag.contains(NBT_POS, Tag.TAG_LIST)) return false;
         if(!tag.contains(NBT_ROPE_SHAPE, Tag.TAG_COMPOUND)) return false;
+        if(!tag.contains(NBT_MAIN_HOOK, Tag.TAG_BYTE)) return false;
 
         if(!tag.contains(NBT_COLLISION, Tag.TAG_COMPOUND)) return false;
 

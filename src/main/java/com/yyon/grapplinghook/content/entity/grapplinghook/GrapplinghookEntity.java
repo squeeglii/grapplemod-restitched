@@ -132,7 +132,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isAttachedToSurface = false;
 	}
 
-	public GrapplinghookEntity(HookSnapshot snapshot, CustomizationVolume volume, Entity shootingEntity, boolean isMainHook, boolean isInPair) {
+	public GrapplinghookEntity(HookSnapshot snapshot, CustomizationVolume volume, Entity shootingEntity, boolean isInPair) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
 
 		RopeSnapshot rope = snapshot.getRopeSnapshot();
@@ -144,7 +144,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		this.customization = volume;
 		this.ropeLength = rope.getRopeLength();
-		this.isAttachedToMainHand = isMainHook;
+		this.isAttachedToMainHand = snapshot.isMainHook();
 		this.isInDoublePair = isInPair;
 
 		this.lastBlockCollision = snapshot.getLastBlockCollidedWith();
@@ -503,14 +503,15 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		//west -x
 		//north -z
 		Vec curpos = Vec.positionVec(this);
-		switch (sideHit) {
-			case DOWN  -> curpos.y -= 0.3f;
-			case WEST  -> curpos.x -= 0.05f;
-			case NORTH -> curpos.z -= 0.05f;
-			case SOUTH -> curpos.z += 0.05f;
-			case EAST  -> curpos.x += 0.05f;
-			case UP    -> curpos.y += 0.05f;
-		}
+		if(sideHit != null)
+			switch (sideHit) {
+				case DOWN  -> curpos.y -= 0.3f;
+				case WEST  -> curpos.x -= 0.05f;
+				case NORTH -> curpos.z -= 0.05f;
+				case SOUTH -> curpos.z += 0.05f;
+				case EAST  -> curpos.x += 0.05f;
+				case UP    -> curpos.y += 0.05f;
+			}
 		curpos.applyAsPositionTo(this);
 
 		this.setDeltaMovement(0, 0, 0);
