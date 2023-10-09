@@ -75,9 +75,13 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	private boolean isAttachedToSurface;
 	public Vec attachDirection = null;
 
+	// Used for saving + loading hook state on world re-join.
+	// if restoreCollision is true, the first tick of this hook entity
+	// should force-attach the client.
 	private BlockPos lastBlockCollision = null;
 	private Direction lastBlockCollisionSide = null;
 	private Vec lastSubCollisionPos = null;
+	private boolean restoreCollision = false;
 
 
 	public double pull;
@@ -142,6 +146,11 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.ropeLength = rope.getRopeLength();
 		this.isAttachedToMainHand = isMainHook;
 		this.isInDoublePair = isInPair;
+
+		this.lastBlockCollision = snapshot.getLastBlockCollidedWith();
+		this.lastSubCollisionPos = snapshot.getLastSubCollisionPos();
+		this.lastBlockCollisionSide = snapshot.getLastBlockCollisionSide();
+		this.restoreCollision = true;
 
 		//this.isAttachedToSurface = snapshot.isAttached();
 	}
@@ -233,12 +242,25 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		super.tick();
 
+		if(this.restoreCollision) {
+			this.serverAttach(
+					this.getLastBlockCollision(),
+					this.getLastSubCollisionPos(),
+					this.getLastBlockCollisionSide()
+			);
+			return;
+		}
+
 		boolean hookIsDetached = !this.level().isClientSide &&
 				                  this.shootingEntity != null &&
 				                 !this.isAttachedToSurface;
 
 		if(!hookIsDetached) return;
 
+		this.handleHookPhysics();
+	}
+
+	private void handleHookPhysics() {
 		if (this.segmentHandler.hookPastBend(this.ropeLength)) {
 			Vec farthest = this.segmentHandler.getFarthest();
 			this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
@@ -496,7 +518,18 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
         this.thisPos = Vec.positionVec(this);
 		this.isFirstAttach = true;
 
-		GrappleModUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
+		GrappleModUtils.sendToCorrectClient(
+				new GrappleAttachMessage(
+						this.getId(),
+						this.position().x, this.position().y, this.position().z,
+						this.shootingEntityID, blockpos,
+						this.segmentHandler.segments,
+						this.segmentHandler.segmentTopSides,
+						this.segmentHandler.segmentBottomSides,
+						this.customization),
+				this.shootingEntityID,
+				this.level()
+		);
 
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
 		NetworkManager.packetToClient(msg, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) this.level(), new Vec(this.position())));

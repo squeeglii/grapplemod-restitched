@@ -1,10 +1,14 @@
 package com.yyon.grapplinghook.network;
 
+import com.mojang.authlib.GameProfile;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.clientbound.*;
 import com.yyon.grapplinghook.network.serverbound.*;
+import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
+import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -86,5 +90,21 @@ public class NetworkManager {
         NetworkManager.registerServer("player_movement", PlayerMovementMessage::new);
         NetworkManager.registerServer("physics_update", PhysicsUpdateMessage::new);
         NetworkManager.registerServer("save_grapple_state", SaveGrappleStateMessage::new);
+
+        S2CPlayChannelEvents.REGISTER.register((handler, sender, server, channels) -> {
+            ServerPlayer player = handler.player;
+
+            // Sanity check
+            if(player.level().isClientSide)
+                return;
+
+            if(ServerHookEntityTracker.isSavedHookStateValid(player)) {
+                ServerHookEntityTracker.applyFromSavedHookState(player);
+                GrappleMod.LOGGER.info("#3!");
+            }
+
+            IHookStateHolder hookStateHolder = (IHookStateHolder) player;
+            hookStateHolder.grapplemod$resetLastHookState();
+        });
     }
 }
