@@ -76,14 +76,36 @@ def cleanAll = tasks.register('clean-all') {
     delete "build"
 }
 
-def packageCompatModules = tasks.register('bundle-compat-modules') {
+// This could do with a better implementation.
+// As of right now, modules are only loaded outside of a dev environment.
+// I think this is the definition of tha
+def packageCompatModules = tasks.register('bundle-compat-modules', Copy) {
     group = "squee-gradle"
     description = "Takes the built compatability modules and includes them in the jar"
     dependsOn collectJars
 
-
+    from new File(project(":Core").projectDir, "src/main/resources/").getPath()
+    include("fabric.mod.json")
+    into buildDir
 
     doLast {
+
+        // Takes the GrappleMod's fabric.mod.json, strips off the last '}', adds the 'jars' list
+        // necessary for sub-mods, and adds the '}' back on.
+        String[] compatJarFileNames = new File("${buildDir}/compat").listFiles().toList()
+                .stream()
+                .map { "{ \"file\": \"compat/${it.name}\" }".toString() }
+                .toArray(String[]::new)
+        String joinedCompatFileNames = String.join(",", compatJarFileNames)
+        String modJarsJson = ",\"jars\": [ ${joinedCompatFileNames} ] }"
+
+        File modJson = new File("$buildDir/fabric.mod.json")
+        String modJsonText = modJson.getText().trim()
+        String newText = modJsonText.substring(0, modJsonText.length() - 1) + modJarsJson
+        modJson.write(newText)
+
+        // Gets tbe file name of the GrappleMod jar so that it can be updated
+        // to include the new fabric.mod.json + the compatibility modules
         String modFileName = file(buildDir).listFiles().toList()
                 .stream()
                 .filter { it.name.toLowerCase().startsWith("grapplemod")}
@@ -92,7 +114,7 @@ def packageCompatModules = tasks.register('bundle-compat-modules') {
 
         exec {
             workingDir buildDir
-            commandLine 'jar', 'uf', modFileName, 'compat/*'
+            commandLine 'jar', 'uf', modFileName, 'compat/*', 'fabric.mod.json'
         }
     }
 }
