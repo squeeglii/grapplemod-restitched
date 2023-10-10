@@ -15,6 +15,7 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "*",
-    "vc_gliders": "${gliders_version_range}"
+    "grapplemod": "${grapplemod_target_range}",
+    "vc_gliders": "${gliders_target_range}"
   }
 }

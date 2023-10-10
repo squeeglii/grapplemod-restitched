@@ -1,13 +1,13 @@
 package me.cg360.mod.grapplemod.compat.gliders;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
+import com.mojang.logging.LogUtils;
 
-public class GlidersCompatModule implements ModInitializer {
+public class GlidersCompatModule {
 
-    @Override
-    public void onInitialize() {
-        if(!FabricLoader.getInstance().isModLoaded("vc_gliders")) return;
+    public GlidersCompatModule() {
+        LogUtils.getLogger().info("Enabled Gliders Compatibility Module");
+
+        //TODO: Add module contents - this needs a 1.19.2 backport of GrappleMod v2 to be
+        // completed before work can be done.
     }
-
 }

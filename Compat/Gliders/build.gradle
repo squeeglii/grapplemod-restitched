@@ -35,6 +35,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    modImplementation("maven.modrinth:gliders:${project.gliders_modrinth_version}")
+
     implementation project(":Core")
 }
 
