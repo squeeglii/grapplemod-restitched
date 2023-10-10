@@ -22,6 +22,7 @@
     "client.FixKeyMappingConflictsMixin",
     "client.GrappleCrosshairMixin",
     "client.KeybindingHandlerMixin",
+    "client.LocalPlayerUpdatesMixin",
     "client.MovementInputHandlerMixin",
     "client.attachable.LayerDefinitionsMixin"
   ],

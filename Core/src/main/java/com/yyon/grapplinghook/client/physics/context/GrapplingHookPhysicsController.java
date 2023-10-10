@@ -16,6 +16,9 @@ import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +26,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -137,10 +141,11 @@ public class GrapplingHookPhysicsController {
 		this.isControllerActive = false;
 
 		Player clientPlayer = Minecraft.getInstance().player;
+		boolean isEntityClientPlayer = this.entity == clientPlayer;
 
 		// Not null & player
 		// Reset server-side physics tracking.
-		if(this.entity == clientPlayer && !wasAlreadyDisabled)
+		if(isEntityClientPlayer && !wasAlreadyDisabled)
 			NetworkManager.packetToServer(new PhysicsUpdateMessage());
 
 
@@ -151,6 +156,12 @@ public class GrapplingHookPhysicsController {
 			return;
 
 		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
+
+		if(this.entity instanceof LocalPlayer p) {
+			PlayerInfo playerInfo = p.connection.getPlayerInfo(p.getUUID());
+
+			if(playerInfo != null && playerInfo.getGameMode() == GameType.SPECTATOR) return;
+		}
 
 		if(!wasAlreadyDisabled) {
 			GrappleModClient.get()
