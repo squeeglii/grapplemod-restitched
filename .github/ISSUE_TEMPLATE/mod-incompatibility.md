@@ -1,37 +1,31 @@
 ---
 name: Mod Incompatibility
-about: Is this mod only broken when another mod is involved? Report it!
-title: "[INCOMPATIBILITY]"
-labels: mod incompatibility
+about: Is this mod not playing well when installed with another mod? Use this!
+title: "..."
+labels: [ "incompatibility" ]
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
 
-**Video / Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Affected Mods
 
-**Version**
-Include the versions for:
- - The Grapple Hook Mod
- - The Mod Loader (fabric/quilt - include the api mod's version)
- - Minecraft
- - Any potentially affected mods
+ - `FILL IN THIS - list all the affected mods & their versions` 
 
-**Output Log**
-An example log when the problem occurred. (Getting the log with the default Minecraft launcher: https://instant-structures-mod.com/tutorials/game-output-log/)
-<details>
-example log
-</details>
 
-**Steps To Reproduce**
-If you can, steps to reproduce the behavior, e.g.:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Versions:
 
-**Additional context**
-Add any other context about the problem here.
+ - The Grapple Hook Mod:  `FILL IN THIS`
+ - Minecraft:  `FILL IN THIS`
+ - Mod Loader:  `FILL IN THIS - Fabric/Quilt? API Version?`
+
+
+## Description:
+
+`FILL IN THIS SECTION`
+Please include clear description of the bug, with the steps of how to recreate it.
+
+ - If it's a crash, _always_ include the crash log hosted on a site like https://pastebin.com/
+ - Images & videos can be useful.
+  
+The more details, the quicker it can be replicated & fixed.

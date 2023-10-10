@@ -1,12 +1,12 @@
 ---
-name: Feature Request
-about: Suggest an idea or a modification to the project.
-title: "[FEATURE]"
-labels: enhancement
+name: "Feature Request / Idea"
+about: "Have something you want added to the mod? Suggest it with this!"
+title: "..."
+labels: [ "enhancement" ]
 assignees: ''
 
 ---
 
-**Type:** Quality of Life / Addition / Re-work
+## Description:
 
-### Feature:
+`FILL IN THIS SECTION`
