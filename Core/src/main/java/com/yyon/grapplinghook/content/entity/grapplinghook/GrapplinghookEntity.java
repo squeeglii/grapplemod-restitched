@@ -264,6 +264,77 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.handleHookPhysics();
 	}
 
+	@Override
+	public void handleInsidePortal(BlockPos pos) {
+		// Portal is ignored.
+	}
+
+	@Override
+	protected void onHit(HitResult movingobjectposition) {
+		if (!this.level().isClientSide) {
+			if (this.isAttachedToSurface) {
+				return;
+			}
+			if (this.shootingEntity == null || this.shootingEntityID == 0) {
+				return;
+			}
+			if (movingobjectposition == null) {
+				return;
+			}
+
+			Vec vec3d = Vec.positionVec(this);
+			Vec vec3d1 = vec3d.add(Vec.motionVec(this));
+
+			if (movingobjectposition instanceof EntityHitResult && !GrappleModLegacyConfig.getConf().grapplinghook.other.hookaffectsentities) {
+				onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
+				return;
+			}
+
+			BlockHitResult blockhit = null;
+			if (movingobjectposition instanceof BlockHitResult) {
+				blockhit = (BlockHitResult) movingobjectposition;
+			}
+
+			if (blockhit != null) {
+				BlockPos blockpos = blockhit.getBlockPos();
+				Block block = this.level().getBlockState(blockpos).getBlock();
+				if (ConfigUtility.breaksBlock(block)) {
+					this.level().destroyBlock(blockpos, true);
+					onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
+					return;
+				}
+			}
+
+			if (movingobjectposition instanceof EntityHitResult entityHit) {
+				// hit entity
+				Entity entity = entityHit.getEntity();
+				if (entity == this.shootingEntity) {
+					return;
+				}
+
+				Vec playerpos = Vec.positionVec(this.shootingEntity);
+				Vec entitypos = Vec.positionVec(entity);
+				Vec yank = playerpos.sub(entitypos).scale(0.4);
+				yank.y = Math.min(yank.y, 2);
+				Vec newmotion = Vec.motionVec(entity).add(yank);
+				entity.setDeltaMovement(newmotion.toVec3d());
+
+				this.removeServer();
+
+			} else if (blockhit != null) {
+				BlockPos blockpos = blockhit.getBlockPos();
+
+				Vec vec3 = new Vec(movingobjectposition.getLocation());
+
+				this.serverAttach(blockpos, vec3, blockhit.getDirection());
+			} else {
+				GrappleMod.LOGGER.warn("unknown impact?");
+			}
+		}
+	}
+
+
+
 	private void handleHookPhysics() {
 		if (this.segmentHandler.hookPastBend(this.ropeLength)) {
 			Vec farthest = this.segmentHandler.getFarthest();
@@ -387,70 +458,6 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		}
 
 		prevPos = pos;
-	}
-
-	@Override
-	protected void onHit(HitResult movingobjectposition) {
-		if (!this.level().isClientSide) {
-			if (this.isAttachedToSurface) {
-				return;
-			}
-			if (this.shootingEntity == null || this.shootingEntityID == 0) {
-				return;
-			}
-			if (movingobjectposition == null) {
-				return;
-			}
-
-			Vec vec3d = Vec.positionVec(this);
-			Vec vec3d1 = vec3d.add(Vec.motionVec(this));
-
-			if (movingobjectposition instanceof EntityHitResult && !GrappleModLegacyConfig.getConf().grapplinghook.other.hookaffectsentities) {
-				onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
-				return;
-			}
-
-			BlockHitResult blockhit = null;
-			if (movingobjectposition instanceof BlockHitResult) {
-				blockhit = (BlockHitResult) movingobjectposition;
-			}
-
-			if (blockhit != null) {
-				BlockPos blockpos = blockhit.getBlockPos();
-				Block block = this.level().getBlockState(blockpos).getBlock();
-				if (ConfigUtility.breaksBlock(block)) {
-					this.level().destroyBlock(blockpos, true);
-					onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
-					return;
-				}
-			}
-
-			if (movingobjectposition instanceof EntityHitResult entityHit) {
-				// hit entity
-				Entity entity = entityHit.getEntity();
-				if (entity == this.shootingEntity) {
-					return;
-				}
-
-				Vec playerpos = Vec.positionVec(this.shootingEntity);
-				Vec entitypos = Vec.positionVec(entity);
-				Vec yank = playerpos.sub(entitypos).scale(0.4);
-				yank.y = Math.min(yank.y, 2);
-				Vec newmotion = Vec.motionVec(entity).add(yank);
-				entity.setDeltaMovement(newmotion.toVec3d());
-
-				this.removeServer();
-
-			} else if (blockhit != null) {
-				BlockPos blockpos = blockhit.getBlockPos();
-
-				Vec vec3 = new Vec(movingobjectposition.getLocation());
-
-				this.serverAttach(blockpos, vec3, blockhit.getDirection());
-			} else {
-				GrappleMod.LOGGER.warn("unknown impact?");
-			}
-		}
 	}
 
 
