@@ -11,12 +11,12 @@ static def formatAsBadgeSafe(var val) {
 }
 
 
-tasks.register('updateDocTemplates', Copy) {
+tasks.register('update-doc-templates', Copy) {
     group = "squee-gradle"
     description = "Takes documents from a folder, expands any template variables, and then copies them to the root."
     doNotTrackState("Stops gradle from screaming - It doesn't let files get copied to the root if tracking state.")
 
-    Map filteredSrc = project.properties.collectEntries {
+    Map filteredSrc = project(":Core").properties.collectEntries {
         k, v -> [(k): formatAsBadgeSafe(v) ]
     }
 

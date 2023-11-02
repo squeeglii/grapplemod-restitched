@@ -95,18 +95,23 @@ Thanks for any help in advance! :)  -- I keep an eye out for Issues and PRs fair
 
 ## 📦 Building/Running the project
 
-The project can be built with:
+The full project can be built with:
 
-- `gradle clean build` / `gradlew clean build` depending on your install.
-- This should build to `/build/libs/`
+- `gradle clean-all bundle-compat-modules` / `gradlew clean-all bundle-compat-modules` depending on your install.
+  - This should build to `/build/` in the root project with all the compatibility extensions bundled in
+- If you want to just build the core mod, `gradle clean-all :Core:build collect-jars` / `gradlew clean-all :Core:build collect-jars`
+  - This should build to `/build/` in the root project using the original build behaviour.
 
 If running the mod in a dev environment, runs should be created automatically. If not, consult the
 [Fabric Loom Wiki](https://fabricmc.net/wiki/documentation:fabric_loom) on how to generate these through gradle.
 
 Once the runs are generated, running them should place the environments for each in the following isolated folders:
 
-- Client `/run/client/`
-- Server `/run/server/`
+- Client `[sub project]/run/client/`
+- Server `[sub project]/run/server/`
+
+*Note that runs are only generated for the Core project - See ideConfigGenerated on the loom wiki for how to enable 
+generation on other subprojects.*
 
 
 

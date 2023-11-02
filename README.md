@@ -1,9 +1,9 @@
 [![](./docs/media/banner.png)](https://github.com/CloudG360/grapplemod-restitched)
 
-[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.20.1-blue?style=flat-square)](https://www.minecraft.net/en-us)
-[![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.21-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
-[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v11.0.99-pink?style=flat-square)](https://modrinth.com/mod/cloth-config)
-[![Mod Menu Version](https://img.shields.io/badge/Mod_Menu-v7.1.0-indigo?style=flat-square)](https://modrinth.com/mod/modmenu)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-v1.20.2-blue?style=flat-square)](https://www.minecraft.net/en-us)
+[![Fabric Loader Version](https://img.shields.io/badge/Fabric_Loader-v0.14.22-AA8554?style=flat-square)](https://fabricmc.net/use/installer/)
+[![Cloth Config Version](https://img.shields.io/badge/Cloth_Config-v12.0.109-pink?style=flat-square)](https://modrinth.com/mod/cloth-config)
+[![Mod Menu Version](https://img.shields.io/badge/Mod_Menu-v8.0.0-indigo?style=flat-square)](https://modrinth.com/mod/modmenu)
 [![GPL-3.0](https://img.shields.io/badge/License-GNU_GPL_3.0-mint?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 [![Modrinth](https://img.shields.io/modrinth/dt/f4hp6FTb?logo=modrinth&style=flat-square)](https://modrinth.com/mod/grappling-hook-mod-fabric)
@@ -11,7 +11,7 @@
 
 ---
 
-# ⚠️ Development Notice
+# ⚠�? Development Notice
 
 This branch is currently in active development and hasn't yet had a public release.
 This means it is **NOT** stable. So depending on your use-case:
@@ -95,18 +95,23 @@ Thanks for any help in advance! :)  -- I keep an eye out for Issues and PRs fair
 
 ## 📦 Building/Running the project
 
-The project can be built with:
+The full project can be built with:
 
-- `gradle clean build` / `gradlew clean build` depending on your install.
-- This should build to `/build/libs/`
+- `gradle clean-all bundle-compat-modules` / `gradlew clean-all bundle-compat-modules` depending on your install.
+  - This should build to `/build/` in the root project with all the compatibility extensions bundled in
+- If you want to just build the core mod, `gradle clean-all :Core:build collect-jars` / `gradlew clean-all :Core:build collect-jars`
+  - This should build to `/build/` in the root project using the original build behaviour.
 
 If running the mod in a dev environment, runs should be created automatically. If not, consult the
 [Fabric Loom Wiki](https://fabricmc.net/wiki/documentation:fabric_loom) on how to generate these through gradle.
 
 Once the runs are generated, running them should place the environments for each in the following isolated folders:
 
-- Client `/run/client/`
-- Server `/run/server/`
+- Client `[sub project]/run/client/`
+- Server `[sub project]/run/server/`
+
+*Note that runs are only generated for the Core project - See ideConfigGenerated on the loom wiki for how to enable 
+generation on other subprojects.*
 
 
 
