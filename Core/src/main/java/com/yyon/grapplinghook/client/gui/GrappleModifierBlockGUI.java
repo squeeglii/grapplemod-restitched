@@ -339,7 +339,7 @@ public class GrappleModifierBlockGUI extends Screen {
 				continue;
 			}
 
-			if (b instanceof CustomizationSlider slide) {
+			if (b instanceof PreciseCustomizationSlider slide) {
 				slide.setTooltipOverride(Component.literal(desc));
 				slide.setAlpha(0.5F);
 				continue;

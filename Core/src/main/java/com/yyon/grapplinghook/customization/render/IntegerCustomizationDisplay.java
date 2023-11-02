@@ -1,29 +1,31 @@
 package com.yyon.grapplinghook.customization.render;
 
 import com.yyon.grapplinghook.client.gui.widget.PreciseCustomizationSlider;
+import com.yyon.grapplinghook.client.gui.widget.SteppedCustomizationSlider;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.customization.type.DoubleProperty;
+import com.yyon.grapplinghook.customization.type.IntegerProperty;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-public class DoubleCustomizationDisplay extends AbstractCustomizationDisplay<Double, DoubleProperty> {
+public class IntegerCustomizationDisplay extends AbstractCustomizationDisplay<Integer, IntegerProperty> {
 
-    public DoubleCustomizationDisplay(DoubleProperty property) {
+    public IntegerCustomizationDisplay(IntegerProperty property) {
         super(property);
     }
 
     @Override
-    public Component getModificationHint(Double value) {
+    public Component getModificationHint(Integer value) {
         if(value == null) return null;
-        double v = Math.floor(value * 100) / 100;
-        return this.getProperty().getDisplayName().copy().append(": %.3f".formatted(v));
+        return this.getProperty().getDisplayName()
+                .copy()
+                .append(": %s".formatted(value));
     }
 
     @Override
     public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
-        return new PreciseCustomizationSlider(source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
+        return new SteppedCustomizationSlider(source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
     }
 }

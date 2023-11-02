@@ -10,14 +10,14 @@ import net.minecraft.network.chat.MutableComponent;
 
 import java.util.function.Supplier;
 
-public class CustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
+public class PreciseCustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
     private final DoubleProperty option;
     private final Supplier<CustomizationVolume> customizations;
     private final Runnable onValueUpdate;
 
     private Component tooltipOverride;
 
-    public CustomizationSlider(Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
+    public PreciseCustomizationSlider(Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
         super(x, y, w, h, option.getDisplayName(), (convertDouble(customizations.get(), option) - option.getMin()) / (option.getMax() - option.getMin()));
 
         this.option = option;
