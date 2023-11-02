@@ -13,6 +13,7 @@ import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
+import com.yyon.grapplinghook.data.UpgraderUpper;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
@@ -402,10 +403,23 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 		tag.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, nbt);
 		tag.remove(TemplateUtils.NBT_HOOK_TEMPLATE);
+		UpgraderUpper.setLatestVersionInTag(tag);
 
 		stack.setTag(tag);
 	}
 
+	@Override
+	public void verifyTagAfterLoad(CompoundTag tag) {
+
+		Optional<CompoundTag> upgradedTag = UpgraderUpper.upgradeGrapplingHook(tag);
+
+		if(upgradedTag.isEmpty()) {
+			super.verifyTagAfterLoad(tag);
+			return;
+		}
+
+		super.verifyTagAfterLoad(upgradedTag.get());
+	}
 
 	public Vec calculateThrowDirectionVector(Vec angleVec) {
 		float velx = -Mth.sin((float) angleVec.getYaw() * 0.017453292F) * Mth.cos((float) angleVec.getPitch() * 0.017453292F);
