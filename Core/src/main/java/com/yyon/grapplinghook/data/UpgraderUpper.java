@@ -71,4 +71,9 @@ public class UpgraderUpper {
         return Optional.empty();
     }
 
+
+    public static Optional<CompoundTag> upgradeModificationTable(CompoundTag tagIn) {
+
+    }
+
 }

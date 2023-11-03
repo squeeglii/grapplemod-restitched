@@ -5,6 +5,7 @@ import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
+import com.yyon.grapplinghook.data.UpgraderUpper;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,59 +30,37 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.customization = new CustomizationVolume();
 	}
 
-	private void triggerUpdate() {
-		if(this.level != null) {
-			BlockState state = this.level.getBlockState(worldPosition);
-			this.level.sendBlockUpdated(worldPosition, state, state, 3);
-			this.setChanged();
-		}
-	}
 
-	public void unlockCategory(CustomizationCategory category) {
-		this.categoryUnlockStates.put(category, true);
-		this.triggerUpdate();
-	}
+	@Override
+	public void saveAdditional(CompoundTag nbtOut) {
+		super.saveAdditional(nbtOut);
+		UpgraderUpper.setLatestVersionInTag(nbtOut);
 
-	public void setCustomizationClient(CustomizationVolume customization) {
-		this.customization = customization;
-		NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
-		this.triggerUpdate();
-	}
+		CompoundTag unlockedNBT = nbtOut.getCompound("unlocked");
 
-	public void setCustomizationServer(CustomizationVolume customization) {
-		this.customization = customization;
-		this.triggerUpdate();
-	}
+		this.categoryUnlockStates.forEach((key, value) -> {
+            unlockedNBT.putBoolean(key.getIdentifier().toString(), value);
+        });
 
-	public boolean isUnlocked(CustomizationCategory category) {
-		return this.categoryUnlockStates.containsKey(category) && this.categoryUnlockStates.get(category);
+		nbtOut.put("unlocked", unlockedNBT);
+		nbtOut.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, this.customization.writeToNBT());
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag nbtTagCompound) {
-		super.saveAdditional(nbtTagCompound);
+	public void load(CompoundTag nbtIn) {
+		super.load(nbtIn); // The super call is required to load the tiles location
 
-		CompoundTag unlockedNBT = nbtTagCompound.getCompound("unlocked");
-
-		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
-			boolean unlocked = this.isUnlocked(category);
-
-			unlockedNBT.putBoolean(category.getIdentifier().toString(), unlocked);
-		});
-
-		nbtTagCompound.put("unlocked", unlockedNBT);
-		nbtTagCompound.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, this.customization.writeToNBT());
-	}
-
-	@Override
-	public void load(CompoundTag parentNBTTagCompound) {
-		super.load(parentNBTTagCompound); // The super call is required to load the tiles location
+		// Upgrade the data from old versions. If an upgrade has happened, it'll be returned
+		// and swapped in.
+		Optional<CompoundTag> fixedTag = UpgraderUpper.upgradeModificationTable(nbtIn);
+		CompoundTag parentNBTTagCompound = fixedTag.orElse(nbtIn);
 
 		CompoundTag unlockedNBT = parentNBTTagCompound.getCompound("unlocked");
 
 		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
 			boolean unlocked = unlockedNBT.getBoolean(category.getIdentifier().toString());
-			this.categoryUnlockStates.put(category, unlocked);
+
+			if(unlocked) this.categoryUnlockStates.put(category, true);
 		});
 
 		CompoundTag custom = parentNBTTagCompound.getCompound(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
@@ -102,6 +82,36 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		CompoundTag nbtTagCompound = new CompoundTag();
 		this.saveAdditional(nbtTagCompound);
 		return nbtTagCompound;
+	}
+
+
+
+	private void triggerUpdate() {
+		if(this.level == null) return;
+
+		BlockState state = this.level.getBlockState(worldPosition);
+		this.level.sendBlockUpdated(worldPosition, state, state, 3);
+		this.setChanged();
+	}
+
+	public void unlockCategory(CustomizationCategory category) {
+		this.categoryUnlockStates.put(category, true);
+		this.triggerUpdate();
+	}
+
+	public void setCustomizationClient(CustomizationVolume customization) {
+		this.customization = customization;
+		NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
+		this.triggerUpdate();
+	}
+
+	public void setCustomizationServer(CustomizationVolume customization) {
+		this.customization = customization;
+		this.triggerUpdate();
+	}
+
+	public boolean isUnlocked(CustomizationCategory category) {
+		return this.categoryUnlockStates.containsKey(category) && this.categoryUnlockStates.get(category);
 	}
 
 	public CustomizationVolume getCurrentCustomizations() {
