@@ -73,7 +73,35 @@ public class UpgraderUpper {
 
 
     public static Optional<CompoundTag> upgradeModificationTable(CompoundTag tagIn) {
+        int verIn = UpgraderUpper.findVersionInTag(tagIn);
 
+        if(verIn <= 0 && !tagIn.contains("unlocked"))
+            return Optional.empty();
+
+
+
+        if(verIn == 0) {
+            GrappleMod.LOGGER.info("Upgrading Grappling Hook Modification Table from v0 (forge/1.x fabric) --> v2");
+
+            if(tagIn.contains("customization", Tag.TAG_COMPOUND)) {
+                CompoundTag oldCustom = tagIn.getCompound("customization");
+                CompoundTag newCustom = V2Utils.upgradeCustomizations(oldCustom);
+                tagIn.remove("customization");
+                tagIn.put("customization", newCustom);
+            }
+
+            if(tagIn.contains("unlocked", Tag.TAG_COMPOUND)) {
+                CompoundTag oldUnlocks = tagIn.getCompound("unlocked");
+                CompoundTag newUnlocked = V2Utils.upgradeCategoryUnlocks(oldUnlocks);
+                tagIn.remove("unlocked");
+                tagIn.put("unlocked", newUnlocked);
+            }
+
+            UpgraderUpper.setVersionInTag(tagIn, 2);
+            return Optional.of(tagIn);
+        }
+
+        return Optional.empty();
     }
 
 }

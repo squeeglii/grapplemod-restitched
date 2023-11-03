@@ -1,12 +1,17 @@
 package com.yyon.grapplinghook.data.v2;
 
+import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
+import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.data.v2.property.BooleanUpgrader;
 import com.yyon.grapplinghook.data.v2.property.DoubleUpgrader;
 import com.yyon.grapplinghook.data.v2.property.MissingUpgrader;
 import com.yyon.grapplinghook.data.v2.property.PropertyUpgrader;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class V2Lookups {
 
@@ -14,6 +19,12 @@ public class V2Lookups {
 
 
     private static HashMap<String, PropertyUpgrader<?>> customizationUpgraders = new HashMap<>();
+    private static CustomizationCategory[] orderedCategories = new CustomizationCategory[] {
+            ROPE.get(), HOOK_THROWER.get(), MOTOR.get(),
+            SWING.get(), ENDER_STAFF.get(), FORCEFIELD.get(),
+            MAGNET.get(), DOUBLE_HOOK.get(), LIMITS.get(),
+            ROCKET.get()
+    };
 
     private static void mapCustomization(PropertyUpgrader<?> upgrader) {
         customizationUpgraders.put(upgrader.getLegacyId(), upgrader);
@@ -62,6 +73,12 @@ public class V2Lookups {
 
     public static PropertyUpgrader<?> customizationUpgraderFor(String id) {
         return customizationUpgraders.getOrDefault(id.toLowerCase().trim(), MISSING_UPGRADER);
+    }
+
+    public static Optional<CustomizationCategory> categoryKnownAs(int oldId) {
+        return oldId < orderedCategories.length
+                ? Optional.of(orderedCategories[oldId])
+                : Optional.empty();
     }
 
 }

@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.block.TemplateTableBlock;
 import com.yyon.grapplinghook.content.item.BlueprintItem;
 import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
+import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -55,6 +56,7 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public void saveAdditional(CompoundTag tag) {
+        UpgraderUpper.setLatestVersionInTag(tag);
         ContainerHelper.saveAllItems(tag, this.storedTemplates, true);
     }
 
