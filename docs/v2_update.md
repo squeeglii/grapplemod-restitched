@@ -137,7 +137,7 @@
 ### Upgrader-Upper!
 
 Because Mojang's [DataFixerUpper](https://github.com/Mojang/DataFixerUpper) is a nightmare to figure out & there's
-no longer a supported Fabric/Quilt API for it, there's a home-made replacemend for it built into the mod.
+no longer a supported Fabric/Quilt API for it, there's a home-made replacement for it built into the mod.
 
 It's not nearly as sophisticated, but it seems to do the job. With it, any new updates to the NBT data of the mod will
 change a version number now stored in NBT. Any previous versions of the mod (Fabric 1.x / Forge) will be upgraded to
