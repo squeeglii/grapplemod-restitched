@@ -563,6 +563,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		CompoundTag nbt = template.saveMetadataToNBT();
 
 		tag.put(TemplateUtils.NBT_HOOK_TEMPLATE, nbt);
+		UpgraderUpper.setLatestVersionInTag(tag);
 
 		stack.setTag(tag);
 	}

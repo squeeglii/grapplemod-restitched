@@ -48,8 +48,8 @@ public class UpgraderUpper {
         int verIn = UpgraderUpper.findVersionInTag(tagIn);
 
         // Hooks without customizations don't really have a data version
-        // Update this as more top-level data is added to the hooks.
-        if(!tagIn.contains("custom") && !tagIn.contains("customization"))
+        // If the data version is missing (0) and it doesn't match the format of the forge / fabric 1.x hooks, skip.
+        if(verIn <= 0 && !tagIn.contains("custom"))
             return Optional.empty();
 
         // Move it to 'upgrade paths' if you actually add more data versions.

@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import com.yyon.grapplinghook.customization.template.TemplateUtils;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
+import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -39,6 +40,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         CompoundTag nbt = customizations.writeToNBT();
 
         tag.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, nbt);
+        UpgraderUpper.setLatestVersionInTag(tag);
 
         stack.setTag(tag);
     }
@@ -68,6 +70,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
         CompoundTag base = stack.getOrCreateTag();
         base.put(TemplateUtils.NBT_HOOK_TEMPLATE, metadata);
+        UpgraderUpper.setLatestVersionInTag(base);
 
         stack.setTag(base);
     }
