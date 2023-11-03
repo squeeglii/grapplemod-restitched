@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
+
 	private final HashMap<CustomizationCategory, Boolean> categoryUnlockStates = new HashMap<>();
 	private CustomizationVolume customization;
 
@@ -99,14 +100,12 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.triggerUpdate();
 	}
 
-	public void setCustomizationClient(CustomizationVolume customization) {
+	public void setCustomization(CustomizationVolume customization) {
 		this.customization = customization;
-		NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
-		this.triggerUpdate();
-	}
 
-	public void setCustomizationServer(CustomizationVolume customization) {
-		this.customization = customization;
+		if(this.level != null && this.level.isClientSide)
+			NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
+
 		this.triggerUpdate();
 	}
 

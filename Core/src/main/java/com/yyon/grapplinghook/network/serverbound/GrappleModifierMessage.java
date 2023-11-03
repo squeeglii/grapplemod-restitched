@@ -62,7 +62,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
 			BlockEntity ent = w.getBlockEntity(this.pos);
 
 			if (ent instanceof GrappleModifierBlockEntity e) {
-				e.setCustomizationServer(this.custom);
+				e.setCustomization(this.custom);
 				return;
 			}
 

@@ -85,7 +85,7 @@ public class GrappleModifierBlockGUI extends Screen {
 
 	@Override
 	public void onClose() {
-		this.blockEntity.setCustomizationClient(customization);
+		this.blockEntity.setCustomization(customization);
 		super.onClose();
 	}
 
