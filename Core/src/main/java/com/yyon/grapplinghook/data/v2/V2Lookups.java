@@ -1,15 +1,11 @@
 package com.yyon.grapplinghook.data.v2;
 
-import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.data.v2.property.BooleanUpgrader;
-import com.yyon.grapplinghook.data.v2.property.DoubleUpgrader;
-import com.yyon.grapplinghook.data.v2.property.MissingUpgrader;
-import com.yyon.grapplinghook.data.v2.property.PropertyUpgrader;
+import com.yyon.grapplinghook.data.v2.property.*;
+
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -18,8 +14,8 @@ public class V2Lookups {
     private static final MissingUpgrader MISSING_UPGRADER = new MissingUpgrader();
 
 
-    private static HashMap<String, PropertyUpgrader<?>> customizationUpgraders = new HashMap<>();
-    private static CustomizationCategory[] orderedCategories = new CustomizationCategory[] {
+    private static final HashMap<String, PropertyUpgrader<?>> customizationUpgraders = new HashMap<>();
+    private static final CustomizationCategory[] orderedCategories = new CustomizationCategory[] {
             ROPE.get(), HOOK_THROWER.get(), MOTOR.get(),
             SWING.get(), ENDER_STAFF.get(), FORCEFIELD.get(),
             MAGNET.get(), DOUBLE_HOOK.get(), LIMITS.get(),
@@ -32,8 +28,6 @@ public class V2Lookups {
 
 
     static {
-        //todo: upgrades for: motorwhencrouching & motorwhennotcrouching
-
         mapCustomization(new BooleanUpgrader("phaserope", BLOCK_PHASE_ROPE.get()));
         mapCustomization(new BooleanUpgrader("motor", MOTOR_ATTACHED.get()));
         mapCustomization(new BooleanUpgrader("smartmotor", SMART_MOTOR.get()));
@@ -67,6 +61,9 @@ public class V2Lookups {
         mapCustomization(new DoubleUpgrader("rocket_refuel_ratio", ROCKET_REFUEL_RATIO.get()));
         mapCustomization(new DoubleUpgrader("rocket_vertical_angle", ROCKET_ANGLE.get()));
 
+        // Special upgraders - have to merge two properties into one.
+        mapCustomization(MotorActivationUpgrader.whenCrouching());
+        mapCustomization(MotorActivationUpgrader.whenNotCrouching());
     }
 
 

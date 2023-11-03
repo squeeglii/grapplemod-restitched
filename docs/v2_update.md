@@ -102,28 +102,48 @@
      - "custom"
        - "property1": value
        - "property2": value
+       - ... - all properties registered with the game have a value
        - "crc32": checksum
    - After
      - "hook_template"
        - "id": value 
        - "display_name": value
+     - "mod_data_version"
+           - "grapplemod": 2
      - "customization"
        - "properties"
          - "property1": value
          - "property2": value
-       - "crc32"
+         - ... - only modified properties have a value.
+       - "crc32": checksum
 
  - NBT structure has changed for grappling hook modifier block entities.
    - Before:
        - "unlocked"
-           - "1": true
-           - "2": false
+           - "0": true
+           - "1": false
+           - "2": true
+           - ... - all customizations have an entry.
        -  "customization": <see old grapple hook "custom">
    - After:
+       - "mod_data_version"
+           - "grapplemod": 2
        - "unlocked"
            - "namespaced:id1": true
-           - "namespaced:id2": false
+           - "namespaced:id2": true
+           - ... - only unlocked categories have an entry saved.
        -  "customization": <see new grapple hook "custom"
+
+### Upgrader-Upper!
+
+Because Mojang's [DataFixerUpper](https://github.com/Mojang/DataFixerUpper) is a nightmare to figure out & there's
+no longer a supported Fabric/Quilt API for it, there's a home-made replacemend for it built into the mod.
+
+It's not nearly as sophisticated, but it seems to do the job. With it, any new updates to the NBT data of the mod will
+change a version number now stored in NBT. Any previous versions of the mod (Fabric 1.x / Forge) will be upgraded to
+v2 and be marked accordingly.
+
+*TLDR: The upgrade from older versions to v2 should be seamless unless you're messing with NBT directly.*
 
 
 ### Other Internal Changes Like
