@@ -3,16 +3,16 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
-			"item": "grapplemod:grapplinghook"
+			"item": "grapplemod:grappling_hook"
 		},
 		{
-			"item": "grapplemod:grapplinghook"
+			"item": "grapplemod:grappling_hook"
 		}
 	],
 	"result": {
-		"item": "grapplemod:doubleupgradeitem"
+		"item": "grapplemod:double_hook_upgrade"
 	}
 }

@@ -8,7 +8,7 @@
 	],
 	"key": {
 		"2": {
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		"4": {
 			"item": "minecraft:anvil",
@@ -16,6 +16,6 @@
 		}
 	},
 	"result": {
-		"item": "grapplemod:block_grapple_modifier"
+		"item": "grapplemod:modification_table"
 	}
 }

@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.long_fall_boots.title" },
         "description": { "translate": "advancement.grapplemod.core.long_fall_boots.description" },
-        "icon": { "item": "grapplemod:longfallboots" },
+        "icon": { "item": "grapplemod:long_fall_boots" },
         "frame": "task"
     },
 
@@ -15,7 +15,7 @@
                     "equipment": {
                         "feet": {
                             "items": [
-                                "grapplemod:longfallboots"
+                                "grapplemod:long_fall_boots"
                             ]
                         }
                     }

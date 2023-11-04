@@ -39,9 +39,9 @@ public class GrappleModEnchantments {
         }
     }
 
-    public static final EnchantmentEntry<WallRunEnchantment> WALL_RUN = GrappleModEnchantments.enchantment("wallrunenchantment", WallRunEnchantment::new);
-    public static final EnchantmentEntry<DoubleJumpEnchantment> DOUBLE_JUMP = GrappleModEnchantments.enchantment("doublejumpenchantment", DoubleJumpEnchantment::new);
-    public static final EnchantmentEntry<SlidingEnchantment> SLIDING = GrappleModEnchantments.enchantment("slidingenchantment", SlidingEnchantment::new);
+    public static final EnchantmentEntry<WallRunEnchantment> WALL_RUN = GrappleModEnchantments.enchantment("wall_running", WallRunEnchantment::new);
+    public static final EnchantmentEntry<DoubleJumpEnchantment> DOUBLE_JUMP = GrappleModEnchantments.enchantment("double_jump", DoubleJumpEnchantment::new);
+    public static final EnchantmentEntry<SlidingEnchantment> SLIDING = GrappleModEnchantments.enchantment("sliding", SlidingEnchantment::new);
 
     public static class EnchantmentEntry<E extends Enchantment> extends AbstractRegistryReference<E> {
         protected EnchantmentEntry(ResourceLocation id, Supplier<E> factory) {

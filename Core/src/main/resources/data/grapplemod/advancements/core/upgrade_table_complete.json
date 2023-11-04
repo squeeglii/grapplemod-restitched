@@ -15,7 +15,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:limits\":1b}}"
                         }
                     }
@@ -29,7 +29,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:rope\":1b}}"
                         }
                     }
@@ -43,7 +43,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:hook_thrower\":1b}}"
                         }
                     }
@@ -57,7 +57,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:motor\":1b}}"
                         }
                     }
@@ -71,7 +71,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:swing\":1b}}"
                         }
                     }
@@ -85,7 +85,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:ender_staff\":1b}}"
                         }
                     }
@@ -99,7 +99,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:forcefield\":1b}}"
                         }
                     }
@@ -113,7 +113,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:magnet\":1b}}"
                         }
                     }
@@ -127,7 +127,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:double_hook\":1b}}"
                         }
                     }
@@ -141,7 +141,7 @@
                     "condition": "minecraft:location_check",
                     "predicate": {
                         "block": {
-                            "blocks": [ "grapplemod:block_grapple_modifier" ],
+                            "blocks": [ "grapplemod:modification_table" ],
                             "nbt": "{unlocked:{\"grapplemod:rocket\":1b}}"
                         }
                     }

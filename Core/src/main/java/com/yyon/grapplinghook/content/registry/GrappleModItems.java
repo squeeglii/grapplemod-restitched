@@ -31,24 +31,24 @@ public final class GrappleModItems {
         creativeMenuCache = null;
     }
 
-    public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grapplinghook", GrapplehookItem::new, ItemEntry.populateHookVariantsInTab());
-    public static final ItemEntry<EnderStaffItem> ENDER_STAFF = GrappleModItems.item("launcheritem", EnderStaffItem::new);
-    public static final ItemEntry<ForcefieldItem> FORCE_FIELD = GrappleModItems.item("repeller", ForcefieldItem::new);
+    public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grappling_hook", GrapplehookItem::new, ItemEntry.populateHookVariantsInTab());
+    public static final ItemEntry<EnderStaffItem> ENDER_STAFF = GrappleModItems.item("ender_staff", EnderStaffItem::new);
+    public static final ItemEntry<ForcefieldItem> FORCE_FIELD = GrappleModItems.item("forcefield", ForcefieldItem::new);
     public static final ItemEntry<RocketItem> ROCKET = GrappleModItems.item("rocket", RocketItem::new);
 
-    public static final ItemEntry<BaseUpgradeItem> BASE_UPGRADE = GrappleModItems.item("baseupgradeitem", BaseUpgradeItem::new);
-    public static final ItemEntry<DoubleUpgradeItem> DOUBLE_UPGRADE = GrappleModItems.item("doubleupgradeitem", DoubleUpgradeItem::new);
-    public static final ItemEntry<ForcefieldUpgradeItem> FORCE_FIELD_UPGRADE = GrappleModItems.item("forcefieldupgradeitem", ForcefieldUpgradeItem::new);
-    public static final ItemEntry<MagnetUpgradeItem> MAGNET_UPGRADE = GrappleModItems.item("magnetupgradeitem", MagnetUpgradeItem::new);
-    public static final ItemEntry<MotorUpgradeItem> MOTOR_UPGRADE = GrappleModItems.item("motorupgradeitem", MotorUpgradeItem::new);
-    public static final ItemEntry<RopeUpgradeItem> ROPE_UPGRADE = GrappleModItems.item("ropeupgradeitem", RopeUpgradeItem::new);
-    public static final ItemEntry<StaffUpgradeItem> ENDER_STAFF_UPGRADE = GrappleModItems.item("staffupgradeitem", StaffUpgradeItem::new);
-    public static final ItemEntry<SwingUpgradeItem> SWING_UPGRADE = GrappleModItems.item("swingupgradeitem", SwingUpgradeItem::new);
-    public static final ItemEntry<ThrowUpgradeItem> THROW_UPGRADE = GrappleModItems.item("throwupgradeitem", ThrowUpgradeItem::new);
-    public static final ItemEntry<LimitsUpgradeItem> LIMITS_UPGRADE = GrappleModItems.item("limitsupgradeitem", LimitsUpgradeItem::new);
-    public static final ItemEntry<RocketUpgradeItem> ROCKET_UPGRADE = GrappleModItems.item("rocketupgradeitem", RocketUpgradeItem::new);
+    public static final ItemEntry<BaseUpgradeItem> BASE_UPGRADE = GrappleModItems.item("base_upgrade", BaseUpgradeItem::new);
+    public static final ItemEntry<DoubleUpgradeItem> DOUBLE_UPGRADE = GrappleModItems.item("double_hook_upgrade", DoubleUpgradeItem::new);
+    public static final ItemEntry<ForcefieldUpgradeItem> FORCE_FIELD_UPGRADE = GrappleModItems.item("forcefield_upgrade", ForcefieldUpgradeItem::new);
+    public static final ItemEntry<MagnetUpgradeItem> MAGNET_UPGRADE = GrappleModItems.item("magnet_upgrade", MagnetUpgradeItem::new);
+    public static final ItemEntry<MotorUpgradeItem> MOTOR_UPGRADE = GrappleModItems.item("motor_upgrade", MotorUpgradeItem::new);
+    public static final ItemEntry<RopeUpgradeItem> ROPE_UPGRADE = GrappleModItems.item("rope_upgrade", RopeUpgradeItem::new);
+    public static final ItemEntry<StaffUpgradeItem> ENDER_STAFF_UPGRADE = GrappleModItems.item("ender_staff_upgrade", StaffUpgradeItem::new);
+    public static final ItemEntry<SwingUpgradeItem> SWING_UPGRADE = GrappleModItems.item("swing_upgrade", SwingUpgradeItem::new);
+    public static final ItemEntry<ThrowUpgradeItem> HOOK_THROWER_UPGRADE = GrappleModItems.item("hook_thrower_upgrade", ThrowUpgradeItem::new);
+    public static final ItemEntry<LimitsUpgradeItem> LIMITS_UPGRADE = GrappleModItems.item("limits_upgrade", LimitsUpgradeItem::new);
+    public static final ItemEntry<RocketUpgradeItem> ROCKET_UPGRADE = GrappleModItems.item("rocket_upgrade", RocketUpgradeItem::new);
 
-    public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("longfallboots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND));
+    public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND));
 
     public static final ItemEntry<BlueprintItem> BLUEPRINT = GrappleModItems.item("blueprint", BlueprintItem::new);
 

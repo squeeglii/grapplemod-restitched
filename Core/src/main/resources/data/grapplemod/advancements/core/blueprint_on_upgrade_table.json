@@ -25,7 +25,7 @@
                         "predicate": {
                             "block": {
                                 "blocks": [
-                                    "grapplemod:block_grapple_modifier"
+                                    "grapplemod:modification_table"
                                 ]
                             }
                         }

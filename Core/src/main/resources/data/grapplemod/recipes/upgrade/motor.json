@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
 			"item": "minecraft:piston"
 		}
 	],
 	"result": {
-		"item": "grapplemod:motorupgradeitem"
+		"item": "grapplemod:motor_upgrade"
 	}
 }

@@ -3,7 +3,7 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
 			"item": "minecraft:leather_boots"
@@ -13,6 +13,6 @@
 		}
 	],
 	"result": {
-		"item": "grapplemod:swingupgradeitem"
+		"item": "grapplemod:swing_upgrade"
 	}
 }

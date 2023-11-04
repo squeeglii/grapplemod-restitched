@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
-			"item": "grapplemod:launcheritem"
+			"item": "grapplemod:ender_staff"
 		}
 	],
 	"result": {
-		"item": "grapplemod:staffupgradeitem"
+		"item": "grapplemod:ender_staff_upgrade"
 	}
 }

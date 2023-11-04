@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.data.v2.V2Utils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
@@ -41,6 +42,11 @@ public class UpgraderUpper {
 
         CompoundTag versionsTag = tag.getCompound(MOD_DATA_VER_LOCATION);
         versionsTag.putInt(GRAPPLEMOD_VERSION_NAME, version);
+    }
+
+
+    public static ResourceLocation processItemName(ResourceLocation nameIn) {
+        return GlobalLookup.getMappingFor(nameIn).orElse(nameIn);
     }
 
 

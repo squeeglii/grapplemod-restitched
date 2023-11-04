@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-        "grapplemod:block_grapple_modifier"
+        "grapplemod:modification_table",
+        "grapplemod:template_table"
     ]
 }

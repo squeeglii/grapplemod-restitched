@@ -47,7 +47,7 @@ public class GrappleModBlocks {
     }
 
     public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks
-            .block("block_grapple_modifier", GrappleModifierBlock::new)
+            .block("modification_table", GrappleModifierBlock::new)
             .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 

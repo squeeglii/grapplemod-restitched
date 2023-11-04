@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.upgrade_table.title" },
         "description": { "translate": "advancement.grapplemod.core.upgrade_table.description" },
-        "icon": { "item": "grapplemod:block_grapple_modifier" },
+        "icon": { "item": "grapplemod:modification_table" },
         "frame": "goal"
     },
 
@@ -34,7 +34,7 @@
                         "predicate": {
                             "block": {
                                 "blocks": [
-                                    "grapplemod:block_grapple_modifier"
+                                    "grapplemod:modification_table"
                                 ]
                             }
                         }

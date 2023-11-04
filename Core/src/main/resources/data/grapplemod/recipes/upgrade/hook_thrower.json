@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
 			"item": "minecraft:bow"
 		}
 	],
 	"result": {
-		"item": "grapplemod:throwupgradeitem"
+		"item": "grapplemod:hook_thrower_upgrade"
 	}
 }

@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
 			"item": "minecraft:nether_star"
 		}
 	],
 	"result": {
-		"item": "grapplemod:limitsupgradeitem"
+		"item": "grapplemod:limits_upgrade"
 	}
 }

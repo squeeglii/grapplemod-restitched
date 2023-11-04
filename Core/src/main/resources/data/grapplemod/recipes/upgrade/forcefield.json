@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
-			"item": "grapplemod:repeller"
+			"item": "grapplemod:forcefield"
 		}
 	],
 	"result": {
-		"item": "grapplemod:forcefieldupgradeitem"
+		"item": "grapplemod:forcefield_upgrade"
 	}
 }

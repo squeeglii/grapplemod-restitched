@@ -21,7 +21,7 @@ public class GrappleModBlockEntities {
     }
 
     public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = GrappleModBlockEntities
-            .blockEntity("block_grapple_modifier",() -> BlockEntityType.Builder
+            .blockEntity("modification_table",() -> BlockEntityType.Builder
                     .of(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
                     .build(null));
 

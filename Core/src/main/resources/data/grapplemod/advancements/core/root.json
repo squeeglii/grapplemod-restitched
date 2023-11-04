@@ -2,7 +2,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.root.title" },
         "description": { "translate": "advancement.grapplemod.core.root.description" },
-        "icon": { "item": "grapplemod:grapplinghook" },
+        "icon": { "item": "grapplemod:grappling_hook" },
         "background": "grapplemod:textures/gui/advancements/bg/core.png",
         "announce_to_chat": true,
         "show_toast": true,
@@ -13,7 +13,7 @@
         "recipes": [
             "grapplemod:grappling_hook",
             "grapplemod:base_upgrade_item",
-            "grapplemod:grapple_hook_modification_station",
+            "grapplemod:modification_table",
             "grapplemod:ender_staff",
             "grapplemod:rocket",
             "grapplemod:forcefield"
@@ -26,7 +26,7 @@
             "conditions": {
                 "items": [
                     {
-                        "items": [ "grapplemod:grapplinghook" ]
+                        "items": [ "grapplemod:grappling_hook" ]
                     }
                 ]
             }

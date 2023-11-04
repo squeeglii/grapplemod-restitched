@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
 			"item": "minecraft:compass"
 		}
 	],
 	"result": {
-		"item": "grapplemod:magnetupgradeitem"
+		"item": "grapplemod:magnet_upgrade"
 	}
 }

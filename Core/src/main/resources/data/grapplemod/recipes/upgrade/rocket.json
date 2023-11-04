@@ -3,13 +3,13 @@
 	"category": "misc",
 	"ingredients": [
 		{
-			"item": "grapplemod:baseupgradeitem"
+			"item": "grapplemod:base_upgrade"
 		}, 
 		{
 			"item": "grapplemod:rocket"
 		}
 	],
 	"result": {
-		"item": "grapplemod:rocketupgradeitem"
+		"item": "grapplemod:rocket_upgrade"
 	}
 }

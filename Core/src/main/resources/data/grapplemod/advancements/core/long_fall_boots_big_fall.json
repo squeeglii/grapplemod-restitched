@@ -20,7 +20,7 @@
                     "equipment": {
                         "feet": {
                             "items": [
-                                "grapplemod:longfallboots"
+                                "grapplemod:long_fall_boots"
                             ]
                         }
                     }

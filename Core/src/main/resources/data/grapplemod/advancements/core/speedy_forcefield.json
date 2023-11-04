@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.speedy_forcefield.title" },
         "description": { "translate": "advancement.grapplemod.core.speedy_forcefield.description" },
-        "icon": { "item": "grapplemod:repeller" },
+        "icon": { "item": "grapplemod:forcefield" },
         "frame": "challenge"
     },
 
