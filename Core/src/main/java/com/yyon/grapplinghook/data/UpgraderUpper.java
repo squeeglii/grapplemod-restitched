@@ -45,8 +45,8 @@ public class UpgraderUpper {
     }
 
 
-    public static ResourceLocation processItemName(ResourceLocation nameIn) {
-        return GlobalLookup.getMappingFor(nameIn).orElse(nameIn);
+    public static Optional<ResourceLocation> processItemName(ResourceLocation nameIn) {
+        return GlobalLookup.getMappingFor(nameIn);
     }
 
 

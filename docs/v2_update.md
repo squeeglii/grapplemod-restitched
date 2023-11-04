@@ -62,9 +62,24 @@
    - Controls should be a bit clearer.
 
 
-### Resource Packs
+### Resource Packs & Ids
 
- - Most customization translation keys have changed.
+A lot of translation keys & ids have been changed for consistency! This is a bit of a brutal change that I don't plan
+on ever doing again but, I decided it was better to risk breaking everything all at once, rather than small bits in
+future updates.
+
+ - Translation Keys have been changed for almost every part of the mod
+ - Item, Block, & Enchantment Ids have been changed
+
+Things that are broken because of this include:
+ - Resource Packs
+   - Most mod translation keys have changed - any translations from before will no longer work.
+   - Item & Block model names have changed in resource packs, breaking 
+ - Command blocks using the old mod item ids will no longer work
+ - 
+
+However, effort has been put in to ensure items, blocks, & enchantments will not be lost when upgrading. Old Ids
+will be automagically upgraded!
 
 
 ### Internal Rewrite of Customizations:
@@ -150,4 +165,4 @@ v2 and be marked accordingly.
 
  - Grappling Hook Physics Controllers now have ResourceLocation ids
  - Key Enums have been replaced with just vanilla KeyMappings
- - Cleaned Up + Refactored a lot of the older classes.
+ - Cleaned up + refactored a lot of the older classes.

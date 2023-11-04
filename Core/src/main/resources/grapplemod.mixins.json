@@ -10,6 +10,7 @@
     "LivingEntityDamageHandlerMixin",
     "PlayerDropHandlerMixin",
     "PlayerJoinMixin",
+    "RegistryIdFixerMixin",
     "SendExtraEntityDataMixin",
     "ServerPlayerMixin",
     "ServerStartMixin"
