@@ -147,6 +147,20 @@
                     }
                 }]
             }
+        },
+        "dye_bag_unlocked": {
+            "trigger": "minecraft:item_used_on_block",
+            "conditions": {
+                "location": [{
+                    "condition": "minecraft:location_check",
+                    "predicate": {
+                        "block": {
+                            "blocks": [ "grapplemod:modification_table" ],
+                            "nbt": "{unlocked:{\"grapplemod:style\":1b}}"
+                        }
+                    }
+                }]
+            }
         }
     },
 
@@ -160,6 +174,7 @@
         [ "forcefield_unlocked" ],
         [ "magnet_unlocked" ],
         [ "double_hook_unlocked" ],
-        [ "rocket_unlocked" ]
+        [ "rocket_unlocked" ],
+        [ "dye_bag_unlocked"]
     ]
 }

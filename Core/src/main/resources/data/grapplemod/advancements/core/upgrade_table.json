@@ -20,7 +20,8 @@
             "grapplemod:upgrade/motor",
             "grapplemod:upgrade/rocket",
             "grapplemod:upgrade/rope",
-            "grapplemod:upgrade/swing"
+            "grapplemod:upgrade/swing",
+            "grapplemod:upgrade/dye_bag"
         ]
     },
 

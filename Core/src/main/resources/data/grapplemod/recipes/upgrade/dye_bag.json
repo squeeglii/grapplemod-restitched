@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"ingredients": [
+		{
+			"item": "grapplemod:base_upgrade"
+		}, 
+		{
+			"item": "minecraft:leather"
+		},
+		{
+			"tag": "grapplemod:dye"
+		},
+		{
+			"tag": "grapplemod:dye"
+		},
+		{
+			"item": "minecraft:glow_ink_sac"
+		}
+	],
+	"result": {
+		"item": "grapplemod:dye_bag_upgrade"
+	}
+}

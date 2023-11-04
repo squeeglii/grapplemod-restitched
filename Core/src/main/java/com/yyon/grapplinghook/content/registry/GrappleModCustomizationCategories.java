@@ -95,7 +95,7 @@ public class GrappleModCustomizationCategories {
     ));
 
     public static final Entry<CustomizationCategory> STYLE = category("style", () -> new CustomizationCategory(
-            null,
+            GrappleModItems.DYE_BAG_UPGRADE.get(),
             ROPE_STYLE.get(), GLOWING_ROPE.get()
     ));
 

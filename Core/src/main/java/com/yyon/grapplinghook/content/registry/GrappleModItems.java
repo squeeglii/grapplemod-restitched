@@ -47,6 +47,8 @@ public final class GrappleModItems {
     public static final ItemEntry<ThrowUpgradeItem> HOOK_THROWER_UPGRADE = GrappleModItems.item("hook_thrower_upgrade", ThrowUpgradeItem::new);
     public static final ItemEntry<LimitsUpgradeItem> LIMITS_UPGRADE = GrappleModItems.item("limits_upgrade", LimitsUpgradeItem::new);
     public static final ItemEntry<RocketUpgradeItem> ROCKET_UPGRADE = GrappleModItems.item("rocket_upgrade", RocketUpgradeItem::new);
+    public static final ItemEntry<DyeBagUpgrade> DYE_BAG_UPGRADE = GrappleModItems.item("dye_bag_upgrade", DyeBagUpgrade::new);
+
 
     public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND));
 
