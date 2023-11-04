@@ -79,7 +79,7 @@ public class GrappleModBlocks {
         }
 
         public <I extends BlockItem> Flow<B> withCustomItem(Consumer<GrappleModItems.ItemEntry<I>> destination, Supplier<I> factory) {
-            GrappleModItems.ItemEntry<I> item = GrappleModItems.item(context.getIdentifier().getPath(), factory);
+            GrappleModItems.ItemEntry<I> item = GrappleModItems.item(context.getIdentifier().getPath(), factory, null, true);
             destination.accept(item);
             return this;
         }

@@ -12,6 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -49,10 +51,10 @@ public final class GrappleModItems {
     public static final ItemEntry<RocketUpgradeItem> ROCKET_UPGRADE = GrappleModItems.item("rocket_upgrade", RocketUpgradeItem::new);
     public static final ItemEntry<DyeBagUpgrade> DYE_BAG_UPGRADE = GrappleModItems.item("dye_bag_upgrade", DyeBagUpgrade::new);
 
-
-    public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND));
-
     public static final ItemEntry<BlueprintItem> BLUEPRINT = GrappleModItems.item("blueprint", BlueprintItem::new);
+
+    public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND), ItemEntry.populateBootVariants());
+
 
 
 
@@ -69,6 +71,12 @@ public final class GrappleModItems {
                     .map(Supplier::get)
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
+
+            // Add enchanted books to end of creative menu.
+            GrappleModEnchantments.getEnchantments().stream()
+                    .map(enchantment -> new EnchantmentInstance(enchantment, 1))
+                    .map(EnchantedBookItem::createForEnchantment)
+                    .forEach(creativeMenuCache::add);
         }
 
         creativeMenuCache.forEach(output::accept);
@@ -87,6 +95,10 @@ public final class GrappleModItems {
     }
 
     public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemStack>> tabProvider) {
+        return item(id, item, tabProvider, false);
+    }
+
+    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemStack>> tabProvider, boolean placeFirstInCreative) {
         ResourceLocation qualId = GrappleMod.id(id);
         ItemEntry<I> entry = new ItemEntry<>(qualId, item, tabProvider);
 
@@ -94,7 +106,13 @@ public final class GrappleModItems {
             throw new IllegalStateException("Duplicate item registered");
 
         GrappleModItems.items.put(qualId, entry);
-        GrappleModItems.itemsInRegistryOrder.add(qualId);
+
+        if(placeFirstInCreative) {
+            GrappleModItems.itemsInRegistryOrder.add(0, qualId);
+        } else {
+            GrappleModItems.itemsInRegistryOrder.add(qualId);
+        }
+
         return entry;
     }
 
@@ -146,6 +164,30 @@ public final class GrappleModItems {
 
         private static Supplier<List<ItemStack>> hiddenInTab() {
             return ArrayList::new;
+        }
+
+        private static Supplier<List<ItemStack>> populateBootVariants() {
+            return () -> {
+                LinkedList<ItemStack> variants = new LinkedList<>();
+
+                ItemStack plainItem = LONG_FALL_BOOTS.get().getDefaultInstance();
+                plainItem.enchant(Enchantments.FALL_PROTECTION, 4);
+                variants.add(plainItem);
+
+                ItemStack doubleJumpItem = LONG_FALL_BOOTS.get().getDefaultInstance();
+                doubleJumpItem.enchant(Enchantments.FALL_PROTECTION, 4);
+                doubleJumpItem.enchant(GrappleModEnchantments.DOUBLE_JUMP.get(), 1);
+                variants.add(doubleJumpItem);
+
+                ItemStack allEnchantsItem = LONG_FALL_BOOTS.get().getDefaultInstance();
+                allEnchantsItem.enchant(Enchantments.FALL_PROTECTION, 4);
+                allEnchantsItem.enchant(GrappleModEnchantments.DOUBLE_JUMP.get(), 1);
+                allEnchantsItem.enchant(GrappleModEnchantments.SLIDING.get(), 1);
+                allEnchantsItem.enchant(GrappleModEnchantments.WALL_RUN.get(), 1);
+                variants.add(allEnchantsItem);
+
+                return variants;
+            };
         }
 
         private static Supplier<List<ItemStack>> populateHookVariantsInTab() {
