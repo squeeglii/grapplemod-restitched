@@ -53,7 +53,7 @@ public final class GrappleModItems {
 
     public static final ItemEntry<BlueprintItem> BLUEPRINT = GrappleModItems.item("blueprint", BlueprintItem::new);
 
-    public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", () -> new LongFallBootsItem(ArmorMaterials.DIAMOND), ItemEntry.populateBootVariants());
+    public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", LongFallBootsItem::new, ItemEntry.populateBootVariants());
 
 
 
