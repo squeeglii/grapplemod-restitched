@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client.attachable;
 
 import com.google.common.collect.ImmutableMap;
-import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayers;
+import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayerIdentifiers;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -24,11 +24,6 @@ public class LayerDefinitionsMixin {
         return builder;
     }
 
-    //@Inject(method = "createRoots()Ljava/util/Map;", at = @At(value = "HEAD"), locals = LocalCapture.CAPTURE_FAILHARD)
-    //private static void builder(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir, ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> builder) {
-    //    builderRef = builder;
-    //}
-
     @Inject(method = "createRoots()Ljava/util/Map;",
             remap = false,
             at = @At(
@@ -37,9 +32,10 @@ public class LayerDefinitionsMixin {
                     ordinal = 1
             ))
     private static void insertLayers(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {
-        GrappleModEntityRenderLayers.RenderLayerEntry longFallBoots = GrappleModEntityRenderLayers.LONG_FALL_BOOTS;
+        GrappleModEntityRenderLayerIdentifiers.RenderLayerEntry longFallBoots = GrappleModEntityRenderLayerIdentifiers.LONG_FALL_BOOTS;
+        LayerDefinition layerDefinition = LayerDefinition.create(longFallBoots.get(), 64, 32);
 
-        builderRef.put(longFallBoots.getLocation(), longFallBoots.get());
+        builderRef.put(longFallBoots.getLocation(), layerDefinition);
     }
 
 }

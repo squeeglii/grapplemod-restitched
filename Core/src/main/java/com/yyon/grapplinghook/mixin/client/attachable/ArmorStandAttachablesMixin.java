@@ -1,9 +1,11 @@
 package com.yyon.grapplinghook.mixin.client.attachable;
 
-import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayers;
+import com.yyon.grapplinghook.client.attachable.LongFallBootsLayer;
+import com.yyon.grapplinghook.client.attachable.model.LongFallBootsModel;
+import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayerIdentifiers;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.ArmorStandRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,8 +17,12 @@ public abstract class ArmorStandAttachablesMixin {
 
     @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;)V", at = @At("TAIL"))
     public void appendRenderLayers(EntityRendererProvider.Context context, CallbackInfo ci) {
-        RenderLayer longFallBootsLayer = GrappleModEntityRenderLayers.LONG_FALL_BOOTS.getLayer(((ArmorStandRenderer) (Object) this), context.getModelSet());
-        ((ArmorStandRenderer) (Object) this).addLayer(longFallBootsLayer);
+        ArmorStandRenderer self = (ArmorStandRenderer) (Object) this;
+        ModelLayerLocation loc = GrappleModEntityRenderLayerIdentifiers.LONG_FALL_BOOTS.getLocation();
+        LongFallBootsModel model = new LongFallBootsModel(context.bakeLayer(loc));
+        LongFallBootsLayer layer = new LongFallBootsLayer(self, model, context.getModelManager());
+
+        self.addLayer(layer);
     }
 
 }

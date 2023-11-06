@@ -25,7 +25,10 @@
     "client.KeybindingHandlerMixin",
     "client.LocalPlayerUpdatesMixin",
     "client.MovementInputHandlerMixin",
-    "client.attachable.LayerDefinitionsMixin"
+    "client.attachable.ArmorStandAttachablesMixin",
+    "client.attachable.HumanoidAttachablesMixin",
+    "client.attachable.LayerDefinitionsMixin",
+    "client.attachable.PlayerRendererAttachablesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

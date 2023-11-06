@@ -20,7 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 
-public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
+public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends M> extends RenderLayer<T, M> {
 
     public static final ResourceLocation BOOTS_TEXTURE = GrappleMod.id("textures/armor/long_fall_boots.png");
 
@@ -76,5 +76,7 @@ public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<
 
         model.renderToBuffer(poseStack, glintBuf, packedLight, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0f);
     }
+
+
 
 }
