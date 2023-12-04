@@ -16,7 +16,7 @@ public abstract class ServerStartMixin {
     @Inject(method = "runServer()V",
             at = @At(
                     value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/Util;getMillis()J",
+                    target = "Lnet/minecraft/Util;getNanos()J",
                     shift = At.Shift.BEFORE
             ))
     public void onServerStart(CallbackInfo ci) {

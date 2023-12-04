@@ -7,3 +7,6 @@ accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addL
 # Non Conflict Keybinding overflows need this
 accessible field net/minecraft/client/KeyMapping clickCount I
 accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;
+
+# Weird UI change !!!
+accessible method net/minecraft/client/gui/components/Checkbox <init> (IILnet/minecraft/network/chat/Component;Lnet/minecraft/client/gui/Font;ZLnet/minecraft/client/gui/components/Checkbox$OnValueChange;)V

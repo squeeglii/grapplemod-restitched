@@ -241,7 +241,7 @@ public class GrappleModiferBlockGUI extends Screen {
 		public Component tooltip;
 
 		public GuiCheckbox(int x, int y, int w, int h, Component text, boolean val, String option, Component tooltip) {
-			super(x, y, w, h, text, val);
+			super(x, y, text, font, val, OnValueChange.NOP);
 			this.option = option;
 			this.tooltip = tooltip;
 		}

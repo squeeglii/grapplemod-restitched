@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.block.modifierblock;
 
+import com.mojang.serialization.MapCodec;
 import com.yyon.grapplinghook.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleConfig;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -45,7 +47,11 @@ import java.util.Map;
 public class GrappleModifierBlock extends BaseEntityBlock {
 
 	public GrappleModifierBlock() {
-		super(Block.Properties.copy(Blocks.STONE).strength(1.5f));
+		super(Block.Properties.ofFullCopy(Blocks.STONE).strength(1.5f));
+	}
+
+	public GrappleModifierBlock(BlockBehaviour.Properties properties) {
+		super(properties);
 	}
 
 
@@ -164,8 +170,13 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		return InteractionResult.SUCCESS;
 	}
-    
-    @Override
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return simpleCodec(GrappleModifierBlock::new);
+	}
+
+	@Override
 	@NotNull
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
