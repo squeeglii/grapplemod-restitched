@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public record PhysicsFramePredicate(Optional<List<String>> controllerTypes, Optional<MinMaxBounds.Doubles> speed, Optional<Boolean> isUsingRocket) {
+public record PhysicsFramePredicate(Optional<List<ResourceLocation>> controllerTypes, Optional<MinMaxBounds.Doubles> speed, Optional<Boolean> isUsingRocket) {
 
     public static final Codec<PhysicsFramePredicate> CODEC = RecordCodecBuilder.create((instance) ->
             instance
                 .group(
-                        ExtraCodecs.strictOptionalField(Codec.list(ExtraCodecs.RESOURCE_PATH_CODEC), "controller_types").forGetter(PhysicsFramePredicate::controllerTypes),
+                        ExtraCodecs.strictOptionalField(Codec.list(ResourceLocation.CODEC), "controller_types").forGetter(PhysicsFramePredicate::controllerTypes),
                         ExtraCodecs.strictOptionalField(MinMaxBounds.Doubles.CODEC, "speed").forGetter(PhysicsFramePredicate::speed),
                         ExtraCodecs.strictOptionalField(Codec.BOOL, "is_using_rocket").forGetter(PhysicsFramePredicate::isUsingRocket)
 
@@ -39,7 +39,7 @@ public record PhysicsFramePredicate(Optional<List<String>> controllerTypes, Opti
 
     public boolean matches(PlayerPhysicsFrame frame) {
         if(this.controllerTypes.isPresent()) {
-            String frameType = frame.getPhysicsControllerType().toString();
+            ResourceLocation frameType = frame.getPhysicsControllerType();
 
             if (!this.controllerTypes.get().contains(frameType))
                 return false;
