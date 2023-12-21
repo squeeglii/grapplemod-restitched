@@ -14,3 +14,6 @@ accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShar
 
 # UpgraderUpper - support replacing item ids in registry by changing the least amount of behaviour possible.
 accessible method net/minecraft/core/MappedRegistry getValueFromNullable (Lnet/minecraft/core/Holder$Reference;)Ljava/lang/Object;
+
+# Uh oh, they locked the checkbox away! Make the constructor available again.
+accessible method net/minecraft/client/gui/components/Checkbox <init> (IILnet/minecraft/network/chat/Component;Lnet/minecraft/client/gui/Font;ZLnet/minecraft/client/gui/components/Checkbox$OnValueChange;)V

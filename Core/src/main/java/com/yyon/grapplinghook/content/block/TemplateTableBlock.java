@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.content.block;
 
+import com.mojang.serialization.MapCodec;
 import com.yyon.grapplinghook.content.blockentity.TemplateTableBlockEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import net.minecraft.core.BlockPos;
@@ -22,13 +23,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class TemplateTableBlock extends BaseEntityBlock {
 
+	public static final MapCodec<TemplateTableBlock> CODEC = simpleCodec(TemplateTableBlock::new);
+
 	public static final IntegerProperty TEMPLATES_HELD = IntegerProperty.create("shelves_filled", 0, 4);
 
 	public static final int FULL = 4;
 	public static final int EMPTY = 0;
 
-	public TemplateTableBlock() {
-		super(Properties.copy(Blocks.FLETCHING_TABLE));
+
+	public TemplateTableBlock(Properties properties) {
+		super(properties);
 		BlockState defaultState = this.stateDefinition.any()
 				.setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH)
 				.setValue(TEMPLATES_HELD, EMPTY);
@@ -36,6 +40,16 @@ public class TemplateTableBlock extends BaseEntityBlock {
 		this.registerDefaultState(defaultState);
 	}
 
+	public TemplateTableBlock() {
+		this(Properties.ofFullCopy(Blocks.FLETCHING_TABLE));
+	}
+
+
+	@NotNull
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
 
     @Override
 	@NotNull
@@ -127,7 +141,6 @@ public class TemplateTableBlock extends BaseEntityBlock {
 		Rotation rotatedDir = mirror.getRotation(state.getValue(HorizontalDirectionalBlock.FACING));
 		return state.rotate(rotatedDir);
 	}
-
 
 	@NotNull
 	@Override

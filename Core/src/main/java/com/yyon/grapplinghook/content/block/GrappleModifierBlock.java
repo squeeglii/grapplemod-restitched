@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.content.block;
 
+import com.mojang.serialization.MapCodec;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
@@ -47,10 +48,21 @@ import java.util.Map;
 
 public class GrappleModifierBlock extends BaseEntityBlock {
 
-	public GrappleModifierBlock() {
-		super(Block.Properties.copy(Blocks.FLETCHING_TABLE));
+	public static final MapCodec<GrappleModifierBlock> CODEC = simpleCodec(GrappleModifierBlock::new);
+
+	public GrappleModifierBlock(Properties properties) {
+		super(properties);
 	}
 
+	public GrappleModifierBlock() {
+		this(Block.Properties.ofFullCopy(Blocks.FLETCHING_TABLE));
+	}
+
+	@NotNull
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
 
 	@Nullable
 	@Override

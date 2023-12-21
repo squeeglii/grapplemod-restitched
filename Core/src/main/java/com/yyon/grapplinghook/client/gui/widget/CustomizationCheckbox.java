@@ -2,6 +2,8 @@ package com.yyon.grapplinghook.client.gui.widget;
 
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -17,8 +19,8 @@ public class CustomizationCheckbox extends Checkbox implements CustomTooltipHand
     private final Runnable onValueUpdated;
     private Component tooltipOverride;
 
-    public CustomizationCheckbox(Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, BooleanProperty option, Runnable onValueUpdate) {
-        super(x, y, w, h, option.getDisplayName(), customizations.get().get(option));
+    public CustomizationCheckbox(Supplier<CustomizationVolume> customizations, int x, int y, BooleanProperty option, Runnable onValueUpdate) {
+        super(x, y, option.getDisplayName(), Minecraft.getInstance().font, customizations.get().get(option), (checkbox, bl) -> onValueUpdate.run());
 
         this.customizations = customizations;
         this.option = option;
