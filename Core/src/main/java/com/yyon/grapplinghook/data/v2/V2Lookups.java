@@ -17,7 +17,7 @@ public class V2Lookups {
     private static final HashMap<String, PropertyUpgrader<?>> customizationUpgraders = new HashMap<>();
     private static final CustomizationCategory[] orderedCategories = new CustomizationCategory[] {
             ROPE.get(), HOOK_THROWER.get(), MOTOR.get(),
-            SWING.get(), ENDER_STAFF.get(), FORCEFIELD.get(),
+            PHYSICS.get(), ENDER_STAFF.get(), FORCEFIELD.get(),
             MAGNET.get(), DOUBLE_HOOK.get(), LIMITS.get(),
             ROCKET.get()
     };

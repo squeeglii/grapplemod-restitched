@@ -49,7 +49,6 @@ public class GrappleModCustomizationCategories {
             MAX_ROPE_LENGTH.get(), BLOCK_PHASE_ROPE.get(), STICKY_ROPE.get()
     ));
 
-    // TODO: Group gravity with playermovementmult in a physics tab maybe?
     public static final Entry<CustomizationCategory> HOOK_THROWER = category("hook_thrower", () -> new CustomizationCategory(
             GrappleModItems.HOOK_THROWER_UPGRADE.get(),
             HOOK_GRAVITY_MULTIPLIER.get(), HOOK_THROW_SPEED.get(), HOOK_THROW_ANGLE.get(), HOOK_THROW_ANGLE_ON_SNEAK.get(),
@@ -60,11 +59,6 @@ public class GrappleModCustomizationCategories {
             GrappleModItems.MOTOR_UPGRADE.get(),
             MOTOR_ATTACHED.get(), MOTOR_ACCELERATION.get(), MAX_MOTOR_SPEED.get(), MOTOR_ACTIVATION.get(),
             SMART_MOTOR.get(), MOTOR_DAMPENER.get(), MOTOR_WORKS_BACKWARDS.get()
-    ));
-
-    public static final Entry<CustomizationCategory> SWING = category("swing", () -> new CustomizationCategory(
-            GrappleModItems.SWING_UPGRADE.get(),
-            MOVE_SPEED_MULTIPLIER.get()
     ));
 
     public static final Entry<CustomizationCategory> ENDER_STAFF = category("ender_staff", () -> new CustomizationCategory(
@@ -98,6 +92,13 @@ public class GrappleModCustomizationCategories {
             GrappleModItems.DYE_BAG_UPGRADE.get(),
             ROPE_STYLE.get(), GLOWING_ROPE.get()
     ));
+
+
+    public static final Entry<CustomizationCategory> PHYSICS = category("physics", () -> new CustomizationCategory(
+            GrappleModItems.SWING_UPGRADE.get(),
+            YOYO_YANK.get(), MOVE_SPEED_MULTIPLIER.get()
+    ));
+
 
     public static Set<Entry<? extends CustomizationCategory>> getModCategories() {
         return Set.copyOf(categories.values());

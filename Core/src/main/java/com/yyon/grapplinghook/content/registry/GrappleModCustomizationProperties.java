@@ -59,8 +59,6 @@ public class GrappleModCustomizationProperties {
     public static final Entry<BooleanProperty> MOTOR_DAMPENER = property("motor_dampener", () -> new BooleanProperty(false)); //TODO: Only available with limits.
     public static final Entry<BooleanProperty> MOTOR_WORKS_BACKWARDS = property("motor_works_backwards", () -> new BooleanProperty(true));
 
-    public static final Entry<DoubleProperty> MOVE_SPEED_MULTIPLIER = property("holder_move_speed_multiplier", () -> new DoubleProperty(1.0D, 0.0D, 2.0D));
-
     public static final Entry<AttachmentProperty> ENDER_STAFF_ATTACHED = property("ender_staff", () -> new AttachmentProperty(false));
 
     public static final Entry<AttachmentProperty> FORCEFIELD_ATTACHED = property("forcefield", () -> new AttachmentProperty(false));
@@ -83,6 +81,10 @@ public class GrappleModCustomizationProperties {
 
     public static final Entry<EnumProperty<RopeStyle>> ROPE_STYLE = property("rope_style", () -> new EnumProperty<>(RopeStyle.REGULAR, RopeStyle.values()));
     public static final Entry<BooleanProperty> GLOWING_ROPE = property("glowing_rope", () -> new BooleanProperty(false));
+
+    public static final Entry<BooleanProperty> YOYO_YANK = property("yoyo_yank", () -> new BooleanProperty(false)); // Brings back old entity yeeting behaviour.
+    public static final Entry<DoubleProperty> MOVE_SPEED_MULTIPLIER = property("holder_move_speed_multiplier", () -> new DoubleProperty(1.0D, 0.0D, 2.0D));
+
 
     // Internal properties! - Should not be tied to a category.
     public static final Entry<BooleanProperty> IS_EQUIPMENT_OVERRIDE = property("is_equipment_override", () -> new BooleanProperty(false));

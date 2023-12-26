@@ -143,7 +143,7 @@ public class GrappleAttachMessage extends BaseMessageClient {
 
     	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
 
-        	grapple.clientAttach(this.x, this.y, this.z);
+        	grapple.onClientAttachClientSide(this.x, this.y, this.z);
         	RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
         	segmentHandler.segments = this.segments;
         	segmentHandler.segmentBottomSides = this.segmentBottomSides;

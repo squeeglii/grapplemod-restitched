@@ -78,7 +78,7 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
         }
 
     	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
-        	grapple.setAttachPos(this.x, this.y, this.z);
+        	grapple.setBlockAttachPos(this.x, this.y, this.z);
         }
     }
 }
