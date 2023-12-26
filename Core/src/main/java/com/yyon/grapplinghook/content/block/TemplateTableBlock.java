@@ -64,17 +64,19 @@ public class TemplateTableBlock extends BaseEntityBlock {
 
 
 
+		// TemplateTable has no 'primary blueprint' so there's nothing to quick-apply from - open UI
 		if(templateTableBlockEntity.isEmpty()) {
-			if(worldIn.isClientSide) return InteractionResult.PASS;
+			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
 
-			// TODO: Open UI - there is no 'primary blueprint' to quick-apply from.
+			playerIn.openMenu(templateTableBlockEntity);
 			return InteractionResult.CONSUME;
 		}
 
+		// Item can't recieve upgrades - open UI
 		if(!(heldItem instanceof ICustomizationApplicable customizationReciever)) {
-			if(worldIn.isClientSide) return InteractionResult.PASS;
+			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
 
-			// TODO: Open UI - item can't recieve upgrades
+			playerIn.openMenu(templateTableBlockEntity);
 			return InteractionResult.CONSUME;
 		}
 

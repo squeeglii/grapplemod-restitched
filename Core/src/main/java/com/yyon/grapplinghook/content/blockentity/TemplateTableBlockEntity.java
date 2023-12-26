@@ -16,6 +16,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,7 +46,14 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
     @NotNull
     @Override
     protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-        return null;
+        return ChestMenu.oneRow(containerId, inventory);
+
+        //TODO: Implement actual UI for 15 slots. Needs:
+        // - List view on left with 'favourite' blueprint on the top.
+        //  - list needs way to add blueprints (slot at top of selected item?)
+        //  - add empty entries for unfilled slots?
+        // - Details of what's on blueprint + slot to apply it to new items.
+        // - Settings pane for how to treat new items.
     }
 
     @Override
@@ -108,7 +116,9 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
     @Override
     public void setItem(int slot, ItemStack stack) {
         if(slot > this.getContainerSize()) return;
-        //TODO: Add item tag.
+
+        //TODO: Add item datapack tag for acceptable items.
+        //      Handle weird functionality when slot is selected?
         if(!(stack.getItem() instanceof BlueprintItem)) return;
 
         this.storedTemplates.set(slot, stack);
@@ -137,7 +147,8 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        //TODO: Add item tag.
+        //TODO: Add item datapack tag for acceptable items.
+        //      Handle weird functionality when slot is selected?
         return stack.getItem() instanceof BlueprintItem &&
                this.getItem(index).isEmpty();
     }
