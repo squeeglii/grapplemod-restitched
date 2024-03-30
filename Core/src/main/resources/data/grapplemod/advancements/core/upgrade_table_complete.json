@@ -1,5 +1,5 @@
 {
-    "parent": "grapplemod:core/upgrade_table",
+    "parent": "grapplemod:core/upgrade_acquired",
     "display": {
         "title": { "translate": "advancement.grapplemod.core.upgrade_table_complete.title" },
         "description": { "translate": "advancement.grapplemod.core.upgrade_table_complete.description" },

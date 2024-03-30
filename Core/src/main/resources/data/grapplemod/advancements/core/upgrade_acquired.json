@@ -1,0 +1,29 @@
+{
+  "parent": "grapplemod:core/upgrade_table",
+  "display": {
+    "title": { "translate": "advancement.grapplemod.core.upgrade_acquired.title" },
+    "description": { "translate": "advancement.grapplemod.core.upgrade_acquired.description" },
+    "icon": { "item": "grapplemod:dye_bag_upgrade" },
+    "frame": "task"
+  },
+
+  "rewards": { },
+
+  "criteria": {
+
+    "acquired_an_upgrade_somehow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "tag":  "grapplemod:hook_upgrade" }
+        ]
+      }
+    }
+  },
+
+  "requirements": [
+    [
+      "acquired_an_upgrade_somehow"
+    ]
+  ]
+}
