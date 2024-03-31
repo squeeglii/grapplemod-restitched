@@ -68,6 +68,10 @@ public class Vec {
 	}
 	
 	public static Vec motionVec(Entity e) {
+		if(e == null) {
+			GrappleMod.LOGGER.warn("Tried to get motion vec for a non-existent entity.");
+			return new Vec(0, 0, 0);
+		}
 		return new Vec(e.getDeltaMovement());
 	}
 	

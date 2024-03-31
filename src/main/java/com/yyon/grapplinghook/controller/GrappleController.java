@@ -70,6 +70,10 @@ public class GrappleController {
 		this.controllerId = controllerId;
 		
 		this.entity = world.getEntity(entityId);
+
+		if(this.entity == null)
+			throw new IllegalStateException("Grapple Controller must have a holder entity.");
+
 		this.motion = Vec.motionVec(entity);
 		
 		// undo friction
