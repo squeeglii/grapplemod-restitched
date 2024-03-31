@@ -8,5 +8,9 @@
         "auto_unlock": {
             "trigger": "minecraft:location"
         }
-    }
+    },
+
+    "requirements": [
+        [ "auto_unlock" ]
+    ]
 }
