@@ -75,7 +75,8 @@ public class ClientControllerManager {
 		if (this.isWallRunning(player, Vec.motionVec(player))) {
 			if (!controllers.containsKey(player.getId())) {
 				GrappleController controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, null);
-				if (controller.getWallDirection() == null)
+
+				if (controller != null && controller.getWallDirection() == null)
 					controller.unattach();
 			}
 			
@@ -320,36 +321,43 @@ public class ClientControllerManager {
 			currentController.unattach();
 		
 		GrappleController control;
-		if (controllerId == GrappleModUtils.GRAPPLE_ID) {
-			if (!multi) {
-				control = new GrappleController(grapplehookEntityId, playerId, world, controllerId, custom);
 
-			} else {
-				control = controllers.get(playerId);
+		try {
+			if (controllerId == GrappleModUtils.GRAPPLE_ID) {
+				if (!multi) {
+					control = new GrappleController(grapplehookEntityId, playerId, world, controllerId, custom);
 
-				GrappleController finalControl = control;
-				List<Supplier<Boolean>> conditions = List.of(
-						() -> finalControl != null,
-						() -> finalControl.getClass().equals(GrappleController.class),
-						() -> finalControl.custom.doublehook,
-						() -> grapplehookEntity != null
-				);
+				} else {
+					control = controllers.get(playerId);
 
-				if(GrappleModUtils.and(conditions)) {
-					control.addHookEntity(grapplehookEntity);
-					return control;
+					GrappleController finalControl = control;
+					List<Supplier<Boolean>> conditions = List.of(
+							() -> finalControl != null,
+							() -> finalControl.getClass().equals(GrappleController.class),
+							() -> finalControl.custom.doublehook,
+							() -> grapplehookEntity != null
+					);
+
+					if (GrappleModUtils.and(conditions)) {
+						control.addHookEntity(grapplehookEntity);
+						return control;
+					}
+
+					control = new GrappleController(grapplehookEntityId, playerId, world, controllerId, custom);
 				}
 
-				control = new GrappleController(grapplehookEntityId, playerId, world, controllerId, custom);
-			}
+			} else if (controllerId == GrappleModUtils.REPEL_ID) {
+				control = new ForcefieldController(grapplehookEntityId, playerId, world, controllerId);
 
-		} else if (controllerId == GrappleModUtils.REPEL_ID) {
-			control = new ForcefieldController(grapplehookEntityId, playerId, world, controllerId);
+			} else if (controllerId == GrappleModUtils.AIR_FRICTION_ID) {
+				control = new AirfrictionController(grapplehookEntityId, playerId, world, controllerId, custom);
 
-		} else if (controllerId == GrappleModUtils.AIR_FRICTION_ID) {
-			control = new AirfrictionController(grapplehookEntityId, playerId, world, controllerId, custom);
+			} else return null;
 
-		} else return null;
+		} catch (IllegalStateException err) {
+			GrappleMod.LOGGER.warn("Invalid State while creating a grappling hook controller. This may cause problems! Report to 'GrappleMod: Restitched' if the mod acts weird or this is spammed.", err);
+			return null;
+		}
 
 		if (blockPos != null)
 			ClientControllerManager.controllerPos.put(blockPos, control);
@@ -472,6 +480,9 @@ public class ClientControllerManager {
 
 		} else {
 			controller = this.createControl(GrappleModUtils.AIR_FRICTION_ID, -1, player.getId(), player.level, null, custom);
+
+			if(controller == null)
+				return;
 		}
 		
 		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(new ResourceLocation("grapplemod", "rocket")), SoundSource.PLAYERS);
