@@ -107,8 +107,6 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	public GrapplinghookEntity(EntityType<? extends GrapplinghookEntity> type, Level world) {
 		super(type, world);
 
-		GrappleMod.LOGGER.warn("Constructor 1");
-
 		this.segmentHandler = new RopeSegmentHandler(this, Vec.positionVec(this), Vec.positionVec(this));
 		this.customization = new CustomizationVolume();
 
@@ -295,10 +293,14 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			return;
 		}
 
-
-		if (hit == null) {
+		// A sanity check - Gives the client side entity a bit more
+		// time to spawn.
+		if(this.tickCount < 1)
 			return;
-		}
+
+		if (hit == null)
+			return;
+
 
 		Vec vec3d = Vec.positionVec(this);
 		Vec vec3d1 = vec3d.add(Vec.motionVec(this));
