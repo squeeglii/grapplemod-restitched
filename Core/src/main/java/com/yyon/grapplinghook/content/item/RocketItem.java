@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.content.item;
 import com.google.common.collect.ImmutableSet;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.TextUtils;
 import net.fabricmc.api.EnvType;
@@ -24,8 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
-import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
-import static com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController.FORCEFIELD_CONTROLLER;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.IS_EQUIPMENT_OVERRIDE;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
 
@@ -49,8 +48,8 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 public class RocketItem extends Item {
 
 	private static final Set<ResourceLocation> SUPPORTED_TYPES = ImmutableSet.of(
-			AIR_FRICTION_CONTROLLER,
-			FORCEFIELD_CONTROLLER
+			PhysicsControllers.AIR_FRICTION,
+			PhysicsControllers.FORCEFIELD
 	);
 
 	public RocketItem() {

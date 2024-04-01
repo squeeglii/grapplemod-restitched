@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.util.Vec;
@@ -18,8 +19,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 import java.util.LinkedList;
-
-import static com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController.GRAPPLING_HOOK_CONTROLLER;
 
 /*
  * This file is part of GrappleMod.
@@ -161,6 +160,6 @@ public class GrappleAttachMessage extends BaseMessageClient {
     	            	
     	GrappleModClient.get()
                 .getClientControllerManager()
-                .createControl(GRAPPLING_HOOK_CONTROLLER, this.id, this.entityId, world, this.blockPos, this.custom);
+                .createControl(PhysicsControllers.GRAPPLING_HOOK, this.id, this.entityId, world, this.blockPos, this.custom);
     }
 }

@@ -6,6 +6,7 @@ import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
@@ -35,13 +36,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.HashSet;
 
-import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 
 public class GrapplingHookPhysicsController {
-
-	public static final ResourceLocation GRAPPLING_HOOK_CONTROLLER = GrappleMod.id("grappling_hook");
 
 	public int entityId;
 	public Level world;
@@ -135,7 +133,7 @@ public class GrapplingHookPhysicsController {
 	}
 
 	public ResourceLocation getType() {
-		return GRAPPLING_HOOK_CONTROLLER;
+		return PhysicsControllers.GRAPPLING_HOOK;
 	}
 	
 	public void disable() {
@@ -157,7 +155,7 @@ public class GrapplingHookPhysicsController {
 		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.entityId) == null)
 			return;
 
-		if (this.getType() == AIR_FRICTION_CONTROLLER)
+		if (this.getType() == PhysicsControllers.AIR_FRICTION)
 			return;
 
 		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
@@ -171,7 +169,7 @@ public class GrapplingHookPhysicsController {
 		if(!wasAlreadyDisabled) {
 			GrappleModClient.get()
 					.getClientControllerManager()
-					.createControl(AIR_FRICTION_CONTROLLER, -1, this.entityId, this.entity.level(), null, this.custom);
+					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.entityId, this.entity.level(), null, this.custom);
 		}
 	}
 	

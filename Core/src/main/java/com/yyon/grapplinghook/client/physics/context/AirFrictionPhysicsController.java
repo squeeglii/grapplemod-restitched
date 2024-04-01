@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.client.physics.context;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -32,7 +33,6 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 
 public class AirFrictionPhysicsController extends GrapplingHookPhysicsController {
 
-	public static final ResourceLocation AIR_FRICTION_CONTROLLER = GrappleMod.id("air_friction");
 	
 	private int ignoreGroundCounter = 0;
 	private boolean wasSliding = false;
@@ -47,7 +47,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 
 	@Override
 	public ResourceLocation getType() {
-		return AIR_FRICTION_CONTROLLER;
+		return PhysicsControllers.AIR_FRICTION;
 	}
 
 	@Override

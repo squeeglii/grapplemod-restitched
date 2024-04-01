@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.util.TextUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,9 +20,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
-import static com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController.FORCEFIELD_CONTROLLER;
 
 public class ForcefieldItem extends Item {
 	public ForcefieldItem() {
@@ -42,10 +40,10 @@ public class ForcefieldItem extends Item {
 				.getClientControllerManager()
 				.getController(playerId);
 
-		if (oldController == null || oldController.getType() == AIR_FRICTION_CONTROLLER) {
+		if (oldController == null || oldController.getType() == PhysicsControllers.AIR_FRICTION) {
 			GrappleModClient.get()
 					.getClientControllerManager()
-					.createControl(FORCEFIELD_CONTROLLER, -1, playerId, worldIn, null, null);
+					.createControl(PhysicsControllers.FORCEFIELD, -1, playerId, worldIn, null, null);
 		} else {
 			oldController.disable();
 		}

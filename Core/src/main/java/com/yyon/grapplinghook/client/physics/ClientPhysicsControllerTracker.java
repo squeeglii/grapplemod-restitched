@@ -14,6 +14,7 @@ import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -40,8 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController.AIR_FRICTION_CONTROLLER;
-import static com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController.GRAPPLING_HOOK_CONTROLLER;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 public class ClientPhysicsControllerTracker {
@@ -66,13 +65,13 @@ public class ClientPhysicsControllerTracker {
 
 
 	public void onClientTick(Player player) {
-		if (player.onGround() || (this.controllers.containsKey(player.getId()) && this.controllers.get(player.getId()).getType() == GRAPPLING_HOOK_CONTROLLER)) {
+		if (player.onGround() || (this.controllers.containsKey(player.getId()) && this.controllers.get(player.getId()).getType() == PhysicsControllers.GRAPPLING_HOOK)) {
 			this.ticksWallRunning = 0;
 		}
 
 		if (this.isWallRunning(player, Vec.motionVec(player))) {
 			if (!this.controllers.containsKey(player.getId())) {
-				GrapplingHookPhysicsController controller = this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, null);
+				GrapplingHookPhysicsController controller = this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, null);
 
 				if (controller != null && controller.getWallDirection() == null)
 					controller.disable();
@@ -107,7 +106,7 @@ public class ClientPhysicsControllerTracker {
 
 	public void checkSlide(Player player) {
 		if (GrappleKey.SLIDE.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
-			this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, null);
+			this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, null);
 		}
 	}
 
@@ -142,7 +141,7 @@ public class ClientPhysicsControllerTracker {
 
 			if (!controllers.containsKey(player.getId())) {
 				player.setOnGround(false);
-				this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, custom);
+				this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, custom);
 			}
 
 			facing.mutableScale(GrappleModLegacyConfig.getConf().enderstaff.ender_staff_strength);
@@ -229,7 +228,7 @@ public class ClientPhysicsControllerTracker {
 		boolean allConditionsMet = GrappleModUtils.and(conditions);
 
 		if(allConditionsMet && !controllers.containsKey(player.getId())) {
-			this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, null);
+			this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, null);
 			GrappleModClient.get().playDoubleJumpSound();
 		}
 
@@ -314,7 +313,7 @@ public class ClientPhysicsControllerTracker {
 		}
 		
 		GrapplingHookPhysicsController control;
-		if (controllerId == GrapplingHookPhysicsController.GRAPPLING_HOOK_CONTROLLER) {
+		if (controllerId == PhysicsControllers.GRAPPLING_HOOK) {
 			if (!thisMulti) {
 				control = new GrapplingHookPhysicsController(grapplehookEntityId, playerId, world, custom);
 
@@ -337,10 +336,10 @@ public class ClientPhysicsControllerTracker {
 				control = new GrapplingHookPhysicsController(grapplehookEntityId, playerId, world, custom);
 			}
 
-		} else if (controllerId == ForcefieldPhysicsController.FORCEFIELD_CONTROLLER) {
+		} else if (controllerId == PhysicsControllers.FORCEFIELD) {
 			control = new ForcefieldPhysicsController(grapplehookEntityId, playerId, world);
 
-		} else if (controllerId == AIR_FRICTION_CONTROLLER) {
+		} else if (controllerId == PhysicsControllers.AIR_FRICTION) {
 			control = new AirFrictionPhysicsController(grapplehookEntityId, playerId, world, custom);
 
 		} else {
@@ -439,7 +438,7 @@ public class ClientPhysicsControllerTracker {
 			}
 
 		} else {
-			controller = this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, custom);
+			controller = this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, custom);
 		}
 
 		if(controller == null)
