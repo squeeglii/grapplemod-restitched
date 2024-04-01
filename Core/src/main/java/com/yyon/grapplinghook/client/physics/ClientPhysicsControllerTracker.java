@@ -66,20 +66,21 @@ public class ClientPhysicsControllerTracker {
 
 
 	public void onClientTick(Player player) {
-		if (player.onGround() || (controllers.containsKey(player.getId()) && controllers.get(player.getId()).getType() == GRAPPLING_HOOK_CONTROLLER)) {
-			ticksWallRunning = 0;
+		if (player.onGround() || (this.controllers.containsKey(player.getId()) && this.controllers.get(player.getId()).getType() == GRAPPLING_HOOK_CONTROLLER)) {
+			this.ticksWallRunning = 0;
 		}
 
 		if (this.isWallRunning(player, Vec.motionVec(player))) {
-			if (!controllers.containsKey(player.getId())) {
+			if (!this.controllers.containsKey(player.getId())) {
 				GrapplingHookPhysicsController controller = this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, null);
-				if (controller.getWallDirection() == null)
+
+				if (controller != null && controller.getWallDirection() == null)
 					controller.disable();
 			}
 			
-			if (controllers.containsKey(player.getId())) {
-				ticksSinceLastOnGround = 0;
-				alreadyUsedDoubleJump = false;
+			if (this.controllers.containsKey(player.getId())) {
+				this.ticksSinceLastOnGround = 0;
+				this.alreadyUsedDoubleJump = false;
 			}
 		}
 		
@@ -89,10 +90,11 @@ public class ClientPhysicsControllerTracker {
 		
 		this.rocketFuel += this.rocketIncreaseTick;
 
-		for (GrapplingHookPhysicsController controller : new LinkedList<>(controllers.values()))
+		for (GrapplingHookPhysicsController controller : new LinkedList<>(this.controllers.values()))
 			controller.doClientTick();
 
-		if (this.rocketFuel > 1) {this.rocketFuel = 1;}
+		if (this.rocketFuel > 1)
+			this.rocketFuel = 1;
 		
 		if (player.onGround()) {
 			if (this.enderLaunchTimer.containsKey(player.getId())) {
@@ -295,19 +297,17 @@ public class ClientPhysicsControllerTracker {
 
 
 	public GrapplingHookPhysicsController createControl(ResourceLocation controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, CustomizationVolume custom) {
-		GrapplinghookEntity grapplinghookEntity;
-		if (world.getEntity(grapplehookEntityId) instanceof GrapplinghookEntity g)
-			grapplinghookEntity = g;
-		else {
-			grapplinghookEntity = null;
-		}
+		GrapplinghookEntity grapplinghookEntity = world.getEntity(grapplehookEntityId) instanceof GrapplinghookEntity g
+				? g
+				: null;
 
-		GrapplingHookPhysicsController currentController = controllers.get(playerId);
+		GrapplingHookPhysicsController currentController = this.controllers.get(playerId);
 
 		boolean thisMulti = custom != null && custom.get(DOUBLE_HOOK_ATTACHED.get());
 
 		if(currentController != null) {
-			boolean currentMulti = currentController.getCurrentCustomizations() != null && currentController.getCurrentCustomizations().get(DOUBLE_HOOK_ATTACHED.get());
+			boolean currentMulti = currentController.getCurrentCustomizations() != null &&
+					               currentController.getCurrentCustomizations().get(DOUBLE_HOOK_ATTACHED.get());
 
 			if (!(thisMulti && currentMulti))
 				currentController.disable();
@@ -319,7 +319,7 @@ public class ClientPhysicsControllerTracker {
 				control = new GrapplingHookPhysicsController(grapplehookEntityId, playerId, world, custom);
 
 			} else {
-				control = controllers.get(playerId);
+				control = this.controllers.get(playerId);
 
 				GrapplingHookPhysicsController finalControl = control;
 				List<Supplier<Boolean>> conditions = List.of(
@@ -343,7 +343,10 @@ public class ClientPhysicsControllerTracker {
 		} else if (controllerId == AIR_FRICTION_CONTROLLER) {
 			control = new AirFrictionPhysicsController(grapplehookEntityId, playerId, world, custom);
 
-		} else return null;
+		} else {
+			GrappleMod.LOGGER.warn("Physics controller '%s' does not exist. Failed to create controller.".formatted(controllerId));
+			return null;
+		}
 
 		if (blockPos != null)
 			this.controllerPos.put(blockPos, control);
@@ -354,7 +357,6 @@ public class ClientPhysicsControllerTracker {
 		if (e instanceof LocalPlayer p)
 			control.receivePlayerMovementMessage(p.input.leftImpulse, p.input.forwardImpulse, p.input.shiftKeyDown);
 
-		
 		return control;
 	}
 
@@ -439,6 +441,9 @@ public class ClientPhysicsControllerTracker {
 		} else {
 			controller = this.createControl(AIR_FRICTION_CONTROLLER, -1, player.getId(), player.level(), null, custom);
 		}
+
+		if(controller == null)
+			return;
 
 		controller.resetRocketProgression();
 		RocketSound sound = new RocketSound(controller, SoundEvent.createVariableRangeEvent(GrappleMod.id("rocket")), SoundSource.PLAYERS);

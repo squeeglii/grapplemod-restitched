@@ -16,7 +16,6 @@ import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.server.IntegratedServer;
@@ -97,8 +96,14 @@ public class GrapplingHookPhysicsController {
 		
 		this.entity = world.getEntity(entityId);
 
-		if(this.entity == null || !this.entity.isAlive()) {
-			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is missing an expected holder entity!");
+		if(this.entity == null) {
+			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is missing an expected holder entity! Report this to 'GrappleMod: Restitched'");
+			this.disable();
+			return;
+		}
+
+		// This could happen if a player is killed before their hook actually lands.
+		if(!this.entity.isAlive()) {
 			this.disable();
 			return;
 		}
@@ -761,26 +766,35 @@ public class GrapplingHookPhysicsController {
 	public double getJumpPower(Entity player, Vec spherevec, GrapplinghookEntity hookEntity) {
 		double maxjump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_power;
 		Vec jump = new Vec(0, maxjump, 0);
-		if (spherevec != null && !GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_at_angle) {
+
+		boolean useRopeAngleAsJump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_at_angle && spherevec != null;
+
+		if (useRopeAngleAsJump) {
 			jump = jump.project(spherevec);
 		}
+
 		double jumppower = jump.y;
 		
 		if (spherevec != null && spherevec.y > 0) {
 			jumppower = 0;
 		}
+
 		if ((hookEntity != null) && hookEntity.ropeLength < 1 && (player.position().y < hookEntity.position().y)) {
 			jumppower = maxjump;
 		}
 
 		jumppower = this.getJumpPower(player, jumppower);
-		
-		double current_speed = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_at_angle ? -motion.distanceAlong(spherevec) : motion.y;
-		if (current_speed > 0) {
-			jumppower = jumppower - current_speed;
-		}
 
-		if (jumppower < 0) {jumppower = 0;}
+
+		double current_speed = useRopeAngleAsJump
+				? -this.motion.distanceAlong(spherevec)
+				: this.motion.y;
+
+		if (current_speed > 0)
+			jumppower = jumppower - current_speed;
+
+		if (jumppower < 0)
+			jumppower = 0;
 
 		return jumppower;
 	}
