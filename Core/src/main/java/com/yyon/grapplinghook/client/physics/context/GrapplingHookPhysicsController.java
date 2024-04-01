@@ -726,8 +726,8 @@ public class GrapplingHookPhysicsController {
 
 	private double getJumpPower(Entity player, double jumppower) {
 		double maxjump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_power;
-		if (onGroundTimer > 0) { // on ground: jump normally
-			onGroundTimer = 20;
+		if (this.onGroundTimer > 0) { // on ground: jump normally
+			this.onGroundTimer = 20;
 			return 0;
 		}
 		if (player.onGround()) {

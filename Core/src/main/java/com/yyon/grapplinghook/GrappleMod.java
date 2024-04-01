@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook;
 
+import com.yyon.grapplinghook.command.GrappleModCommand;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.*;
 import com.yyon.grapplinghook.network.NetworkManager;
@@ -9,6 +10,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -73,6 +75,8 @@ public class GrappleMod implements ModInitializer {
         GrappleModCustomizationProperties.registerAll();
         GrappleModCustomizationCategories.registerAll(); // Categories must always go after items + properties.
 
+        this.queueCommandRegistration();
+
         NetworkManager.registerPacketListeners();
 
         this.serverPhysicsObserver = new ServerPhysicsObserver();
@@ -91,6 +95,12 @@ public class GrappleMod implements ModInitializer {
         cfg.registerLoadListener((holder, config) -> {
             GrappleModItems.invalidateCreativeTabCache();
             return InteractionResult.SUCCESS;
+        });
+    }
+
+    private void queueCommandRegistration() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            dispatcher.register(GrappleModCommand.build());
         });
     }
 
