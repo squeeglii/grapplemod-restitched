@@ -1,0 +1,11 @@
+{
+  "criteria": {
+    "advancements_disabled_so_this_blocks_it": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+
+  "requirements": [
+    [ "advancements_disabled_so_this_blocks_it" ]
+  ]
+}

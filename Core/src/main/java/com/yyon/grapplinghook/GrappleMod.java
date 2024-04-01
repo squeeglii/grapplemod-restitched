@@ -4,14 +4,21 @@ import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.*;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Optional;
 
 /*
  * This file is part of GrappleMod.
@@ -69,6 +76,8 @@ public class GrappleMod implements ModInitializer {
         NetworkManager.registerPacketListeners();
 
         this.serverPhysicsObserver = new ServerPhysicsObserver();
+
+        this.registerDataPacks();
     }
 
     private void initConfig() {
@@ -83,6 +92,18 @@ public class GrappleMod implements ModInitializer {
             GrappleModItems.invalidateCreativeTabCache();
             return InteractionResult.SUCCESS;
         });
+    }
+
+    public void registerDataPacks() {
+        Optional<ModContainer> cont = FabricLoader.getInstance().getModContainer(GrappleMod.MOD_ID);
+
+        if(cont.isEmpty()) {
+            GrappleMod.LOGGER.error("Unable to register data packs! This mod technically doesn't exist!!");
+            return;
+        }
+
+        ModContainer container = cont.get();
+        GrappleModUtils.registerPack("simplified", Component.translatable("pack.grapplemod.simplified"), container, ResourcePackActivationType.NORMAL);
     }
 
     public ServerPhysicsObserver getServerPhysicsObserver() {
