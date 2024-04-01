@@ -8,6 +8,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 
@@ -70,15 +71,24 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
     @Environment(EnvType.CLIENT)
     @Override
     public void processMessage(NetworkContext ctx) {
-    	Level world = Minecraft.getInstance().level;
+        ctx.getClient().execute(() -> {
+            Level world = Minecraft.getInstance().level;
 
-        if(world == null) {
-            GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttachPos)");
-            return;
-        }
+            if (world == null) {
+                GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttachPos)");
+                return;
+            }
 
-    	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
-        	grapple.setAttachPos(this.x, this.y, this.z);
-        }
+            Entity e = world.getEntity(this.id);
+
+            if (e == null) {
+                GrappleMod.LOGGER.warn("GrappleAttachPos received for a hook that doesn't exist on the client side! (yet?)");
+                return;
+            }
+
+            if (e instanceof GrapplinghookEntity grapple) {
+                grapple.setAttachPos(this.x, this.y, this.z);
+            }
+        });
     }
 }

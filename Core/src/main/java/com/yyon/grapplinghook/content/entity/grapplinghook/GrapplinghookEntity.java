@@ -103,9 +103,11 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	public boolean wasInAir = false;
 	public BlockPos magnetBlock = null;
 
-
+	/** Client-side? instantiation. Creates a very basic entity for filling in details later.**/
 	public GrapplinghookEntity(EntityType<? extends GrapplinghookEntity> type, Level world) {
 		super(type, world);
+
+		GrappleMod.LOGGER.warn("Constructor 1");
 
 		this.segmentHandler = new RopeSegmentHandler(this, Vec.positionVec(this), Vec.positionVec(this));
 		this.customization = new CustomizationVolume();
@@ -114,9 +116,10 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isAttachedToSurface = false;
 	}
 
+	/** Server-side? instantiation. Used to spawn the entity & configure it correctly. */
 	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean isAttachedToMainHand, CustomizationVolume customization, boolean isInDoublePair) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
-		
+
 		this.shootingEntity = shooter;
 		this.shootingEntityID = this.shootingEntity.getId();
 		
@@ -133,6 +136,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isAttachedToSurface = false;
 	}
 
+	/** Restore from state snapshot -- used when logging in to re-instantiate a player's hook. */
 	public GrapplinghookEntity(HookSnapshot snapshot, CustomizationVolume volume, Entity shootingEntity, boolean isInPair) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
 
@@ -276,7 +280,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	@Override
-	protected void onHit(HitResult movingobjectposition) {
+	protected void onHit(HitResult hit) {
 		if (this.level().isClientSide) return;
 
 		if (this.isAttachedToSurface) {
@@ -292,19 +296,19 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		}
 
 
-		if (movingobjectposition == null) {
+		if (hit == null) {
 			return;
 		}
 
 		Vec vec3d = Vec.positionVec(this);
 		Vec vec3d1 = vec3d.add(Vec.motionVec(this));
 
-		if (movingobjectposition instanceof EntityHitResult && !GrappleModLegacyConfig.getConf().grapplinghook.other.hookaffectsentities) {
+		if (hit instanceof EntityHitResult && !GrappleModLegacyConfig.getConf().grapplinghook.other.hookaffectsentities) {
 			this.onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 			return;
 		}
 
-		BlockHitResult blockhit = movingobjectposition instanceof BlockHitResult movingHit
+		BlockHitResult blockhit = hit instanceof BlockHitResult movingHit
 				? movingHit
 				: null;
 
@@ -319,7 +323,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			}
 		}
 
-		if (movingobjectposition instanceof EntityHitResult entityHit) {
+		if (hit instanceof EntityHitResult entityHit) {
 			// hit entity
 			Entity entity = entityHit.getEntity();
 			if (entity == this.shootingEntity) {
@@ -338,7 +342,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		} else if (blockhit != null) {
 			BlockPos blockpos = blockhit.getBlockPos();
 
-			Vec vec3 = new Vec(movingobjectposition.getLocation());
+			Vec vec3 = new Vec(hit.getLocation());
 
 			this.serverAttach(blockpos, vec3, blockhit.getDirection());
 

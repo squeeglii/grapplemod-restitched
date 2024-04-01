@@ -133,33 +133,42 @@ public class GrappleAttachMessage extends BaseMessageClient {
     @Environment(EnvType.CLIENT)
     @Override
     public void processMessage(NetworkContext ctx) {
-		Level world = Minecraft.getInstance().level;
+        ctx.getClient().execute(() -> {
+            Level world = Minecraft.getInstance().level;
 
-        if(world == null) {
-            GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttach)");
-            return;
-        }
-
-    	if (world.getEntity(this.id) instanceof GrapplinghookEntity grapple) {
-
-        	grapple.clientAttach(this.x, this.y, this.z);
-        	RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
-        	segmentHandler.segments = this.segments;
-        	segmentHandler.segmentBottomSides = this.segmentBottomSides;
-        	segmentHandler.segmentTopSides = this.segmentTopSides;
-        	
-        	Entity holder = world.getEntity(this.entityId);
-
-            if(holder == null) {
-                GrappleMod.LOGGER.warn("Network Message received in invalid context (Holder does not exist | GrappleAttach)");
+            if(world == null) {
+                GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttach)");
                 return;
             }
 
-        	segmentHandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
-    	}
-    	            	
-    	GrappleModClient.get()
-                .getClientControllerManager()
-                .createControl(PhysicsControllers.GRAPPLING_HOOK, this.id, this.entityId, world, this.blockPos, this.custom);
+
+            Entity e = world.getEntity(this.id);
+
+            if (e == null) {
+                GrappleMod.LOGGER.warn("GrappleAttachMessage received for a hook that doesn't exist on the client side! (yet?)");
+                return;
+            }
+
+            if (e instanceof GrapplinghookEntity grapple) {
+
+                grapple.clientAttach(this.x, this.y, this.z);
+                RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
+                segmentHandler.segments = this.segments;
+                segmentHandler.segmentBottomSides = this.segmentBottomSides;
+                segmentHandler.segmentTopSides = this.segmentTopSides;
+
+                Entity holder = world.getEntity(this.entityId);
+
+                if (holder == null) {
+                    GrappleMod.LOGGER.warn("Network Message received in invalid context (Holder does not exist | GrappleAttach)");
+                    return;
+                }
+
+                segmentHandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
+                GrappleModClient.get()
+                        .getClientControllerManager()
+                        .createControl(PhysicsControllers.GRAPPLING_HOOK, this.id, this.entityId, world, this.blockPos, this.custom);
+            }
+        });
     }
 }
