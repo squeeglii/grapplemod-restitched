@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -100,7 +101,8 @@ public class GrappleMod implements ModInitializer {
 
     private void queueCommandRegistration() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(GrappleModCommand.build());
+            if(FabricLoader.getInstance().isDevelopmentEnvironment())
+                dispatcher.register(GrappleModCommand.build());
         });
     }
 
