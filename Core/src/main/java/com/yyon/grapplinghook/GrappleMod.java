@@ -2,6 +2,7 @@ package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.command.GrappleModCommand;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.pack.DataPackProcessor;
 import com.yyon.grapplinghook.content.registry.*;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
@@ -11,12 +12,14 @@ import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.InteractionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,15 +110,22 @@ public class GrappleMod implements ModInitializer {
     }
 
     public void registerDataPacks() {
+        GrappleMod.LOGGER.info("Re-assigning datapack reload listener...");
+
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new DataPackProcessor());
+
+        GrappleMod.LOGGER.info("Loading default data packs.");
         Optional<ModContainer> cont = FabricLoader.getInstance().getModContainer(GrappleMod.MOD_ID);
 
         if(cont.isEmpty()) {
-            GrappleMod.LOGGER.error("Unable to register data packs! This mod technically doesn't exist!!");
+            GrappleMod.LOGGER.error("Unable to register datapacks! This mod technically doesn't exist!!");
             return;
         }
 
         ModContainer container = cont.get();
         GrappleModUtils.registerPack("simplified", Component.translatable("pack.grapplemod.simplified"), container, ResourcePackActivationType.NORMAL);
+
+        GrappleMod.LOGGER.info("All done with datapacks!");
     }
 
     public ServerPhysicsObserver getServerPhysicsObserver() {
