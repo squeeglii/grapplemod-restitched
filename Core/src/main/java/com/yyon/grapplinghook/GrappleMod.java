@@ -114,7 +114,7 @@ public class GrappleMod implements ModInitializer {
 
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new DataPackProcessor());
 
-        GrappleMod.LOGGER.info("Loading default data packs.");
+        GrappleMod.LOGGER.info("Loading default data packs...");
         Optional<ModContainer> cont = FabricLoader.getInstance().getModContainer(GrappleMod.MOD_ID);
 
         if(cont.isEmpty()) {
@@ -124,6 +124,7 @@ public class GrappleMod implements ModInitializer {
 
         ModContainer container = cont.get();
         GrappleModUtils.registerPack("simplified", Component.translatable("pack.grapplemod.simplified"), container, ResourcePackActivationType.NORMAL);
+        GrappleModUtils.registerPack("no_enchants", Component.translatable("pack.grapplemod.no_enchants"), container, ResourcePackActivationType.NORMAL);
 
         GrappleMod.LOGGER.info("All done with datapacks!");
     }

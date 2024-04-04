@@ -67,7 +67,7 @@ public class EnchantmentConfiguration {
      */
     public static void reset() {
         GrappleModEnchantments.streamEntries()
-                .map(AbstractRegistryReference::get)
+                .map(GrappleModEnchantments.EnchantmentEntry::get)
                 .forEach(enchantment -> {
                     enchantment.setDiscoverable(true);
                     enchantment.setTradeable(true);
@@ -165,7 +165,7 @@ public class EnchantmentConfiguration {
         List<ResourceLocation> validIds = GrappleModEnchantments.getEnchantmentIds();
 
         for(String key: switchObj.keySet()) {
-            if(ResourceLocation.isValidResourceLocation(key))
+            if(!ResourceLocation.isValidResourceLocation(key))
                 throw new InvalidDataException("Enchantment Config field '%s' must have Resource Locations for keys!".formatted(elementName));
 
             JsonElement valueEl = switchObj.get(key);
