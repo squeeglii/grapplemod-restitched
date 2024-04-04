@@ -2,18 +2,11 @@ package com.yyon.grapplinghook.config;
 
 import com.yyon.grapplinghook.content.registry.GrappleModBlocks;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.level.block.Block;
 
 import java.util.HashSet;
 
 public class ConfigUtility {
-
-	private static final Rarity[] RARITIES = new Rarity[] {
-			Rarity.VERY_RARE, Rarity.RARE,
-			Rarity.UNCOMMON, Rarity.COMMON
-	};
 
 	private static boolean anyBlocks = true;
 	private static HashSet<Block> grapplingBlocks;
@@ -108,8 +101,4 @@ public class ConfigUtility {
 		return grapplingBreaksBlocks.contains(block);
 	}
 
-	public static Rarity getRarity(int rarity) {
-		int clampedRarity = Mth.clamp(rarity, 0, RARITIES.length);
-		return RARITIES[clampedRarity];
-	}
 }

@@ -1,20 +1,12 @@
 package com.yyon.grapplinghook.config.pack;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.exception.InvalidDataException;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * Handles extensions of data packs - content types
@@ -33,28 +25,16 @@ public class DataPackProcessor implements SimpleSynchronousResourceReloadListene
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        Optional<Resource> optEnchantmentConfig = resourceManager.getResource(ENCHANTMENTS);
+        List<Resource> enchantmentConfigs = resourceManager.getResourceStack(ENCHANTMENTS);
 
-        if(optEnchantmentConfig.isPresent()) {
-            Resource enchantmentConfig = optEnchantmentConfig.get();
-            this.loadEnchantments(enchantmentConfig);
+        try {
+            EnchantmentConfiguration.processStack(enchantmentConfigs);
+        } catch (Exception err) {
+            GrappleMod.LOGGER.error("Error while processing the Enchantment Configuration stack", err);
         }
+
     }
 
-    private void loadEnchantments(Resource enchantmentConfig) {
-        try (InputStream read = enchantmentConfig.open()) {
 
-            JsonElement enchantmentConfigIn = JsonParser.parseReader(new InputStreamReader(read));
-
-            if(!enchantmentConfigIn.isJsonObject())
-                throw new InvalidDataException("Enchantment config (from pack '%s') requires the root to be an object.".formatted(enchantmentConfig.sourcePackId()));
-
-            //TODO: For each enchantment id, configure whether they're enabled or not. Can be a simple boolean for now.
-            // Also add a damn version number.
-
-        } catch (IOException e) {
-            GrappleMod.LOGGER.error("Skipping resource due to error: ", e);
-        }
-    }
 
 }
