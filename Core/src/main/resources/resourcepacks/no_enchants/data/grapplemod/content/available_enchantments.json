@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "replace": true,
+    "discoverable": {
+        "grapplemod:wall_running": false,
+        "grapplemod:double_jump": false,
+        "grapplemod:sliding": false
+    },
+    "tradeable": {
+        "grapplemod:wall_running": false,
+        "grapplemod:double_jump": false,
+        "grapplemod:sliding": false
+    }
+}
