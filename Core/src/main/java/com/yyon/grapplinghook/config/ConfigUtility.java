@@ -12,7 +12,6 @@ public class ConfigUtility {
 	private static HashSet<Block> grapplingBlocks;
 	private static boolean removeBlocks = false;
 	private static HashSet<Block> grapplingBreaksBlocks;
-	private static boolean anyBreakBlocks = false;
 
 	public static HashSet<Block> stringToBlocks(String s) {
 		HashSet<Block> blocks = new HashSet<>();
@@ -62,10 +61,6 @@ public class ConfigUtility {
 		if (!anyBlocks) {
 			grapplingBlocks = stringToBlocks(s);
 		}
-		
-		grapplingBreaksBlocks = stringToBlocks(GrappleModLegacyConfig.getConf().grapplinghook.blocks.grappleBreakBlocks);
-		anyBreakBlocks = !grapplingBreaksBlocks.isEmpty();
-		
 	}
 
 	private static final String prevGrapplingBlocks = null;
@@ -86,19 +81,6 @@ public class ConfigUtility {
 		} else {
 			return inlist;
 		}
-	}
-
-	private static final String prevGrapplingBreakBlocks = null;
-	public static boolean breaksBlock(Block block) {
-		if (!GrappleModLegacyConfig.getConf().grapplinghook.blocks.grappleBreakBlocks.equals(prevGrapplingBreakBlocks)) {
-			updateGrapplingBlocks();
-		}
-		
-		if (!anyBreakBlocks) {
-			return false;
-		}
-		
-		return grapplingBreaksBlocks.contains(block);
 	}
 
 }

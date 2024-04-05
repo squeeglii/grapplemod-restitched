@@ -8,6 +8,7 @@ import com.yyon.grapplinghook.config.ConfigUtility;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.GrappleModTags;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
@@ -316,9 +317,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		if (blockhit != null) {
 			BlockPos blockpos = blockhit.getBlockPos();
-			Block block = this.level().getBlockState(blockpos).getBlock();
+			BlockState block = this.level().getBlockState(blockpos);
 
-			if (ConfigUtility.breaksBlock(block)) {
+			if (block.is(GrappleModTags.HOOK_BREAKS)) {
 				this.level().destroyBlock(blockpos, true);
 				this.onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 				return;
