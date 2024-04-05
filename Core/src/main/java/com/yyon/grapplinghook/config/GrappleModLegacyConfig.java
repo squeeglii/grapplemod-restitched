@@ -14,18 +14,6 @@ public class GrappleModLegacyConfig implements ConfigData {
 		@Tooltip
 		public GrapplingHook grapplinghook = new GrapplingHook();
 		public static class GrapplingHook {
-
-			@ConfigEntry.Gui.CollapsibleObject
-			@Tooltip
-			public Blocks blocks = new Blocks();
-			public static class Blocks {
-				@Tooltip
-				public String grapplingBlocks = "any";
-				@Tooltip
-				public String grapplingNonBlocks = "none";
-				@Tooltip
-				public String grappleBreakBlocks = "none";
-			}
 			
 			@ConfigEntry.Gui.CollapsibleObject
 			@Tooltip

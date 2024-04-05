@@ -79,6 +79,11 @@ public class GrappleMod implements ModInitializer {
         GrappleModCustomizationProperties.registerAll();
         GrappleModCustomizationCategories.registerAll(); // Categories must always go after items + properties.
 
+        // Some things don't need "registering" but are static so they still
+        // need loading. Load them now for reliability.
+        GrappleModTags.bump();
+        GrappleModGamerules.bump();
+
         this.queueCommandRegistration();
 
         NetworkManager.registerPacketListeners();

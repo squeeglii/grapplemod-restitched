@@ -4,9 +4,9 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
-import com.yyon.grapplinghook.config.ConfigUtility;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
+import com.yyon.grapplinghook.content.registry.GrappleModGamerules;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.content.registry.GrappleModTags;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
@@ -25,6 +25,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -34,7 +35,6 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -45,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
@@ -259,7 +260,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			this.serverAttach(
 					this.getLastBlockCollision(),
 					this.getLastSubCollisionPos(),
-					this.getLastBlockCollisionSide()
+					this.getLastBlockCollisionSide(),
+					true
 			);
 			return;
 		}
@@ -427,35 +429,40 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		Vec playerpos = Vec.positionVec(this.shootingEntity);
 		Vec pos = Vec.positionVec(this);
-		if (magnetBlock == null) {
-			if (prevPos != null) {
-				HashMap<BlockPos, Boolean> checkedset = new HashMap<>();
-				Vec vector = pos.sub(prevPos);
-				if (vector.length() > 0) {
-					Vec normvector = vector.normalize();
-					for (int i = 0; i < vector.length(); i++) {
-						double dist = prevPos.sub(playerpos).length();
-						int radius = (int) dist / 4;
-						BlockPos found = this.check(prevPos, checkedset);
-						if (found != null) {
-							//if (wasinair) {
-							Vec distvec = new Vec(found.getX(), found.getY(), found.getZ());
-							distvec.mutableSub(prevPos);
-							if (distvec.length() < radius) {
-								this.setPosRaw(prevPos.x, prevPos.y, prevPos.z);
-								pos = prevPos;
 
-								magnetBlock = found;
+		if (this.magnetBlock == null && this.prevPos != null) {
 
-								break;
-							}
-							//}
-						} else {
-							wasInAir = true;
-						}
+			HashMap<BlockPos, Boolean> cachedPositions = new HashMap<>();
+			Vec vector = pos.sub(this.prevPos);
 
-						prevPos.mutableAdd(normvector);
+			if (vector.length() > 0) {
+				Vec normvector = vector.normalize();
+
+				for (int i = 0; i < vector.length(); i++) {
+					double dist = this.prevPos.sub(playerpos).length();
+					int radius = (int) dist / 4;
+
+					Optional<BlockPos> optFound = this.checkForMagnetTargetsNearby(this.prevPos, cachedPositions);
+
+					if (optFound.isEmpty()) {
+						this.wasInAir = true;
+						this.prevPos.mutableAdd(normvector);
+						continue;
 					}
+
+					BlockPos found = optFound.get();
+
+					Vec distvec = new Vec(found.getX(), found.getY(), found.getZ());
+					distvec.mutableSub(prevPos);
+					if (distvec.length() < radius) {
+						this.setPosRaw(prevPos.x, prevPos.y, prevPos.z);
+						pos = this.prevPos;
+						this.magnetBlock = found;
+
+						break;
+					}
+
+					this.prevPos.mutableAdd(normvector);
 				}
 			}
 		}
@@ -504,6 +511,10 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit) {
+		this.serverAttach(blockpos, pos, sideHit, false);
+	}
+
+	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit, boolean force) {
 		if (this.isAttachedToSurface)
 			return;
 
@@ -516,9 +527,10 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.lastBlockCollisionSide = sideHit;
 
 		if (blockpos != null) {
-			Block block = this.level().getBlockState(blockpos).getBlock();
+			BlockState block = this.level().getBlockState(blockpos);
 
-			if (!ConfigUtility.attachesBlock(block)) {
+			if ((!force) && (!this.canAttachToBlock(block))) {
+				this.playSound(SoundEvents.ANVIL_LAND, 0.7f, 1.8f);
 				this.removeServer();
 				return;
 			}
@@ -591,49 +603,72 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	// used for magnet attraction
 
-	public BlockPos check(Vec p, HashMap<BlockPos, Boolean> checkedset) {
+	/**
+	 * Checks all the block positions within a certain "radius" (+- radius in each axis)
+	 * around the center to see if the hook could successfully collide with them.
+	 */
+	public Optional<BlockPos> checkForMagnetTargetsNearby(Vec center, HashMap<BlockPos, Boolean> cachedPositions) {
     	int radius = (int) Math.floor(this.customization.get(MAGNET_RADIUS.get()));
-    	BlockPos closestpos = null;
-    	double closestdist = 0;
-    	for (int x = (int)p.x - radius; x <= (int)p.x + radius; x++) {
-        	for (int y = (int)p.y - radius; y <= (int)p.y + radius; y++) {
-            	for (int z = (int)p.z - radius; z <= (int)p.z + radius; z++) {
+
+    	BlockPos closestValidPos = null;
+    	double closestDistance = 0;
+
+		int pX = (int) center.x;
+		int pY = (int) center.y;
+		int pZ = (int) center.z;
+
+    	for (int x = pX - radius; x <= pX + radius; x++) {
+        	for (int y = pY - radius; y <= pY + radius; y++) {
+            	for (int z = pZ - radius; z <= pZ + radius; z++) {
+
 			    	BlockPos pos = new BlockPos(x, y, z);
-					if (hasBlock(pos, checkedset)) {
-						Vec distvec = new Vec(pos.getX(), pos.getY(), pos.getZ());
-						distvec.mutableSub(p);
-						double dist = distvec.length();
-						if (closestpos == null || dist < closestdist) {
-							closestpos = pos;
-							closestdist = dist;
-						}
+					if (!this.checkIfCollidingWithBlock(pos, cachedPositions))
+						continue;
+
+					Vec distvec = new Vec(pos.getX(), pos.getY(), pos.getZ());
+					distvec.mutableSub(center);
+
+					double dist = distvec.length();
+					if (closestValidPos == null || dist < closestDistance) {
+						closestValidPos = pos;
+						closestDistance = dist;
 					}
 				}
 	    	}
     	}
-		return closestpos;
+
+		return Optional.ofNullable(closestValidPos);
 	}
 	// used for magnet attraction
 
-	public boolean hasBlock(BlockPos pos, HashMap<BlockPos, Boolean> checkedset) {
-    	if (!checkedset.containsKey(pos)) {
-    		boolean isblock = false;
-	    	BlockState blockstate = this.level().getBlockState(pos);
-	    	Block b = blockstate.getBlock();
-			if (ConfigUtility.attachesBlock(b)) {
-		    	if (!(blockstate.isAir())) {
-			    	VoxelShape BB = blockstate.getCollisionShape(this.level(), pos);
-			    	if (!BB.isEmpty()) {
-			    		isblock = true;
-			    	}
-		    	}
-			}
+	/**
+	 * Checks if the hook has collided with a block, caching the check to the provided HashMap.
+	 * Ensures that if there is a collision, the collided block matches the allowed / disallowed
+	 * tags & gamerules.
+	 */
+	public boolean checkIfCollidingWithBlock(BlockPos pos, HashMap<BlockPos, Boolean> cachedPositions) {
+		if(cachedPositions.containsKey(pos))
+			return cachedPositions.get(pos);
 
-	    	checkedset.put(pos, isblock);
-	    	return isblock;
-    	} else {
-    		return checkedset.get(pos);
-    	}
+		boolean canAttach = false;
+		BlockState blockState = this.level().getBlockState(pos);
+
+		if (this.canAttachToBlock(blockState) && !blockState.isAir()) {
+			VoxelShape collider = blockState.getCollisionShape(this.level(), pos);
+
+			if (!collider.isEmpty())
+				canAttach = true;
+		}
+
+		cachedPositions.put(pos, canAttach);
+		return canAttach;
+	}
+
+	private boolean canAttachToBlock(BlockState blockState) {
+		// "Limited Hook" mode acts as a whitelist. Default behaviour uses a blacklist.
+		return this.level().getGameRules().getBoolean(GrappleModGamerules.USE_LIMITED_HOOK)
+				? blockState.is(GrappleModTags.LIMITED_HOOK_ALLOWED)
+				: !blockState.is(GrappleModTags.HOOK_DISALLOWED);
 	}
 
 	public double getSpeed() {
