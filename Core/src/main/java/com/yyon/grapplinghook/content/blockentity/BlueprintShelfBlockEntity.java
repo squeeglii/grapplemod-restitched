@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.blockentity;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.block.TemplateTableBlock;
+import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
 import com.yyon.grapplinghook.content.item.BlueprintItem;
 import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
 import com.yyon.grapplinghook.data.UpgraderUpper;
@@ -25,14 +25,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
+public class BlueprintShelfBlockEntity extends BaseContainerBlockEntity {
 
     public static int MAX_CAPACITY = 15;
 
     private final NonNullList<ItemStack> storedTemplates;
 
-    public TemplateTableBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(GrappleModBlockEntities.TEMPLATE_TABLE.get(), blockPos, blockState);
+    public BlueprintShelfBlockEntity(BlockPos blockPos, BlockState blockState) {
+        super(GrappleModBlockEntities.BLUEPRINT_SHELF.get(), blockPos, blockState);
         this.storedTemplates = NonNullList.createWithCapacity(MAX_CAPACITY);
     }
 
@@ -40,7 +40,7 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
     @NotNull
     @Override
     protected Component getDefaultName() {
-        return Component.translatable("template_table.title.default");
+        return Component.translatable("blueprint_shelf.title.default");
     }
 
     @NotNull
@@ -170,19 +170,19 @@ public class TemplateTableBlockEntity extends BaseContainerBlockEntity {
     }
 
     public void updateBlockState() {
-        IntegerProperty templatesHeld = TemplateTableBlock.TEMPLATES_HELD;
+        IntegerProperty templatesHeld = BlueprintShelfBlock.TEMPLATES_HELD;
 
         if(this.getTemplateCount() > this.getContainerSize()) {
             GrappleMod.LOGGER.error("TemplateTableBlockEntity has more items than it's capacity!!");
 
-            this.getBlockState().setValue(templatesHeld, TemplateTableBlock.FULL);
+            this.getBlockState().setValue(templatesHeld, BlueprintShelfBlock.FULL);
             return;
         }
 
         float fillFraction = (float) this.getTemplateCount() / this.getContainerSize();
         float cappedFillFraction = Mth.clamp(fillFraction, 0f, 1f);
 
-        float fillStage = Mth.lerp(cappedFillFraction, TemplateTableBlock.EMPTY, TemplateTableBlock.FULL);
+        float fillStage = Mth.lerp(cappedFillFraction, BlueprintShelfBlock.EMPTY, BlueprintShelfBlock.FULL);
         int steppedFillStage = Mth.floor(fillStage);
 
         this.getBlockState().setValue(templatesHeld, steppedFillStage);

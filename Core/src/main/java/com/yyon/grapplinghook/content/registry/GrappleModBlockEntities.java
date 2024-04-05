@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.content.blockentity.TemplateTableBlockEntity;
+import com.yyon.grapplinghook.content.blockentity.BlueprintShelfBlockEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -25,9 +25,9 @@ public class GrappleModBlockEntities {
                     .of(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
                     .build(null));
 
-    public static final BlockEntityEntry<BlockEntityType<TemplateTableBlockEntity>> TEMPLATE_TABLE = GrappleModBlockEntities
-            .blockEntity("template_table",() -> BlockEntityType.Builder
-                    .of(TemplateTableBlockEntity::new, GrappleModBlocks.TEMPLATE_TABLE.get())
+    public static final BlockEntityEntry<BlockEntityType<BlueprintShelfBlockEntity>> BLUEPRINT_SHELF = GrappleModBlockEntities
+            .blockEntity("blueprint_shelf",() -> BlockEntityType.Builder
+                    .of(BlueprintShelfBlockEntity::new, GrappleModBlocks.BLUEPRINT_SHELF.get())
                     .build(null));
 
 

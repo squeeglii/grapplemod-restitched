@@ -96,7 +96,7 @@
     "item.grapplemod.dye_bag_upgrade": "Dye Bag Upgrade",
 
     "block.grapplemod.modification_table": "Grappling Hook Modifier",
-    "block.grapplemod.template_table": "Template Table",
+    "block.grapplemod.blueprint_shelf": "Blueprint Shelf",
 
     "enchantment.grapplemod.wall_running": "Wall-Running",
     "enchantment.grapplemod.double_jump": "Double-Jump",
@@ -110,7 +110,7 @@
     "hook_template.grapplemod.rocket_hook": "Rocket Grappling Hook",
     "hook_template.grapplemod.double_rocket_motor_hook": "Dual Motorized Rocket Grappling Hooks",
 
-    "template_table.title.default": "Template Table",
+    "blueprint_shelf.title.default": "Blueprint Shelf",
 
 
     "grapple_modifier.title": "Grapple Hook Modifier Table",

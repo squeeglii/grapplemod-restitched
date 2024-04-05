@@ -9,7 +9,7 @@
 
     "rewards": {
         "recipes": [
-            "grapplemod:template_table",
+            "grapplemod:blueprint_shelf",
             "grapplemod:blueprint",
             "grapplemod:upgrade/double_hook",
             "grapplemod:upgrade/ender_staff",

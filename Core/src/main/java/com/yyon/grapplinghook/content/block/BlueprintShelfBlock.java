@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.content.block;
 
 import com.mojang.serialization.MapCodec;
-import com.yyon.grapplinghook.content.blockentity.TemplateTableBlockEntity;
+import com.yyon.grapplinghook.content.blockentity.BlueprintShelfBlockEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,9 +21,9 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-public class TemplateTableBlock extends BaseEntityBlock {
+public class BlueprintShelfBlock extends BaseEntityBlock {
 
-	public static final MapCodec<TemplateTableBlock> CODEC = simpleCodec(TemplateTableBlock::new);
+	public static final MapCodec<BlueprintShelfBlock> CODEC = simpleCodec(BlueprintShelfBlock::new);
 
 	public static final IntegerProperty TEMPLATES_HELD = IntegerProperty.create("shelves_filled", 0, 4);
 
@@ -31,7 +31,7 @@ public class TemplateTableBlock extends BaseEntityBlock {
 	public static final int EMPTY = 0;
 
 
-	public TemplateTableBlock(Properties properties) {
+	public BlueprintShelfBlock(Properties properties) {
 		super(properties);
 		BlockState defaultState = this.stateDefinition.any()
 				.setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH)
@@ -40,8 +40,8 @@ public class TemplateTableBlock extends BaseEntityBlock {
 		this.registerDefaultState(defaultState);
 	}
 
-	public TemplateTableBlock() {
-		this(Properties.ofFullCopy(Blocks.FLETCHING_TABLE));
+	public BlueprintShelfBlock() {
+		this(Properties.ofFullCopy(Blocks.CHISELED_BOOKSHELF));
 	}
 
 
@@ -56,7 +56,7 @@ public class TemplateTableBlock extends BaseEntityBlock {
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult rayResult) {
 		BlockEntity blockEntity = worldIn.getBlockEntity(pos);
 
-		if (!(blockEntity instanceof TemplateTableBlockEntity templateTableBlockEntity))
+		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity))
 			return InteractionResult.PASS;
 
 		ItemStack heldStack = playerIn.getItemInHand(hand);
@@ -65,10 +65,10 @@ public class TemplateTableBlock extends BaseEntityBlock {
 
 
 		// TemplateTable has no 'primary blueprint' so there's nothing to quick-apply from - open UI
-		if(templateTableBlockEntity.isEmpty()) {
+		if(blueprintShelfBlockEntity.isEmpty()) {
 			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
 
-			playerIn.openMenu(templateTableBlockEntity);
+			playerIn.openMenu(blueprintShelfBlockEntity);
 			return InteractionResult.CONSUME;
 		}
 
@@ -76,7 +76,7 @@ public class TemplateTableBlock extends BaseEntityBlock {
 		if(!(heldItem instanceof ICustomizationApplicable customizationReciever)) {
 			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
 
-			playerIn.openMenu(templateTableBlockEntity);
+			playerIn.openMenu(blueprintShelfBlockEntity);
 			return InteractionResult.CONSUME;
 		}
 
@@ -93,18 +93,18 @@ public class TemplateTableBlock extends BaseEntityBlock {
 			return;
 
 		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if (!(blockEntity instanceof TemplateTableBlockEntity templateTableBlockEntity)) {
+		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity)) {
 			super.onRemove(state, level, pos, newState, isMoving);
 			return;
 		}
 
-		if(templateTableBlockEntity.isEmpty()) {
+		if(blueprintShelfBlockEntity.isEmpty()) {
 			super.onRemove(state, level, pos, newState, isMoving);
 			return;
 		}
 
-		for (int i = 0; i < templateTableBlockEntity.getContainerSize(); i++) {
-			ItemStack itemStack = templateTableBlockEntity.getItem(i);
+		for (int i = 0; i < blueprintShelfBlockEntity.getContainerSize(); i++) {
+			ItemStack itemStack = blueprintShelfBlockEntity.getItem(i);
 
 			if (itemStack.isEmpty())
 				continue;
@@ -112,7 +112,7 @@ public class TemplateTableBlock extends BaseEntityBlock {
 			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
 		}
 
-		templateTableBlockEntity.clearContent();
+		blueprintShelfBlockEntity.clearContent();
 		level.updateNeighbourForOutputSignal(pos, this);
 
 		super.onRemove(state, level, pos, newState, isMoving);
@@ -121,7 +121,7 @@ public class TemplateTableBlock extends BaseEntityBlock {
 	@NotNull
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new TemplateTableBlockEntity(pos, state);
+		return new BlueprintShelfBlockEntity(pos, state);
 	}
 
 	@Override
@@ -167,11 +167,11 @@ public class TemplateTableBlock extends BaseEntityBlock {
 			return 0;
 
 		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if (!(blockEntity instanceof TemplateTableBlockEntity templateTableBlockEntity))
+		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity))
 			return 0;
 
-		int templateCount = templateTableBlockEntity.getTemplateCount();
-		int maxTemplates = templateTableBlockEntity.getContainerSize();
+		int templateCount = blueprintShelfBlockEntity.getTemplateCount();
+		int maxTemplates = blueprintShelfBlockEntity.getContainerSize();
 
 		return Math.floorDiv(templateCount, maxTemplates);
 	}

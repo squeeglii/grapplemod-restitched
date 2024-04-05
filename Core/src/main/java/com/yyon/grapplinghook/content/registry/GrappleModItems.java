@@ -59,7 +59,7 @@ public final class GrappleModItems {
 
 
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
-    public static final GrappleModBlocks.BlockItemEntry<BlockItem> TEMPLATE_TABLE_BLOCK = reserve();
+    public static final GrappleModBlocks.BlockItemEntry<BlockItem> BLUEPRINT_SHELF_BLOCK = reserve();
 
     private static final CreativeModeTab.DisplayItemsGenerator MOD_TAB_GENERATOR = (displayParameters, output) -> {
 

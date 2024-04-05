@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.block.GrappleModifierBlock;
-import com.yyon.grapplinghook.content.block.TemplateTableBlock;
+import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -51,9 +51,9 @@ public class GrappleModBlocks {
             .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 
-    public static final BlockEntry<TemplateTableBlock> TEMPLATE_TABLE = GrappleModBlocks
-            .block("template_table", TemplateTableBlock::new)
-            .withConfiguredItem(GrappleModItems.TEMPLATE_TABLE_BLOCK, new Item.Properties().stacksTo(64))
+    public static final BlockEntry<BlueprintShelfBlock> BLUEPRINT_SHELF = GrappleModBlocks
+            .block("blueprint_shelf", BlueprintShelfBlock::new)
+            .withConfiguredItem(GrappleModItems.BLUEPRINT_SHELF_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 
 
