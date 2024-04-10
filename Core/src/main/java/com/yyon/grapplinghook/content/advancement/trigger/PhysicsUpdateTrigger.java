@@ -1,10 +1,13 @@
 package com.yyon.grapplinghook.content.advancement.trigger;
 
+import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.advancement.PhysicsFramePredicate;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import org.jetbrains.annotations.NotNull;
@@ -13,13 +16,21 @@ import java.util.Optional;
 
 public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTrigger.TriggerInstance> {
 
-    private static final String PHYSICS_PREDICATE_ID = "physics";
 
+    private static final ResourceLocation ID = GrappleMod.id("grapple_physics_changed");
+    private static final String PHYSICS_PREDICATE = "physics";
 
     @NotNull
     @Override
-    public Codec<TriggerInstance> codec() {
-        return TriggerInstance.CODEC;
+    public ResourceLocation getId() {
+        return ID;
+    }
+
+    @NotNull
+    @Override
+    protected TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate contextAwarePredicate, DeserializationContext deserializationContext) {
+        PhysicsFramePredicate predicate = PhysicsFramePredicate.fromJson(jsonObject.get(PHYSICS_PREDICATE));
+        return new TriggerInstance(contextAwarePredicate, predicate);
     }
 
     public void trigger(ServerPlayer player, PlayerPhysicsFrame frame) {
@@ -27,21 +38,25 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
     }
 
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<PhysicsFramePredicate> physics) implements SimpleInstance {
+    public static class TriggerInstance extends AbstractCriterionTriggerInstance {
 
-        public static final Codec<PhysicsUpdateTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create((instance) -> instance
-                .group(
-                        ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(TriggerInstance::player),
-                        ExtraCodecs.strictOptionalField(PhysicsFramePredicate.CODEC, PHYSICS_PREDICATE_ID).forGetter(TriggerInstance::physics)
-                )
-                .apply(instance, TriggerInstance::new));
+        private final PhysicsFramePredicate physics;
 
-        public boolean matches(PlayerPhysicsFrame frame) {
-            return this.physics.isPresent() && this.physics.get().matches(frame);
+        private TriggerInstance(ContextAwarePredicate contextAwarePredicate, PhysicsFramePredicate predicate) {
+            super(ID, contextAwarePredicate);
+            this.physics = predicate;
         }
 
-        public Optional<PhysicsFramePredicate> physics() {
-            return this.physics;
+        public boolean matches(PlayerPhysicsFrame frame) {
+            return this.physics.matches(frame);
+        }
+
+        @NotNull
+        @Override
+        public JsonObject serializeToJson(SerializationContext context) {
+            JsonObject base = super.serializeToJson(context);
+            base.add(PHYSICS_PREDICATE, this.physics.toJson());
+            return base;
         }
     }
 }

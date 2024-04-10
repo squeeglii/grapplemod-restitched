@@ -34,11 +34,14 @@ public abstract class GrappleCrosshairMixin {
     @Final @Shadow
     private Minecraft minecraft;
 
-    @Shadow @Final private static ResourceLocation CROSSHAIR_SPRITE;
-
+    @Final @Shadow
+    private static ResourceLocation GUI_ICONS_LOCATION;
 
     @Inject(method = "renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V", shift = At.Shift.AFTER, ordinal = 0))
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V",
+                    shift = At.Shift.AFTER, ordinal = 0))
     public void renderModCrosshair(GuiGraphics guiGraphics, CallbackInfo ci) {
 
         LocalPlayer player = this.minecraft.player;
@@ -111,7 +114,7 @@ public abstract class GrappleCrosshairMixin {
     @Unique
     private void drawCrosshair(GuiGraphics guiGraphics, int x, int y) {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        guiGraphics.blitSprite(CROSSHAIR_SPRITE, (int) (x - (15.0F/2)), (int) (y - (15.0F/2)), 15, 15);
+        guiGraphics.blit(GUI_ICONS_LOCATION, (int) (x - (15.0F/2)), (int) (y - (15.0F/2)), 0, 0, 15, 15);
         RenderSystem.defaultBlendFunc();
     }
 

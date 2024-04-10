@@ -48,20 +48,12 @@ import java.util.Map;
 
 public class GrappleModifierBlock extends BaseEntityBlock {
 
-	public static final MapCodec<GrappleModifierBlock> CODEC = simpleCodec(GrappleModifierBlock::new);
-
 	public GrappleModifierBlock(Properties properties) {
 		super(properties);
 	}
 
 	public GrappleModifierBlock() {
-		this(Block.Properties.ofFullCopy(Blocks.FLETCHING_TABLE));
-	}
-
-	@NotNull
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
+		this(Block.Properties.copy(Blocks.FLETCHING_TABLE));
 	}
 
 	@Nullable

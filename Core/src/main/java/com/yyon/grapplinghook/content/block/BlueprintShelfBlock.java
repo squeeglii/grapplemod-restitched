@@ -27,8 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class BlueprintShelfBlock extends BaseEntityBlock {
 
-	public static final MapCodec<BlueprintShelfBlock> CODEC = simpleCodec(BlueprintShelfBlock::new);
-
 	public static final IntegerProperty TEMPLATES_HELD = IntegerProperty.create("shelves_filled", 0, 4);
 
 	public static final int FULL = 4;
@@ -45,14 +43,7 @@ public class BlueprintShelfBlock extends BaseEntityBlock {
 	}
 
 	public BlueprintShelfBlock() {
-		this(Properties.ofFullCopy(Blocks.CHISELED_BOOKSHELF));
-	}
-
-
-	@NotNull
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
+		this(Properties.copy(Blocks.CHISELED_BOOKSHELF));
 	}
 
     @Override

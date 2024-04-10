@@ -43,8 +43,8 @@ public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<
 
         this.renderModel(poseStack, buffer, packedLight, model, 1.0f, 1.0f, 1.0f);
 
-        ArmorTrim.getTrim(livingEntity.level().registryAccess(), itemStack, true).ifPresent(armorTrim -> {
-            this.renderTrim(poseStack, buffer, packedLight, armorTrim, model);
+        ArmorTrim.getTrim(livingEntity.level().registryAccess(), itemStack).ifPresent(armorTrim -> {
+            this.renderTrim(poseStack, buffer, packedLight, model);
         });
 
         if (itemStack.hasFoil()) {
@@ -61,10 +61,9 @@ public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<
     }
 
 
-    private void renderTrim(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ArmorTrim trim, A model) {
+    private void renderTrim(PoseStack poseStack, MultiBufferSource buffer, int packedLight, A model) {
         TextureAtlasSprite bootsSprite = this.armorTrimAtlas.getSprite(BOOTS_TEXTURE);
-        boolean isDecal = trim.pattern().value().decal();
-        RenderType trimsSheet = Sheets.armorTrimsSheet(isDecal);
+        RenderType trimsSheet = Sheets.armorTrimsSheet();
         VertexConsumer trimBuffer = buffer.getBuffer(trimsSheet);
         VertexConsumer vertexConsumer = bootsSprite.wrap(trimBuffer);
 

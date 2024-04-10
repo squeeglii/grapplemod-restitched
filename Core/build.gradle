@@ -12,7 +12,7 @@ String modVer = isModVersionDefined
         : project.properties["mod_version"].toString()
 
 group = project.maven_group
-version = "%s+%s.fabric".formatted(modVer, project.properties["minecraft_version"])
+version = "%s+%s.beta.fabric".formatted(modVer, project.properties["minecraft_version"])
 
 loom {
     accessWidenerPath = file("src/main/resources/grapplemod.accesswidener")

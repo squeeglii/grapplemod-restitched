@@ -32,7 +32,7 @@ public class GrappleModAdvancementTriggers {
     public static void registerAllTriggers() {
         for(TriggerEntry<?> entry: advancementTriggers) {
             CriterionTrigger<?> it = entry.getFactory().get();
-            entry.finalize(CriteriaTriggers.register(entry.getIdentifier().toString(), it));
+            entry.finalize(CriteriaTriggers.register(it));
         }
     }
 

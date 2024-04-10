@@ -13,7 +13,7 @@ public class BackgroundWidget extends AbstractWidget {
 
     private static final ResourceLocation BG_TEXTURE = new ResourceLocation(
             GrappleMod.MOD_ID,
-            "blueprint"
+            "textures/gui/sprites/blueprint.png"
     );
 
     public BackgroundWidget(int posX, int posY, int sizeVertical, int sizeHorizontal, Component text) {
@@ -27,7 +27,7 @@ public class BackgroundWidget extends AbstractWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(BG_TEXTURE, this.getX(), this.getY(), this.width, this.height);
+        graphics.blitNineSliced(BG_TEXTURE, this.getX(), this.getY(), this.width, this.height, 10, 37, 37, 0, 0);
     }
 
     @Override
