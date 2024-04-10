@@ -3,8 +3,12 @@ package com.yyon.grapplinghook.content.block;
 import com.mojang.serialization.MapCodec;
 import com.yyon.grapplinghook.content.blockentity.BlueprintShelfBlockEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -54,33 +58,12 @@ public class BlueprintShelfBlock extends BaseEntityBlock {
     @Override
 	@NotNull
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult rayResult) {
-		BlockEntity blockEntity = worldIn.getBlockEntity(pos);
 
-		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity))
-			return InteractionResult.PASS;
-
-		ItemStack heldStack = playerIn.getItemInHand(hand);
-		Item heldItem = heldStack.getItem();
-
-
-
-		// TemplateTable has no 'primary blueprint' so there's nothing to quick-apply from - open UI
-		if(blueprintShelfBlockEntity.isEmpty()) {
-			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
-
-			playerIn.openMenu(blueprintShelfBlockEntity);
-			return InteractionResult.CONSUME;
+		if(worldIn.isClientSide()) {
+			playerIn.playNotifySound(SoundEvents.NOTE_BLOCK_BANJO.value(), SoundSource.BLOCKS, 0.8f, 0.3f);
+			playerIn.sendSystemMessage(Component.literal("This block isn't implemented yet. See you in v2.0!")
+					.withStyle(ChatFormatting.RED));
 		}
-
-		// Item can't recieve upgrades - open UI
-		if(!(heldItem instanceof ICustomizationApplicable customizationReciever)) {
-			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
-
-			playerIn.openMenu(blueprintShelfBlockEntity);
-			return InteractionResult.CONSUME;
-		}
-
-		// TODO : Apply main blueprint
 
 		return InteractionResult.sidedSuccess(worldIn.isClientSide);
 	}
@@ -91,29 +74,6 @@ public class BlueprintShelfBlock extends BaseEntityBlock {
 		// if block isn't removed/replaced, don't onRemove
 		if (state.is(newState.getBlock()))
 			return;
-
-		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity)) {
-			super.onRemove(state, level, pos, newState, isMoving);
-			return;
-		}
-
-		if(blueprintShelfBlockEntity.isEmpty()) {
-			super.onRemove(state, level, pos, newState, isMoving);
-			return;
-		}
-
-		for (int i = 0; i < blueprintShelfBlockEntity.getContainerSize(); i++) {
-			ItemStack itemStack = blueprintShelfBlockEntity.getItem(i);
-
-			if (itemStack.isEmpty())
-				continue;
-
-			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
-		}
-
-		blueprintShelfBlockEntity.clearContent();
-		level.updateNeighbourForOutputSignal(pos, this);
 
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
@@ -166,13 +126,6 @@ public class BlueprintShelfBlock extends BaseEntityBlock {
 		if (level.isClientSide())
 			return 0;
 
-		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity))
-			return 0;
-
-		int templateCount = blueprintShelfBlockEntity.getTemplateCount();
-		int maxTemplates = blueprintShelfBlockEntity.getContainerSize();
-
-		return Math.floorDiv(templateCount, maxTemplates);
+		return 0;
 	}
 }

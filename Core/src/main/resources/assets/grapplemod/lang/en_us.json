@@ -74,8 +74,8 @@
     "feedback.grapplemod.modifier.applied_blueprint": "Drew up a new blueprint with the modifier tweaks! ⛏",
 
     "item.grapplemod.grappling_hook": "Grappling Hook",
-    "item.grapplemod.blueprint": "Blueprint",
-    "item.grapplemod.blank_blueprint": "Blank Blueprint",
+    "item.grapplemod.blueprint": "Blueprint (Unimplemented)",
+    "item.grapplemod.blank_blueprint": "Blank Blueprint (Unimplemented)",
     "item.grapplemod.ender_staff": "Ender Staff",
     "item.grapplemod.forcefield": "Magnetic Forcefield",
     "item.grapplemod.rocket": "Porta-Rocket",
@@ -97,7 +97,7 @@
     "item.grapplemod.dye_bag_upgrade": "Dye Bag Upgrade",
 
     "block.grapplemod.modification_table": "Grappling Hook Modifier",
-    "block.grapplemod.blueprint_shelf": "Blueprint Shelf",
+    "block.grapplemod.blueprint_shelf": "Blueprint Shelf (Unimplemented)",
 
     "enchantment.grapplemod.wall_running": "Wall-Running",
     "enchantment.grapplemod.double_jump": "Double-Jump",
