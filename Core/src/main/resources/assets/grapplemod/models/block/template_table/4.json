@@ -1,6 +1,0 @@
-{
-    "parent": "grapplemod:block/template_table/empty",
-    "textures": {
-        "north": "grapplemod:block/template_table/front_4"
-    }
-}

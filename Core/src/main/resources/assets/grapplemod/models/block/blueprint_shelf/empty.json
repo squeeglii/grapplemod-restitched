@@ -1,0 +1,14 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "particle": "grapplemod:block/blueprint_shelf/side",
+
+        "down": "minecraft:block/mangrove_planks",
+        "up": "grapplemod:block/blueprint_shelf/top",
+
+        "east": "grapplemod:block/blueprint_shelf/side",
+        "west": "grapplemod:block/blueprint_shelf/side",
+        "south": "grapplemod:block/blueprint_shelf/side",
+        "north": "grapplemod:block/blueprint_shelf/front_empty"
+    }
+}

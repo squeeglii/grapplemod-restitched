@@ -1,0 +1,6 @@
+{
+    "parent": "grapplemod:block/blueprint_shelf/empty",
+    "textures": {
+        "north": "grapplemod:block/blueprint_shelf/front_4"
+    }
+}
