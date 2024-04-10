@@ -130,6 +130,7 @@ public class GrappleMod implements ModInitializer {
         ModContainer container = cont.get();
         GrappleModUtils.registerPack("simplified", Component.translatable("pack.grapplemod.simplified"), container, ResourcePackActivationType.NORMAL);
         GrappleModUtils.registerPack("no_enchants", Component.translatable("pack.grapplemod.no_enchants"), container, ResourcePackActivationType.NORMAL);
+        GrappleModUtils.registerPack("classic_recipes", Component.translatable("pack.grapplemod.classic_recipes"), container, ResourcePackActivationType.NORMAL);
 
         GrappleMod.LOGGER.info("All done with datapacks!");
     }

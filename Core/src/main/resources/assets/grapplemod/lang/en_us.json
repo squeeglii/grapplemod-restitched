@@ -5,6 +5,7 @@
     "pack.grapplemod.original": "Classic Textures",
     "pack.grapplemod.simplified": "Just the Hook please!",
     "pack.grapplemod.no_enchants": "No GrappleMod Enchantments",
+    "pack.grapplemod.classic_recipes": "Classic Recipes",
 
     "gamerule.useLimitedHook": "Use Limited Hook",
     "gamerule.useLimitedHook.description":  "If on, it limits the blocks that the hook can attach to, based on a whitelist tag (defined in a datapack, #grapplemod:limited_hook_allowed) - If off, a blacklist is used instead (tag, #grapplemod:hook_disallowed)",
