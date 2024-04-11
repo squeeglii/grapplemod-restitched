@@ -17,8 +17,6 @@ import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -113,6 +111,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		this.isAttachedToMainHand = true;
 		this.isAttachedToSurface = false;
+
 	}
 
 	/** Server-side? instantiation. Used to spawn the entity & configure it correctly. */
@@ -173,6 +172,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	    	GrappleMod.LOGGER.warn("error: customization null");
 	    }
 	    this.customization.writeToBuf(data);
+		data.writeBoolean(this.restoreCollision);
     }
 	
 	@Override
@@ -184,6 +184,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isAttachedToSurface = data.readBoolean();
 	    this.customization = new CustomizationVolume();
 	    this.customization.readFromBuf(data);
+		this.restoreCollision = data.readBoolean();
     }
 
 	@Override
@@ -238,7 +239,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			return;
 		}
 
-		if(!this.shootingEntity.isAlive()) {
+		if (!this.shootingEntity.isAlive()) {
 			this.discard();
 			return;
 		}
@@ -262,6 +263,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 					this.getLastBlockCollisionSide(),
 					true
 			);
+
+			this.restoreCollision = false;
 			return;
 		}
 
@@ -294,6 +297,10 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		if(!this.shootingEntity.isAlive()) {
 			return;
 		}
+
+		// Give the entity time to restore the collision
+		if(this.restoreCollision)
+			return;
 
 		// A sanity check - Gives the client side entity a bit more
 		// time to spawn.
@@ -604,6 +611,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.setDeltaMovement(0, 0, 0);
 		this.isFirstAttach = true;
 		this.isAttachedToSurface = true;
+		this.restoreCollision = false;
         this.thisPos = new Vec(x, y, z);
 	}
 
