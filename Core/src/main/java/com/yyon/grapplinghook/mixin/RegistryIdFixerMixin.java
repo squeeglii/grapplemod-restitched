@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
@@ -36,9 +37,13 @@ public abstract class RegistryIdFixerMixin<T> implements WritableRegistry<T> {
     private void grapplemod$interceptResourceKeyId(@Nullable ResourceKey<T> key, CallbackInfoReturnable<@Nullable T> cir) {
         if(key == null) return;
 
-        ResourceLocation originalId = key.location();
+        try {
+            ResourceLocation originalId = key.location();
+            grapplemod$handleCommon(originalId, cir);
 
-       grapplemod$handleCommon(originalId, cir);
+        } catch (NoSuchMethodError err) {
+            GrappleMod.LOGGER.error("Error converting ResourceKey into a ResourceLocation - %s".formatted(key.toString()));
+        }
     }
 
     @Unique
