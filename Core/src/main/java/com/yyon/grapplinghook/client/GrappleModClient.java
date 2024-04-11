@@ -10,6 +10,8 @@ import com.yyon.grapplinghook.client.render.entity.GrapplinghookEntityRenderer;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
+import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
+import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayerIdentifiers;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
@@ -18,6 +20,8 @@ import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
+import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
+import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.ClientModInitializer;
@@ -70,6 +74,7 @@ public class GrappleModClient implements ClientModInitializer {
         GrappleModEntityRenderLayerIdentifiers.registerAll();
 
         NetworkManager.registerClientPacketListeners();
+        GrappleModClient.registerClientsidePacketHandlers();
 
         this.clientPhysicsControllerTracker = new ClientPhysicsControllerTracker();
         this.registerPropertyOverride();
@@ -112,6 +117,66 @@ public class GrappleModClient implements ClientModInitializer {
         ModContainer container = cont.get();
 
         GrappleModUtils.registerPack("original_textures", Component.translatable("pack.grapplemod.original"), container, ResourcePackActivationType.NORMAL);
+    }
+
+    private static void registerClientsidePacketHandlers() {
+        GrappleAttachMessage.packetProcessor = packet -> {
+            Level world = (Level) Minecraft.getInstance().level;
+
+            if(world == null) {
+                GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttach)");
+                return;
+            }
+
+
+            Entity e = world.getEntity(packet.id);
+
+            if (e == null) {
+                GrappleMod.LOGGER.warn("GrappleAttachMessage received for a hook that doesn't exist on the client side! (yet?)");
+                return;
+            }
+
+            if (e instanceof GrapplinghookEntity grapple) {
+
+                grapple.clientAttach(packet.x, packet.y, packet.z);
+                RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
+                segmentHandler.segments = packet.segments;
+                segmentHandler.segmentBottomSides = packet.segmentBottomSides;
+                segmentHandler.segmentTopSides = packet.segmentTopSides;
+
+                Entity holder = world.getEntity(packet.entityId);
+
+                if (holder == null) {
+                    GrappleMod.LOGGER.warn("Network Message received in invalid context (Holder does not exist | GrappleAttach)");
+                    return;
+                }
+
+                segmentHandler.forceSetPos(new Vec(packet.x, packet.y, packet.z), Vec.positionVec(holder));
+                GrappleModClient.get()
+                        .getClientControllerManager()
+                        .createControl(PhysicsControllers.GRAPPLING_HOOK, packet.id, packet.entityId, world, packet.blockPos, packet.custom);
+            }
+        };
+
+        GrappleAttachPosMessage.packetProcessor = packet -> {
+            Level world = Minecraft.getInstance().level;
+
+            if (world == null) {
+                GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttachPos)");
+                return;
+            }
+
+            Entity e = world.getEntity(packet.id);
+
+            if (e == null) {
+                GrappleMod.LOGGER.warn("GrappleAttachPos received for a hook that doesn't exist on the client side! (yet?)");
+                return;
+            }
+
+            if (e instanceof GrapplinghookEntity grapple) {
+                grapple.setAttachPos(packet.x, packet.y, packet.z);
+            }
+        };
     }
 
 

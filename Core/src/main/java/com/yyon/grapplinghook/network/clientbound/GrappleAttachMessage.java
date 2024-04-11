@@ -1,24 +1,18 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
-import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
-import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 /*
  * This file is part of GrappleMod.
@@ -38,7 +32,9 @@ import java.util.LinkedList;
  */
 
 public class GrappleAttachMessage extends BaseMessageClient {
-   
+
+    public static Consumer<GrappleAttachMessage> packetProcessor = null;
+
 	public int id;
 	public double x;
 	public double y;
@@ -52,6 +48,10 @@ public class GrappleAttachMessage extends BaseMessageClient {
 
     public GrappleAttachMessage(FriendlyByteBuf buf) {
     	super(buf);
+    }
+
+    public GrappleAttachMessage() {
+
     }
 
     public GrappleAttachMessage(int id, double x, double y, double z, int entityid, BlockPos blockpos, LinkedList<Vec> segments, LinkedList<Direction> segmenttopsides, LinkedList<Direction> segmentbottomsides, CustomizationVolume custom) {
@@ -134,41 +134,7 @@ public class GrappleAttachMessage extends BaseMessageClient {
     @Override
     public void processMessage(NetworkContext ctx) {
         ctx.getClient().execute(() -> {
-            Level world = Minecraft.getInstance().level;
-
-            if(world == null) {
-                GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttach)");
-                return;
-            }
-
-
-            Entity e = world.getEntity(this.id);
-
-            if (e == null) {
-                GrappleMod.LOGGER.warn("GrappleAttachMessage received for a hook that doesn't exist on the client side! (yet?)");
-                return;
-            }
-
-            if (e instanceof GrapplinghookEntity grapple) {
-
-                grapple.clientAttach(this.x, this.y, this.z);
-                RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
-                segmentHandler.segments = this.segments;
-                segmentHandler.segmentBottomSides = this.segmentBottomSides;
-                segmentHandler.segmentTopSides = this.segmentTopSides;
-
-                Entity holder = world.getEntity(this.entityId);
-
-                if (holder == null) {
-                    GrappleMod.LOGGER.warn("Network Message received in invalid context (Holder does not exist | GrappleAttach)");
-                    return;
-                }
-
-                segmentHandler.forceSetPos(new Vec(this.x, this.y, this.z), Vec.positionVec(holder));
-                GrappleModClient.get()
-                        .getClientControllerManager()
-                        .createControl(PhysicsControllers.GRAPPLING_HOOK, this.id, this.entityId, world, this.blockPos, this.custom);
-            }
+            if(packetProcessor != null) packetProcessor.accept(this);
         });
     }
 }

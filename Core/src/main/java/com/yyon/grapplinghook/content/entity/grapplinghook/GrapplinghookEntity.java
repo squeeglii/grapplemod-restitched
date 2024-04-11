@@ -17,6 +17,8 @@ import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -36,10 +38,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
@@ -256,7 +255,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		super.tick();
 
-		if(this.restoreCollision) {
+		if(this.restoreCollision && !this.level().isClientSide) {
 			this.serverAttach(
 					this.getLastBlockCollision(),
 					this.getLastSubCollisionPos(),
@@ -361,7 +360,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	private void handleHookPhysics() {
 		if (this.segmentHandler.hookPastBend(this.ropeLength)) {
 			Vec farthest = this.segmentHandler.getFarthest();
-			this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
+
+			if(!this.level().isClientSide)
+				this.serverAttach(this.segmentHandler.getBendBlock(1), farthest, null);
 		}
 
 		if (!this.customization.get(BLOCK_PHASE_ROPE.get())) {
@@ -378,7 +379,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 					for (int i = 1; i <= bendnumber; i++)
 						this.segmentHandler.removeSegment(1);
 
-					this.serverAttach(blockpos, closest, null);
+					if(!this.level().isClientSide)
+						this.serverAttach(blockpos, closest, null);
 				}
 			}
 
@@ -510,11 +512,15 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
         }
 	}
 
+
 	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit) {
 		this.serverAttach(blockpos, pos, sideHit, false);
 	}
 
 	public void serverAttach(BlockPos blockpos, Vec pos, Direction sideHit, boolean force) {
+		if(this.level().isClientSide)
+			return;
+
 		if (this.isAttachedToSurface)
 			return;
 

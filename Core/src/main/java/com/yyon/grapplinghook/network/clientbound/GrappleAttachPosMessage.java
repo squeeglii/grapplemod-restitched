@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
+import java.util.function.Consumer;
+
 
 /*
  * This file is part of GrappleMod.
@@ -30,6 +32,8 @@ import net.minecraft.world.level.Level;
  */
 
 public class GrappleAttachPosMessage extends BaseMessageClient {
+
+    public static Consumer<GrappleAttachPosMessage> packetProcessor = null;
    
 	public int id;
 	public double x;
@@ -72,23 +76,7 @@ public class GrappleAttachPosMessage extends BaseMessageClient {
     @Override
     public void processMessage(NetworkContext ctx) {
         ctx.getClient().execute(() -> {
-            Level world = Minecraft.getInstance().level;
-
-            if (world == null) {
-                GrappleMod.LOGGER.warn("Network Message received in invalid context (World not present | GrappleAttachPos)");
-                return;
-            }
-
-            Entity e = world.getEntity(this.id);
-
-            if (e == null) {
-                GrappleMod.LOGGER.warn("GrappleAttachPos received for a hook that doesn't exist on the client side! (yet?)");
-                return;
-            }
-
-            if (e instanceof GrapplinghookEntity grapple) {
-                grapple.setAttachPos(this.x, this.y, this.z);
-            }
+            if(packetProcessor != null) packetProcessor.accept(this);
         });
     }
 }
