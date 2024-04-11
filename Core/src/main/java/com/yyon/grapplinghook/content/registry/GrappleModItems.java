@@ -51,6 +51,8 @@ public final class GrappleModItems {
     public static final ItemEntry<RocketUpgradeItem> ROCKET_UPGRADE = GrappleModItems.item("rocket_upgrade", RocketUpgradeItem::new);
     public static final ItemEntry<DyeBagUpgrade> DYE_BAG_UPGRADE = GrappleModItems.item("dye_bag_upgrade", DyeBagUpgrade::new);
 
+    public static final ItemEntry<LongFallBootsSmithingTemplate> LONG_FALL_BOOTS_SMITHING_TEMPLATE = GrappleModItems.item("long_fall_boots_smithing_template", LongFallBootsSmithingTemplate::new);
+
     public static final ItemEntry<BlueprintItem> BLUEPRINT = GrappleModItems.item("blueprint", BlueprintItem::new);
 
     public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", LongFallBootsItem::new, ItemEntry.populateBootVariants());
