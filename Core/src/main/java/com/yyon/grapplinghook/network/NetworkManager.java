@@ -5,6 +5,7 @@ import com.yyon.grapplinghook.network.clientbound.*;
 import com.yyon.grapplinghook.network.serverbound.*;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.physics.io.IHookStateHolder;
+import com.yyon.grapplinghook.util.scheduling.Ticker;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
@@ -97,11 +98,13 @@ public class NetworkManager {
             if(player.level().isClientSide)
                 return;
 
-            if(ServerHookEntityTracker.isSavedHookStateValid(player))
-                ServerHookEntityTracker.applyFromSavedHookState(player);
+            Ticker.grappleMod().queue(3, () -> {
+                if(ServerHookEntityTracker.isSavedHookStateValid(player))
+                    ServerHookEntityTracker.applyFromSavedHookState(player);
 
-            IHookStateHolder hookStateHolder = (IHookStateHolder) player;
-            hookStateHolder.grapplemod$resetLastHookState();
+                IHookStateHolder hookStateHolder = (IHookStateHolder) player;
+                hookStateHolder.grapplemod$resetLastHookState();
+            });
         });
     }
 }

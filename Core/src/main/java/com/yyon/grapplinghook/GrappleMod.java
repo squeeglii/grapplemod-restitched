@@ -8,11 +8,13 @@ import com.yyon.grapplinghook.content.registry.*;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
 import com.yyon.grapplinghook.util.GrappleModUtils;
+import com.yyon.grapplinghook.util.scheduling.Ticker;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -50,12 +52,14 @@ public class GrappleMod implements ModInitializer {
     private static GrappleMod instance;
 
     private ServerFeatures serverFeatures;
-
+    private Ticker ticker;
     private ServerPhysicsObserver serverPhysicsObserver;
 
     @Override
     public void onInitialize() {
         instance = this;
+
+        this.ticker = new Ticker();
 
         try {
             this.initConfig();
@@ -87,6 +91,8 @@ public class GrappleMod implements ModInitializer {
         this.serverPhysicsObserver = new ServerPhysicsObserver();
 
         this.registerDataPacks();
+
+        ServerTickEvents.START_SERVER_TICK.register(server -> this.ticker.tick());
     }
 
     private void initConfig() {
@@ -133,6 +139,10 @@ public class GrappleMod implements ModInitializer {
 
     public ServerPhysicsObserver getServerPhysicsObserver() {
         return this.serverPhysicsObserver;
+    }
+
+    public Ticker getTicker() {
+        return this.ticker;
     }
 
     public ServerFeatures getServerFeatures() {
