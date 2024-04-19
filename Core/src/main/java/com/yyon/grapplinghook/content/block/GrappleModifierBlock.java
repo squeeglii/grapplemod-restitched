@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.content.block;
 import com.mojang.serialization.MapCodec;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
@@ -107,8 +108,23 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		if (heldItem instanceof ICustomizationApplicable customItem)
 			return this.handleApplyCustomizations(customItem, worldIn, pos, playerIn, heldStack);
 
-		if (heldItem == Items.DIAMOND_BOOTS)
+		if (heldItem == Items.DIAMOND_BOOTS) {
+
+			if (worldIn.isClientSide)
+				return InteractionResult.SUCCESS;
+
+			if (ServerFeatures.get().isBlockingOldLongFallBootsRecipe()) {
+				Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots.disabled")
+						.withStyle(ChatFormatting.RED);
+
+				playerIn.sendSystemMessage(msg);
+				worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
+
+				return InteractionResult.CONSUME;
+			}
+
 			return this.handleDiamondBoots(worldIn, pos, playerIn, hand, heldStack);
+		}
 
 		if (heldItem == Items.DIAMOND)
 			return this.handleEasterEgg(worldIn, pos, playerIn);
@@ -126,19 +142,13 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return InteractionResult.SUCCESS;
 	}
 
+	/**
+	 * @deprecated Will be removed in 1.22. Replaced by the smithing table and the LongFallBootsTemplateItem.
+	 */
+	@Deprecated
 	private InteractionResult handleDiamondBoots(Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, ItemStack heldStack) {
 		if (worldIn.isClientSide)
 			return InteractionResult.SUCCESS;
-
-		if (!GrappleModLegacyConfig.getConf().longfallboots.longfallbootsrecipe) {
-			Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots.disabled")
-									 .withStyle(ChatFormatting.RED);
-
-			playerIn.sendSystemMessage(msg);
-			worldIn.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 1f, 0.3f);
-
-			return InteractionResult.CONSUME;
-		}
 
 		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(heldStack);
 

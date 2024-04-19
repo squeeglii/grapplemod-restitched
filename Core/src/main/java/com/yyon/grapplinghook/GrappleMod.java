@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.command.GrappleModCommand;
+import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.config.pack.DataPackProcessor;
 import com.yyon.grapplinghook.content.registry.*;
@@ -16,7 +17,6 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -42,20 +42,14 @@ import java.util.Optional;
     You should have received a copy of the GNU General Public License
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-//TODO
-// Pull mobs
-// Attach 2 things together
-// wallrun on diagonal walls
-// smart motor acts erratically when aiming above hook
-// key events
-
 public class GrappleMod implements ModInitializer {
 
     public static final String MOD_ID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
 
     private static GrappleMod instance;
+
+    private ServerFeatures serverFeatures;
 
     private ServerPhysicsObserver serverPhysicsObserver;
 
@@ -68,6 +62,8 @@ public class GrappleMod implements ModInitializer {
         } catch (Exception e) {
             LOGGER.info(e);
         }
+
+        this.serverFeatures = new ServerFeatures();
 
         GrappleModBlocks.registerAllBlocks();
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
@@ -139,6 +135,9 @@ public class GrappleMod implements ModInitializer {
         return this.serverPhysicsObserver;
     }
 
+    public ServerFeatures getServerFeatures() {
+        return this.serverFeatures;
+    }
 
     public static GrappleMod get() {
         return instance;

@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.content.armor.LongFallBootsMaterial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -37,7 +38,7 @@ public class LongFallBootsItem extends ArmorItem {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		if (!stack.isEnchanted() && GrappleModLegacyConfig.getConf().longfallboots.longfallbootsrecipe) {
+		if (!stack.isEnchanted() && !ServerFeatures.get().isBlockingOldLongFallBootsRecipe()) {
 			list.add(Component
 					.translatable("grappletooltip.longfallbootsrecipe.desc")
 					.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)

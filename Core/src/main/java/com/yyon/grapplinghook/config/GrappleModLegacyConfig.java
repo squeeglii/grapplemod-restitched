@@ -5,6 +5,7 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "grapplemod")
 public class GrappleModLegacyConfig implements ConfigData {
@@ -35,13 +36,17 @@ public class GrappleModLegacyConfig implements ConfigData {
 				public double climb_speed = 0.3;
 			}
 		}
-		
+
 		@ConfigEntry.Gui.CollapsibleObject
 		@Tooltip
 		public LongFallBoots longfallboots = new LongFallBoots();
 		public static class LongFallBoots {
+
+			@Comment("This option is now ignored (will be removed in the next release) - see Server Features in the datapack file 'grapplemod:content/enabled_server_features.json' for its replacement.")
 			@Tooltip
+			@Deprecated
 			public boolean longfallbootsrecipe = true;
+
 		}
 		
 		@ConfigEntry.Gui.CollapsibleObject
