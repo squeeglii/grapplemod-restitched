@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.config.pack;
 import com.yyon.grapplinghook.GrappleMod;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.util.List;
@@ -16,7 +15,13 @@ public class DataPackProcessor implements SimpleSynchronousResourceReloadListene
 
     private static final ResourceLocation ID = GrappleMod.id("mod_data_configuration");
 
-    private static final ResourceLocation ENCHANTMENTS = GrappleMod.id("content/available_enchantments.json");
+    private final List<SimpleResourceProcessor> subProcessors;
+
+    public DataPackProcessor() {
+        this.subProcessors = List.of(
+                EnchantmentProcessor.get()
+        );
+    }
 
     @Override
     public ResourceLocation getFabricId() {
@@ -25,16 +30,12 @@ public class DataPackProcessor implements SimpleSynchronousResourceReloadListene
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        List<Resource> enchantmentConfigs = resourceManager.getResourceStack(ENCHANTMENTS);
-
-        try {
-            EnchantmentConfiguration.processStack(enchantmentConfigs);
-        } catch (Exception err) {
-            GrappleMod.LOGGER.error("Error while processing the Enchantment Configuration stack", err);
+        for(SimpleResourceProcessor processor: this.subProcessors) {
+            try {
+                processor.process(resourceManager);
+            } catch (Exception err) {
+                GrappleMod.LOGGER.error("Error while processing the '%s' resource".formatted(processor.getResourcePath()), err);
+            }
         }
-
     }
-
-
-
 }
