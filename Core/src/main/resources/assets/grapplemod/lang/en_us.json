@@ -1,5 +1,5 @@
 {
-    "itemgroup.grapplemod.main": "Grappling Hook Mod",
+    "itemGroup.grapplemod.main": "Grappling Hook Mod",
     "grapplemod.jei_modifier_text": "Add upgrade(s), open\ninterface to customize,\nthen apply to hook",
 
     "pack.grapplemod.original": "Classic Textures",
