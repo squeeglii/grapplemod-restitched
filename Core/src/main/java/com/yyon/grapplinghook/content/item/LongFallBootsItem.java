@@ -38,13 +38,6 @@ public class LongFallBootsItem extends ArmorItem {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		if (!stack.isEnchanted() && !ServerFeatures.get().isBlockingOldLongFallBootsRecipe()) {
-			list.add(Component
-					.translatable("grappletooltip.longfallbootsrecipe.desc")
-					.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
-			);
-		}
-
 		list.add(Component
 				.translatable("grappletooltip.longfallboots.desc")
 				.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)

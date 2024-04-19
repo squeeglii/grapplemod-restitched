@@ -1,0 +1,10 @@
+{
+    "type": "minecraft:smithing_transform",
+    "show_notification": true,
+
+    "base": { "tag": "grapplemod:eligible_long_fall_boots_base" },
+    "template": { "item": "grapplemod:long_fall_boots_smithing_template" },
+    "addition": { "item": "minecraft:phantom_membrane" },
+
+    "result": { "item": "grapplemod:long_fall_boots" }
+}

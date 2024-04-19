@@ -95,9 +95,17 @@
     "item.grapplemod.limits_upgrade": "Limits Upgrade",
     "item.grapplemod.rocket_upgrade": "Rocket Upgrade",
     "item.grapplemod.dye_bag_upgrade": "Dye Bag Upgrade",
+    "item.grapplemod.long_fall_boots_smithing_template": "Smithing Template",
+
+    "item.grapplemod.smithing_template.long_fall_boots.applies_to": "Diamond & Netherite Boots",
+    "item.grapplemod.smithing_template.long_fall_boots.ingredients": "Phantom Membrane",
+    "item.grapplemod.smithing_template.long_fall_boots.base_slot_description": "Add Diamond/Netherite Boots",
+    "item.grapplemod.smithing_template.long_fall_boots.additions_slot_description": "Add Phantom Membrane",
 
     "block.grapplemod.modification_table": "Grappling Hook Modifier",
     "block.grapplemod.blueprint_shelf": "Blueprint Shelf",
+
+    "upgrade.grapplemod.long_fall_boots": "Long Fall Boots Upgrade",
 
     "enchantment.grapplemod.wall_running": "Wall-Running",
     "enchantment.grapplemod.double_jump": "Double-Jump",
@@ -113,9 +121,7 @@
 
     "blueprint_shelf.title.default": "Blueprint Shelf",
 
-
     "grapple_modifier.title": "Grapple Hook Modifier Table",
-
     "grapple_modifier.close_button": "Close",
     "grapple_modifier.reset_button": "Reset",
     "grapple_modifier.back_button": "Back",

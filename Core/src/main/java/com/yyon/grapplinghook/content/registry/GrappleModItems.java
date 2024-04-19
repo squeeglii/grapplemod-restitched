@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.item.*;
+import com.yyon.grapplinghook.content.item.smithing.LongFallBootsTemplateItem;
 import com.yyon.grapplinghook.content.item.upgrade.*;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -54,9 +55,7 @@ public final class GrappleModItems {
     public static final ItemEntry<BlueprintItem> BLUEPRINT = GrappleModItems.item("blueprint", BlueprintItem::new);
 
     public static final ItemEntry<LongFallBootsItem> LONG_FALL_BOOTS = GrappleModItems.item("long_fall_boots", LongFallBootsItem::new, ItemEntry.populateBootVariants());
-
-
-
+    public static final ItemEntry<LongFallBootsTemplateItem> LONG_FALL_BOOTS_SMITHING_TEMPLATE = GrappleModItems.item("long_fall_boots_smithing_template", LongFallBootsTemplateItem::new);
 
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> GRAPPLE_MODIFIER_BLOCK = reserve();
     public static final GrappleModBlocks.BlockItemEntry<BlockItem> BLUEPRINT_SHELF_BLOCK = reserve();
