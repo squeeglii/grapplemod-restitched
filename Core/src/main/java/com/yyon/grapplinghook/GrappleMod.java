@@ -96,7 +96,7 @@ public class GrappleMod implements ModInitializer {
 
         this.registerDataPacks();
 
-        ServerTickEvents.START_SERVER_TICK.register(server -> this.ticker.tick());
+        ServerTickEvents.START_SERVER_TICK.register(this.ticker::tick);
     }
 
     private void initConfig() {
