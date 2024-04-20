@@ -19,8 +19,15 @@ loom {
 }
 
 repositories {
+
+    // Palladium stuff
     maven {
         url 'https://repo.repsy.io/mvn/lucraft/threetag'
+    }
+
+    // Cardinal components
+    maven {
+        url 'https://maven.ladysnake.org/releases'
     }
 }
 
@@ -34,11 +41,17 @@ dependencies {
     modApi project(":Core")
 
     modApi("maven.modrinth:gliders:${project.gliders_modrinth_version}")
+
     modImplementation("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
     include("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
+
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
+
     modImplementation("net.threetag:PalladiumCore-fabric:${project.palladium_version}")
     include("net.threetag:PalladiumCore-fabric:${project.palladium_version}")
-
 }
 
 remapJar {
