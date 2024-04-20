@@ -135,8 +135,12 @@ public class GrapplingHookPhysicsController {
 	public ResourceLocation getType() {
 		return PhysicsControllers.GRAPPLING_HOOK;
 	}
-	
+
 	public void disable() {
+		this.disable(false);
+	}
+
+	public void disable(boolean stopPropagation) {
 		// Error'ed controllers should just be removed with no extra
 		// conntrollers applied - they should be 'disabled' already.
 
@@ -146,10 +150,16 @@ public class GrapplingHookPhysicsController {
 		Player clientPlayer = Minecraft.getInstance().player;
 		boolean isEntityClientPlayer = this.entity == clientPlayer;
 
+		// Reset local copy of "Server Physics"
+		if(this.entity instanceof Player player) {
+			GrappleMod.get().getServerPhysicsObserver().receiveNewFrame(player, new PlayerPhysicsFrame());
+		}
+
 		// Not null & player
 		// Reset server-side physics tracking.
-		if(isEntityClientPlayer && !wasAlreadyDisabled)
+		if(isEntityClientPlayer && !wasAlreadyDisabled) {
 			NetworkManager.packetToServer(new PhysicsUpdateMessage());
+		}
 
 
 		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.entityId) == null)
@@ -166,7 +176,7 @@ public class GrapplingHookPhysicsController {
 			if(playerInfo != null && playerInfo.getGameMode() == GameType.SPECTATOR) return;
 		}
 
-		if(!wasAlreadyDisabled) {
+		if(!stopPropagation && !wasAlreadyDisabled) {
 			GrappleModClient.get()
 					.getClientControllerManager()
 					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.entityId, this.entity.level(), null, this.custom);
@@ -216,6 +226,7 @@ public class GrapplingHookPhysicsController {
 				.setSpeed(this.motion.length())
 				.setUsingRocket(this.rocketKeyDown);
 
+		GrappleMod.get().getServerPhysicsObserver().receiveNewFrame(clientPlayer, frame);
 		NetworkManager.packetToServer(new PhysicsUpdateMessage(frame));
 	}
 		
@@ -232,6 +243,8 @@ public class GrapplingHookPhysicsController {
 		
 		if (!this.isControllerActive) return;
 		if(entity == null) return;
+
+		entity.resetFallDistance();
 
 		if (entity.getVehicle() != null) {
 			this.disable();
@@ -804,7 +817,14 @@ public class GrapplingHookPhysicsController {
 	}
 	
 	public void updateServerPos() {
+		this.limitVelocity();
 		NetworkManager.packetToServer(new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z));
+	}
+
+	public void limitVelocity() {
+		if (this.motion.length() > 1.0f) { // 1 block a tick is *fast*
+			this.motion.mutableSetMagnitude(1.0f);
+		}
 	}
 	
 	// Vector stuff:

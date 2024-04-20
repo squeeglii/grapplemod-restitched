@@ -151,18 +151,14 @@ public class Vec {
 	}
 	
 	public Vec normalize() {
-		if (this.length() == 0) {
-			GrappleMod.LOGGER.warn("normalizing vector with no length");
-			return new Vec(this);
-		}
-		return this.scale(1.0 / this.length());
+		return this.length() == 0
+				? new Vec(this)
+				: this.scale(1.0 / this.length());
 	}
 	
 	public Vec mutableNormalize() {
-		if (this.length() == 0) {
-			GrappleMod.LOGGER.warn("normalizing vector with no length");
+		if (this.length() == 0)
 			return this;
-		}
 
 		return this.mutableScale(1.0 / this.length());
 	}

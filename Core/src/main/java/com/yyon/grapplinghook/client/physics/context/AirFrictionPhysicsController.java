@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.client.physics.context;
 
-import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
@@ -61,6 +60,9 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 			this.updateServerPos();
 			return;
 		}
+
+		if(this.motion.y > 0)
+			entity.resetFallDistance();
 
 		if (entity instanceof LivingEntity e && e.onClimbable()) {
 			this.disable();

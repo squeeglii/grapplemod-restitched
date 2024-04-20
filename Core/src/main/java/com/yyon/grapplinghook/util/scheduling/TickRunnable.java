@@ -1,16 +1,17 @@
 package com.yyon.grapplinghook.util.scheduling;
 
 import com.yyon.grapplinghook.GrappleMod;
+import net.minecraft.server.MinecraftServer;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class TickRunnable {
 
     private int tickToRunOn;
     private int repeatInterval;
-    private Supplier<Boolean> task;
+    private Function<MinecraftServer, Boolean> task;
 
-    protected TickRunnable(int tickToRunOn, int repeatInterval, Supplier<Boolean> task) {
+    protected TickRunnable(int tickToRunOn, int repeatInterval, Function<MinecraftServer, Boolean> task) {
         this.tickToRunOn = tickToRunOn;
         this.repeatInterval = repeatInterval;
         this.task = task;
@@ -18,12 +19,12 @@ public class TickRunnable {
 
 
     /** @return true if the task should continue. false if it should be cancelled. */
-    public boolean tryToRun(int currentTick) {
+    public boolean tryToRun(MinecraftServer server, int currentTick) {
         try {
             if(currentTick != this.getTickToRunOn())
                 return true;
 
-            boolean shouldContinue = this.task.get();
+            boolean shouldContinue = this.task.apply(server);
 
             if(!shouldContinue)
                 return false;
@@ -45,7 +46,7 @@ public class TickRunnable {
         return this.repeatInterval;
     }
 
-    public Supplier<Boolean> getTask() {
+    public Function<MinecraftServer, Boolean> getTask() {
         return this.task;
     }
 }

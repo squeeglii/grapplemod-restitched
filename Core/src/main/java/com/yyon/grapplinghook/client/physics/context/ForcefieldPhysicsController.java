@@ -28,6 +28,8 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 		if (!this.isControllerActive()) return;
 		if(entity == null) return;
 
+		entity.resetFallDistance();
+
 		this.normalGround(false);
 		this.normalCollisions(false);
 

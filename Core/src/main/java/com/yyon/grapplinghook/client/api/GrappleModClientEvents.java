@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.client.api;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class GrappleModClientEvents {
@@ -21,6 +22,13 @@ public class GrappleModClientEvents {
             }
     );
 
+    public static final Event<PhysicsApplied> PHYSICS_APPLIED = EventFactory.createArrayBacked(PhysicsApplied.class,
+            callbacks -> (thrower, physics) -> {
+                for (PhysicsApplied callback : callbacks)
+                    callback.onPhysicsApplied(thrower, physics);
+            }
+    );
+
     @FunctionalInterface
     public interface HookAttach {
         void onHookAttach(Entity thrower, GrapplinghookEntity hook);
@@ -29,6 +37,11 @@ public class GrappleModClientEvents {
     @FunctionalInterface
     public interface HookDetach {
         void onHookDetach(Entity thrower);
+    }
+
+    @FunctionalInterface
+    public interface PhysicsApplied {
+        void onPhysicsApplied(Entity thrower, ResourceLocation physicsType);
     }
 
 }

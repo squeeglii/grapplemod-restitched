@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.client.physics;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
@@ -356,10 +357,14 @@ public class ClientPhysicsControllerTracker {
 		if (e instanceof LocalPlayer p)
 			control.receivePlayerMovementMessage(p.input.leftImpulse, p.input.forwardImpulse, p.input.shiftKeyDown);
 
+		if(e != null) {
+			GrappleModClientEvents.PHYSICS_APPLIED.invoker().onPhysicsApplied(e, controllerId);
+		}
+
 		return control;
 	}
 
-	public void registerController(int entityId, GrapplingHookPhysicsController controller) {
+	private void registerController(int entityId, GrapplingHookPhysicsController controller) {
 		if (this.controllers.containsKey(entityId))
 			this.controllers.get(entityId).disable();
 

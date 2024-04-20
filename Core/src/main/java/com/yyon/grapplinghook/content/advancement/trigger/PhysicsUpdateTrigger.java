@@ -2,11 +2,13 @@ package com.yyon.grapplinghook.content.advancement.trigger;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.advancement.PhysicsFramePredicate;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -22,8 +24,13 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
         return TriggerInstance.CODEC;
     }
 
-    public void trigger(ServerPlayer player, PlayerPhysicsFrame frame) {
-        this.trigger(player, triggerInstance -> triggerInstance.matches(frame));
+    public void trigger(Player player, PlayerPhysicsFrame frame) {
+        if(!(player instanceof ServerPlayer serverPlayer)) {
+            GrappleMod.LOGGER.warn("Attempted to trigger advancement from client.");
+            return;
+        }
+
+        this.trigger(serverPlayer, triggerInstance -> triggerInstance.matches(frame));
     }
 
 

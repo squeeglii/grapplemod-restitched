@@ -4,42 +4,60 @@ plugins {
 }
 
 loom {
-    // This is here to ensure the environment sources just stay in
-    // one place. It was splitting them for some reason.
-    mods {
-        gliders {
-            sourceSet sourceSets.main
-        }
-    }
 
     runs {
         client {
             runDir "run/client"
+            ideConfigGenerated true
         }
 
         server {
             runDir "run/server"
+            ideConfigGenerated true
         }
+    }
+}
+
+repositories {
+
+    // Palladium stuff
+    maven {
+        url 'https://repo.repsy.io/mvn/lucraft/threetag'
+    }
+
+    // Cardinal components
+    maven {
+        url 'https://maven.ladysnake.org/releases'
     }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.layered() {
-        officialMojangMappings()
+    mappings loom.officialMojangMappings()
 
-        if(project.parchment_version != "")
-            parchment("org.parchmentmc.data:${project.parchment_version}@zip")
-    }
-
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation("net.fabricmc:fabric-loader")
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation("maven.modrinth:gliders:${project.gliders_modrinth_version}")
+    api project(path: ":Core", configuration: "namedElements")
 
-    implementation project(":Core")
+    modApi("maven.modrinth:gliders:${project.gliders_modrinth_version}")
+    modApi("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
+
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
+
+    modApi "net.threetag:PalladiumCore-fabric:${project.palladium_version}"
+    include "net.threetag:PalladiumCore-fabric:${project.palladium_version}"
 }
 
 remapJar {
     archiveClassifier.set("compat")
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:${project.loader_version}")
+    }
 }

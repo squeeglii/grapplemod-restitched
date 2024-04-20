@@ -1,7 +1,4 @@
 
-apply plugin: 'base'
-
-
 static def formatAsBadgeSafe(var val) {
     if(!(val instanceof String))
         return val
@@ -41,7 +38,7 @@ def collectJars = tasks.register('collect-jars', Copy) {
 
         return discovered == null
                 ? []
-                : discovered;
+                : discovered
     })
 
     def jarHolderDirs = []
@@ -84,7 +81,7 @@ def packageCompatModules = tasks.register('bundle-compat-modules', Copy) {
     description = "Takes the built compatability modules and includes them in the jar"
     dependsOn collectJars
 
-    from new File(project(":Core").projectDir, "src/main/resources/").getPath()
+    from new File(project(":Core").layout.buildDirectory.asFile.get(), "resources/main/").getPath()
     include("fabric.mod.json")
     into buildDir
 
