@@ -4,40 +4,41 @@ plugins {
 }
 
 loom {
-    // This is here to ensure the environment sources just stay in
-    // one place. It was splitting them for some reason.
-    mods {
-        gliders {
-            sourceSet sourceSets.main
-        }
-    }
 
     runs {
         client {
             runDir "run/client"
+            ideConfigGenerated true
         }
 
         server {
             runDir "run/server"
+            ideConfigGenerated true
         }
+    }
+}
+
+repositories {
+    maven {
+        url 'https://repo.repsy.io/mvn/lucraft/threetag'
     }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.layered() {
-        officialMojangMappings()
-
-        if(project.parchment_version != "")
-            parchment("org.parchmentmc.data:${project.parchment_version}@zip")
-    }
+    mappings loom.officialMojangMappings()
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation("maven.modrinth:gliders:${project.gliders_modrinth_version}")
+    modApi project(":Core")
 
-    implementation project(":Core")
+    modApi("maven.modrinth:gliders:${project.gliders_modrinth_version}")
+    modImplementation("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
+    include("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
+    modImplementation("net.threetag:PalladiumCore-fabric:${project.palladium_version}")
+    include("net.threetag:PalladiumCore-fabric:${project.palladium_version}")
+
 }
 
 remapJar {

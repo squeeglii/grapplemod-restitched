@@ -1,7 +1,4 @@
 
-apply plugin: 'base'
-
-
 static def formatAsBadgeSafe(var val) {
     if(!(val instanceof String))
         return val
@@ -41,7 +38,7 @@ def collectJars = tasks.register('collect-jars', Copy) {
 
         return discovered == null
                 ? []
-                : discovered;
+                : discovered
     })
 
     def jarHolderDirs = []

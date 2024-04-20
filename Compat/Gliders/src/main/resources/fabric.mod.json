@@ -7,15 +7,14 @@
   "authors": [ "CG360" ],
   "contact": {},
   "license": "GPL-3.0",
-  "icon": "assets/grapplemod/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [ "me.cg360.mod.grapplemod.compat.gliders.GlidersCompatEntrypoint" ]
   },
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "*",
-    "grapplemod": "${grapplemod_target_range}",
-    "vc_gliders": "${gliders_target_range}"
+    "grapplemod": "${grapplemod_target_range}"
   }
 }
