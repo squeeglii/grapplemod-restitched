@@ -35,25 +35,29 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.officialMojangMappings()
 
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation("net.fabricmc:fabric-loader")
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modApi project(":Core")
+    api project(path: ":Core", configuration: "namedElements")
 
     modApi("maven.modrinth:gliders:${project.gliders_modrinth_version}")
-
-    modImplementation("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
-    include("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
+    modApi("maven.modrinth:playeranimator:${project.player_animator_modrinth_version}")
 
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
 
-    modImplementation("net.threetag:PalladiumCore-fabric:${project.palladium_version}")
-    include("net.threetag:PalladiumCore-fabric:${project.palladium_version}")
+    modApi "net.threetag:PalladiumCore-fabric:${project.palladium_version}"
+    include "net.threetag:PalladiumCore-fabric:${project.palladium_version}"
 }
 
 remapJar {
     archiveClassifier.set("compat")
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:${project.loader_version}")
+    }
 }
