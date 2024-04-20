@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "me.cg360.mod.grapplemod.compat.gliders.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        "GliderUtilMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

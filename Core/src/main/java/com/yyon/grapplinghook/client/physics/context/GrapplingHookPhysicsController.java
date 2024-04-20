@@ -146,10 +146,16 @@ public class GrapplingHookPhysicsController {
 		Player clientPlayer = Minecraft.getInstance().player;
 		boolean isEntityClientPlayer = this.entity == clientPlayer;
 
+		// Reset local copy of "Server Physics"
+		if(this.entity instanceof Player player) {
+			GrappleMod.get().getServerPhysicsObserver().receiveNewFrame(player, new PlayerPhysicsFrame());
+		}
+
 		// Not null & player
 		// Reset server-side physics tracking.
-		if(isEntityClientPlayer && !wasAlreadyDisabled)
+		if(isEntityClientPlayer && !wasAlreadyDisabled) {
 			NetworkManager.packetToServer(new PhysicsUpdateMessage());
+		}
 
 
 		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.entityId) == null)
@@ -216,6 +222,7 @@ public class GrapplingHookPhysicsController {
 				.setSpeed(this.motion.length())
 				.setUsingRocket(this.rocketKeyDown);
 
+		GrappleMod.get().getServerPhysicsObserver().receiveNewFrame(clientPlayer, frame);
 		NetworkManager.packetToServer(new PhysicsUpdateMessage(frame));
 	}
 		
@@ -232,6 +239,8 @@ public class GrapplingHookPhysicsController {
 		
 		if (!this.isControllerActive) return;
 		if(entity == null) return;
+
+		entity.resetFallDistance();
 
 		if (entity.getVehicle() != null) {
 			this.disable();

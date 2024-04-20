@@ -1,7 +1,11 @@
 package com.yyon.grapplinghook.physics;
 
 import com.yyon.grapplinghook.content.registry.GrappleModAdvancementTriggers;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -16,8 +20,20 @@ import net.minecraft.server.level.ServerPlayer;
  */
 public class ServerPhysicsObserver {
 
-    public void receiveNewFrame(ServerPlayer player, PlayerPhysicsFrame frame) {
-        GrappleModAdvancementTriggers.PHYSICS_UPDATE_TRIGGER.get().trigger(player, frame);
+    private final HashMap<UUID, PlayerPhysicsFrame> lastFrame = new HashMap<>();
+
+    public void receiveNewFrame(Player player, PlayerPhysicsFrame frame) {
+        this.lastFrame.put(player.getUUID(), frame);
+
+        if(!player.level().isClientSide)
+            GrappleModAdvancementTriggers.PHYSICS_UPDATE_TRIGGER.get().trigger(player, frame);
     }
 
+    public Optional<PlayerPhysicsFrame> getMostRecentFrame(Player player) {
+        return Optional.ofNullable(this.lastFrame.get(player.getUUID()));
+    }
+
+    public void resetHistory() {
+        this.lastFrame.clear();
+    }
 }

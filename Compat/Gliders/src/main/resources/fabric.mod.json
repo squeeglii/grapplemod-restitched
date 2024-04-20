@@ -8,6 +8,7 @@
   "contact": {},
   "license": "GPL-3.0",
   "environment": "*",
+  "mixins": [ "grapplemodcompat-vc-gliders.mixins.json" ],
   "entrypoints": {
     "main": [ "me.cg360.mod.grapplemod.compat.gliders.GlidersCompatEntrypoint" ]
   },

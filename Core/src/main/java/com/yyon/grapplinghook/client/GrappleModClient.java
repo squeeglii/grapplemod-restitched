@@ -27,6 +27,7 @@ import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -79,6 +80,28 @@ public class GrappleModClient implements ClientModInitializer {
         this.clientPhysicsControllerTracker = new ClientPhysicsControllerTracker();
         this.registerPropertyOverride();
         this.registerResourcePacks();
+
+        ClientTickEvents.END_CLIENT_TICK.register(world -> {
+            LocalPlayer localPlayer = Minecraft.getInstance().player;
+
+            if(localPlayer == null)
+                return;
+
+            Component isJumping = Component.literal("isJumping=%s, ".formatted(localPlayer.input.jumping));
+            Component isNotFlying = Component.literal("isNotFlying=%s, ".formatted(!localPlayer.getAbilities().flying));
+            Component isNotPassenger = Component.literal("isNotPassenger=%s, ".formatted(!localPlayer.isPassenger()));
+            Component isNotClimbing = Component.literal("isNotClimbing=%s".formatted(!localPlayer.onClimbable()));
+
+            Component debugInfo = Component.literal("")
+                    .append(isJumping)
+                    .append(isNotFlying)
+                    .append(isNotPassenger)
+                    .append(isNotClimbing);
+
+            GrappleMod.LOGGER.info(debugInfo);
+            Minecraft.getInstance().gui.setOverlayMessage(debugInfo, false);
+
+        });
     }
 
     public static GrappleModClient get() {
