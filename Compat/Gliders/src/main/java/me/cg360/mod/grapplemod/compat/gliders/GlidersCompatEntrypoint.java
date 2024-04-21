@@ -2,7 +2,6 @@ package me.cg360.mod.grapplemod.compat.gliders;
 
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 

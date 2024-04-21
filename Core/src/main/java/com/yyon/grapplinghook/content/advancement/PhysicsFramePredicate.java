@@ -1,21 +1,14 @@
 package com.yyon.grapplinghook.content.advancement;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.util.GsonHelper;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public record PhysicsFramePredicate(Optional<List<ResourceLocation>> controllerTypes, Optional<MinMaxBounds.Doubles> speed, Optional<Boolean> isUsingRocket) {
 

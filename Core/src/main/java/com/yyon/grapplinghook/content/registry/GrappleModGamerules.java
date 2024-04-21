@@ -3,9 +3,7 @@ package com.yyon.grapplinghook.content.registry;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 
-import static net.minecraft.world.level.GameRules.Key;
-import static net.minecraft.world.level.GameRules.Category;
-import static net.minecraft.world.level.GameRules.BooleanValue;
+import static net.minecraft.world.level.GameRules.*;
 
 public class GrappleModGamerules {
 

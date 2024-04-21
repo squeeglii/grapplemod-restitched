@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.client.gui.widget;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.Tooltip;

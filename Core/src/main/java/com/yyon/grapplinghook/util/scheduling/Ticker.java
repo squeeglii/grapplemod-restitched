@@ -6,7 +6,6 @@ import net.minecraft.server.MinecraftServer;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Ticker {
 

@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.block.GrappleModifierBlock;
 import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
+import com.yyon.grapplinghook.content.block.GrappleModifierBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

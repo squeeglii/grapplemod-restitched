@@ -1,15 +1,11 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 

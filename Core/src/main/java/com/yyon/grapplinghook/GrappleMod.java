@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.command.GrappleModCommand;
-import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.config.pack.DataPackProcessor;
 import com.yyon.grapplinghook.content.registry.*;
 import com.yyon.grapplinghook.network.NetworkManager;

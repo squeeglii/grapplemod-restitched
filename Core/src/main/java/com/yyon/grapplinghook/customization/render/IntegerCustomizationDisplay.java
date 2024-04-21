@@ -1,6 +1,5 @@
 package com.yyon.grapplinghook.customization.render;
 
-import com.yyon.grapplinghook.client.gui.widget.PreciseCustomizationSlider;
 import com.yyon.grapplinghook.client.gui.widget.SteppedCustomizationSlider;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.customization.type.IntegerProperty;

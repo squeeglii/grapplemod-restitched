@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
 import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.customization.type.DoubleProperty;
 import com.yyon.grapplinghook.customization.type.IntegerProperty;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;

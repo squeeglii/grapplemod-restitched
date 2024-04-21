@@ -8,7 +8,6 @@ import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.exception.InvalidDataException;
 import net.minecraft.server.packs.resources.Resource;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ServerFeatureProcessor extends SimpleJsonResourceProcessor {

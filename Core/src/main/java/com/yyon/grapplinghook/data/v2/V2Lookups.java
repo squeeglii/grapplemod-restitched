@@ -3,11 +3,11 @@ package com.yyon.grapplinghook.data.v2;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.data.v2.property.*;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories.*;
-
 import java.util.HashMap;
 import java.util.Optional;
+
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories.*;
+import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 public class V2Lookups {
 

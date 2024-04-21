@@ -1,13 +1,14 @@
 package com.yyon.grapplinghook.content.item;
 
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.content.armor.LongFallBootsMaterial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import java.util.List;

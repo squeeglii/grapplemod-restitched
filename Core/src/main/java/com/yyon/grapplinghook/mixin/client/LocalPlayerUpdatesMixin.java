@@ -5,8 +5,6 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
