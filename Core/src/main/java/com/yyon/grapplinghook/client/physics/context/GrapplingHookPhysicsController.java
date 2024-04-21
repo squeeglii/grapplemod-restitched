@@ -135,8 +135,12 @@ public class GrapplingHookPhysicsController {
 	public ResourceLocation getType() {
 		return PhysicsControllers.GRAPPLING_HOOK;
 	}
-	
+
 	public void disable() {
+		this.disable(false);
+	}
+
+	public void disable(boolean stopPropagation) {
 		// Error'ed controllers should just be removed with no extra
 		// conntrollers applied - they should be 'disabled' already.
 
@@ -172,7 +176,7 @@ public class GrapplingHookPhysicsController {
 			if(playerInfo != null && playerInfo.getGameMode() == GameType.SPECTATOR) return;
 		}
 
-		if(!wasAlreadyDisabled) {
+		if(!stopPropagation && !wasAlreadyDisabled) {
 			GrappleModClient.get()
 					.getClientControllerManager()
 					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.entityId, this.entity.level(), null, this.custom);
@@ -813,7 +817,14 @@ public class GrapplingHookPhysicsController {
 	}
 	
 	public void updateServerPos() {
+		this.limitVelocity();
 		NetworkManager.packetToServer(new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z));
+	}
+
+	public void limitVelocity() {
+		if (this.motion.length() > 1.0f) { // 1 block a tick is *fast*
+			this.motion.mutableSetMagnitude(1.0f);
+		}
 	}
 	
 	// Vector stuff:
