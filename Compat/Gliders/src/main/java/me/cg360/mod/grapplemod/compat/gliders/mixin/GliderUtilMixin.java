@@ -23,7 +23,6 @@ public class GliderUtilMixin {
     private static void handleGrapplingDeployCondition(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         if(!(livingEntity instanceof Player player)) return;
 
-        GrappleMod.LOGGER.info("Handling deploy!");
 
         Optional<PlayerPhysicsFrame> mostRecentFrame = GrappleMod.get().getServerPhysicsObserver()
                                                                        .getMostRecentFrame(player);
@@ -32,27 +31,19 @@ public class GliderUtilMixin {
         if(mostRecentFrame.isEmpty())
             return;
 
-        GrappleMod.LOGGER.info("Frame found!");
-
         ResourceLocation controllerType = mostRecentFrame.get().getPhysicsControllerType();
 
         // Sanity
         if(controllerType == null) return;
-
-        GrappleMod.LOGGER.info("Controller Found!");
 
         boolean usingValidController = controllerType.equals(PhysicsControllers.AIR_FRICTION) ||
                                        controllerType.equals(PhysicsControllers.GRAPPLING_HOOK);
 
         // Can't be deployed with forcefield either as that just feels jank.
         if(usingValidController) {
-            GrappleMod.LOGGER.info("Phys Trigger!");
             cir.setReturnValue(true);
             cir.cancel();
         }
-
-
-        //todo: issue is linked to elytra deployment conditions not being met
     }
 
 }
