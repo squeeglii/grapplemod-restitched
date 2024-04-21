@@ -44,7 +44,7 @@ public class MovementInputHandlerMixin {
         }
 
         if (overrideMovement) {
-            input.jumping = false;
+            //input.jumping = false;
             input.down = false;
             input.up = false;
             input.left = false;
