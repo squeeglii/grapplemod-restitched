@@ -24,7 +24,7 @@
     "minecraft": "${minecraft_version_support_range}",
     "cloth-config": ">=${clothconfig_version}"
   },
-  "recommends": {
+  "suggests": {
     "modmenu": ">=${modmenu_version}"
   }
 }
