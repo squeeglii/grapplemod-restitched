@@ -13,9 +13,13 @@
     "client": [ "me.cg360.mod.grapplemod.compat.gliders.GlidersCompatEntrypoint" ]
   },
   "depends": {
-    "fabricloader": ">=${loader_version}",
-    "fabric": "*",
-    "minecraft": "*",
     "grapplemod": "${grapplemod_target_range}"
+  },
+  "recommends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": ">={minecraft_version}"
+  },
+  "suggests": {
+    "vc-gliders": ">={gliders_target_range}"
   }
 }
