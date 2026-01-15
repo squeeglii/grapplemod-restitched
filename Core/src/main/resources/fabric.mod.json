@@ -18,6 +18,9 @@
   },
   "mixins": [ "grapplemod.mixins.json" ],
   "accessWidener": "grapplemod.accesswidener",
+
+  "jars": [ $compatibility_jars ],
+
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",

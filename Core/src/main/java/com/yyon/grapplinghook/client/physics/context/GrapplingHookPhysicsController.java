@@ -43,7 +43,7 @@ public class GrapplingHookPhysicsController {
 
 	public int entityId;
 	public Level world;
-	public Entity entity;
+	public LivingEntity holder;
 
 	private int lastTickRan = -1;
 	private int duplicates = 0;
@@ -91,25 +91,33 @@ public class GrapplingHookPhysicsController {
 			this.playerMovementMult = this.custom.get(MOVE_SPEED_MULTIPLIER.get());
 			this.maxLen = custom.get(MAX_ROPE_LENGTH.get());
 		}
-		
-		this.entity = world.getEntity(entityId);
 
-		if(this.entity == null) {
+		Entity holderFromWorld = world.getEntity(entityId);
+
+		if(this.holder == null) {
 			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is missing an expected holder entity! Report this to 'GrappleMod: Restitched'");
 			this.disable();
 			return;
 		}
 
-		// This could happen if a player is killed before their hook actually lands.
-		if(!this.entity.isAlive()) {
+		if(!(holderFromWorld instanceof LivingEntity holderAsLiving)) {
+			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is tied to a holder entity id that is not a Living Entity! Holders are meant to be players!");
 			this.disable();
 			return;
 		}
 
-		this.motion = Vec.motionVec(this.entity);
+		this.holder = holderAsLiving;
+
+		// This could happen if a player is killed before their hook actually lands.
+		if(!this.holder.isAlive()) {
+			this.disable();
+			return;
+		}
+
+		this.motion = Vec.motionVec(this.holder);
 		
 		// undo friction
-		Vec newmotion = new Vec(entity.position().x - entity.xOld, entity.position().y - entity.yOld, entity.position().z - entity.zOld);
+		Vec newmotion = new Vec(holder.position().x - holder.xOld, holder.position().y - holder.yOld, holder.position().z - holder.zOld);
 		if (newmotion.x/motion.x < 2 && motion.x/newmotion.x < 2 && newmotion.y/motion.y < 2 && motion.y/newmotion.y < 2 && newmotion.z/motion.z < 2 && motion.z/newmotion.z < 2) {
 			this.motion = newmotion;
 		}
@@ -148,10 +156,10 @@ public class GrapplingHookPhysicsController {
 		this.isControllerActive = false;
 
 		Player clientPlayer = Minecraft.getInstance().player;
-		boolean isEntityClientPlayer = this.entity == clientPlayer;
+		boolean isEntityClientPlayer = this.holder == clientPlayer;
 
 		// Reset local copy of "Server Physics"
-		if(this.entity instanceof Player player) {
+		if(this.holder instanceof Player player) {
 			GrappleMod.get().getServerPhysicsObserver().receiveNewFrame(player, new PlayerPhysicsFrame());
 		}
 
@@ -170,7 +178,7 @@ public class GrapplingHookPhysicsController {
 
 		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
 
-		if(this.entity instanceof LocalPlayer p) {
+		if(this.holder instanceof LocalPlayer p) {
 			PlayerInfo playerInfo = p.connection.getPlayerInfo(p.getUUID());
 
 			if(playerInfo != null && playerInfo.getGameMode() == GameType.SPECTATOR) return;
@@ -179,7 +187,7 @@ public class GrapplingHookPhysicsController {
 		if(!stopPropagation && !wasAlreadyDisabled) {
 			GrappleModClient.get()
 					.getClientControllerManager()
-					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.entityId, this.entity.level(), null, this.custom);
+					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.entityId, this.holder.level(), null, this.custom);
 		}
 	}
 	
@@ -201,7 +209,7 @@ public class GrapplingHookPhysicsController {
 			this.lastTickRan = serverTick;
 		}
 
-		if (this.entity == null || !this.entity.isAlive()) {
+		if (this.holder == null || !this.holder.isAlive()) {
 			this.disable();
 		} else {
 			this.updatePlayerPos();
@@ -215,10 +223,10 @@ public class GrapplingHookPhysicsController {
 
 		Player clientPlayer = Minecraft.getInstance().player;
 
-		if(this.entity == null)
+		if(this.holder == null)
 			return;
 
-		if(this.entity != clientPlayer)
+		if(this.holder != clientPlayer)
 			return;
 
 		PlayerPhysicsFrame frame = new PlayerPhysicsFrame()
@@ -235,11 +243,11 @@ public class GrapplingHookPhysicsController {
 		this.playerStrafe = strafe;
 		this.playerSneak = sneak;
 		this.playerMovementUnrotated = new Vec(strafe, 0, forward);
-		this.playerMovement = playerMovementUnrotated.rotateYaw((float) (this.entity.getYRot() * (Math.PI / 180.0)));
+		this.playerMovement = playerMovementUnrotated.rotateYaw((float) (this.holder.getYRot() * (Math.PI / 180.0)));
 	}
 	
 	public void updatePlayerPos() {
-		Entity entity = this.entity;
+		Entity entity = this.holder;
 		
 		if (!this.isControllerActive) return;
 		if(entity == null) return;
@@ -333,7 +341,7 @@ public class GrapplingHookPhysicsController {
 
 				if (isJumping && this.onGroundTimer >= 0) {
 					// jumping
-					double timer = GrappleModClient.get().getTimeSinceLastRopeJump(this.entity.level());
+					double timer = GrappleModClient.get().getTimeSinceLastRopeJump(this.holder.level());
 					if (timer > GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_cooldown_s * 20.0) {
 						doJump = true;
 						jumpSpeed = this.getJumpPower(player, spherevec, hookEntity);
@@ -406,7 +414,7 @@ public class GrapplingHookPhysicsController {
 			jumpSpeed = Mth.clamp(jumpSpeed, 0.0D, maxJumpPower);
 
 			this.doJump(entity, jumpSpeed, averagemotiontowards, minSphereVecDist);
-			GrappleModClient.get().resetRopeJumpTime(this.entity.level());
+			GrappleModClient.get().resetRopeJumpTime(this.holder.level());
 			return;
 		}
 
@@ -431,7 +439,7 @@ public class GrapplingHookPhysicsController {
 		if (GrappleKey.CLIMB.isDown()) {
 			climbDelta = this.playerForward;
 
-			if (GrappleModClient.get().isMovingSlowly(this.entity))
+			if (GrappleModClient.get().isMovingSlowly(this.holder))
 				climbDelta /= 0.3D;
 
 			climbDelta = Mth.clamp(climbDelta, -1.0D, 1.0D);
@@ -653,33 +661,33 @@ public class GrapplingHookPhysicsController {
 	public void normalCollisions(boolean sliding) {
 
 		// stop if collided with object
-		if (this.entity.horizontalCollision) {
-			if (this.entity.getDeltaMovement().x == 0) {
+		if (this.holder.horizontalCollision) {
+			if (this.holder.getDeltaMovement().x == 0) {
 				if (!sliding || this.tryStepUp(new Vec(this.motion.x, 0, 0))) {
 					this.motion.x = 0;
 				}
 			}
 
-			if (this.entity.getDeltaMovement().z == 0) {
+			if (this.holder.getDeltaMovement().z == 0) {
 				if (!sliding || this.tryStepUp(new Vec(0, 0, this.motion.z))) {
 					this.motion.z = 0;
 				}
 			}
 		}
 		
-		if (sliding && !this.entity.horizontalCollision) {
-			if (entity.position().x - entity.xOld == 0) {
+		if (sliding && !this.holder.horizontalCollision) {
+			if (holder.position().x - holder.xOld == 0) {
 				this.motion.x = 0;
 			}
-			if (entity.position().z - entity.zOld == 0) {
+			if (holder.position().z - holder.zOld == 0) {
 				this.motion.z = 0;
 			}
 		}
 		
-		if (this.entity.verticalCollision) {
-			if (this.entity.onGround()) {
+		if (this.holder.verticalCollision) {
+			if (this.holder.onGround()) {
 				if (!sliding && Minecraft.getInstance().options.keyJump.isDown()) {
-					this.motion.y = entity.getDeltaMovement().y;
+					this.motion.y = holder.getDeltaMovement().y;
 				} else {
 					if (this.motion.y < 0) {
 						this.motion.y = 0;
@@ -687,7 +695,7 @@ public class GrapplingHookPhysicsController {
 				}
 
 			} else {
-				if (this.motion.y > 0 && entity.yOld == entity.position().y) {
+				if (this.motion.y > 0 && holder.yOld == holder.position().y) {
 					this.motion.y = 0;
 				}
 			}
@@ -698,38 +706,38 @@ public class GrapplingHookPhysicsController {
 		if (collisionMotion.length() == 0)
 			return false;
 
-		Vec moveOffset = collisionMotion.withMagnitude(0.05).add(0, entity.maxUpStep() + 0.01, 0);
-		Iterable<VoxelShape> collisions = this.entity.level().getCollisions(this.entity, this.entity.getBoundingBox().move(moveOffset.x, moveOffset.y, moveOffset.z));
+		Vec moveOffset = collisionMotion.withMagnitude(0.05).add(0, holder.maxUpStep() + 0.01, 0);
+		Iterable<VoxelShape> collisions = this.holder.level().getCollisions(this.holder, this.holder.getBoundingBox().move(moveOffset.x, moveOffset.y, moveOffset.z));
 
 		if (collisions.iterator().hasNext()) return true;
 
-		if (this.entity.onGround()) {
-			this.entity.horizontalCollision = false;
+		if (this.holder.onGround()) {
+			this.holder.horizontalCollision = false;
 			return false;
 		}
 
-		Vec pos = Vec.positionVec(entity);
+		Vec pos = Vec.positionVec(holder);
 		pos.mutableAdd(moveOffset);
-		pos.applyAsPositionTo(entity);
-		this.entity.xOld = pos.x;
-		this.entity.yOld = pos.y;
-		this.entity.zOld = pos.z;
+		pos.applyAsPositionTo(holder);
+		this.holder.xOld = pos.x;
+		this.holder.yOld = pos.y;
+		this.holder.zOld = pos.z;
 
 		return false;
 	}
 
 	public void normalGround(boolean sliding) {
-		if (this.entity.onGround()) {
+		if (this.holder.onGround()) {
 			this.onGroundTimer = this.maxOnGroundTimer;
 
 		} else if (this.onGroundTimer > 0) {
 			this.onGroundTimer--;
 		}
 
-		boolean touchingGround = this.entity.onGround() || this.onGroundTimer > 0;
+		boolean touchingGround = this.holder.onGround() || this.onGroundTimer > 0;
 
 		if (touchingGround && !sliding) {
-			this.motion = Vec.motionVec(this.entity);
+			this.motion = Vec.motionVec(this.holder);
 			Options options = Minecraft.getInstance().options;
 
 			if (options.keyJump.isDown())
@@ -818,7 +826,7 @@ public class GrapplingHookPhysicsController {
 	
 	public void updateServerPos() {
 		this.limitVelocity();
-		NetworkManager.packetToServer(new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z));
+		NetworkManager.packetToServer(new PlayerMovementMessage(this.entityId, this.holder.position().x, this.holder.position().y, this.holder.position().z, this.holder.getDeltaMovement().x, this.holder.getDeltaMovement().y, this.holder.getDeltaMovement().z));
 	}
 
 	public void limitVelocity() {
@@ -835,12 +843,12 @@ public class GrapplingHookPhysicsController {
 
 	public void receiveEnderLaunch(double x, double y, double z) {
 		this.motion.mutableAdd(x, y, z);
-		this.motion.applyAsMotionTo(this.entity);
+		this.motion.applyAsMotionTo(this.holder);
 	}
 	
 	public void applyAirFriction() {
 		double dragforce = 1 / 200F;
-		if (this.entity.isInWater() || this.entity.isInLava()) {
+		if (this.holder.isInWater() || this.holder.isInLava()) {
 			dragforce = 1 / 4F;
 		}
 		
@@ -860,7 +868,7 @@ public class GrapplingHookPhysicsController {
 
 	public void addHookEntity(GrapplinghookEntity hookEntity) {
 		this.grapplehookEntities.add(hookEntity);
-		hookEntity.ropeLength = hookEntity.getSegmentHandler().getDist(Vec.positionVec(hookEntity), Vec.positionVec(entity).add(new Vec(0, entity.getEyeHeight(), 0)));
+		hookEntity.ropeLength = hookEntity.getSegmentHandler().getDist(Vec.positionVec(hookEntity), Vec.positionVec(holder).add(new Vec(0, holder.getEyeHeight(), 0)));
 		this.grapplehookEntityIds.add(hookEntity.getId());
 	}
 
@@ -974,7 +982,7 @@ public class GrapplingHookPhysicsController {
 
 
 	public Vec getNearbyWall(Vec tryFirst, Vec trySecond, double extra) {
-		float entityCollisionWidth = this.entity.getBbWidth();
+		float entityCollisionWidth = this.holder.getBbWidth();
 
 		Vec[] directions = new Vec[] {
 				tryFirst,
@@ -986,10 +994,10 @@ public class GrapplingHookPhysicsController {
 		for (Vec direction : directions) {
 			Vec collisionRayLength = direction.withMagnitude(entityCollisionWidth/2 + extra);
 			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(
-					this.entity,
-					this.entity.level(),
-					Vec.positionVec(this.entity),
-					Vec.positionVec(this.entity).add(collisionRayLength)
+					this.holder,
+					this.holder.level(),
+					Vec.positionVec(this.holder),
+					Vec.positionVec(this.holder).add(collisionRayLength)
 			);
 
 			if (raytraceresult != null) {
@@ -1033,7 +1041,7 @@ public class GrapplingHookPhysicsController {
 	}
 	
 	public boolean wallNearby(double dist) {
-		float entitywidth = this.entity.getBbWidth();
+		float entitywidth = this.holder.getBbWidth();
 		Vec v1 = new Vec(entitywidth/2 + dist, 0, 0);
 		Vec v2 = new Vec(0, 0, entitywidth/2 + dist);
 		
@@ -1041,7 +1049,7 @@ public class GrapplingHookPhysicsController {
 			Vec corner1 = getCorner(i, v1, v2);
 			Vec corner2 = getCorner((i + 1) % 4, v1, v2);
 			
-			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.entity, this.entity.level(), Vec.positionVec(this.entity).add(corner1), Vec.positionVec(this.entity).add(corner2));
+			BlockHitResult raytraceresult = GrappleModUtils.rayTraceBlocks(this.holder, this.holder.level(), Vec.positionVec(this.holder).add(corner1), Vec.positionVec(this.holder).add(corner2));
 			if (raytraceresult != null) {
 				return true;
 			}
@@ -1064,12 +1072,12 @@ public class GrapplingHookPhysicsController {
 		if (GrappleModClient.get().getWallrunTicks() < GrappleModLegacyConfig.getConf().enchantments.wallrun.max_wallrun_time * 40) {
 			if (!(this.playerSneak)) {
 				// continue wallrun
-				if (this.isOnWall && !this.entity.onGround() && this.entity.horizontalCollision) {
-					return !(entity instanceof LivingEntity living && living.onClimbable());
+				if (this.isOnWall && !this.holder.onGround() && this.holder.horizontalCollision) {
+					return !this.holder.onClimbable();
 				}
 				
 				// start wallrun
-				if (GrappleModClient.get().isWallRunning(this.entity, this.motion)) {
+				if (GrappleModClient.get().isWallRunning(this.holder, this.motion)) {
 					this.isOnWall = true;
 					return true;
 				}
@@ -1078,7 +1086,7 @@ public class GrapplingHookPhysicsController {
 			this.isOnWall = false;
 		}
 		
-		if (GrappleModClient.get().getWallrunTicks() > 0 && (this.entity.onGround() || (!this.entity.horizontalCollision && !this.wallNearby(0.2)))) {
+		if (GrappleModClient.get().getWallrunTicks() > 0 && (this.holder.onGround() || (!this.holder.horizontalCollision && !this.wallNearby(0.2)))) {
 			this.ticksSinceLastWallrunSoundEffect = 0;
 		}
 		
@@ -1133,12 +1141,10 @@ public class GrapplingHookPhysicsController {
 				if (this.wallrunRaytraceResult != null) {
 					BlockPos blockpos = this.wallrunRaytraceResult.getBlockPos();
 					
-					BlockState blockState = this.entity.level().getBlockState(blockpos);
-					Block blockIn = blockState.getBlock();
-					
-			        SoundType soundtype = blockIn.getSoundType(blockState);
+					BlockState blockState = this.holder.level().getBlockState(blockpos);
+			        SoundType soundtype = blockState.getSoundType();
 
-		            this.entity.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.30F * GrappleModLegacyConfig.getClientConf().sounds.wallrun_sound_volume, soundtype.getPitch());
+		            this.holder.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.30F * GrappleModLegacyConfig.getClientConf().sounds.wallrun_sound_volume, soundtype.getPitch());
 					this.ticksSinceLastWallrunSoundEffect = 0;
 				}
 			}
@@ -1187,8 +1193,8 @@ public class GrapplingHookPhysicsController {
 		}
 
 		this.motion.y += GrappleModLegacyConfig.getConf().enchantments.doublejump.doublejumpforce;
-		this.motion.applyAsMotionTo(this.entity);
-		this.entity.resetFallDistance();
+		this.motion.applyAsMotionTo(this.holder);
+		this.holder.resetFallDistance();
 	}
 	
 	public void applySlidingFriction() {

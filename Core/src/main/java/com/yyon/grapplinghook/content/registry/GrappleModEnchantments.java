@@ -1,70 +1,113 @@
 package com.yyon.grapplinghook.content.registry;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.enchantment.ConfigurableEnchantment;
-import com.yyon.grapplinghook.content.enchantment.DoubleJumpEnchantment;
-import com.yyon.grapplinghook.content.enchantment.SlidingEnchantment;
-import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Unit;
+import net.minecraft.world.item.enchantment.Enchantment;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.UnaryOperator;
 
 public class GrappleModEnchantments {
 
-    private static final HashMap<ResourceLocation, EnchantmentEntry<?>> enchantments;
+    private static Set<EnchantmentEffectRegistration<?>> enchantmentEffects;
+    private static Set<EnchantmentDefinitionRegistration> enchantmentDefinitions;
+
+    private static Set<ResourceKey<Enchantment>> availableEnchantments = null;
 
     static {
-        enchantments = new HashMap<>();
+        enchantmentEffects = new HashSet<>();
+        enchantmentDefinitions = new HashSet<>();
     }
 
-    public static <E extends ConfigurableEnchantment> EnchantmentEntry<E> enchantment(String id, Supplier<E> ench) {
-        ResourceLocation qualId = GrappleMod.id(id);
-        EnchantmentEntry<E> entry = new EnchantmentEntry<>(qualId, ench);
-        enchantments.put(qualId, entry);
-        return entry;
+    public static final DataComponentType<Unit> EFFECT_WALL_RUNNING = registerEffect("wall_running", builder -> builder.persistent(Unit.CODEC));
+    public static final DataComponentType<Unit> EFFECT_SLIDING = registerEffect("sliding", builder -> builder.persistent(Unit.CODEC));
+    public static final DataComponentType<Unit> EFFECT_DOUBLE_JUMP = registerEffect("double_jump", builder -> builder.persistent(Unit.CODEC));
+
+
+    // TODO: ACTUALLY IMPLEMENT THE ENCHANTMENT DEFINITIONS
+    private static final ResourceKey<Enchantment> DEF_WALL_RUNNING = registerExpectedEnchantment("wall_running");
+    private static final ResourceKey<Enchantment> DEF_SLIDING = registerExpectedEnchantment("sliding");
+    private static final ResourceKey<Enchantment> DEF_DOUBLE_JUMP = registerExpectedEnchantment("double_jump");
+
+    private static <T> DataComponentType<T> registerEffect(String id, UnaryOperator<DataComponentType.Builder<T>> operator) {
+        ResourceLocation enchantment = GrappleMod.id(id);
+        DataComponentType<T> dataComponentType = operator.apply(DataComponentType.builder()).build();
+        EnchantmentEffectRegistration<T> reg = new EnchantmentEffectRegistration<>(enchantment, dataComponentType);
+
+        enchantmentEffects.add(reg);
+        return dataComponentType;
     }
 
+    private static ResourceKey<Enchantment> registerExpectedEnchantment(String id) {
+        ResourceLocation enchId = GrappleMod.id(id);
+        ResourceKey<Enchantment> enchKey = ResourceKey.create(Registries.ENCHANTMENT, enchId);
+        EnchantmentDefinitionRegistration def = new EnchantmentDefinitionRegistration(enchKey);
 
-    public static void registerAllEnchantments() {
-        for(Map.Entry<ResourceLocation, EnchantmentEntry<?>> def: enchantments.entrySet()) {
-            ResourceLocation id = def.getKey();
-            EnchantmentEntry<?> data = def.getValue();
-            ConfigurableEnchantment it = data.getFactory().get();
+        enchantmentDefinitions.add(def);
 
-            data.finalize(Registry.register(BuiltInRegistries.ENCHANTMENT, id, it));
+        return def.key();
+    }
+
+    public static void registerImmutable() {
+        for(EnchantmentEffectRegistration<?> effect: enchantmentEffects) {
+            DataComponentType<?> component = effect.operator();
+            Registry.register(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, effect.id(), component);
         }
     }
 
-    public static final EnchantmentEntry<WallRunEnchantment> WALL_RUN = GrappleModEnchantments.enchantment("wall_running", WallRunEnchantment::new);
-    public static final EnchantmentEntry<DoubleJumpEnchantment> DOUBLE_JUMP = GrappleModEnchantments.enchantment("double_jump", DoubleJumpEnchantment::new);
-    public static final EnchantmentEntry<SlidingEnchantment> SLIDING = GrappleModEnchantments.enchantment("sliding", SlidingEnchantment::new);
+    // Enchantments can change per-world. I think they're registered seperately? See VanillaRegistries?
+    public static void registerRuntime() {
+        //todo: pre-gen these in code.
+        //for(EnchantmentDefinitionRegistration def: enchantmentDefinitions)
+        //    Registry.registerForHolder(Registries.ENCHANTMENT, def.enchantment);
 
-
-    public static List<? extends ConfigurableEnchantment> getEnchantments() {
-        return enchantments.values().stream()
-                .map(EnchantmentEntry::get)
-                .toList();
+        //TODO: check these on world load.
+        availableEnchantments = Set.of(DEF_WALL_RUNNING, DEF_DOUBLE_JUMP, DEF_SLIDING);
     }
 
-    public static List<ResourceLocation> getEnchantmentIds() {
-        return enchantments.values().stream()
-                .map(EnchantmentEntry::getIdentifier)
-                .toList();
+    @Deprecated
+    public static ResourceKey<Enchantment> wallRunning() {
+        return DEF_WALL_RUNNING;
     }
 
-    public static Stream<EnchantmentEntry<?>> streamEntries() {
-        return enchantments.values().stream();
+    @Deprecated
+    public static ResourceKey<Enchantment> sliding() {
+        return DEF_SLIDING;
     }
 
-    public static class EnchantmentEntry<E extends ConfigurableEnchantment> extends AbstractRegistryReference<E> {
-        protected EnchantmentEntry(ResourceLocation id, Supplier<E> factory) {
-            super(id, factory);
+    @Deprecated
+    public static ResourceKey<Enchantment> doubleJump() {
+        return DEF_DOUBLE_JUMP;
+    }
+
+    /**
+     * These enchantments are ones the mod includes by default, but are not
+     * guaranteed to be included in all instances. You should check if they're
+     * registered rather than blindly including them.
+     *
+     * See GrappleModItems & the creative menu as an example.
+     */
+    public static Set<ResourceKey<Enchantment>> getRecommendedEnchantments() {
+        return availableEnchantments;
+    }
+
+    public record EnchantmentEffectRegistration<T>(ResourceLocation id, DataComponentType<T> operator) {
+
+    }
+
+    public record EnchantmentDefinitionRegistration(ResourceKey<Enchantment> enchantment) {
+
+        public ResourceKey<Enchantment> key() {
+            return this.enchantment;
         }
+
     }
 }

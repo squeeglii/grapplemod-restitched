@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.content.registry;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.BlueprintShelfBlockEntity;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
+import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

@@ -51,7 +51,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 
 	@Override
 	public void updatePlayerPos() {
-		Entity entity = this.entity;
+		Entity entity = this.holder;
 
 		if (entity == null) return;
 
@@ -101,7 +101,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 
 		this.applyAirFriction();
 
-		if (this.entity.isInWater() || this.entity.isInLava()) {
+		if (this.holder.isInWater() || this.holder.isInLava()) {
 			this.disable();
 			return;
 		}

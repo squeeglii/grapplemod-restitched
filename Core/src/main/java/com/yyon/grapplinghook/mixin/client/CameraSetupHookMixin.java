@@ -1,5 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yyon.grapplinghook.client.GrappleModClient;
@@ -8,6 +10,7 @@ import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsControlle
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.util.Vec;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Player;
@@ -23,13 +26,13 @@ public class CameraSetupHookMixin {
     @Unique
     private float currentCameraTilt = 0;
 
-    @Inject(method = "renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
+    @Inject(method = "renderLevel(Lnet/minecraft/client/DeltaTracker;)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/Camera;setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V",
                     shift = At.Shift.AFTER
             ))
-    public void postCameraSetup(float partialTicks, long finishTimeNano, PoseStack matrixStack, CallbackInfo ci) {
+    public void postCameraSetup(DeltaTracker deltaTracker, CallbackInfo ci, @Local PoseStack poseStack) {
         Player player = Minecraft.getInstance().player;
         if (!Minecraft.getInstance().isRunning() || player == null) return;
 
@@ -68,7 +71,7 @@ public class CameraSetupHookMixin {
         if (this.currentCameraTilt == 0) return;
 
         float angle = this.currentCameraTilt * GrappleModLegacyConfig.getClientConf().camera.wallrun_camera_tilt_degrees;
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(angle));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(angle));
     }
 
 }

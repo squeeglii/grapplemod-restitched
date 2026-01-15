@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.helper;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -23,7 +23,7 @@ public abstract class AbstractRegistryReference<T> {
     }
 
     @SuppressWarnings("unchecked")
-    protected void finalize(Object entry) {
+    public void finalize(Object entry) {
         if(entry == null) throw new IllegalStateException("Entry cannot be null!");
         if(this.isRegistered()) throw new IllegalStateException("Entry is already registered!");
 

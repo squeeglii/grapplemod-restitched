@@ -85,22 +85,20 @@ def packageCompatModules = tasks.register('bundle-compat-modules', Copy) {
     include("fabric.mod.json")
     into buildDir
 
-    doLast {
+    // Substitute in the compatibility jars
+    expand("compatibility_jars": () -> {
+        if(project.property("should_bundle_compat_modules").is(false))
+            return ""
 
-        // Takes the GrappleMod's fabric.mod.json, strips off the last '}', adds the 'jars' list
-        // necessary for sub-mods, and adds the '}' back on.
         String[] compatJarFileNames = new File("${buildDir}/compat").listFiles().toList()
                 .stream()
                 .map { "{ \"file\": \"compat/${it.name}\" }".toString() }
                 .toArray(String[]::new)
-        String joinedCompatFileNames = String.join(",", compatJarFileNames)
-        String modJarsJson = ",\"jars\": [ ${joinedCompatFileNames} ] }"
+        return String.join(",", compatJarFileNames)
+    })
 
-        File modJson = new File("$buildDir/fabric.mod.json")
-        String modJsonText = modJson.getText().trim()
-        String newText = modJsonText.substring(0, modJsonText.length() - 1) + modJarsJson
-        modJson.write(newText)
-
+    // Swap out bundled jar for
+    doLast {
         // Gets tbe file name of the GrappleMod jar so that it can be updated
         // to include the new fabric.mod.json + the compatibility modules
         String modFileName = file(buildDir).listFiles().toList()

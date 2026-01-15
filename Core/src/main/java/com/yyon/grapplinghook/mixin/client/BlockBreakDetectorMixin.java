@@ -26,7 +26,7 @@ public class BlockBreakDetectorMixin {
             control.disable();
             physManager.controllerPos.remove(pos);
 
-            GrappleModClientEvents.HOOK_DETACH.invoker().onHookDetach(control.entity);
+            GrappleModClientEvents.HOOK_DETACH.invoker().onHookDetach(control.holder);
         }
     }
 

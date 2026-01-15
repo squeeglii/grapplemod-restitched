@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.advancement.trigger.PhysicsUpdateTrigger;
+import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.resources.ResourceLocation;

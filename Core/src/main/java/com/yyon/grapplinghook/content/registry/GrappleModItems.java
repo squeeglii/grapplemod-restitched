@@ -4,8 +4,11 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.item.*;
 import com.yyon.grapplinghook.content.item.smithing.LongFallBootsTemplateItem;
 import com.yyon.grapplinghook.content.item.upgrade.*;
+import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
+import com.yyon.grapplinghook.content.registry.helper.TabBuilder;
 import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -13,10 +16,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -25,13 +30,9 @@ public final class GrappleModItems {
     private static final ArrayList<ResourceLocation> itemsInRegistryOrder;
     private static final HashMap<ResourceLocation, ItemEntry<?>> items;
 
-    private static List<ItemStack> creativeMenuCache;
-    private static boolean creativeCacheInvalid;
-
     static {
         items = new HashMap<>();
         itemsInRegistryOrder = new ArrayList<>();
-        creativeMenuCache = null;
     }
 
     public static final ItemEntry<GrapplehookItem> GRAPPLING_HOOK = GrappleModItems.item("grappling_hook", GrapplehookItem::new, ItemEntry.populateHookVariantsInTab());
@@ -62,23 +63,24 @@ public final class GrappleModItems {
 
     private static final CreativeModeTab.DisplayItemsGenerator MOD_TAB_GENERATOR = (displayParameters, output) -> {
 
-        if(creativeMenuCache == null || creativeCacheInvalid) {
-            GrappleModItems.creativeCacheInvalid = false;
-            creativeMenuCache = itemsInRegistryOrder.stream()
-                    .map(items::get)
-                    .map(ItemEntry::getTabProvider)
-                    .map(Supplier::get)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
+        displayParameters.holders().lookupOrThrow(Registries.ENCHANTMENT);
 
-            // Add enchanted books to end of creative menu.
-            GrappleModEnchantments.getEnchantments().stream()
-                    .map(enchantment -> new EnchantmentInstance(enchantment, 1))
-                    .map(EnchantedBookItem::createForEnchantment)
-                    .forEach(creativeMenuCache::add);
-        }
+        List<ItemStack> creativeMenu = itemsInRegistryOrder.stream()
+                .map(items::get)
+                .map(ItemEntry::getTabProvider)
+                .map(provider -> provider.build(displayParameters))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
 
-        creativeMenuCache.forEach(output::accept);
+        // Add enchanted books to end of creative menu.
+        GrappleModEnchantments.getRecommendedEnchantments().stream()
+                .map(enchantment -> tryGetEnchantment(displayParameters, enchantment))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(enchantment -> new EnchantmentInstance(enchantment, 1))
+                .map(EnchantedBookItem::createForEnchantment)
+                .forEach(creativeMenu::add);
+
     };
 
     private static final ResourceKey<CreativeModeTab> ITEM_GROUP_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, GrappleMod.id("main"));
@@ -93,11 +95,11 @@ public final class GrappleModItems {
         return item(id, item, null);
     }
 
-    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemStack>> tabProvider) {
+    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, TabBuilder tabProvider) {
         return item(id, item, tabProvider, false);
     }
 
-    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, Supplier<List<ItemStack>> tabProvider, boolean placeFirstInCreative) {
+    public static <I extends Item> ItemEntry<I> item(String id, Supplier<I> item, TabBuilder tabProvider, boolean placeFirstInCreative) {
         ResourceLocation qualId = GrappleMod.id(id);
         ItemEntry<I> entry = new ItemEntry<>(qualId, item, tabProvider);
 
@@ -119,12 +121,16 @@ public final class GrappleModItems {
         return new GrappleModBlocks.BlockItemEntry<>();
     }
 
+    // Enchantment registry could change at any point -
+    // I cba to check that perfectly.
+    @Deprecated(since = "1.21.1")
     public static void invalidateCreativeTabCache() {
-        GrappleModItems.creativeCacheInvalid = true;
+
     }
 
+    @Deprecated(since = "1.21.1")
     public static boolean isCreativeCacheInvalid() {
-        return GrappleModItems.creativeCacheInvalid;
+        return false;
     }
 
     public static void registerAllItems() {
@@ -143,9 +149,9 @@ public final class GrappleModItems {
 
     public static class ItemEntry<I extends Item> extends AbstractRegistryReference<I> {
 
-        protected Supplier<List<ItemStack>> tabProvider;
+        protected TabBuilder tabProvider;
 
-        protected ItemEntry(ResourceLocation id, Supplier<I> factory, Supplier<List<ItemStack>> creativeTabProvider) {
+        protected ItemEntry(ResourceLocation id, Supplier<I> factory, TabBuilder creativeTabProvider) {
             super(id, factory);
 
             this.tabProvider = creativeTabProvider == null
@@ -153,44 +159,53 @@ public final class GrappleModItems {
                     : creativeTabProvider;
         }
 
-        public Supplier<List<ItemStack>> getTabProvider() {
-            return tabProvider;
+        public TabBuilder getTabProvider() {
+            return this.tabProvider;
         }
 
-        private Supplier<List<ItemStack>> defaultInTab() {
-            return () -> List.of(this.get().getDefaultInstance());
+        private TabBuilder defaultInTab() {
+            return displayParams -> List.of(this.get().getDefaultInstance());
         }
 
-        private static Supplier<List<ItemStack>> hiddenInTab() {
-            return ArrayList::new;
+        private static TabBuilder hiddenInTab() {
+            return displayParams -> new ArrayList<>();
         }
 
-        private static Supplier<List<ItemStack>> populateBootVariants() {
-            return () -> {
+        private static TabBuilder populateBootVariants() {
+            return displayParams -> {
+
+
+                //todo: this may vary depending on datapacks.
                 LinkedList<ItemStack> variants = new LinkedList<>();
 
+
+                // Always include plain. The feather falling is for aesthetic value anyway.
                 ItemStack plainItem = LONG_FALL_BOOTS.get().getDefaultInstance();
-                plainItem.enchant(Enchantments.FALL_PROTECTION, 4);
+                tryApplyEnchantment(displayParams, plainItem, Enchantments.FEATHER_FALLING, 4);
                 variants.add(plainItem);
 
                 ItemStack doubleJumpItem = LONG_FALL_BOOTS.get().getDefaultInstance();
-                doubleJumpItem.enchant(Enchantments.FALL_PROTECTION, 4);
-                doubleJumpItem.enchant(GrappleModEnchantments.DOUBLE_JUMP.get(), 1);
-                variants.add(doubleJumpItem);
+                boolean appliedAllDJ =
+                    tryApplyEnchantment(displayParams, doubleJumpItem, Enchantments.FEATHER_FALLING, 4) &&
+                    tryApplyEnchantment(displayParams, doubleJumpItem, GrappleModEnchantments.doubleJump(), 1);
+                if(appliedAllDJ)
+                    variants.add(doubleJumpItem);
 
                 ItemStack allEnchantsItem = LONG_FALL_BOOTS.get().getDefaultInstance();
-                allEnchantsItem.enchant(Enchantments.FALL_PROTECTION, 4);
-                allEnchantsItem.enchant(GrappleModEnchantments.DOUBLE_JUMP.get(), 1);
-                allEnchantsItem.enchant(GrappleModEnchantments.SLIDING.get(), 1);
-                allEnchantsItem.enchant(GrappleModEnchantments.WALL_RUN.get(), 1);
-                variants.add(allEnchantsItem);
+                boolean appliedAllFull =
+                    tryApplyEnchantment(displayParams, allEnchantsItem, Enchantments.FEATHER_FALLING, 4) &&
+                    tryApplyEnchantment(displayParams, allEnchantsItem, GrappleModEnchantments.doubleJump(), 1) &&
+                    tryApplyEnchantment(displayParams, allEnchantsItem, GrappleModEnchantments.sliding(), 1) &&
+                    tryApplyEnchantment(displayParams, allEnchantsItem, GrappleModEnchantments.wallRunning(), 1);
+                if(appliedAllFull)
+                    variants.add(allEnchantsItem);
 
                 return variants;
             };
         }
 
-        private static Supplier<List<ItemStack>> populateHookVariantsInTab() {
-            return () -> {
+        private static TabBuilder populateHookVariantsInTab() {
+            return displayParams -> {
                 ArrayList<ItemStack> grappleHookVariants = new ArrayList<>();
                 grappleHookVariants.add(GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance());
 
@@ -202,5 +217,24 @@ public final class GrappleModItems {
                 return grappleHookVariants;
             };
         }
+    }
+
+    private static boolean tryApplyEnchantment(CreativeModeTab.ItemDisplayParameters tabParams, ItemStack item, ResourceKey<Enchantment> enchantment, int level) {
+        Optional<Holder.Reference<Enchantment>> optRegEnch = tabParams.holders()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .get(enchantment);
+
+        if(optRegEnch.isPresent()) {
+            item.enchant(optRegEnch.get(), level);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static Optional<Holder.Reference<Enchantment>> tryGetEnchantment(CreativeModeTab.ItemDisplayParameters tabParams, ResourceKey<Enchantment> enchantment) {
+        return tabParams.holders()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .get(enchantment);
     }
 }

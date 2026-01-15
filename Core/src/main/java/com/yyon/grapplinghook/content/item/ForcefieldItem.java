@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ForcefieldItem extends Item {
+
 	public ForcefieldItem() {
 		super(new Item.Properties().stacksTo(1));
 	}

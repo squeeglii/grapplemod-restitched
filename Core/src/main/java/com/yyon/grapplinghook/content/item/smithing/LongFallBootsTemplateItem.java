@@ -14,7 +14,7 @@ public class LongFallBootsTemplateItem extends SmithingTemplateItem {
     // Taken from superclass as it was private there.
     private static final ChatFormatting TITLE_FORMAT = ChatFormatting.GRAY;
     private static final ChatFormatting DESCRIPTION_FORMAT = ChatFormatting.BLUE;
-    private static final ResourceLocation EMPTY_SLOT_BOOTS = new ResourceLocation("item/empty_armor_slot_boots");
+    private static final ResourceLocation EMPTY_SLOT_BOOTS = ResourceLocation.fromNamespaceAndPath("minecraft", "item/empty_armor_slot_boots");
 
     // And this stuff is new
     private static final String TRANSLATION_APPLIES_TO = Util.makeDescriptionId("item", GrappleMod.id("smithing_template.long_fall_boots.applies_to"));

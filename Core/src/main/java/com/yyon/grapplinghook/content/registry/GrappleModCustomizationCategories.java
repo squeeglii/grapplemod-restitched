@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;

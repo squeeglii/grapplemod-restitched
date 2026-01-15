@@ -9,19 +9,18 @@ import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.client.sound.RocketSound;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.content.enchantment.DoubleJumpEnchantment;
-import com.yyon.grapplinghook.content.enchantment.SlidingEnchantment;
-import com.yyon.grapplinghook.content.enchantment.WallRunEnchantment;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
+import com.yyon.grapplinghook.content.registry.GrappleModEnchantments;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -31,7 +30,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,7 +37,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
@@ -173,29 +170,18 @@ public class ClientPhysicsControllerTracker {
 			return this.rocketIncreaseTick / this.rocketDecreaseTick / 2.0;
 		}
 	}
-	
-	public boolean isWallRunning(Entity entity, Vec motion) {
-		if (!(entity.horizontalCollision && !entity.onGround() && !entity.isCrouching())) return false;
-		if (entity instanceof LivingEntity && ((LivingEntity) entity).onClimbable()) return false;
 
-		for (ItemStack stack : entity.getArmorSlots()) {
-			if (stack != null) {
-				Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-				for (Enchantment enchant : enchantments.keySet()) {
-					if (!(enchant instanceof WallRunEnchantment)) continue;
-					if (enchantments.get(enchant) < 1) continue;
-					if (GrappleKey.DETACH.isDown() || Minecraft.getInstance().options.keyJump.isDown())  continue;
+	public boolean isWallRunning(LivingEntity entity, Vec motion) {
+		if(!(entity.horizontalCollision && !entity.onGround() && !entity.isCrouching())) return false;
+		if(entity.onClimbable()) return false;
+		if(!GrappleModUtils.hasArmourAbility(entity, GrappleModEnchantments.EFFECT_WALL_RUNNING)) return false;
+		if(GrappleKey.DETACH.isDown() || Minecraft.getInstance().options.keyJump.isDown()) return false;
 
-					BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
-					if (rayTraceResult == null) {
-						double currentSpeed = Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.z,  2));
-						if (currentSpeed >= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
-							return true;
-						}
-					}
-
-					break;
-				}
+		BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
+		if(rayTraceResult == null) {
+			double currentSpeed = Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.z,  2));
+			if(currentSpeed >= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
+				return true;
 			}
 		}
 
@@ -221,7 +207,7 @@ public class ClientPhysicsControllerTracker {
 				() -> !player.isInWater(),
 				() -> !player.isInLava(),
 				() -> ticksSinceLastOnGround > 3,
-				() -> this.wearingDoubleJumpEnchant(player),
+				() -> GrappleModUtils.hasArmourAbility(player, GrappleModEnchantments.EFFECT_DOUBLE_JUMP),
 				() -> !player.getAbilities().flying,
 				() -> !alreadyUsedDoubleJump
 		);
@@ -242,43 +228,11 @@ public class ClientPhysicsControllerTracker {
 		this.prevJumpButton = isJumpButtonDown;
 	}
 
-	public boolean wearingDoubleJumpEnchant(Entity entity) {
-		for (ItemStack stack : entity.getArmorSlots()) {
-			if (stack == null) continue;
-
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-
-			for (Enchantment enchant : enchantments.keySet()) {
-				if (!(enchant instanceof DoubleJumpEnchantment)) continue;
-				if (enchantments.get(enchant) < 1) continue;
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
-	public static boolean isWearingSlidingEnchant(Entity entity) {
-		for (ItemStack stack : entity.getArmorSlots()) {
-			if (stack != null) {
-				Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-
-				for (Enchantment enchant : enchantments.keySet()) {
-					if (!(enchant instanceof SlidingEnchantment)) continue;
-					if (enchantments.get(enchant) < 1) continue;
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	public boolean isSliding(Entity entity, Vec motion) {
+	public boolean isSliding(LivingEntity entity, Vec motion) {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
 		if (entity.onGround() && GrappleKey.SLIDE.isDown()) {
-			if (!ClientPhysicsControllerTracker.isWearingSlidingEnchant(entity)) return false;
+			if (!GrappleModUtils.hasArmourAbility(entity, GrappleModEnchantments.EFFECT_SLIDING)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();
 

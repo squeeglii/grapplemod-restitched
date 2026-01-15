@@ -8,11 +8,15 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -24,6 +28,17 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class GrappleModUtils {
+
+	public static boolean hasArmourAbility(LivingEntity target, DataComponentType<?> ability) {
+		for (ItemStack stack : target.getArmorSlots()) {
+			if (stack == null) continue;
+
+			if(EnchantmentHelper.has(stack, ability))
+				return true;
+		}
+
+		return false;
+	}
 
 	public static void sendToCorrectClient(BaseMessageClient message, int playerid, Level w) {
 		Entity entity = w.getEntity(playerid);

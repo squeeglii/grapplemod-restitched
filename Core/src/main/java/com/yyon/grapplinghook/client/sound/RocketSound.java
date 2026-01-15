@@ -44,8 +44,8 @@ public final class RocketSound extends AbstractTickableSoundInstance {
         if (this.volume == 0 && this.isStopping)
             this.stop();
 
-        this.x = controller.entity.getX();
-        this.y = controller.entity.getY();
-        this.z = controller.entity.getZ();
+        this.x = controller.holder.getX();
+        this.y = controller.holder.getY();
+        this.z = controller.holder.getZ();
     }
 }

@@ -8,6 +8,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationVolume;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,7 +30,8 @@ import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationPro
 @Mixin(Gui.class)
 public abstract class GrappleCrosshairMixin {
 
-    private static final double Z_LEVEL = -90.0D;
+    @Unique
+    private static final float Z_LEVEL = -90.0f;
 
     @Final @Shadow
     private Minecraft minecraft;
@@ -37,9 +39,9 @@ public abstract class GrappleCrosshairMixin {
     @Shadow @Final private static ResourceLocation CROSSHAIR_SPRITE;
 
 
-    @Inject(method = "renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V",
+    @Inject(method = "renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V", shift = At.Shift.AFTER, ordinal = 0))
-    public void renderModCrosshair(GuiGraphics guiGraphics, CallbackInfo ci) {
+    public void renderModCrosshair(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 
         LocalPlayer player = this.minecraft.player;
         ItemStack grapplehookItemStack = null;
@@ -98,12 +100,12 @@ public abstract class GrappleCrosshairMixin {
 
             int totalbarLength = w / 8;
 
-            RenderSystem.getModelViewStack().pushPose();
+            RenderSystem.getModelViewStack().pushMatrix();
 
             this.drawRect(w / 2 - totalbarLength / 2, h * 3 / 4, totalbarLength, 2, 50, 100);
             this.drawRect(w / 2 - totalbarLength / 2, h * 3 / 4, (int) (totalbarLength * rocketFuel), 2, 200, 255);
 
-            RenderSystem.getModelViewStack().popPose();
+            RenderSystem.getModelViewStack().pushMatrix();
         }
     }
 
@@ -119,14 +121,13 @@ public abstract class GrappleCrosshairMixin {
     public void drawRect(int x, int y, int width, int height, int g, int a)
     {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferbuilder.vertex(x, y + height, Z_LEVEL).color(g, g, g, a).endVertex();
-        bufferbuilder.vertex(x + width, y + height, Z_LEVEL).color(g, g, g, a).endVertex();
-        bufferbuilder.vertex(x + width, y, Z_LEVEL).color(g, g, g, a).endVertex();
-        bufferbuilder.vertex(x, y, Z_LEVEL).color(g, g, g, a).endVertex();
+        bufferbuilder.addVertex(x, y + height, Z_LEVEL).setColor(g, g, g, a);
+        bufferbuilder.addVertex(x + width, y + height, Z_LEVEL).setColor(g, g, g, a);
+        bufferbuilder.addVertex(x + width, y, Z_LEVEL).setColor(g, g, g, a);
+        bufferbuilder.addVertex(x, y, Z_LEVEL).setColor(g, g, g, a);
 
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 }

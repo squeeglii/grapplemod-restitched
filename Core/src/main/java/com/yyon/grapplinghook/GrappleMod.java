@@ -72,15 +72,21 @@ public class GrappleMod implements ModInitializer {
         GrappleModBlocks.registerAllBlocks();
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
         GrappleModEntities.registerAllEntities();
-        GrappleModEnchantments.registerAllEnchantments();
+        GrappleModEnchantments.registerImmutable();
         GrappleModBlockEntities.registerAllBlockEntities();
         GrappleModAdvancementTriggers.registerAllTriggers();
+        GrappleModArmourMaterials.registerAllMaterials();
 
         GrappleModCustomizationProperties.registerAll();
         GrappleModCustomizationCategories.registerAll(); // Categories must always go after items + properties.
 
+        // Some stuff should be re-registered when a world loads I think? Dynamic registries are strange.
+        GrappleModEnchantments.registerRuntime();
+
+
         // Some things don't need "registering" but are static so they still
         // need loading. Load them now for reliability.
+
         GrappleModTags.bump();
         GrappleModGamerules.bump();
 
@@ -154,10 +160,10 @@ public class GrappleMod implements ModInitializer {
     }
 
     public static ResourceLocation id(String id) {
-        return new ResourceLocation(MOD_ID, id);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
     }
 
     public static ResourceLocation fakeId(String id) {
-        return new ResourceLocation("minecraft", id);
+        return ResourceLocation.fromNamespaceAndPath("minecraft", id);
     }
 }

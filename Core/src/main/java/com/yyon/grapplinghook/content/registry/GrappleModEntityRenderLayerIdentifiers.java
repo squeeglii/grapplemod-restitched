@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.attachable.model.LongFallBootsModel;
+import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.builders.MeshDefinition;

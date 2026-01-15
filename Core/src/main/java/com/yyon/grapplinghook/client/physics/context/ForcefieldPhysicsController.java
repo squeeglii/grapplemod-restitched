@@ -23,7 +23,7 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 
 	@Override
 	public void updatePlayerPos() {
-		Entity entity = this.entity;
+		Entity entity = this.holder;
 		
 		if (!this.isControllerActive()) return;
 		if(entity == null) return;
@@ -59,7 +59,7 @@ public class ForcefieldPhysicsController extends GrapplingHookPhysicsController 
 			}
 		}
 
-		this.motion.applyAsMotionTo(this.entity);
+		this.motion.applyAsMotionTo(this.holder);
 		this.updateServerPos();
 	}
 }

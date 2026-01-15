@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.enchantment.ConfigurableEnchantment;
 import com.yyon.grapplinghook.content.registry.GrappleModEnchantments;
 import com.yyon.grapplinghook.exception.InvalidDataException;
 import net.minecraft.resources.ResourceLocation;
