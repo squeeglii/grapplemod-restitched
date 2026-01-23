@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.template;
+package com.yyon.grapplinghook.customization.helper;
 
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 

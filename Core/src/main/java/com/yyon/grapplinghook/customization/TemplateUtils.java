@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.template;
+package com.yyon.grapplinghook.customization;
 
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.nbt.CompoundTag;

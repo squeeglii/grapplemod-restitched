@@ -8,9 +8,11 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
-import com.yyon.grapplinghook.customization.template.TemplateUtils;
+import com.yyon.grapplinghook.content.registry.GrappleModItemComponents;
+import com.yyon.grapplinghook.customization.data.DeployState;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.customization.HookTemplates;
+import com.yyon.grapplinghook.customization.TemplateUtils;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.data.UpgraderUpper;
@@ -80,7 +82,13 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 
 	public GrapplehookItem() {
-		super(new Item.Properties().stacksTo(1).durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability));
+		super(
+				new Item.Properties()
+						.stacksTo(1)
+						.durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability)
+						.component(GrappleModItemComponents.DEPLOYABLE, new DeployState())
+						.component(GrappleModItemComponents.CUSTOMIZABLE, new HookCustomization())
+		);
 	}
 
 
@@ -117,7 +125,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				NetworkManager.packetToServer(new KeypressMessage(key, true));
 
 			} else if (key == IGlobalKeyObserver.Keys.ROCKET) {
-				CustomizationVolume custom = this.getCustomizations(stack);
+				HookCustomization custom = this.getCustomizations(stack);
 				if (custom.get(ROCKET_ATTACHED.get()))
 					GrappleModClient.get().startRocket(player, custom);
 			}
@@ -125,7 +133,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			return;
 		}
 
-		CustomizationVolume custom = this.getCustomizations(stack);
+		HookCustomization custom = this.getCustomizations(stack);
 
 		boolean isEitherSingleHandThrowKeyDown = key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT;
 
@@ -168,7 +176,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			}
 
 		} else {
-	    	CustomizationVolume custom = this.getCustomizations(stack);
+	    	HookCustomization custom = this.getCustomizations(stack);
 	    	
 	    	if (custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
 	    		GrapplinghookEntity hookLeft = getHookEntityLeft(player);
@@ -210,7 +218,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
-		CustomizationVolume custom = this.getCustomizations(stack);
+		HookCustomization custom = this.getCustomizations(stack);
 		Options options = Minecraft.getInstance().options;
 
 		Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
@@ -385,8 +393,8 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 
 	@Override
-	public CustomizationVolume resetCustomizations(ItemStack stack) {
-		CustomizationVolume custom = new CustomizationVolume();
+	public HookCustomization resetCustomizations(ItemStack stack) {
+		HookCustomization custom = new HookCustomization();
 		this.applyCustomizations(stack, custom);
 
 		return custom;
@@ -397,7 +405,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	 * To retain the metadata, call #applyTemplateMetadata(...) after calling this.
 	 */
 	@Override
-	public void applyCustomizations(ItemStack stack, CustomizationVolume custom) {
+	public void applyCustomizations(ItemStack stack, HookCustomization custom) {
 		CompoundTag tag = stack.getOrCreateTag();
 		CompoundTag nbt = custom.writeToNBT();
 
@@ -443,7 +451,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		if (stack.getCount() <= 0)
 			return;
 
-		CustomizationVolume custom = this.getCustomizations(stack);
+		HookCustomization custom = this.getCustomizations(stack);
 		double angle = this.getSingleHookAngle(entityLiving, custom);
 		boolean shouldThrowOffHand = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle != 0;
 
@@ -457,7 +465,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 
 	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
-    	CustomizationVolume custom = this.getCustomizations(stack);
+    	HookCustomization custom = this.getCustomizations(stack);
 
 		double angle = this.getDoubleHookAngle(entityLiving, custom);
 		double verticalAngle = this.getSingleHookAngle(entityLiving, custom);
@@ -476,7 +484,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 	
 	public boolean throwRight(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
-	    CustomizationVolume custom = this.getCustomizations(stack);
+	    HookCustomization custom = this.getCustomizations(stack);
 		double angle = this.getDoubleHookAngle(entityLiving, custom);
   		double verticalAngle = this.getSingleHookAngle(entityLiving, custom);
 
@@ -558,7 +566,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		return hookEntity;
 	}
 
-	public void applyTemplateMetadata(ItemStack stack, GrapplingHookTemplate template) {
+	public void applyTemplateMetadata(ItemStack stack, HookTemplates template) {
 		CompoundTag tag = stack.getOrCreateTag();
 		CompoundTag nbt = template.saveMetadataToNBT();
 
@@ -608,28 +616,30 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		return null;
 	}
 
-	public double getSingleHookAngle(LivingEntity entity, CustomizationVolume custom) {
+	public double getSingleHookAngle(LivingEntity entity, HookCustomization custom) {
 		return entity.isCrouching()
 				? custom.get(HOOK_THROW_ANGLE_ON_SNEAK.get())
 				: custom.get(HOOK_THROW_ANGLE.get());
 	}
 
-	public double getDoubleHookAngle(LivingEntity entity, CustomizationVolume custom) {
+	public double getDoubleHookAngle(LivingEntity entity, HookCustomization custom) {
 		return entity.isCrouching()
 				? custom.get(DOUBLE_HOOK_ANGLE_ON_SNEAK.get())
 				: custom.get(DOUBLE_HOOK_ANGLE.get());
 	}
 
-	public CustomizationVolume getCustomizations(ItemStack itemstack) {
+	public HookCustomization getCustomizations(ItemStack itemstack) {
 		CompoundTag tag = itemstack.getOrCreateTag();
 
 		Tag customizationsTag = tag.get(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
 		if (!(customizationsTag instanceof CompoundTag customizationsCompound))
 			return this.resetCustomizations(itemstack);
 
-		return CustomizationVolume.fromNBT(customizationsCompound);
+		return HookCustomization.fromNBT(customizationsCompound);
 	}
 
+	// todo: this could be done with item components, but I feel like this may be
+	// better as some form of predicate.
 	public boolean shouldDisplayAsHookOnly(ItemStack stack) {
 		return stack.getOrCreateTag().contains("hook");
 	}

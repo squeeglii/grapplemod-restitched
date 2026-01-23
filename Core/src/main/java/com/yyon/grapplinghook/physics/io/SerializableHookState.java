@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.physics.io;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -19,18 +19,18 @@ public class SerializableHookState {
     private static final String NBT_CUSTOMIZATIONS = "customization";
 
     private final List<HookSnapshot> hooks;
-    private final CustomizationVolume volume;
+    private final HookCustomization volume;
 
 
     private SerializableHookState(ServerPlayer holder) {
         Set<GrapplinghookEntity> hooks = ServerHookEntityTracker.getHooksThrownBy(holder);
         List<HookSnapshot> hookList = new LinkedList<>();
 
-        CustomizationVolume volumeToSave = null;
+        HookCustomization volumeToSave = null;
         long lastChecksum = -1;
 
         for(GrapplinghookEntity hook: hooks) {
-            CustomizationVolume currentVol = hook.getCurrentCustomizations();
+            HookCustomization currentVol = hook.getCurrentCustomizations();
             long currentChecksum = currentVol.getChecksum();
 
             // The saving is only intended to stop players from falling when they join a game
@@ -53,7 +53,7 @@ public class SerializableHookState {
 
         this.volume = volumeToSave != null
                 ? volumeToSave
-                : new CustomizationVolume();
+                : new HookCustomization();
         this.hooks = hookList;
     }
 
@@ -74,7 +74,7 @@ public class SerializableHookState {
             hooks.add(snapshot);
         }
 
-        CustomizationVolume vol = CustomizationVolume.fromNBT(customizationTag);
+        HookCustomization vol = HookCustomization.fromNBT(customizationTag);
 
         this.hooks = hooks;
         this.volume = vol;
@@ -110,7 +110,7 @@ public class SerializableHookState {
     }
 
     private void applyHookSnapshot(HookSnapshot snapshot, ServerPlayer player) {
-        CustomizationVolume newVolume = CustomizationVolume.copyAllFrom(this.volume);
+        HookCustomization newVolume = HookCustomization.copyAllFrom(this.volume);
         GrapplinghookEntity e = new GrapplinghookEntity(snapshot, newVolume, player, this.hooks.size() > 1);
         ServerHookEntityTracker.addGrappleEntity(player, e);
 

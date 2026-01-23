@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.data.v2.property;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -12,7 +12,7 @@ public class BooleanUpgrader extends PropertyUpgrader<Boolean> {
     }
 
     @Override
-    public void upgrade(CompoundTag source, CustomizationVolume destination) {
+    public void upgrade(CompoundTag source, HookCustomization destination) {
         if(!source.contains(this.oldId, Tag.TAG_BYTE)) return;
 
         boolean val = source.getBoolean(this.oldId);

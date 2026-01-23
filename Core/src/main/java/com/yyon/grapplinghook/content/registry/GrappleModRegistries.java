@@ -9,7 +9,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
-public class GrappleModMetaRegistry {
+public class GrappleModRegistries {
 
     public static final ResourceKey<Registry<CustomizationProperty<?>>> CUSTOMIZATION_PROPERTIES_KEY = ResourceKey.createRegistryKey(GrappleMod.id("customization_property"));
     public static final ResourceKey<Registry<CustomizationCategory>> CUSTOMIZATION_CATEGORY_KEY = ResourceKey.createRegistryKey(GrappleMod.id("customization_category"));

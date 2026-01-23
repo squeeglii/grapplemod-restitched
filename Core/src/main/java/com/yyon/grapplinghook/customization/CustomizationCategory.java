@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.customization;
 
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -42,7 +42,7 @@ public class CustomizationCategory {
     }
 
     public ResourceLocation getIdentifier() {
-        return GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.getKey(this);
+        return GrappleModRegistries.CUSTOMIZATION_CATEGORIES.getKey(this);
     }
 
     public BaseUpgradeItem getUpgradeItem() {

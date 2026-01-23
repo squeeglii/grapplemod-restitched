@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.data.v2.property;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -12,7 +12,7 @@ public class DoubleUpgrader extends PropertyUpgrader<Double> {
     }
 
     @Override
-    public void upgrade(CompoundTag source, CustomizationVolume destination) {
+    public void upgrade(CompoundTag source, HookCustomization destination) {
         if(!source.contains(this.oldId, Tag.TAG_DOUBLE)) return;
 
         double val = source.getDouble(this.oldId);

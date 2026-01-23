@@ -1,9 +1,9 @@
-package com.yyon.grapplinghook.customization.template;
+package com.yyon.grapplinghook.customization;
 
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.customization.CustomizationAvailability;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.customization.helper.PropertyOverride;
 import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.nbt.CompoundTag;
@@ -16,12 +16,12 @@ import java.util.*;
 import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
 
 // These mimic the old recipes, automatically checking if a given template is valid.
-public class GrapplingHookTemplate {
+public class HookTemplates {
 
-    private static final Map<String, GrapplingHookTemplate> defaultTemplates = new LinkedHashMap<>();
+    private static final Map<String, HookTemplates> defaultTemplates = new LinkedHashMap<>();
 
-    private static GrapplingHookTemplate registerDefault(GrapplingHookTemplate template) {
-        GrapplingHookTemplate.defaultTemplates.put(template.getId().toLowerCase(), template);
+    private static HookTemplates registerDefault(HookTemplates template) {
+        HookTemplates.defaultTemplates.put(template.getId().toLowerCase(), template);
         return template;
     }
 
@@ -35,12 +35,12 @@ public class GrapplingHookTemplate {
         return new PropertyOverride<>(id, value);
     }
 
-    public static Collection<GrapplingHookTemplate> getTemplates() {
+    public static Collection<HookTemplates> getTemplates() {
         return Collections.unmodifiableCollection(defaultTemplates.values());
     }
 
 
-    public static final GrapplingHookTemplate ENDER_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates ENDER_HOOK = registerDefault(new HookTemplates(
             "ender_hook", Component.translatable("hook_template.grapplemod.ender_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -48,7 +48,7 @@ public class GrapplingHookTemplate {
             property(ENDER_STAFF_ATTACHED, true)
     ));
 
-    public static final GrapplingHookTemplate MOTOR_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates MOTOR_HOOK = registerDefault(new HookTemplates(
             "motor_hook", Component.translatable("hook_template.grapplemod.motor_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -57,7 +57,7 @@ public class GrapplingHookTemplate {
             property(MOVE_SPEED_MULTIPLIER, 2.0d)
     ));
 
-    public static final GrapplingHookTemplate SMART_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates SMART_HOOK = registerDefault(new HookTemplates(
             "smart_hook", Component.translatable("hook_template.grapplemod.smart_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -67,7 +67,7 @@ public class GrapplingHookTemplate {
             property(MOVE_SPEED_MULTIPLIER, 2.0d)
     ));
 
-    public static final GrapplingHookTemplate MAGNET_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates MAGNET_HOOK = registerDefault(new HookTemplates(
             "magnet_hook", Component.translatable("hook_template.grapplemod.magnet_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -76,7 +76,7 @@ public class GrapplingHookTemplate {
             property(FORCEFIELD_ATTACHED, true)
     ));
 
-    public static final GrapplingHookTemplate ROCKET_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates ROCKET_HOOK = registerDefault(new HookTemplates(
             "rocket_hook", Component.translatable("hook_template.grapplemod.rocket_hook"),
             property(HOOK_THROW_SPEED, 3.5d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -84,7 +84,7 @@ public class GrapplingHookTemplate {
             property(ROCKET_ATTACHED, true)
     ));
 
-    public static final GrapplingHookTemplate DOUBLE_MOTOR_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates DOUBLE_MOTOR_HOOK = registerDefault(new HookTemplates(
             "double_motor_hook", Component.translatable("hook_template.grapplemod.double_motor_hook"),
             property(HOOK_THROW_SPEED, 20.0d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -108,7 +108,7 @@ public class GrapplingHookTemplate {
             property(MOVE_SPEED_MULTIPLIER, 2.0d)
     ));
 
-    public static final GrapplingHookTemplate DOUBLE_ROCKET_MOTOR_HOOK = registerDefault(new GrapplingHookTemplate(
+    public static final HookTemplates DOUBLE_ROCKET_MOTOR_HOOK = registerDefault(new HookTemplates(
             "double_rocket_motor_hook", Component.translatable("hook_template.grapplemod.double_rocket_motor_hook"),
             property(HOOK_THROW_SPEED, 20.0d),
             property(MAX_ROPE_LENGTH, 60.0d),
@@ -143,18 +143,18 @@ public class GrapplingHookTemplate {
     private final Set<PropertyOverride<?>> properties;
 
 
-    private GrapplingHookTemplate(PropertyOverride<?>... properties) {
+    private HookTemplates(PropertyOverride<?>... properties) {
         this(null, properties);
     }
-    private GrapplingHookTemplate(String identifier, PropertyOverride<?>... properties) {
+    private HookTemplates(String identifier, PropertyOverride<?>... properties) {
         this(identifier, null, properties);
     }
 
-    private GrapplingHookTemplate(String identifier, Component displayName, PropertyOverride<?>... properties) {
+    private HookTemplates(String identifier, Component displayName, PropertyOverride<?>... properties) {
         this(identifier, displayName, Component.translatable("grapple_template.author.default"), properties);
     }
 
-    public GrapplingHookTemplate(String identifier, Component displayName, Component author, PropertyOverride<?>... properties) {
+    public HookTemplates(String identifier, Component displayName, Component author, PropertyOverride<?>... properties) {
         this.identifier = identifier == null
                 ? "user-generated"
                 : identifier;
@@ -182,8 +182,8 @@ public class GrapplingHookTemplate {
                 .noneMatch(p -> p.getAvailability() == CustomizationAvailability.BLOCKED); // 2 = Disabled Fully.
     }
 
-    public CustomizationVolume getCustomizations() {
-        CustomizationVolume customization = new CustomizationVolume();
+    public HookCustomization getCustomizations() {
+        HookCustomization customization = new HookCustomization();
         this.properties.forEach(customization::set);
         return customization;
     }
@@ -229,25 +229,25 @@ public class GrapplingHookTemplate {
     }
 
 
-    public static GrapplingHookTemplate fromStack(ItemStack stack) {
+    public static HookTemplates fromStack(ItemStack stack) {
         if(stack == null) throw new IllegalArgumentException("Stack cannot be null");
 
         CompoundTag tag = stack.getTag();
 
         return tag == null
-                ? new GrapplingHookTemplate()
-                : GrapplingHookTemplate.fromNBT(tag);
+                ? new HookTemplates()
+                : HookTemplates.fromNBT(tag);
     }
 
     // Suppressed - Deals with generics in a way that shouldn't cause issues with types.
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static GrapplingHookTemplate fromNBT(CompoundTag tag) {
+    public static HookTemplates fromNBT(CompoundTag tag) {
         if(tag == null) throw new IllegalArgumentException("NBT Tag cannot be null");
 
         Tag customizationsTag = tag.get(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
-        CustomizationVolume volume = customizationsTag instanceof CompoundTag customizationsCompound
-                ? CustomizationVolume.fromNBT(customizationsCompound)
-                : new CustomizationVolume();
+        HookCustomization volume = customizationsTag instanceof CompoundTag customizationsCompound
+                ? HookCustomization.fromNBT(customizationsCompound)
+                : new HookCustomization();
 
         Tag metaTag = tag.get(TemplateUtils.NBT_HOOK_TEMPLATE);
         CompoundTag metaCompound = metaTag instanceof CompoundTag compound
@@ -270,6 +270,6 @@ public class GrapplingHookTemplate {
                 })
                 .toArray(PropertyOverride[]::new);
 
-        return new GrapplingHookTemplate(id, displayName, author, overrides);
+        return new HookTemplates(id, displayName, author, overrides);
     }
 }

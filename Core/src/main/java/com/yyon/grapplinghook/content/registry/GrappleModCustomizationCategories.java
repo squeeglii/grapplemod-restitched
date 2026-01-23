@@ -36,7 +36,7 @@ public class GrappleModCustomizationCategories {
             Entry<?> data = def.getValue();
             CustomizationCategory it = data.getFactory().get();
 
-            data.finalize(Registry.register(GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES, id, it));
+            data.finalize(Registry.register(GrappleModRegistries.CUSTOMIZATION_CATEGORIES, id, it));
         }
     }
 

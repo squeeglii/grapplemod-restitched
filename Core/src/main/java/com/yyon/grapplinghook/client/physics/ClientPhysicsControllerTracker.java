@@ -14,13 +14,12 @@ import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.content.registry.GrappleModEnchantments;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -30,7 +29,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -133,7 +131,7 @@ public class ClientPhysicsControllerTracker {
 
 			Vec facing = Vec.lookVec(player);
 
-			CustomizationVolume custom = null;
+			HookCustomization custom = null;
 			if (usedItem instanceof GrapplehookItem grapple)
 				custom = grapple.getCustomizations(usedStack);
 
@@ -250,7 +248,7 @@ public class ClientPhysicsControllerTracker {
 	}
 
 
-	public GrapplingHookPhysicsController createControl(ResourceLocation controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, CustomizationVolume custom) {
+	public GrapplingHookPhysicsController createControl(ResourceLocation controllerId, int grapplehookEntityId, int playerId, Level world, BlockPos blockPos, HookCustomization custom) {
 		GrapplinghookEntity grapplinghookEntity = world.getEntity(grapplehookEntityId) instanceof GrapplinghookEntity g
 				? g
 				: null;
@@ -373,13 +371,13 @@ public class ClientPhysicsControllerTracker {
 		controller.receiveEnderLaunch(x, y, z);
 	}
 
-	public void startRocket(Player player, CustomizationVolume custom) {
+	public void startRocket(Player player, HookCustomization custom) {
 		if (!custom.get(ROCKET_ATTACHED.get())) return;
 		
 		GrapplingHookPhysicsController controller;
 		if (this.controllers.containsKey(player.getId())) {
 			controller = this.controllers.get(player.getId());
-			CustomizationVolume serverCustom = controller.getCurrentCustomizations();
+			HookCustomization serverCustom = controller.getCurrentCustomizations();
 
 			// Syncing controller's rocket property
 			if (serverCustom == null || !serverCustom.get(ROCKET_ATTACHED.get())) {

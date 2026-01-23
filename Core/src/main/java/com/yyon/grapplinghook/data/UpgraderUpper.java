@@ -10,6 +10,10 @@ import java.util.Optional;
 
 // Replace with data-fixer-upper when that's figured out.
 // 0 = original version, no data version marked. Tread with caution there.
+
+//TODO: carve this out fully. There's no need to upgrade as the path is so complicated now and 99% of people
+// won't need it.
+@Deprecated(since = "MC 1.20.6")
 public class UpgraderUpper {
 
     public static final int CURRENT_DATA_VERSION = 2;
@@ -83,8 +87,6 @@ public class UpgraderUpper {
 
         if(verIn <= 0 && !tagIn.contains("unlocked"))
             return Optional.empty();
-
-
 
         if(verIn == 0) {
             GrappleMod.LOGGER.info("Upgrading Grappling Hook Modification Table from v0 (forge/1.x fabric) --> v2");

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.data.v2.property;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.nbt.CompoundTag;
 
@@ -16,7 +16,7 @@ public abstract class PropertyUpgrader<T> {
     }
 
 
-    public abstract void upgrade(CompoundTag source, CustomizationVolume destination);
+    public abstract void upgrade(CompoundTag source, HookCustomization destination);
 
     public String getLegacyId() {
         return this.oldId;

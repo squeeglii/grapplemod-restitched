@@ -9,7 +9,7 @@ import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModGamerules;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.content.registry.GrappleModTags;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
@@ -97,7 +97,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	private final RopeSegmentHandler segmentHandler;
 
-	private CustomizationVolume customization;
+	private HookCustomization customization;
 
 	// magnet attract
 	public Vec prevPos = null;
@@ -110,7 +110,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		super(type, world);
 
 		this.segmentHandler = new RopeSegmentHandler(this, Vec.positionVec(this), Vec.positionVec(this));
-		this.customization = new CustomizationVolume();
+		this.customization = new HookCustomization();
 
 		this.isAttachedToMainHand = true;
 		this.isAttachedToSurface = false;
@@ -118,7 +118,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	/** Server-side? instantiation. Used to spawn the entity & configure it correctly. */
-	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean isAttachedToMainHand, CustomizationVolume customization, boolean isInDoublePair) {
+	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean isAttachedToMainHand, HookCustomization customization, boolean isInDoublePair) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
 
 		this.shootingEntity = shooter;
@@ -138,7 +138,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	/** Restore from state snapshot -- used when logging in to re-instantiate a player's hook. */
-	public GrapplinghookEntity(HookSnapshot snapshot, CustomizationVolume volume, Entity shootingEntity, boolean isInPair) {
+	public GrapplinghookEntity(HookSnapshot snapshot, HookCustomization volume, Entity shootingEntity, boolean isInPair) {
 		super(GrappleModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
 
 		RopeSnapshot rope = snapshot.getRopeSnapshot();
@@ -185,7 +185,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	    this.isAttachedToMainHand = data.readBoolean();
 	    this.isInDoublePair = data.readBoolean();
 		this.isAttachedToSurface = data.readBoolean();
-	    this.customization = new CustomizationVolume();
+	    this.customization = new HookCustomization();
 	    this.customization.readFromBuf(data);
 		this.restoreCollision = data.readBoolean();
     }
@@ -692,7 +692,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		return this.customization.get(HOOK_THROW_SPEED.get());
 	}
 
-	public CustomizationVolume getCurrentCustomizations() {
+	public HookCustomization getCurrentCustomizations() {
 		return this.customization;
 	}
 

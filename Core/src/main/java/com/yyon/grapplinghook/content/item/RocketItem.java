@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.TextUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -81,7 +81,7 @@ public class RocketItem extends Item {
 			return InteractionResultHolder.pass(stack);
 
 
-		CustomizationVolume volume = new CustomizationVolume();
+		HookCustomization volume = new HookCustomization();
 		volume.set(ROCKET_ATTACHED.get(), true);
 		volume.set(IS_EQUIPMENT_OVERRIDE.get(), true);
 

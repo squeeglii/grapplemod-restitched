@@ -2,9 +2,12 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
-import com.yyon.grapplinghook.customization.template.TemplateUtils;
+import com.yyon.grapplinghook.content.registry.GrappleModItemComponents;
+import com.yyon.grapplinghook.customization.data.DeployState;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.customization.HookTemplates;
+import com.yyon.grapplinghook.customization.TemplateUtils;
+import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.ChatFormatting;
@@ -26,7 +29,12 @@ import java.util.Optional;
 public class BlueprintItem extends Item implements ICustomizationApplicable, IAuthorable {
 
     public BlueprintItem() {
-        super(new Item.Properties().stacksTo(64));
+        super(
+                new Item.Properties()
+                        .stacksTo(64)
+                        //.component(GrappleModItemComponents.AUTHORED, new TemplateAuthor()) // blank!
+                        .component(GrappleModItemComponents.CUSTOMIZABLE, new HookCustomization())
+        );
     }
 
     @Override
@@ -35,7 +43,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     }
 
     @Override
-    public void applyCustomizations(ItemStack stack, CustomizationVolume customizations) {
+    public void applyCustomizations(ItemStack stack, HookCustomization customizations) {
         CompoundTag tag = stack.getOrCreateTag();
         CompoundTag nbt = customizations.writeToNBT();
 
@@ -46,8 +54,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     }
 
     @Override
-    public CustomizationVolume resetCustomizations(ItemStack stack) {
-        CustomizationVolume custom = new CustomizationVolume();
+    public HookCustomization resetCustomizations(ItemStack stack) {
+        HookCustomization custom = new HookCustomization();
         this.applyCustomizations(stack, custom);
 
         return custom;
@@ -65,7 +73,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     @Override
     public void commit(ItemStack stack, Component displayName, Component author) {
-        GrapplingHookTemplate template = new GrapplingHookTemplate(null, displayName, author);
+        HookTemplates template = new HookTemplates(null, displayName, author);
         CompoundTag metadata = template.saveMetadataToNBT();
 
         CompoundTag base = stack.getOrCreateTag();
@@ -128,7 +136,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         }
 
 
-        Optional<CustomizationVolume> optCustomizations = this.getCustomizations(stack);
+        Optional<HookCustomization> optCustomizations = this.getCustomizations(stack);
 
         if(optCustomizations.isEmpty()) {
             text.add(Component.literal(""));
@@ -137,7 +145,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
             return;
         }
 
-        CustomizationVolume customizations = optCustomizations.get();
+        HookCustomization customizations = optCustomizations.get();
 
         if(customizations.getPropertiesPresent().isEmpty()) {
             text.add(Component.translatable("tooltip.blueprint.no_customizations")
@@ -159,17 +167,17 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     }
 
 
-    public Optional<CustomizationVolume> getCustomizations(ItemStack itemstack) {
+    public Optional<HookCustomization> getCustomizations(ItemStack itemstack) {
         CompoundTag tag = itemstack.getOrCreateTag();
         Tag customizationsTag = tag.get(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
 
         return customizationsTag instanceof CompoundTag customizationsCompound
-                ? Optional.of(CustomizationVolume.fromNBT(customizationsCompound))
+                ? Optional.of(HookCustomization.fromNBT(customizationsCompound))
                 : Optional.empty();
     }
 
     public boolean isBlank(ItemStack itemStack) {
-        Optional<CustomizationVolume> optCustomizations = this.getCustomizations(itemStack);
+        Optional<HookCustomization> optCustomizations = this.getCustomizations(itemStack);
 
         boolean isTemplateMetaMissing = TemplateUtils.getTemplateMetadataTag(itemStack).isEmpty();
         boolean areCustomizationsMissing = optCustomizations.isEmpty();

@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.customization.render;
 
 import com.yyon.grapplinghook.client.gui.widget.CustomizationCheckbox;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,7 +25,7 @@ public class BooleanCustomizationDisplay extends AbstractCustomizationDisplay<Bo
     }
 
     @Override
-    public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
+    public AbstractWidget getConfigurationUIElement(Supplier<HookCustomization> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
         return new CustomizationCheckbox(source, x, y, this.getProperty(), onUpdate);
     }
 

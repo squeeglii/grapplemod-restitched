@@ -2,9 +2,9 @@ package com.yyon.grapplinghook.client.gui;
 
 import com.yyon.grapplinghook.client.gui.widget.*;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -49,7 +49,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	private Component noticeMessage;
 
 	private HashMap<AbstractWidget, CustomizationProperty<?>> options;
-	private CustomizationVolume customization;
+	private HookCustomization customization;
 	private CustomizationCategory currentActiveCategory;
 
 
@@ -126,7 +126,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		this.addRenderableWidget(Button.builder(
 						Component.translatable("grapple_modifier.reset_button"),
 						button -> {
-							this.customization = new CustomizationVolume();
+							this.customization = new HookCustomization();
 							this.showMainScreenLayout(Component.translatable("grapple_modifier.notice.reset_customizations"));
 						})
 				.pos(
@@ -173,7 +173,7 @@ public class GrappleModifierBlockGUI extends Screen {
 			this.noticeMessage = null;
 		}
 
-		int columnCount = Mth.positiveCeilDiv(GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.size(), MAX_ROWS);
+		int columnCount = Mth.positiveCeilDiv(GrappleModRegistries.CUSTOMIZATION_CATEGORIES.size(), MAX_ROWS);
 
 		// get full size, remove left+right padding.
 		// + attempt to remove padding from the outermost columns.
@@ -182,7 +182,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		int columnWidth = unpaddedColumnWidth - (COLUMN_PADDING * 2);
 
 		AtomicInteger counter = new AtomicInteger(0);
-		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
+		GrappleModRegistries.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
 			if (!category.shouldRender()) return;
 
 			int i = counter.getAndIncrement();
@@ -381,7 +381,7 @@ public class GrappleModifierBlockGUI extends Screen {
 		};
 	}
 
-	public CustomizationVolume getCurrentCustomizations() {
+	public HookCustomization getCurrentCustomizations() {
 		return this.customization;
 	}
 }

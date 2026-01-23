@@ -1,12 +1,17 @@
-package com.yyon.grapplinghook.customization;
+package com.yyon.grapplinghook.customization.data;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
-import com.yyon.grapplinghook.customization.template.PropertyOverride;
+import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
+import com.yyon.grapplinghook.customization.helper.PropertyOverride;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.nio.ByteBuffer;
@@ -15,12 +20,19 @@ import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-public final class CustomizationVolume {
+public final class HookCustomization {
+
+	// CODEC:
+	// properties: Map<ResourceLocation, Mixed-Type>
+	//  - ... n
+	// crc32: long
+	public static final Codec<HookCustomization> CODEC = RecordCodecBuilder.create();
+	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = StreamCodec.of();
+
 
 	private HashMap<CustomizationProperty<?>, Object> values;
-
 	
-	public CustomizationVolume() {
+	public HookCustomization() {
 		this.setDefaults();
 	}
 	
@@ -28,6 +40,7 @@ public final class CustomizationVolume {
 		this.values = new HashMap<>();
 	}
 
+	@Deprecated(since = "mc 1.21.1")
 	@SuppressWarnings("unchecked") // Types are already verified
 	public <T> CompoundTag writeToNBT() {
 		CompoundTag base = new CompoundTag();
@@ -42,7 +55,8 @@ public final class CustomizationVolume {
 		base.putLong("crc32", this.getChecksum());
 		return base;
 	}
-	
+
+	@Deprecated(since = "mc 1.21.1")
 	public void loadFromNBT(CompoundTag compound) {
 		Tag propTag = compound.get("properties");
 		if(!(propTag instanceof CompoundTag propertiesTag)) {
@@ -121,7 +135,7 @@ public final class CustomizationVolume {
 		this.values.remove(property);
 	}
 
-	public <T> void copyPropertyFrom(CustomizationVolume volume, CustomizationProperty<T> property) {
+	public <T> void copyPropertyFrom(HookCustomization volume, CustomizationProperty<T> property) {
 		this.set(property, volume.get(property));
 	}
 
@@ -152,9 +166,11 @@ public final class CustomizationVolume {
 	}
 
 
+	//todo: migrate read & write to buf as STREAM_CODEC
+
 	@SuppressWarnings("unchecked") // properties and keys are always consistent in type
 	public <T> void writeToBuf(ByteBuf buf) {
-		if(this.values.size() > Short.MAX_VALUE)
+		if(this.values.size() >= Short.MAX_VALUE)
 			throw new IllegalStateException("Too many properties!! - 32k properties is excessive.");
 
 		buf.writeShort((short) this.values.size());
@@ -218,7 +234,7 @@ public final class CustomizationVolume {
 			return Optional.empty();
 		}
 
-		CustomizationProperty<?> property = GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES.get(identifier);
+		CustomizationProperty<?> property = GrappleModRegistries.CUSTOMIZATION_PROPERTIES.get(identifier);
 
 		if(property == null) {
 			GrappleMod.LOGGER.error("Missing key for property: '%s' - are your mods synced with the server?".formatted(identifier.toString()));
@@ -230,7 +246,7 @@ public final class CustomizationVolume {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof CustomizationVolume other)) return false;
+		if(!(obj instanceof HookCustomization other)) return false;
 		for(Map.Entry<CustomizationProperty<?>, ?> entry: this.values.entrySet()) {
 			Object otherVal = other.get(entry.getKey());
 
@@ -249,14 +265,15 @@ public final class CustomizationVolume {
 	}
 
 
-	public static CustomizationVolume fromNBT(CompoundTag compound) {
-		CustomizationVolume volume = new CustomizationVolume();
+	@Deprecated(since = "mc 1.21.1")
+	public static HookCustomization fromNBT(CompoundTag compound) {
+		HookCustomization volume = new HookCustomization();
 		volume.loadFromNBT(compound);
 		return volume;
 	}
 
-	public static CustomizationVolume copyAllFrom(CustomizationVolume volume) {
-		CustomizationVolume newVol = new CustomizationVolume();
+	public static HookCustomization copyAllFrom(HookCustomization volume) {
+		HookCustomization newVol = new HookCustomization();
 		volume.values.forEach(newVol::setUnsafe);
 		return newVol;
 	}

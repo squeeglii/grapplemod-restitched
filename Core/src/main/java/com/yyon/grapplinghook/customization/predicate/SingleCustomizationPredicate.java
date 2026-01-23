@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.predicate;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 
 public abstract class SingleCustomizationPredicate<T> implements CustomizationPredicate<T> {
@@ -13,7 +13,7 @@ public abstract class SingleCustomizationPredicate<T> implements CustomizationPr
     }
 
     @Override
-    public boolean shouldPass(CustomizationVolume volume) {
+    public boolean shouldPass(HookCustomization volume) {
         return this.shouldPass(volume.get(this.property));
     }
 

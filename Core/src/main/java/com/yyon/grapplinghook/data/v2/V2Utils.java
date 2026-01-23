@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.data.v2;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
@@ -16,7 +16,7 @@ public class V2Utils {
     public static CompoundTag upgradeCustomizations(CompoundTag oldCustomizations) {
         if(oldCustomizations == null) return null;
 
-        CustomizationVolume volume = new CustomizationVolume();
+        HookCustomization volume = new HookCustomization();
 
         oldCustomizations.getAllKeys().stream()
                 .map(V2Lookups::customizationUpgraderFor)

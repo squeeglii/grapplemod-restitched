@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.DoubleProperty;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
@@ -12,12 +12,12 @@ import java.util.function.Supplier;
 
 public class PreciseCustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
     private final DoubleProperty option;
-    private final Supplier<CustomizationVolume> customizations;
+    private final Supplier<HookCustomization> customizations;
     private final Runnable onValueUpdate;
 
     private Component tooltipOverride;
 
-    public PreciseCustomizationSlider(Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
+    public PreciseCustomizationSlider(Supplier<HookCustomization> customizations, int x, int y, int w, int h, DoubleProperty option, Runnable onValueUpdate) {
         super(x, y, w, h, option.getDisplayName(), (convertDouble(customizations.get(), option) - option.getMin()) / (option.getMax() - option.getMin()));
 
         this.option = option;
@@ -64,7 +64,7 @@ public class PreciseCustomizationSlider extends AbstractSliderButton implements 
         this.setTooltip(Tooltip.create(this.getTooltipText()));
     }
 
-    private static double convertDouble(CustomizationVolume volume, DoubleProperty optionString) {
+    private static double convertDouble(HookCustomization volume, DoubleProperty optionString) {
         double d = volume.get(optionString);
         return Math.floor(d * 10 + 0.5) / 10;
     }

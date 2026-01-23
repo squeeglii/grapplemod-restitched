@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.IntegerProperty;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
@@ -13,12 +13,12 @@ import java.util.function.Supplier;
 public class SteppedCustomizationSlider extends AbstractSliderButton implements CustomTooltipHandler {
 
     private final IntegerProperty option;
-    private final Supplier<CustomizationVolume> customizations;
+    private final Supplier<HookCustomization> customizations;
     private final Runnable onValueUpdate;
 
     private Component tooltipOverride;
 
-    public SteppedCustomizationSlider(Supplier<CustomizationVolume> customizations, int x, int y, int w, int h, IntegerProperty option, Runnable onValueUpdate) {
+    public SteppedCustomizationSlider(Supplier<HookCustomization> customizations, int x, int y, int w, int h, IntegerProperty option, Runnable onValueUpdate) {
         super(x, y, w, h, option.getDisplayName(), SteppedCustomizationSlider.scaleFromVolume(customizations.get(), option));
 
         this.option = option;
@@ -67,7 +67,7 @@ public class SteppedCustomizationSlider extends AbstractSliderButton implements 
         this.setTooltip(Tooltip.create(this.getTooltipText()));
     }
 
-    private static double scaleFromVolume(CustomizationVolume volume, IntegerProperty option) {
+    private static double scaleFromVolume(HookCustomization volume, IntegerProperty option) {
         int value = volume.get(option);
 
         int height = value - option.getMin();

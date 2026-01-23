@@ -69,6 +69,9 @@ public class GrappleMod implements ModInitializer {
 
         this.serverFeatures = new ServerFeatures();
 
+        // I assume this is needed before items.
+        GrappleModItemComponents.bump();
+
         GrappleModBlocks.registerAllBlocks();
         GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
         GrappleModEntities.registerAllEntities();
@@ -134,6 +137,8 @@ public class GrappleMod implements ModInitializer {
             GrappleMod.LOGGER.error("Unable to register datapacks! This mod technically doesn't exist!!");
             return;
         }
+
+        //todo: update simplified & no-enchants to use new vanilla enchant definitions.
 
         ModContainer container = cont.get();
         GrappleModUtils.registerPack("simplified", Component.translatable("pack.grapplemod.simplified"), container, ResourcePackActivationType.NORMAL);

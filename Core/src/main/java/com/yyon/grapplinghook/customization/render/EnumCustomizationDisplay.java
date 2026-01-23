@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.customization.render;
 
 import com.yyon.grapplinghook.client.gui.widget.CustomizationPicker;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.EnumProperty;
 import com.yyon.grapplinghook.util.IFriendlyNameProvider;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -37,7 +37,7 @@ public class EnumCustomizationDisplay<E extends Enum<E>> extends AbstractCustomi
     }
 
     @Override
-    public AbstractWidget getConfigurationUIElement(Supplier<CustomizationVolume> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
+    public AbstractWidget getConfigurationUIElement(Supplier<HookCustomization> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
         return new CustomizationPicker<>(source, x, y, advisedWidth, advisedHeight, this.getProperty(), onUpdate);
     }
 }

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class AttachmentProperty extends BooleanProperty {
         return Optional.ofNullable(this.shadowedBy);
     }
 
-    public static boolean isShadowed(CustomizationVolume custom, AttachmentProperty attachment) {
+    public static boolean isShadowed(HookCustomization custom, AttachmentProperty attachment) {
         Optional<AttachmentProperty> optShadower = attachment.getShadowingProperty();
         if(optShadower.isEmpty())
             return false;

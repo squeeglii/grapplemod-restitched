@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -23,9 +23,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class GrappleModifierMessage extends BaseMessageServer {
    
 	public BlockPos pos;
-	public CustomizationVolume custom;
+	public HookCustomization custom;
 
-    public GrappleModifierMessage(BlockPos pos, CustomizationVolume custom) {
+    public GrappleModifierMessage(BlockPos pos, HookCustomization custom) {
     	this.pos = pos;
     	this.custom = custom;
     }
@@ -37,7 +37,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
 	@Override
     public void decode(FriendlyByteBuf buf) {
     	this.pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
-    	this.custom = new CustomizationVolume();
+    	this.custom = new HookCustomization();
     	this.custom.readFromBuf(buf);
     }
 

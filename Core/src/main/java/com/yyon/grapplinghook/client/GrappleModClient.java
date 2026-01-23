@@ -15,7 +15,7 @@ import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.content.registry.GrappleModEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayerIdentifiers;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.NetworkManager;
@@ -181,7 +181,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
 
-    public void startRocket(Player player, CustomizationVolume custom) {
+    public void startRocket(Player player, HookCustomization custom) {
         this.getClientControllerManager().startRocket(player, custom);
     }
 
@@ -272,7 +272,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     private static int propertyEquipOverride(ItemStack stack, BooleanProperty property) {
-        CustomizationVolume volume = GrappleModItems.GRAPPLING_HOOK.get().getCustomizations(stack);
+        HookCustomization volume = GrappleModItems.GRAPPLING_HOOK.get().getCustomizations(stack);
         return volume.get(property) ? 1 : 0;
     }
 

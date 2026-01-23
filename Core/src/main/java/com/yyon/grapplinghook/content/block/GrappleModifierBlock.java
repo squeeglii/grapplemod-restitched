@@ -9,7 +9,7 @@ import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModItems;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -183,7 +183,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		if (!(ent instanceof GrappleModifierBlockEntity blockEntity))
 			return InteractionResult.FAIL;
 
-		CustomizationVolume custom = blockEntity.getCurrentCustomizations();
+		HookCustomization custom = blockEntity.getCurrentCustomizations();
 
 		ItemStack newStack = heldStack.split(1);
 		item.applyCustomizations(newStack, custom);

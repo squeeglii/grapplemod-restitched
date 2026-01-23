@@ -6,7 +6,7 @@ import com.yyon.grapplinghook.content.item.smithing.LongFallBootsTemplateItem;
 import com.yyon.grapplinghook.content.item.upgrade.*;
 import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
 import com.yyon.grapplinghook.content.registry.helper.TabBuilder;
-import com.yyon.grapplinghook.customization.template.GrapplingHookTemplate;
+import com.yyon.grapplinghook.customization.HookTemplates;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -21,7 +21,6 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -209,9 +208,9 @@ public final class GrappleModItems {
                 ArrayList<ItemStack> grappleHookVariants = new ArrayList<>();
                 grappleHookVariants.add(GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance());
 
-                GrapplingHookTemplate.getTemplates().stream()
-                        .filter(GrapplingHookTemplate::isEnabled)
-                        .map(GrapplingHookTemplate::getAsStack)
+                HookTemplates.getTemplates().stream()
+                        .filter(HookTemplates::isEnabled)
+                        .map(HookTemplates::getAsStack)
                         .forEachOrdered(grappleHookVariants::add);
 
                 return grappleHookVariants;

@@ -1,10 +1,10 @@
 package com.yyon.grapplinghook.content.blockentity;
 
 import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
-import com.yyon.grapplinghook.customization.template.TemplateUtils;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.customization.TemplateUtils;
 import com.yyon.grapplinghook.data.UpgraderUpper;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 public class GrappleModifierBlockEntity extends BlockEntity {
 
 	private final HashMap<CustomizationCategory, Boolean> categoryUnlockStates = new HashMap<>();
-	private CustomizationVolume customization;
+	private HookCustomization customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
 		super(GrappleModBlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
-		this.customization = new CustomizationVolume();
+		this.customization = new HookCustomization();
 	}
 
 
@@ -58,7 +58,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 
 		CompoundTag unlockedNBT = parentNBTTagCompound.getCompound("unlocked");
 
-		GrappleModMetaRegistry.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
+		GrappleModRegistries.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
 			boolean unlocked = unlockedNBT.getBoolean(category.getIdentifier().toString());
 
 			if(unlocked) this.categoryUnlockStates.put(category, true);
@@ -100,7 +100,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.triggerUpdate();
 	}
 
-	public void setCustomization(CustomizationVolume customization) {
+	public void setCustomization(HookCustomization customization) {
 		this.customization = customization;
 
 		if(this.level != null && this.level.isClientSide)
@@ -113,7 +113,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		return this.categoryUnlockStates.containsKey(category) && this.categoryUnlockStates.get(category);
 	}
 
-	public CustomizationVolume getCurrentCustomizations() {
+	public HookCustomization getCurrentCustomizations() {
 		return this.customization;
 	}
 

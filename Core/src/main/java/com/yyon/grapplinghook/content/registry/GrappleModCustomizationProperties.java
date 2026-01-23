@@ -34,7 +34,7 @@ public class GrappleModCustomizationProperties {
             Entry<?> data = def.getValue();
             CustomizationProperty<?> it = data.getFactory().get();
 
-            data.finalize(Registry.register(GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES, id, it));
+            data.finalize(Registry.register(GrappleModRegistries.CUSTOMIZATION_PROPERTIES, id, it));
         }
     }
 

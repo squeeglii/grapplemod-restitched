@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.style.RopeStyle;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
@@ -224,7 +224,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		Matrix4f poseMatrix = poseEntry.pose();
 		Matrix3f normalMatrix = poseEntry.normal();
 
-		CustomizationVolume volume = hookEntity.getCurrentCustomizations();
+		HookCustomization volume = hookEntity.getCurrentCustomizations();
 
 		// initialize vertexBuffer (used for drawing)
 		VertexConsumer vertexBuffer = volume.get(GrappleModCustomizationProperties.GLOWING_ROPE.get())

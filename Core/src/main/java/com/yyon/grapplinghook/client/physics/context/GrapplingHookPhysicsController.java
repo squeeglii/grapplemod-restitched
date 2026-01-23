@@ -7,7 +7,7 @@ import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
 import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateMessage;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -80,9 +79,9 @@ public class GrapplingHookPhysicsController {
 	private Vec wallDirection = null;
 	private BlockHitResult wallrunRaytraceResult = null;
 
-	private CustomizationVolume custom;
+	private HookCustomization custom;
 	
-	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, CustomizationVolume custom) {
+	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, HookCustomization custom) {
 		this.entityId = entityId;
 		this.world = world;
 		this.custom = custom;
@@ -1220,11 +1219,11 @@ public class GrapplingHookPhysicsController {
 		return this.rocketProgression;
 	}
 
-	public CustomizationVolume getCurrentCustomizations() {
+	public HookCustomization getCurrentCustomizations() {
 		return this.custom;
 	}
 
-	public void overrideCustomizations(CustomizationVolume volume) {
+	public void overrideCustomizations(HookCustomization volume) {
 		this.custom = volume;
 	}
 

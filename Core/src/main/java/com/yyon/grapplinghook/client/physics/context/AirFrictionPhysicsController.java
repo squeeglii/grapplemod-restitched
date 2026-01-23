@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.client.physics.context;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +40,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 	private boolean firstTickSinceCreated = true;
 
 
-	public AirFrictionPhysicsController(int grapplehookEntityId, int entityId, Level world, CustomizationVolume custom) {
+	public AirFrictionPhysicsController(int grapplehookEntityId, int entityId, Level world, HookCustomization custom) {
 		super(grapplehookEntityId, entityId, world, custom);
 	}
 

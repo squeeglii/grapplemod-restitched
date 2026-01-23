@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.content.registry.GrappleModMetaRegistry;
+import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationAvailability;
 import com.yyon.grapplinghook.customization.predicate.CustomizationPredicate;
 import com.yyon.grapplinghook.customization.predicate.SuccessCustomizationPredicate;
@@ -71,7 +71,7 @@ public abstract class CustomizationProperty<T> {
     }
 
     public final ResourceLocation getIdentifier() {
-        return GrappleModMetaRegistry.CUSTOMIZATION_PROPERTIES.getKey(this);
+        return GrappleModRegistries.CUSTOMIZATION_PROPERTIES.getKey(this);
     }
 
     public CustomizationPredicate<?> getValidityPredicate() {

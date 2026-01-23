@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.data.v2.property;
 
 import com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties;
-import com.yyon.grapplinghook.customization.CustomizationVolume;
+import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.EnumProperty;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +19,7 @@ public class MotorActivationUpgrader extends PropertyUpgrader<CrouchToggle> {
     // This whole upgrade is awkward as two booleans need to be merged into one 3-state enum, all
     // while dealing with a default value provided by the new implementation.
     @Override
-    public void upgrade(CompoundTag source, CustomizationVolume destination) {
+    public void upgrade(CompoundTag source, HookCustomization destination) {
         boolean hasValSet = destination.has(this.newProperty);
 
         // The convenience of get returning a default is annoying here - set it to null if it's not explicitly
