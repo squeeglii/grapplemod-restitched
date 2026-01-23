@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.style;
+package com.yyon.grapplinghook.customization.type.enums;
 
 public enum RopeStyle {
 

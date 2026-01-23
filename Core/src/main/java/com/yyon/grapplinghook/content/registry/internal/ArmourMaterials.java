@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.helper.HoldingRegistryReference;
@@ -18,7 +18,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 // yes, the correct british "armour".
-public class GrappleModArmourMaterials {
+public class ArmourMaterials {
 
     private static final LinkedHashSet<MaterialEntry<?>> armourMaterials;
 

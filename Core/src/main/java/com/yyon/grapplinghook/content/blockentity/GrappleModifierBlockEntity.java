@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.content.blockentity;
 
-import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
+import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
@@ -27,7 +27,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	private HookCustomization customization;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
-		super(GrappleModBlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
+		super(BlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
 		this.customization = new HookCustomization();
 	}
 

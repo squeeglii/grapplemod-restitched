@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+/** Shared across multiple mixins to handle multiple damage-based events */
 public class SharedDamageHandler {
 
     public static void handleDeath(Entity deadEntity) {

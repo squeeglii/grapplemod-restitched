@@ -2,12 +2,10 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
-import com.yyon.grapplinghook.content.registry.GrappleModItemComponents;
-import com.yyon.grapplinghook.customization.data.DeployState;
+import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.HookTemplates;
 import com.yyon.grapplinghook.customization.TemplateUtils;
-import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.ChatFormatting;
@@ -33,7 +31,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
                 new Item.Properties()
                         .stacksTo(64)
                         //.component(GrappleModItemComponents.AUTHORED, new TemplateAuthor()) // blank!
-                        .component(GrappleModItemComponents.CUSTOMIZABLE, new HookCustomization())
+                        .component(ModItemComponents.CUSTOMIZABLE, new HookCustomization())
         );
     }
 

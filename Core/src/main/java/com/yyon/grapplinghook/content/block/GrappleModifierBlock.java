@@ -7,7 +7,7 @@ import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
-import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.Vec;
@@ -164,7 +164,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		}
 
 		Component msg = Component.translatable("feedback.grapplemod.modifier.long_fall_boots");
-		ItemStack replacementStack = new ItemStack(GrappleModItems.LONG_FALL_BOOTS.get());
+		ItemStack replacementStack = new ItemStack(ModItems.LONG_FALL_BOOTS.get());
 		EnchantmentHelper.setEnchantments(enchantments, replacementStack);
 
 		playerIn.setItemInHand(hand, replacementStack);

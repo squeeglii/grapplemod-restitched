@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.ServerFeatures;
-import com.yyon.grapplinghook.exception.InvalidDataException;
+import com.yyon.grapplinghook.util.exception.InvalidDataException;
 import net.minecraft.server.packs.resources.Resource;
 
 import java.util.function.Consumer;

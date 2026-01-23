@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.physics;
 
-import com.yyon.grapplinghook.content.registry.GrappleModAdvancementTriggers;
+import com.yyon.grapplinghook.content.registry.internal.AdvancementTriggers;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class ServerPhysicsObserver {
         this.lastFrame.put(player.getUUID(), frame);
 
         if(!player.level().isClientSide)
-            GrappleModAdvancementTriggers.PHYSICS_UPDATE_TRIGGER.get().trigger(player, frame);
+            AdvancementTriggers.PHYSICS_UPDATE_TRIGGER.get().trigger(player, frame);
     }
 
     public Optional<PlayerPhysicsFrame> getMostRecentFrame(Player player) {

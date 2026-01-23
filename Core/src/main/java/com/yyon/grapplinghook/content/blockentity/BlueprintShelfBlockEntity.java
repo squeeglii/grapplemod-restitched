@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.content.blockentity;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
 import com.yyon.grapplinghook.content.item.BlueprintItem;
-import com.yyon.grapplinghook.content.registry.GrappleModBlockEntities;
+import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
 import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -32,7 +32,7 @@ public class BlueprintShelfBlockEntity extends BaseContainerBlockEntity {
     private final NonNullList<ItemStack> storedTemplates;
 
     public BlueprintShelfBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(GrappleModBlockEntities.BLUEPRINT_SHELF.get(), blockPos, blockState);
+        super(BlockEntities.BLUEPRINT_SHELF.get(), blockPos, blockState);
         this.storedTemplates = NonNullList.createWithCapacity(MAX_CAPACITY);
     }
 

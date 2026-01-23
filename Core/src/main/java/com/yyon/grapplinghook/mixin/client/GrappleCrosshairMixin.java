@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
-import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 @Mixin(Gui.class)
 public abstract class GrappleCrosshairMixin {
@@ -55,7 +55,7 @@ public abstract class GrappleCrosshairMixin {
         }
 
         if (grapplehookItemStack != null) {
-            HookCustomization custom = GrappleModItems.GRAPPLING_HOOK.get().getCustomizations(grapplehookItemStack);
+            HookCustomization custom = ModItems.GRAPPLING_HOOK.get().getCustomizations(grapplehookItemStack);
             double angle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
             double verticalAngle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
 

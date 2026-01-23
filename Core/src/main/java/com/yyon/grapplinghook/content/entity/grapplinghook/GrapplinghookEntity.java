@@ -5,10 +5,10 @@ import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.content.registry.GrappleModEntities;
-import com.yyon.grapplinghook.content.registry.GrappleModGamerules;
-import com.yyon.grapplinghook.content.registry.GrappleModItems;
-import com.yyon.grapplinghook.content.registry.GrappleModTags;
+import com.yyon.grapplinghook.content.registry.internal.ModEntities;
+import com.yyon.grapplinghook.content.registry.internal.ModGamerules;
+import com.yyon.grapplinghook.content.registry.internal.ModItems;
+import com.yyon.grapplinghook.content.registry.internal.ModTags;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 /*
  * This file is part of GrappleMod.
@@ -119,7 +119,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	/** Server-side? instantiation. Used to spawn the entity & configure it correctly. */
 	public GrapplinghookEntity(Level world, LivingEntity shooter, boolean isAttachedToMainHand, HookCustomization customization, boolean isInDoublePair) {
-		super(GrappleModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
+		super(ModEntities.GRAPPLE_HOOK.get(), shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, world);
 
 		this.shootingEntity = shooter;
 		this.shootingEntityID = this.shootingEntity.getId();
@@ -139,7 +139,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	/** Restore from state snapshot -- used when logging in to re-instantiate a player's hook. */
 	public GrapplinghookEntity(HookSnapshot snapshot, HookCustomization volume, Entity shootingEntity, boolean isInPair) {
-		super(GrappleModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
+		super(ModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
 
 		RopeSnapshot rope = snapshot.getRopeSnapshot();
 
@@ -232,7 +232,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	@NotNull
 	@Override
 	protected Item getDefaultItem() {
-		return GrappleModItems.GRAPPLING_HOOK.get();
+		return ModItems.GRAPPLING_HOOK.get();
 	}
 
 	@Override
@@ -330,7 +330,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 			BlockPos blockpos = blockhit.getBlockPos();
 			BlockState block = this.level().getBlockState(blockpos);
 
-			if (block.is(GrappleModTags.HOOK_BREAKS)) {
+			if (block.is(ModTags.HOOK_BREAKS)) {
 				this.level().destroyBlock(blockpos, true);
 				this.onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 				return;
@@ -683,9 +683,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 	private boolean canAttachToBlock(BlockState blockState) {
 		// "Limited Hook" mode acts as a whitelist. Default behaviour uses a blacklist.
-		return this.level().getGameRules().getBoolean(GrappleModGamerules.USE_LIMITED_HOOK)
-				? blockState.is(GrappleModTags.LIMITED_HOOK_ALLOWED)
-				: !blockState.is(GrappleModTags.HOOK_DISALLOWED);
+		return this.level().getGameRules().getBoolean(ModGamerules.USE_LIMITED_HOOK)
+				? blockState.is(ModTags.LIMITED_HOOK_ALLOWED)
+				: !blockState.is(ModTags.HOOK_DISALLOWED);
 	}
 
 	public double getSpeed() {

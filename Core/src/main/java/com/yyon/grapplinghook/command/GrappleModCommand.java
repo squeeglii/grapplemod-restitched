@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.yyon.grapplinghook.content.registry.GrappleModEnchantments;
+import com.yyon.grapplinghook.content.registry.internal.ModEnchantments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -22,7 +22,6 @@ public class GrappleModCommand {
     private static LiteralArgumentBuilder<CommandSourceStack> debugBranch() {
         LiteralArgumentBuilder<CommandSourceStack> result = literal("debug");
         result.then(printOnGround());
-        result.then(listEnchantments());
 
         return result;
     }
@@ -44,26 +43,4 @@ public class GrappleModCommand {
         return result;
     }
 
-    private static LiteralArgumentBuilder<CommandSourceStack> listEnchantments() {
-        LiteralArgumentBuilder<CommandSourceStack> result = literal("enchantment_details");
-        result.executes(context -> {
-            MutableComponent message = Component.literal("Enchantments:")
-                                                .withStyle(ChatFormatting.UNDERLINE, ChatFormatting.AQUA);
-
-            GrappleModEnchantments.streamEntries().forEach(entry -> {
-                Component text = Component.literal("\n%s: Discoverable=%s, Tradeable=%s".formatted(
-                        entry.getIdentifier().toString(),
-                        entry.get().isDiscoverable(),
-                        entry.get().isTradeable()
-                )).withStyle(ChatFormatting.GRAY);
-
-                message.append(text);
-            });
-
-            context.getSource().sendSuccess(() -> message, true);
-            return 1;
-        });
-
-        return result;
-    }
 }

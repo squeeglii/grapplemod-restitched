@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client.attachable;
 
 import com.google.common.collect.ImmutableMap;
-import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayerIdentifiers;
+import com.yyon.grapplinghook.content.registry.internal.ModEntityLayerIdentifiers;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -32,7 +32,7 @@ public class LayerDefinitionsMixin {
                     ordinal = 1
             ))
     private static void insertLayers(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {
-        GrappleModEntityRenderLayerIdentifiers.RenderLayerEntry longFallBoots = GrappleModEntityRenderLayerIdentifiers.LONG_FALL_BOOTS;
+        ModEntityLayerIdentifiers.RenderLayerEntry longFallBoots = ModEntityLayerIdentifiers.LONG_FALL_BOOTS;
         LayerDefinition layerDefinition = LayerDefinition.create(longFallBoots.get(), 64, 32);
 
         builderRef.put(longFallBoots.getLocation(), layerDefinition);

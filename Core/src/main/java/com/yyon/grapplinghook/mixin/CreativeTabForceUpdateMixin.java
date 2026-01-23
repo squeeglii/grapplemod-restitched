@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.mixin;
 
-import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,7 +14,7 @@ public class CreativeTabForceUpdateMixin {
 
     @Inject(method = "needsUpdate(Lnet/minecraft/world/flag/FeatureFlagSet;ZLnet/minecraft/core/HolderLookup$Provider;)Z", at = @At("RETURN"), cancellable = true)
     private void checkGrappleTabCondition(FeatureFlagSet featureFlagSet, boolean bl, HolderLookup.Provider provider, CallbackInfoReturnable<Boolean> cir) {
-        if(GrappleModItems.isCreativeCacheInvalid())
+        if(ModItems.isCreativeCacheInvalid())
             cir.setReturnValue(true);
     }
 

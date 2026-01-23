@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.BlueprintShelfBlockEntity;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GrappleModBlockEntities {
+public class BlockEntities {
 
     private static final HashMap<ResourceLocation, BlockEntityEntry<?>> blockEntities;
 
@@ -21,14 +21,14 @@ public class GrappleModBlockEntities {
         blockEntities = new HashMap<>();
     }
 
-    public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = GrappleModBlockEntities
+    public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = BlockEntities
             .blockEntity("modification_table",() -> BlockEntityType.Builder
-                    .of(GrappleModifierBlockEntity::new, GrappleModBlocks.GRAPPLE_MODIFIER.get())
+                    .of(GrappleModifierBlockEntity::new, ModBlocks.GRAPPLE_MODIFIER.get())
                     .build(null));
 
-    public static final BlockEntityEntry<BlockEntityType<BlueprintShelfBlockEntity>> BLUEPRINT_SHELF = GrappleModBlockEntities
+    public static final BlockEntityEntry<BlockEntityType<BlueprintShelfBlockEntity>> BLUEPRINT_SHELF = BlockEntities
             .blockEntity("blueprint_shelf",() -> BlockEntityType.Builder
-                    .of(BlueprintShelfBlockEntity::new, GrappleModBlocks.BLUEPRINT_SHELF.get())
+                    .of(BlueprintShelfBlockEntity::new, ModBlocks.BLUEPRINT_SHELF.get())
                     .build(null));
 
 

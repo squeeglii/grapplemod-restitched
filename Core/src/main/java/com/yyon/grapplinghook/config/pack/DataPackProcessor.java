@@ -17,9 +17,11 @@ public class DataPackProcessor implements SimpleSynchronousResourceReloadListene
 
     private final List<SimpleResourceProcessor> subProcessors;
 
+
+    //todo: does this need the ServerFeatureProcessor?
     public DataPackProcessor() {
         this.subProcessors = List.of(
-                EnchantmentProcessor.get()
+
         );
     }
 

@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.customization.data;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;

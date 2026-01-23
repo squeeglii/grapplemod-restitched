@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.config;
 
-import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
+import com.yyon.grapplinghook.content.registry.CustomizationCategories;
 import com.yyon.grapplinghook.customization.CustomizationAvailability;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -42,7 +42,7 @@ public class GrappleModConfig {
     private void configureCustomizations(ConfigBuilder builder) {
         ConfigCategory category = section(builder, "customizations");
 
-        GrappleModCustomizationCategories.getModCategories().forEach(modCategory -> {
+        CustomizationCategories.getModCategories().forEach(modCategory -> {
             SubCategoryBuilder categorySub = ConfigEntryBuilder.create()
                     .startSubCategory(modCategory.get().getName());
 

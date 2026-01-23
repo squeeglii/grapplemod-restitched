@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GrappleModBlocks {
+public class ModBlocks {
 
     private static final HashMap<ResourceLocation, BlockEntry<?>> blocks;
 
@@ -47,14 +47,14 @@ public class GrappleModBlocks {
         return Collections.unmodifiableMap(blocks);
     }
 
-    public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = GrappleModBlocks
+    public static final BlockEntry<GrappleModifierBlock> GRAPPLE_MODIFIER = ModBlocks
             .block("modification_table", GrappleModifierBlock::new)
-            .withConfiguredItem(GrappleModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
+            .withConfiguredItem(ModItems.GRAPPLE_MODIFIER_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 
-    public static final BlockEntry<BlueprintShelfBlock> BLUEPRINT_SHELF = GrappleModBlocks
+    public static final BlockEntry<BlueprintShelfBlock> BLUEPRINT_SHELF = ModBlocks
             .block("blueprint_shelf", BlueprintShelfBlock::new)
-            .withConfiguredItem(GrappleModItems.BLUEPRINT_SHELF_BLOCK, new Item.Properties().stacksTo(64))
+            .withConfiguredItem(ModItems.BLUEPRINT_SHELF_BLOCK, new Item.Properties().stacksTo(64))
             .define();
 
 
@@ -71,16 +71,16 @@ public class GrappleModBlocks {
             return this.context;
         }
 
-        public Flow<B> withItem(Consumer<GrappleModItems.ItemEntry<BlockItem>>  destination) {
+        public Flow<B> withItem(Consumer<ModItems.ItemEntry<BlockItem>>  destination) {
             return this.withConfiguredItem(destination, new Item.Properties());
         }
 
-        public Flow<B> withConfiguredItem(Consumer<GrappleModItems.ItemEntry<BlockItem>> destination, Item.Properties properties) {
+        public Flow<B> withConfiguredItem(Consumer<ModItems.ItemEntry<BlockItem>> destination, Item.Properties properties) {
             return this.withCustomItem(destination, () -> new BlockItem(context.get(), properties));
         }
 
-        public <I extends BlockItem> Flow<B> withCustomItem(Consumer<GrappleModItems.ItemEntry<I>> destination, Supplier<I> factory) {
-            GrappleModItems.ItemEntry<I> item = GrappleModItems.item(context.getIdentifier().getPath(), factory, null, true);
+        public <I extends BlockItem> Flow<B> withCustomItem(Consumer<ModItems.ItemEntry<I>> destination, Supplier<I> factory) {
+            ModItems.ItemEntry<I> item = ModItems.item(context.getIdentifier().getPath(), factory, null, true);
             destination.accept(item);
             return this;
         }
@@ -93,15 +93,15 @@ public class GrappleModBlocks {
     }
 
 
-    public static class BlockItemEntry<I extends BlockItem> extends GrappleModItems.ItemEntry<I> implements Consumer<GrappleModItems.ItemEntry<I>> {
-        private GrappleModItems.ItemEntry<I> source = null;
+    public static class BlockItemEntry<I extends BlockItem> extends ModItems.ItemEntry<I> implements Consumer<ModItems.ItemEntry<I>> {
+        private ModItems.ItemEntry<I> source = null;
 
         protected BlockItemEntry() {
             super(null, () -> null, null);
         }
 
         @Override
-        public void accept(GrappleModItems.ItemEntry<I> item) {
+        public void accept(ModItems.ItemEntry<I> item) {
             if(this.source != null) throw new IllegalStateException("The original item source cannot be defined more that once.");
             this.source = item;
         }
@@ -117,7 +117,7 @@ public class GrappleModBlocks {
         }
 
         @Override
-        protected void finalize(Object entry) {
+        public void finalize(Object entry) {
             this.source.finalize(entry);
         }
 
@@ -126,7 +126,7 @@ public class GrappleModBlocks {
             return this.source.getIdentifier();
         }
 
-        public GrappleModItems.ItemEntry<I> getSource() {
+        public ModItems.ItemEntry<I> getSource() {
             return this.source;
         }
     }

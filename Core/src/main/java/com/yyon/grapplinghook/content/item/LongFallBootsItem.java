@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.content.item;
 
-import com.yyon.grapplinghook.content.registry.GrappleModArmourMaterials;
+import com.yyon.grapplinghook.content.registry.internal.ArmourMaterials;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -34,7 +34,7 @@ import java.util.List;
 public class LongFallBootsItem extends ArmorItem {
 
 	public LongFallBootsItem() {
-	    super(GrappleModArmourMaterials.LONG_FALL_BOOTS.asHolder(), Type.BOOTS, new Item.Properties().stacksTo(1));
+	    super(ArmourMaterials.LONG_FALL_BOOTS.asHolder(), Type.BOOTS, new Item.Properties().stacksTo(1));
 	}
 	
 	@Override

@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.IS_EQUIPMENT_OVERRIDE;
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.IS_EQUIPMENT_OVERRIDE;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.ROCKET_ATTACHED;
 
 /*
  * This file is part of GrappleMod.

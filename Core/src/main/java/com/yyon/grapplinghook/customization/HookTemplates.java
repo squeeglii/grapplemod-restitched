@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.customization;
 
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
-import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.helper.PropertyOverride;
 import com.yyon.grapplinghook.customization.type.CrouchToggle;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 // These mimic the old recipes, automatically checking if a given template is valid.
 public class HookTemplates {
@@ -189,7 +189,7 @@ public class HookTemplates {
     }
 
     public ItemStack getAsStack() {
-        ItemStack itemStack = GrappleModItems.GRAPPLING_HOOK.get().getDefaultInstance();
+        ItemStack itemStack = ModItems.GRAPPLING_HOOK.get().getDefaultInstance();
         return this.saveNBTToStack(itemStack);
     }
 
@@ -220,7 +220,7 @@ public class HookTemplates {
      * template.
      */
     public ItemStack saveNBTToStack(ItemStack stack) {
-        GrapplehookItem hook = GrappleModItems.GRAPPLING_HOOK.get();
+        GrapplehookItem hook = ModItems.GRAPPLING_HOOK.get();
 
         hook.applyCustomizations(stack, this.getCustomizations());
         hook.applyTemplateMetadata(stack, this);

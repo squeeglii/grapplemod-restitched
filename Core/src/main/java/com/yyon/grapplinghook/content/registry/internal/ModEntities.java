@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GrappleModEntities {
+public class ModEntities {
 
     private static final HashMap<ResourceLocation, EntityEntry<?>> entities;
 
@@ -41,7 +41,7 @@ public class GrappleModEntities {
         }
     }
 
-    public static final EntityEntry<EntityType<GrapplinghookEntity>> GRAPPLE_HOOK = GrappleModEntities
+    public static final EntityEntry<EntityType<GrapplinghookEntity>> GRAPPLE_HOOK = ModEntities
             .entity("grapplehook", () -> FabricEntityTypeBuilder.<GrapplinghookEntity>
                      create(MobCategory.MISC, GrapplinghookEntity::new)
                     .dimensions(EntityDimensions.fixed(0.25f, 0.25f))

@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.advancement.trigger.PhysicsUpdateTrigger;
@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.LinkedHashSet;
 import java.util.function.Supplier;
 
-public class GrappleModAdvancementTriggers {
+public class AdvancementTriggers {
 
     private static final LinkedHashSet<TriggerEntry<?>> advancementTriggers;
 

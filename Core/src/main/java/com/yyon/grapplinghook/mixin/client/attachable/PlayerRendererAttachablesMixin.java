@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.mixin.client.attachable;
 
 import com.yyon.grapplinghook.client.attachable.LongFallBootsLayer;
 import com.yyon.grapplinghook.client.attachable.model.LongFallBootsModel;
-import com.yyon.grapplinghook.content.registry.GrappleModEntityRenderLayerIdentifiers;
+import com.yyon.grapplinghook.content.registry.internal.ModEntityLayerIdentifiers;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -17,7 +17,7 @@ public abstract class PlayerRendererAttachablesMixin {
     @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At("TAIL"))
     public void appendRenderLayers(EntityRendererProvider.Context context, boolean bl, CallbackInfo ci) {
         PlayerRenderer self = (PlayerRenderer) (Object) this;
-        ModelLayerLocation loc = GrappleModEntityRenderLayerIdentifiers.LONG_FALL_BOOTS.getLocation();
+        ModelLayerLocation loc = ModEntityLayerIdentifiers.LONG_FALL_BOOTS.getLocation();
         LongFallBootsModel model = new LongFallBootsModel(context.bakeLayer(loc));
         LongFallBootsLayer layer = new LongFallBootsLayer(self, model, context.getModelManager());
 

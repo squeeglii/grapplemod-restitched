@@ -13,7 +13,7 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.content.registry.GrappleModEnchantments;
+import com.yyon.grapplinghook.content.registry.internal.ModEnchantments;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -37,7 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 public class ClientPhysicsControllerTracker {
 
@@ -172,7 +172,7 @@ public class ClientPhysicsControllerTracker {
 	public boolean isWallRunning(LivingEntity entity, Vec motion) {
 		if(!(entity.horizontalCollision && !entity.onGround() && !entity.isCrouching())) return false;
 		if(entity.onClimbable()) return false;
-		if(!GrappleModUtils.hasArmourAbility(entity, GrappleModEnchantments.EFFECT_WALL_RUNNING)) return false;
+		if(!GrappleModUtils.hasArmourAbility(entity, ModEnchantments.EFFECT_WALL_RUNNING)) return false;
 		if(GrappleKey.DETACH.isDown() || Minecraft.getInstance().options.keyJump.isDown()) return false;
 
 		BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
@@ -205,7 +205,7 @@ public class ClientPhysicsControllerTracker {
 				() -> !player.isInWater(),
 				() -> !player.isInLava(),
 				() -> ticksSinceLastOnGround > 3,
-				() -> GrappleModUtils.hasArmourAbility(player, GrappleModEnchantments.EFFECT_DOUBLE_JUMP),
+				() -> GrappleModUtils.hasArmourAbility(player, ModEnchantments.EFFECT_DOUBLE_JUMP),
 				() -> !player.getAbilities().flying,
 				() -> !alreadyUsedDoubleJump
 		);
@@ -230,7 +230,7 @@ public class ClientPhysicsControllerTracker {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
 		if (entity.onGround() && GrappleKey.SLIDE.isDown()) {
-			if (!GrappleModUtils.hasArmourAbility(entity, GrappleModEnchantments.EFFECT_SLIDING)) return false;
+			if (!GrappleModUtils.hasArmourAbility(entity, ModEnchantments.EFFECT_SLIDING)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();
 

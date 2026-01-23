@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.attachable.model.LongFallBootsModel;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 // This doesn't use a Built-In registry but follows a style similar to one as
 // model locations need registering.
-public class GrappleModEntityRenderLayerIdentifiers {
+public class ModEntityLayerIdentifiers {
 
     private static final HashMap<ResourceLocation, RenderLayerEntry> renderLayers;
 

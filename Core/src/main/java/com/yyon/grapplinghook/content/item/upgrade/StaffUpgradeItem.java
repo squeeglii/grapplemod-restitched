@@ -1,9 +1,9 @@
 package com.yyon.grapplinghook.content.item.upgrade;
 
-import com.yyon.grapplinghook.content.registry.GrappleModCustomizationCategories;
+import com.yyon.grapplinghook.content.registry.CustomizationCategories;
 
 public class StaffUpgradeItem extends BaseUpgradeItem {
 	public StaffUpgradeItem() {
-		super(1, GrappleModCustomizationCategories.ENDER_STAFF::get);
+		super(1, CustomizationCategories.ENDER_STAFF::get);
 	}
 }

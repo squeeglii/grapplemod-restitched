@@ -75,7 +75,7 @@ public class GrappleModUtils {
 	}
 
 	public static void registerPack(String id, Component displayName, ModContainer container, ResourcePackActivationType activationType) {
-		ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation(GrappleMod.MOD_ID, id), container, displayName, activationType);
+		ResourceManagerHelper.registerBuiltinResourcePack(GrappleMod.id(id), container, displayName, activationType);
 	}
 
 }

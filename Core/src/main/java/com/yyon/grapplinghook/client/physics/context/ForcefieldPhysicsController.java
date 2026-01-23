@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.ROCKET_ATTACHED;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.ROCKET_ATTACHED;
 
 public class ForcefieldPhysicsController extends GrapplingHookPhysicsController {
 

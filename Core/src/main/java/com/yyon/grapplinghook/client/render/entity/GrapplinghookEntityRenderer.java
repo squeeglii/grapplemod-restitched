@@ -6,9 +6,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
-import com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties;
+import com.yyon.grapplinghook.content.registry.CustomizationProperties;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
-import com.yyon.grapplinghook.customization.style.RopeStyle;
+import com.yyon.grapplinghook.customization.type.enums.RopeStyle;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -227,11 +227,11 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		HookCustomization volume = hookEntity.getCurrentCustomizations();
 
 		// initialize vertexBuffer (used for drawing)
-		VertexConsumer vertexBuffer = volume.get(GrappleModCustomizationProperties.GLOWING_ROPE.get())
+		VertexConsumer vertexBuffer = volume.get(CustomizationProperties.GLOWING_ROPE.get())
 				? renderType.getBuffer(ROPE_RENDER_GLOWING)
 				: renderType.getBuffer(ROPE_RENDER);
 
-		RopeStyle styleId = volume.get(GrappleModCustomizationProperties.ROPE_STYLE.get());
+		RopeStyle styleId = volume.get(CustomizationProperties.ROPE_STYLE.get());
 
 		// draw rope
 		if (ropeHandler == null) {

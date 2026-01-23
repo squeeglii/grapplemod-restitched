@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.registry;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
-import com.yyon.grapplinghook.customization.style.RopeStyle;
+import com.yyon.grapplinghook.customization.type.enums.RopeStyle;
 import com.yyon.grapplinghook.customization.type.*;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GrappleModCustomizationProperties {
+public class CustomizationProperties {
 
     private static final HashMap<ResourceLocation, Entry<?>> properties;
 

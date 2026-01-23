@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.client.attachable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.content.registry.GrappleModItems;
+import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -37,7 +37,7 @@ public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemStack = livingEntity.getItemBySlot(EquipmentSlot.FEET);
 
-        if (!itemStack.is(GrappleModItems.LONG_FALL_BOOTS.get())) return;
+        if (!itemStack.is(ModItems.LONG_FALL_BOOTS.get())) return;
 
         this.getParentModel().copyPropertiesTo(this.model);
 

@@ -8,7 +8,7 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
-import com.yyon.grapplinghook.content.registry.GrappleModItemComponents;
+import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
 import com.yyon.grapplinghook.customization.data.DeployState;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.HookTemplates;
@@ -55,7 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yyon.grapplinghook.content.registry.GrappleModCustomizationProperties.*;
+import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 
 /*
@@ -86,8 +86,8 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				new Item.Properties()
 						.stacksTo(1)
 						.durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability)
-						.component(GrappleModItemComponents.DEPLOYABLE, new DeployState())
-						.component(GrappleModItemComponents.CUSTOMIZABLE, new HookCustomization())
+						.component(ModItemComponents.DEPLOYABLE, new DeployState())
+						.component(ModItemComponents.CUSTOMIZABLE, new HookCustomization())
 		);
 	}
 

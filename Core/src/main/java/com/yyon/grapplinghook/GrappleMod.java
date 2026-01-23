@@ -4,7 +4,9 @@ import com.yyon.grapplinghook.command.GrappleModCommand;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.config.pack.DataPackProcessor;
-import com.yyon.grapplinghook.content.registry.*;
+import com.yyon.grapplinghook.content.registry.CustomizationCategories;
+import com.yyon.grapplinghook.content.registry.CustomizationProperties;
+import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -70,28 +72,28 @@ public class GrappleMod implements ModInitializer {
         this.serverFeatures = new ServerFeatures();
 
         // I assume this is needed before items.
-        GrappleModItemComponents.bump();
+        ModItemComponents.bump();
 
-        GrappleModBlocks.registerAllBlocks();
-        GrappleModItems.registerAllItems();  // Items must always be registered after blocks.
-        GrappleModEntities.registerAllEntities();
-        GrappleModEnchantments.registerImmutable();
-        GrappleModBlockEntities.registerAllBlockEntities();
-        GrappleModAdvancementTriggers.registerAllTriggers();
-        GrappleModArmourMaterials.registerAllMaterials();
+        ModBlocks.registerAllBlocks();
+        ModItems.registerAllItems();  // Items must always be registered after blocks.
+        ModEntities.registerAllEntities();
+        ModEnchantments.registerImmutable();
+        BlockEntities.registerAllBlockEntities();
+        AdvancementTriggers.registerAllTriggers();
+        ArmourMaterials.registerAllMaterials();
 
-        GrappleModCustomizationProperties.registerAll();
-        GrappleModCustomizationCategories.registerAll(); // Categories must always go after items + properties.
+        CustomizationProperties.registerAll();
+        CustomizationCategories.registerAll(); // Categories must always go after items + properties.
 
         // Some stuff should be re-registered when a world loads I think? Dynamic registries are strange.
-        GrappleModEnchantments.registerRuntime();
+        ModEnchantments.registerRuntime();
 
 
         // Some things don't need "registering" but are static so they still
         // need loading. Load them now for reliability.
 
-        GrappleModTags.bump();
-        GrappleModGamerules.bump();
+        ModTags.bump();
+        ModGamerules.bump();
 
         this.queueCommandRegistration();
 
@@ -108,12 +110,12 @@ public class GrappleMod implements ModInitializer {
         ConfigHolder<?> cfg = AutoConfig.register(GrappleModLegacyConfig.class, GsonConfigSerializer::new);
 
         cfg.registerSaveListener((holder, config) -> {
-            GrappleModItems.invalidateCreativeTabCache();
+            ModItems.invalidateCreativeTabCache();
             return InteractionResult.SUCCESS;
         });
 
         cfg.registerLoadListener((holder, config) -> {
-            GrappleModItems.invalidateCreativeTabCache();
+            ModItems.invalidateCreativeTabCache();
             return InteractionResult.SUCCESS;
         });
     }

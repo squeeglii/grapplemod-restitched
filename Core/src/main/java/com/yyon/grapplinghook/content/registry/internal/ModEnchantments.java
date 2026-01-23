@@ -1,6 +1,5 @@
-package com.yyon.grapplinghook.content.registry;
+package com.yyon.grapplinghook.content.registry.internal;
 
-import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -15,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
-public class GrappleModEnchantments {
+public class ModEnchantments {
 
     private static Set<EnchantmentEffectRegistration<?>> enchantmentEffects;
     private static Set<EnchantmentDefinitionRegistration> enchantmentDefinitions;
