@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.DoubleCustomizationDisplay;
+import com.yyon.grapplinghook.customization.display.DoublePropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
@@ -10,7 +10,7 @@ public class DoubleProperty extends CustomizationProperty<Double> {
 
     protected double min;
     protected double max;
-    protected DoubleCustomizationDisplay display;
+    protected DoublePropertyDisplay display;
 
     public DoubleProperty(double defaultValue, double min, double max) {
         super(defaultValue);
@@ -46,9 +46,9 @@ public class DoubleProperty extends CustomizationProperty<Double> {
     }
 
     @Override
-    public DoubleCustomizationDisplay getDisplay() {
+    public DoublePropertyDisplay getDisplay() {
         if(this.display == null)
-            this.display = new DoubleCustomizationDisplay(this);
+            this.display = new DoublePropertyDisplay(this);
 
         return this.display;
     }

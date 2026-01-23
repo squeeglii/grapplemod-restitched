@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.render;
+package com.yyon.grapplinghook.customization.display;
 
 import com.yyon.grapplinghook.client.gui.widget.PreciseCustomizationSlider;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
@@ -9,9 +9,9 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-public class DoubleCustomizationDisplay extends AbstractCustomizationDisplay<Double, DoubleProperty> {
+public class DoublePropertyDisplay extends AbstractPropertyDisplay<Double, DoubleProperty> {
 
-    public DoubleCustomizationDisplay(DoubleProperty property) {
+    public DoublePropertyDisplay(DoubleProperty property) {
         super(property);
     }
 

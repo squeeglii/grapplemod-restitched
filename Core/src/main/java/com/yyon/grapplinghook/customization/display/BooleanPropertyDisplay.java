@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.render;
+package com.yyon.grapplinghook.customization.display;
 
 import com.yyon.grapplinghook.client.gui.widget.CustomizationCheckbox;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
@@ -9,9 +9,9 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-public class BooleanCustomizationDisplay extends AbstractCustomizationDisplay<Boolean, BooleanProperty> {
+public class BooleanPropertyDisplay extends AbstractPropertyDisplay<Boolean, BooleanProperty> {
 
-    public BooleanCustomizationDisplay(BooleanProperty property) {
+    public BooleanPropertyDisplay(BooleanProperty property) {
         super(property);
     }
 

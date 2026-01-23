@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.render;
+package com.yyon.grapplinghook.customization.display;
 
 import com.yyon.grapplinghook.client.gui.widget.SteppedCustomizationSlider;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
@@ -9,9 +9,9 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-public class IntegerCustomizationDisplay extends AbstractCustomizationDisplay<Integer, IntegerProperty> {
+public class IntegerPropertyDisplay extends AbstractPropertyDisplay<Integer, IntegerProperty> {
 
-    public IntegerCustomizationDisplay(IntegerProperty property) {
+    public IntegerPropertyDisplay(IntegerProperty property) {
         super(property);
     }
 

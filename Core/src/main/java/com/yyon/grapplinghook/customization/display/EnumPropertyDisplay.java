@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.render;
+package com.yyon.grapplinghook.customization.display;
 
 import com.yyon.grapplinghook.client.gui.widget.CustomizationPicker;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
@@ -10,9 +10,9 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-public class EnumCustomizationDisplay<E extends Enum<E>> extends AbstractCustomizationDisplay<E, EnumProperty<E>> {
+public class EnumPropertyDisplay<E extends Enum<E>> extends AbstractPropertyDisplay<E, EnumProperty<E>> {
 
-    public EnumCustomizationDisplay(EnumProperty<E> property) {
+    public EnumPropertyDisplay(EnumProperty<E> property) {
         super(property);
     }
 

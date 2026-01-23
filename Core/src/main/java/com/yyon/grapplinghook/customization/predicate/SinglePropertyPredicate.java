@@ -3,11 +3,11 @@ package com.yyon.grapplinghook.customization.predicate;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 
-public abstract class SingleCustomizationPredicate<T> implements CustomizationPredicate<T> {
+public abstract class SinglePropertyPredicate<T> implements PropertyPredicate<T> {
 
     private final CustomizationProperty<T> property;
 
-    public SingleCustomizationPredicate(CustomizationProperty<T> property) {
+    public SinglePropertyPredicate(CustomizationProperty<T> property) {
         if(property == null) throw new IllegalArgumentException("Property cannot be null");
         this.property = property;
     }

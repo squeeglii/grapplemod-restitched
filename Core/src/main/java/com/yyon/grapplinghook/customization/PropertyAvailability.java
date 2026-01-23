@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.customization;
 
 import net.minecraft.network.chat.Component;
 
-public enum CustomizationAvailability {
+public enum PropertyAvailability {
 
     ALLOWED,
     REQUIRES_LIMITS,

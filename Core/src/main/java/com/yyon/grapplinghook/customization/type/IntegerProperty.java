@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
-import com.yyon.grapplinghook.customization.render.IntegerCustomizationDisplay;
+import com.yyon.grapplinghook.customization.display.IntegerPropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
@@ -10,7 +10,7 @@ public class IntegerProperty extends CustomizationProperty<Integer> {
 
     protected int min;
     protected int max;
-    protected IntegerCustomizationDisplay display;
+    protected IntegerPropertyDisplay display;
 
     public IntegerProperty(int defaultValue, int min, int max) {
         super(defaultValue);
@@ -46,9 +46,9 @@ public class IntegerProperty extends CustomizationProperty<Integer> {
     }
 
     @Override
-    public IntegerCustomizationDisplay getDisplay() {
+    public IntegerPropertyDisplay getDisplay() {
         if(this.display == null)
-            this.display = new IntegerCustomizationDisplay(this);
+            this.display = new IntegerPropertyDisplay(this);
 
         return this.display;
     }

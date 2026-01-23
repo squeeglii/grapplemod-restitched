@@ -2,11 +2,11 @@ package com.yyon.grapplinghook.customization.predicate;
 
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 
-public class BooleanCustomizationPredicate extends SingleCustomizationPredicate<Boolean> {
+public class BooleanPropertyPredicate extends SinglePropertyPredicate<Boolean> {
 
     private final Boolean expectedValue;
 
-    public BooleanCustomizationPredicate(CustomizationProperty<Boolean> property, Boolean expectedValue) {
+    public BooleanPropertyPredicate(CustomizationProperty<Boolean> property, Boolean expectedValue) {
         super(property);
         this.expectedValue = expectedValue;
     }

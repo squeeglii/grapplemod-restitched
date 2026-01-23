@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.render;
+package com.yyon.grapplinghook.customization.display;
 
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
@@ -9,11 +9,11 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-public abstract class AbstractCustomizationDisplay<T, P extends CustomizationProperty<T>> {
+public abstract class AbstractPropertyDisplay<T, P extends CustomizationProperty<T>> {
 
     private final P property;
 
-    public AbstractCustomizationDisplay(P property) {
+    public AbstractPropertyDisplay(P property) {
         this.property = property;
     }
 

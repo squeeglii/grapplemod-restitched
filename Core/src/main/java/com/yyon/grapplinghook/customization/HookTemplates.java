@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.helper.PropertyOverride;
-import com.yyon.grapplinghook.customization.type.CrouchToggle;
+import com.yyon.grapplinghook.customization.type.enums.CrouchToggle;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -179,7 +179,7 @@ public class HookTemplates {
     public boolean isEnabled() {
         return properties.stream()
                 .map(PropertyOverride::property)
-                .noneMatch(p -> p.getAvailability() == CustomizationAvailability.BLOCKED); // 2 = Disabled Fully.
+                .noneMatch(p -> p.getAvailability() == PropertyAvailability.BLOCKED); // 2 = Disabled Fully.
     }
 
     public HookCustomization getCustomizations() {

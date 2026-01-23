@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.config;
 
 import com.yyon.grapplinghook.content.registry.CustomizationCategories;
-import com.yyon.grapplinghook.customization.CustomizationAvailability;
+import com.yyon.grapplinghook.customization.PropertyAvailability;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -59,9 +59,9 @@ public class GrappleModConfig {
 
             categorySub.add(new EnumSelectorBuilder<>(
                     YEET, CUSTOMIZATION_AVAILIBILITY,
-                    CustomizationAvailability.class,
-                    CustomizationAvailability.ALLOWED)
-                    .setEnumNameProvider(val -> ((CustomizationAvailability) val).getTranslationString())
+                    PropertyAvailability.class,
+                    PropertyAvailability.ALLOWED)
+                    .setEnumNameProvider(val -> ((PropertyAvailability) val).getTranslationString())
                     .build()
             );
 

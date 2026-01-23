@@ -1,10 +1,10 @@
 package com.yyon.grapplinghook.customization.type;
 
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
-import com.yyon.grapplinghook.customization.CustomizationAvailability;
-import com.yyon.grapplinghook.customization.predicate.CustomizationPredicate;
-import com.yyon.grapplinghook.customization.predicate.SuccessCustomizationPredicate;
-import com.yyon.grapplinghook.customization.render.AbstractCustomizationDisplay;
+import com.yyon.grapplinghook.customization.PropertyAvailability;
+import com.yyon.grapplinghook.customization.predicate.PropertyPredicate;
+import com.yyon.grapplinghook.customization.predicate.SuccessPropertyPredicate;
+import com.yyon.grapplinghook.customization.display.AbstractPropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -14,22 +14,22 @@ import net.minecraft.resources.ResourceLocation;
 public abstract class CustomizationProperty<T> {
 
     private T defaultValue;
-    private CustomizationAvailability status; // config can update this at any time.
+    private PropertyAvailability status; // config can update this at any time.
 
-    private final CustomizationPredicate<?> validityPredicate;
+    private final PropertyPredicate<?> validityPredicate;
 
     public CustomizationProperty(T defaultValue) {
         this(defaultValue, null);
     }
 
-    public CustomizationProperty(T defaultValue, CustomizationPredicate<?> validityPredicate) {
+    public CustomizationProperty(T defaultValue, PropertyPredicate<?> validityPredicate) {
         if(defaultValue == null) throw new IllegalArgumentException("Default value cannot be null");
 
         this.defaultValue = defaultValue;
-        this.status = CustomizationAvailability.ALLOWED;
+        this.status = PropertyAvailability.ALLOWED;
 
         this.validityPredicate = validityPredicate == null
-                ? SuccessCustomizationPredicate.INSTANCE
+                ? SuccessPropertyPredicate.INSTANCE
                 : validityPredicate;
     }
 
@@ -40,7 +40,7 @@ public abstract class CustomizationProperty<T> {
     public abstract T loadValueFromTag(CompoundTag nbt);
     public abstract byte[] valueToChecksumBytes(T value);
 
-    public abstract AbstractCustomizationDisplay<T, ? extends CustomizationProperty<T>> getDisplay();
+    public abstract AbstractPropertyDisplay<T, ? extends CustomizationProperty<T>> getDisplay();
 
     public final T ifNullDefault(T value) {
         return value == null
@@ -55,7 +55,7 @@ public abstract class CustomizationProperty<T> {
         return this;
     }
 
-    public CustomizationProperty<T> setAvailability(CustomizationAvailability status) {
+    public CustomizationProperty<T> setAvailability(PropertyAvailability status) {
         this.status = status;
         return this;
     }
@@ -66,7 +66,7 @@ public abstract class CustomizationProperty<T> {
         return this.defaultValue;
     }
 
-    public CustomizationAvailability getAvailability() {
+    public PropertyAvailability getAvailability() {
         return this.status;
     }
 
@@ -74,7 +74,7 @@ public abstract class CustomizationProperty<T> {
         return GrappleModRegistries.CUSTOMIZATION_PROPERTIES.getKey(this);
     }
 
-    public CustomizationPredicate<?> getValidityPredicate() {
+    public PropertyPredicate<?> getValidityPredicate() {
         return this.validityPredicate;
     }
 

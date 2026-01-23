@@ -1,4 +1,4 @@
-package com.yyon.grapplinghook.customization.type;
+package com.yyon.grapplinghook.customization.type.enums;
 
 import com.yyon.grapplinghook.util.IFriendlyNameProvider;
 import net.minecraft.client.KeyMapping;
