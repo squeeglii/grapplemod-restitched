@@ -170,7 +170,9 @@ public class GrappleMod implements ModInitializer {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
     }
 
-    public static ResourceLocation fakeId(String id) {
+    /** @deprecated This just seems like a bad idea & a hack. */
+    @Deprecated(since = "mc 1.21.1")
+    public static ResourceLocation vanillaId(String id) {
         return ResourceLocation.fromNamespaceAndPath("minecraft", id);
     }
 }

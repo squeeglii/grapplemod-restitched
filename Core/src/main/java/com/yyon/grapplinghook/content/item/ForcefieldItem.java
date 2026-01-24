@@ -54,22 +54,22 @@ public class ForcefieldItem extends Item {
     
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 		Options options = Minecraft.getInstance().options;
 
-		list.add(Component.translatable("grappletooltip.repelleritem.desc")
+		tooltipComponents.add(Component.translatable("grappletooltip.repelleritem.desc")
 				  .withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
 		);
-		list.add(Component.literal(""));
+		tooltipComponents.add(Component.literal(""));
 
-		list.add(Component.translatable("grappletooltip.controls.title")
+		tooltipComponents.add(Component.translatable("grappletooltip.controls.title")
 				  .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
 		);
 
-		list.add(TextUtils.keybinding("grappletooltip.repelleritemon.desc", options.keyUse));
-		list.add(TextUtils.keybinding("grappletooltip.repelleritemoff.desc", options.keyUse));
-		list.add(TextUtils.keybinding("grappletooltip.repelleritemslow.desc", options.keyShift));
-		list.add(TextUtils.keybinding("grappletooltip.repelleritemmove.desc",
+		tooltipComponents.add(TextUtils.keybinding("grappletooltip.repelleritemon.desc", options.keyUse));
+		tooltipComponents.add(TextUtils.keybinding("grappletooltip.repelleritemoff.desc", options.keyUse));
+		tooltipComponents.add(TextUtils.keybinding("grappletooltip.repelleritemslow.desc", options.keyShift));
+		tooltipComponents.add(TextUtils.keybinding("grappletooltip.repelleritemmove.desc",
 				options.keyUp, options.keyLeft, options.keyDown, options.keyRight)
 		);
 	}

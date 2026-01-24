@@ -39,8 +39,8 @@ public class LongFallBootsItem extends ArmorItem {
 	
 	@Override
     @Environment(EnvType.CLIENT)
-	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-		list.add(Component
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+		tooltipComponents.add(Component
 				.translatable("grappletooltip.longfallboots.desc")
 				.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)
 		);

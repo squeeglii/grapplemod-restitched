@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Used to make an item throwable as a grappling hook
@@ -20,8 +22,13 @@ public class HookDeployment {
 
     // todo: could this actually hold the hook id and tie it to the item better?
 
-    public static final Codec<HookDeployment> CODEC = ;
-    public static final StreamCodec<? super RegistryFriendlyByteBuf, HookDeployment> STREAM_CODEC;
+    public static final Codec<HookDeployment> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+            VisualState.CODEC
+             .fieldOf("visual_state")
+             .forGetter(HookDeployment::getVisualState)
+    ).apply(builder, HookDeployment::new));
+
+    public static final StreamCodec<? super RegistryFriendlyByteBuf, HookDeployment> STREAM_CODEC = ;
 
     public void thrownAsHolder() {
         this.visualState = VisualState.THROWN_ROPE;
@@ -48,10 +55,19 @@ public class HookDeployment {
         return new HookDeployment(VisualState.THROWN_HOOK);
     }
 
-    public enum VisualState {
+
+    public enum VisualState implements StringRepresentable {
         HELD,
         THROWN_HOOK,
-        THROWN_ROPE,
+        THROWN_ROPE;
+
+        public static Codec<VisualState> CODEC = StringRepresentable.fromValues(VisualState::values);
+
+        @Override
+        @NotNull
+        public String getSerializedName() {
+            return this.name();
+        }
     }
 
 }

@@ -92,19 +92,19 @@ public class RocketItem extends Item {
     
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag par4) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 		Options options = Minecraft.getInstance().options;
 
-		list.add(Component
+		tooltipComponents.add(Component
 				.translatable("grapple_tooltip.rocket_item.description")
 				.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-		list.add(Component.literal(""));
+		tooltipComponents.add(Component.literal(""));
 
 
-		list.add(Component
+		tooltipComponents.add(Component
 				.translatable("grappletooltip.controls.title")
 				.withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE)
 		);
-		list.add(TextUtils.keybinding("grapple_tooltip.rocket_item.controls", options.keyUse));
+		tooltipComponents.add(TextUtils.keybinding("grapple_tooltip.rocket_item.controls", options.keyUse));
 	}
 }

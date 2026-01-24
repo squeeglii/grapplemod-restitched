@@ -5,11 +5,10 @@ import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.content.registry.internal.ModEntities;
-import com.yyon.grapplinghook.content.registry.internal.ModGamerules;
-import com.yyon.grapplinghook.content.registry.internal.ModItems;
-import com.yyon.grapplinghook.content.registry.internal.ModTags;
+import com.yyon.grapplinghook.content.item.GrapplehookItem;
+import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.customization.data.HookDeployment;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
@@ -24,6 +23,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -193,13 +193,15 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	@Override
 	@NotNull
 	public ItemStack getItem() {
-		return new ItemStack(this.getDefaultItem());
+		ItemStack stack = new ItemStack(this.getDefaultItem());
+		stack.set(ModItemComponents.DEPLOYABLE, HookDeployment.entityState());
+		return stack;
 	}
 
 	@Override
 	@NotNull
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return new ClientboundAddEntityPacket(this);
+	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
+		return new ClientboundAddEntityPacket(this, entity);
 	}
 
 	@Override
@@ -213,7 +215,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	@Override
-	protected float getGravity() {
+	protected double getDefaultGravity() {
 		if (this.isAttachedToSurface)
 			return 0.0F;
 
@@ -281,8 +283,8 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	}
 
 	@Override
-	public void handleInsidePortal(BlockPos pos) {
-		// Portal is ignored.
+	public boolean canUsePortal(boolean allowPassengers) {
+		return false; // block portal travel else dear god.
 	}
 
 	@Override

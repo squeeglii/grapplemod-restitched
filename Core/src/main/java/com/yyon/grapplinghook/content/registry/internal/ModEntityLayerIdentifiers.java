@@ -26,7 +26,7 @@ public class ModEntityLayerIdentifiers {
     public static void registerAll() { }
 
     public static RenderLayerEntry layer(String path, String modelLayerName, Supplier<MeshDefinition> def) {
-        ResourceLocation qualId = GrappleMod.fakeId(path);
+        ResourceLocation qualId = GrappleMod.vanillaId(path);
         RenderLayerEntry entry = new RenderLayerEntry(qualId, modelLayerName, def);
 
         entry.registerModelLocation();

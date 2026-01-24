@@ -610,6 +610,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 	public boolean shouldDisplayAsHookOnly(ItemStack stack) {
 		return stack.getOrDefault(ModItemComponents.DEPLOYABLE, HookDeployment.baseState())
-					.hookThrown();
+					.isThrown();
 	}
 }
