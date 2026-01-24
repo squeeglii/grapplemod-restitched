@@ -7,6 +7,8 @@ import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Unit;
 
 public class ModItemComponents {
 
@@ -16,10 +18,10 @@ public class ModItemComponents {
             DataComponentType.<HookCustomization>builder().persistent(HookCustomization.CODEC).networkSynchronized(HookCustomization.STREAM_CODEC).cacheEncoding().build()
     );
 
-    public static final DataComponentType<HookDeployment> DEPLOYABLE = Registry.register(
+    public static final DataComponentType<Unit> FORCE_HOOK_DISPLAY = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
-            GrappleMod.id("deployable"),
-            DataComponentType.<HookDeployment>builder().persistent(HookDeployment.CODEC).networkSynchronized(HookDeployment.STREAM_CODEC).cacheEncoding().build()
+            GrappleMod.id("force_hook_display"),
+            DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).cacheEncoding().build()
     );
 
     public static final DataComponentType<TemplateAuthor> AUTHORED = Registry.register(

@@ -5,7 +5,6 @@ import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.data.HookDeployment;
@@ -27,6 +26,7 @@ import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -194,7 +194,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	@NotNull
 	public ItemStack getItem() {
 		ItemStack stack = new ItemStack(this.getDefaultItem());
-		stack.set(ModItemComponents.DEPLOYABLE, HookDeployment.entityState());
+		stack.set(ModItemComponents.FORCE_HOOK_DISPLAY, Unit.INSTANCE);
 		return stack;
 	}
 

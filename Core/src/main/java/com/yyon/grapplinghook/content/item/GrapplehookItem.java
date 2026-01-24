@@ -86,7 +86,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				new Item.Properties()
 						.stacksTo(1)
 						.durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability)
-						.component(ModItemComponents.DEPLOYABLE, HookDeployment.baseState())
 						.component(ModItemComponents.CUSTOMIZABLE, new HookCustomization())
 		);
 	}
@@ -175,27 +174,28 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				NetworkManager.packetToServer(new KeypressMessage(key, false));
 			}
 
-		} else {
-	    	HookCustomization custom = this.getCustomizationsOrDefault(stack);
-	    	
-	    	if (custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-	    		GrapplinghookEntity hookLeft = getHookEntityLeft(player);
-	    		GrapplinghookEntity hookRight = getHookEntityRight(player);
-	    		
-				if (key == IGlobalKeyObserver.Keys.THROWBOTH) {
-					detachBoth(player);
-				} else if (key == IGlobalKeyObserver.Keys.THROWLEFT) {
-		    		if (hookLeft != null) detachLeft(player);
-				} else if (key == IGlobalKeyObserver.Keys.THROWRIGHT) {
-		    		if (hookRight != null) detachRight(player);
-				}
-	    	}
+			return;
+		}
+
+		HookCustomization custom = this.getCustomizationsOrDefault(stack);
+
+		if (custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
+			GrapplinghookEntity hookLeft = getHookEntityLeft(player);
+			GrapplinghookEntity hookRight = getHookEntityRight(player);
+
+			if (key == IGlobalKeyObserver.Keys.THROWBOTH) {
+				detachBoth(player);
+			} else if (key == IGlobalKeyObserver.Keys.THROWLEFT) {
+				if (hookLeft != null) detachLeft(player);
+			} else if (key == IGlobalKeyObserver.Keys.THROWRIGHT) {
+				if (hookRight != null) detachRight(player);
+			}
 		}
 	}
 
 	@Override
 	public void onDroppedByPlayer(ItemStack stack, Player player) {
-		if(!stack.has(ModItemComponents.DEPLOYABLE))
+		if(!stack.has(ModItemComponents.FORCE_HOOK_DISPLAY))
 			return;
 
 		int id = player.getId();
@@ -216,9 +216,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				hookRight.removeServer();
 			}
 		}
-
-		stack.get(ModItemComponents.DEPLOYABLE).retractedByHolder();
-
 	}
 
 	@Override
@@ -609,7 +606,6 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 
 	public boolean shouldDisplayAsHookOnly(ItemStack stack) {
-		return stack.getOrDefault(ModItemComponents.DEPLOYABLE, HookDeployment.baseState())
-					.isThrown();
+		return stack.has(ModItemComponents.FORCE_HOOK_DISPLAY);
 	}
 }

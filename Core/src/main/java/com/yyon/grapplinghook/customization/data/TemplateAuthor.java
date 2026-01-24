@@ -17,8 +17,8 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
             TemplateAuthor::new,
 
             Codec.STRING.optionalFieldOf("template_id", DEFAULT_TEMPLATE_ID).forGetter(TemplateAuthor::templateId),
-            ComponentSerialization.FLAT_CODEC.optionalFieldOf("display_name", null).forGetter(TemplateAuthor::templateDisplayName),
-            ComponentSerialization.FLAT_CODEC.optionalFieldOf("author", null).forGetter(TemplateAuthor::author)
+            ComponentSerialization.FLAT_CODEC.optionalFieldOf("display_name", Component.empty()).forGetter(TemplateAuthor::templateDisplayName),
+            ComponentSerialization.FLAT_CODEC.optionalFieldOf("author", Component.empty()).forGetter(TemplateAuthor::author)
     ));
 
     public static final StreamCodec<? super RegistryFriendlyByteBuf, TemplateAuthor> STREAM_CODEC;
@@ -31,6 +31,6 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
 
     //todo: create translations for blank author data.
     public static TemplateAuthor unknown() {
-        return new TemplateAuthor(null, null);
+        return new TemplateAuthor(Component.empty(), Component.empty());
     }
 }
