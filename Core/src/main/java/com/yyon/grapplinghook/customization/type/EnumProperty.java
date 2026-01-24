@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.customization.display.EnumPropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -8,16 +9,24 @@ import java.nio.ByteBuffer;
 
 public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
 
+
+    private final Codec<E> codec;
     private final E[] ordinalReversal;
     protected EnumPropertyDisplay<E> display;
 
-    public EnumProperty(E defaultValue, E[] ordinalReverser) {
+    public EnumProperty(E defaultValue, E[] ordinalReverser, Codec<E> codec) {
         super(defaultValue);
 
         if(ordinalReverser == null)
             throw new IllegalArgumentException("Ordinal reverser cannot be null. Please just pass [Enum Here].values()");
 
+        this.codec = codec;
         this.ordinalReversal = ordinalReverser;
+    }
+
+    @Override
+    public Codec<E> getValueCodec() {
+        return this.codec;
     }
 
     @Override

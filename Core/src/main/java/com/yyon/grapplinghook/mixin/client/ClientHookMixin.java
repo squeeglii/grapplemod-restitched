@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.mixin.client;
 
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.client.keybind.GrappleKey;
+import com.yyon.grapplinghook.client.ClientKey;
 import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
@@ -44,9 +44,9 @@ public class ClientHookMixin {
 
         // keep in same order as enum from KeypressItem
         boolean[] keys = {
-                GrappleKey.HOOK_ENDER_LAUNCH.isDown(), GrappleKey.THROW_LEFT_HOOK.isDown(),
-                GrappleKey.THROW_RIGHT_HOOK.isDown(), GrappleKey.THROW_HOOKS.isDown(),
-                GrappleKey.ROCKET.isDown()
+                ClientKey.HOOK_ENDER_LAUNCH.isDown(), ClientKey.THROW_LEFT_HOOK.isDown(),
+                ClientKey.THROW_RIGHT_HOOK.isDown(), ClientKey.THROW_HOOKS.isDown(),
+                ClientKey.ROCKET.isDown()
         };
 
         for (int i = 0; i < keys.length; i++) {

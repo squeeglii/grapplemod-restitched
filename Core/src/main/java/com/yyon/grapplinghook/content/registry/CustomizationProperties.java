@@ -57,7 +57,7 @@ public class CustomizationProperties {
     public static final Entry<AttachmentProperty> MOTOR_ATTACHED = property("motor", () -> new AttachmentProperty(false, SMART_MOTOR.get()));
     public static final Entry<DoubleProperty> MOTOR_ACCELERATION = property("motor_acceleration", () -> new DoubleProperty(0.2D, 0.0D, 0.2D));
     public static final Entry<DoubleProperty> MAX_MOTOR_SPEED = property("max_motor_speed", () -> new DoubleProperty(4.0D, 0.0D, 4.0D));
-    public static final Entry<EnumProperty<CrouchToggle>> MOTOR_ACTIVATION = property("motor_activation", () -> new EnumProperty<>(CrouchToggle.WHEN_NOT_CROUCHING, CrouchToggle.values()));
+    public static final Entry<EnumProperty<CrouchToggle>> MOTOR_ACTIVATION = property("motor_activation", () -> new EnumProperty<>(CrouchToggle.WHEN_NOT_CROUCHING, CrouchToggle.values(), CrouchToggle.CODEC));
     public static final Entry<BooleanProperty> MOTOR_DAMPENER = property("motor_dampener", () -> new BooleanProperty(false)); //TODO: Only available with limits.
     public static final Entry<BooleanProperty> MOTOR_WORKS_BACKWARDS = property("motor_works_backwards", () -> new BooleanProperty(true));
 
@@ -83,7 +83,7 @@ public class CustomizationProperties {
     public static final Entry<DoubleProperty> ROCKET_REFUEL_RATIO = property("rocket_refuel_ratio", () -> new DoubleProperty(15.0D, 15.0D, 30.0D));
     public static final Entry<DoubleProperty> ROCKET_ANGLE = property("rocket_angle", () -> new DoubleProperty(0.0D, 0.0D, 90.0D));
 
-    public static final Entry<EnumProperty<RopeStyle>> ROPE_STYLE = property("rope_style", () -> new EnumProperty<>(RopeStyle.REGULAR, RopeStyle.values()));
+    public static final Entry<EnumProperty<RopeStyle>> ROPE_STYLE = property("rope_style", () -> new EnumProperty<>(RopeStyle.REGULAR, RopeStyle.values(), RopeStyle.CODEC));
     public static final Entry<BooleanProperty> GLOWING_ROPE = property("glowing_rope", () -> new BooleanProperty(false));
 
     // Internal properties! - Should not be tied to a category.

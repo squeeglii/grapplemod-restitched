@@ -55,7 +55,7 @@ public abstract class GrappleCrosshairMixin {
         }
 
         if (grapplehookItemStack != null) {
-            HookCustomization custom = ModItems.GRAPPLING_HOOK.get().getCustomizations(grapplehookItemStack);
+            HookCustomization custom = ModItems.GRAPPLING_HOOK.get().getCustomizationsOrDefault(grapplehookItemStack);
             double angle = Math.toRadians(custom.get(DOUBLE_HOOK_ANGLE.get()));
             double verticalAngle = Math.toRadians(custom.get(HOOK_THROW_ANGLE.get()));
 

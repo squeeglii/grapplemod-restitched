@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.customization.display.DoublePropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,11 @@ public class DoubleProperty extends CustomizationProperty<Double> {
         this.min = Math.min(min, max);
         this.max = Math.max(min, max);
         this.display = null;
+    }
+
+    @Override
+    public Codec<Double> getValueCodec() {
+        return Codec.DOUBLE;
     }
 
     @Override

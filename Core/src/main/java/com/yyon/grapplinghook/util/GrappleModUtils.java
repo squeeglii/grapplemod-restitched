@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -28,6 +29,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class GrappleModUtils {
+
+	public static EquipmentSlot currentHand(boolean isMainHand) {
+		return  isMainHand ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+	}
 
 	public static boolean hasArmourAbility(LivingEntity target, DataComponentType<?> ability) {
 		for (ItemStack stack : target.getArmorSlots()) {

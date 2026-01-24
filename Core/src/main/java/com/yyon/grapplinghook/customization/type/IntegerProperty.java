@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.customization.display.IntegerPropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,11 @@ public class IntegerProperty extends CustomizationProperty<Integer> {
         this.min = Math.min(min, max);
         this.max = Math.max(min, max);
         this.display = null;
+    }
+
+    @Override
+    public Codec<Integer> getValueCodec() {
+        return Codec.INT;
     }
 
     @Override

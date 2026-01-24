@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
-import com.yyon.grapplinghook.client.keybind.GrappleKey;
 import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
@@ -71,7 +70,7 @@ public class GrappleModClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 
-        GrappleKey.registerAll();
+        ClientKey.registerAll();
         ModEntityLayerIdentifiers.registerAll();
 
         NetworkManager.registerClientPacketListeners();
@@ -272,7 +271,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     private static int propertyEquipOverride(ItemStack stack, BooleanProperty property) {
-        HookCustomization volume = ModItems.GRAPPLING_HOOK.get().getCustomizations(stack);
+        HookCustomization volume = ModItems.GRAPPLING_HOOK.get().getCustomizationsOrDefault(stack);
         return volume.get(property) ? 1 : 0;
     }
 

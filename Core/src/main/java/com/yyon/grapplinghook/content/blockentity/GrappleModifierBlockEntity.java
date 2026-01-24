@@ -65,7 +65,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		});
 
 		CompoundTag custom = parentNBTTagCompound.getCompound(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
-		this.customization.loadFromNBT(custom);
+		this.customization = HookCustomization.fromNBT(custom);
 	}
 
 	@Override

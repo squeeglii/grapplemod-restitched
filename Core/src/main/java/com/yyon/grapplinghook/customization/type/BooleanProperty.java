@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.customization.display.BooleanPropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +12,11 @@ public class BooleanProperty extends CustomizationProperty<Boolean> {
     public BooleanProperty(Boolean defaultValue) {
         super(defaultValue);
         this.display = null;
+    }
+
+    @Override
+    public Codec<Boolean> getValueCodec() {
+        return Codec.BOOL;
     }
 
     @Override

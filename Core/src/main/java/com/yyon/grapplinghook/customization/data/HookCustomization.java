@@ -1,14 +1,15 @@
 package com.yyon.grapplinghook.customization.data;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.helper.PropertyOverride;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
+import com.yyon.grapplinghook.util.exception.InvalidDataException;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -21,15 +22,40 @@ import java.util.zip.Checksum;
 
 public final class HookCustomization {
 
+	//todo: check casts actually work.
+
+	// Very useful resource: https://wiki.fabricmc.net/tutorial:codec
 	// CODEC:
 	// properties: Map<ResourceLocation, Mixed-Type>
 	//  - ... n
 	// crc32: long
-	public static final Codec<HookCustomization> CODEC = RecordCodecBuilder.create();
+	public static final Codec<HookCustomization> CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(builder -> builder.apply2(
+			HookCustomization::new,
+
+			CustomizationProperty.VALUE_MAP_CODEC
+			 .fieldOf("properties")
+			 .forGetter(HookCustomization::getValues),
+
+			Codec.LONG
+			 .fieldOf("crc32")
+			 .forGetter(HookCustomization::getChecksum)
+		)
+	));
+
+
 	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = StreamCodec.of();
 
 
-	private HashMap<CustomizationProperty<?>, Object> values;
+	private Map<CustomizationProperty<?>, Object> values;
+
+	private HookCustomization(Map<CustomizationProperty<?>, Object> properties, long crc32) {
+		this.values = new HashMap<>(properties);
+
+		// todo: checksum might be redundant these days.
+
+		if(crc32 != this.getChecksum())
+			throw new InvalidDataException("Checksum invalid for hook data!");
+	}
 	
 	public HookCustomization() {
 		this.setDefaults();
@@ -39,51 +65,10 @@ public final class HookCustomization {
 		this.values = new HashMap<>();
 	}
 
+	/** @deprecated Should not be used for item serialisation. See new data components.*/
 	@Deprecated(since = "mc 1.21.1")
-	@SuppressWarnings("unchecked") // Types are already verified
-	public <T> CompoundTag writeToNBT() {
-		CompoundTag base = new CompoundTag();
-		CompoundTag properties = new CompoundTag();
-
-		this.values.forEach((k, v) -> {
-			CustomizationProperty<T> key = (CustomizationProperty<T>) k;
-			key.saveValueToTag(properties, (T) v);
-		});
-
-		base.put("properties", properties);
-		base.putLong("crc32", this.getChecksum());
-		return base;
-	}
-
-	@Deprecated(since = "mc 1.21.1")
-	public void loadFromNBT(CompoundTag compound) {
-		Tag propTag = compound.get("properties");
-		if(!(propTag instanceof CompoundTag propertiesTag)) {
-			this.setDefaults();
-			return;
-		}
-
-		propertiesTag.getAllKeys().forEach(k ->
-			tryParseProperty(k).ifPresent(property -> {
-				Object val = property.loadValueFromTag(propertiesTag);
-
-				if(val == null) {
-					GrappleMod.LOGGER.warn("NBT Parse Error: value for item property '%s'".formatted(property.getIdentifier()));
-					return;
-				}
-
-				this.setUnsafe(property, val);
-			})
-		);
-
-		if (!compound.contains("crc32")) return;
-
-		long recordedChecksum = compound.getLong("crc32");
-		if (this.getChecksum() != recordedChecksum) {
-			String keyCollection = Arrays.toString(propertiesTag.getAllKeys().toArray());
-			GrappleMod.LOGGER.error("Error checksum reading from NBT! Keys present: %s".formatted(keyCollection));
-			this.setDefaults();
-		}
+	public Tag writeToNBT() {
+		return CODEC.encode(this, NbtOps.INSTANCE, new CompoundTag()).getOrThrow();
 	}
 	
 	public <T> void set(CustomizationProperty<T> property, T value) {
@@ -263,14 +248,17 @@ public final class HookCustomization {
 		return Collections.unmodifiableSet(this.values.keySet());
 	}
 
-
-	@Deprecated(since = "mc 1.21.1")
-	public static HookCustomization fromNBT(CompoundTag compound) {
-		HookCustomization volume = new HookCustomization();
-		volume.loadFromNBT(compound);
-		return volume;
+	private Map<CustomizationProperty<?>, Object> getValues() {
+		return this.values;
 	}
 
+	/** Parses a new HookCustomization instance from the root of the provided tag. See top of class for format.*/
+	public static HookCustomization fromNBT(CompoundTag compound) {
+		DataResult<HookCustomization> parsed = CODEC.parse(NbtOps.INSTANCE, compound);
+		return parsed.getOrThrow();
+	}
+
+	/** Performs a copy, creating a new instance with each property copied to a new list. */
 	public static HookCustomization copyAllFrom(HookCustomization volume) {
 		HookCustomization newVol = new HookCustomization();
 		volume.values.forEach(newVol::setUnsafe);

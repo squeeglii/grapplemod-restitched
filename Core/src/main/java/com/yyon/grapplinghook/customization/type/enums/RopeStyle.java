@@ -1,6 +1,11 @@
 package com.yyon.grapplinghook.customization.type.enums;
 
-public enum RopeStyle {
+import com.mojang.serialization.Codec;
+import com.yyon.grapplinghook.util.IFriendlyNameProvider;
+import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
+
+public enum RopeStyle implements IFriendlyNameProvider, StringRepresentable {
 
     REGULAR(0),
     IRON(1),
@@ -9,6 +14,8 @@ public enum RopeStyle {
     GHOSTLY(4),
     TAPE_MEASURE(5);
 
+
+    public static final Codec<RopeStyle> CODEC = StringRepresentable.fromValues(RopeStyle::values);
 
     private final int id;
 
@@ -26,6 +33,17 @@ public enum RopeStyle {
 
     public float getTextureMaxBound() {
         return (this.id + 1) / 8f;
+    }
+
+    @Override
+    public String getFriendlyName() {
+        return "rope_style";
+    }
+
+    @NotNull
+    @Override
+    public String getSerializedName() {
+        return this.name();
     }
 
 }

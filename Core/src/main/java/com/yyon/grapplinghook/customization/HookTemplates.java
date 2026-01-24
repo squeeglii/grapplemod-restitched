@@ -223,53 +223,8 @@ public class HookTemplates {
         GrapplehookItem hook = ModItems.GRAPPLING_HOOK.get();
 
         hook.applyCustomizations(stack, this.getCustomizations());
-        hook.applyTemplateMetadata(stack, this);
+        hook.applyTemplateMetadata(stack, this); //todo: seperate
 
         return stack;
-    }
-
-
-    public static HookTemplates fromStack(ItemStack stack) {
-        if(stack == null) throw new IllegalArgumentException("Stack cannot be null");
-
-        CompoundTag tag = stack.getTag();
-
-        return tag == null
-                ? new HookTemplates()
-                : HookTemplates.fromNBT(tag);
-    }
-
-    // Suppressed - Deals with generics in a way that shouldn't cause issues with types.
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static HookTemplates fromNBT(CompoundTag tag) {
-        if(tag == null) throw new IllegalArgumentException("NBT Tag cannot be null");
-
-        Tag customizationsTag = tag.get(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
-        HookCustomization volume = customizationsTag instanceof CompoundTag customizationsCompound
-                ? HookCustomization.fromNBT(customizationsCompound)
-                : new HookCustomization();
-
-        Tag metaTag = tag.get(TemplateUtils.NBT_HOOK_TEMPLATE);
-        CompoundTag metaCompound = metaTag instanceof CompoundTag compound
-                ? compound
-                : null;
-
-        String id = TemplateUtils.getIdFromMetadata(metaCompound).orElse(null);
-        Component displayName = TemplateUtils.getDisplayNameFromMetadata(metaCompound).orElse(null);
-        Component author = TemplateUtils.getAuthorFromMetadata(metaCompound).orElse(null);
-
-        PropertyOverride[] overrides = volume.getPropertiesPresent().stream()
-                .filter(property -> volume.get(property) != null)
-                .filter(property -> {
-                    Object currentValue = volume.get(property);
-                    return property.getDefaultValue().equals(currentValue);
-                })
-                .map(property -> {
-                    Object currentValue = volume.get(property);
-                    return new PropertyOverride(property, currentValue);
-                })
-                .toArray(PropertyOverride[]::new);
-
-        return new HookTemplates(id, displayName, author, overrides);
     }
 }

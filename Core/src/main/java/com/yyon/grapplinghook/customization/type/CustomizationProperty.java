@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization.type;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.PropertyAvailability;
 import com.yyon.grapplinghook.customization.predicate.PropertyPredicate;
@@ -11,7 +12,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Map;
+
 public abstract class CustomizationProperty<T> {
+
+    public static final Codec<CustomizationProperty<?>> KEY_CODEC = Codec.lazyInitialized(GrappleModRegistries.CUSTOMIZATION_PROPERTIES::byNameCodec);
+    public static final Codec<Map<CustomizationProperty<?>, Object>> VALUE_MAP_CODEC = Codec.dispatchedMap(KEY_CODEC, CustomizationProperty::getValueCodec);
 
     private T defaultValue;
     private PropertyAvailability status; // config can update this at any time.
@@ -32,6 +38,8 @@ public abstract class CustomizationProperty<T> {
                 ? SuccessPropertyPredicate.INSTANCE
                 : validityPredicate;
     }
+
+    public abstract Codec<T> getValueCodec();
 
     public abstract void encodeValueTo(ByteBuf targetBuffer, T value);
     public abstract T decodeValueFrom(ByteBuf targetBuffer);

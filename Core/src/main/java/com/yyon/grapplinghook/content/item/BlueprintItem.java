@@ -7,7 +7,6 @@ import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.HookTemplates;
 import com.yyon.grapplinghook.customization.TemplateUtils;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
-import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +17,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -43,20 +41,12 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     @Override
     public void applyCustomizations(ItemStack stack, HookCustomization customizations) {
         CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag nbt = customizations.writeToNBT();
+        Tag nbt = customizations.writeToNBT();
 
         tag.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, nbt);
         UpgraderUpper.setLatestVersionInTag(tag);
 
         stack.setTag(tag);
-    }
-
-    @Override
-    public HookCustomization resetCustomizations(ItemStack stack) {
-        HookCustomization custom = new HookCustomization();
-        this.applyCustomizations(stack, custom);
-
-        return custom;
     }
 
     @Override
@@ -90,13 +80,13 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> text, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
         Optional<Component> templateName = TemplateUtils.getTemplateDisplayName(stack);
 
         // Blueprint item has no template NBT soooooo, it's probably not a template.
         if(this.isBlank(stack)) {
-            text.add(Component.translatable("tooltip.blueprint.unused_hint")
+            tooltipComponents.add(Component.translatable("tooltip.blueprint.unused_hint")
                               .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             return;
         }
@@ -106,7 +96,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
                     .copy()
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
 
-            text.add(Component.empty()
+            tooltipComponents.add(Component.empty()
                     .withStyle(ChatFormatting.DARK_GRAY)
                     .append(Component.translatable("grapple_tooltip.template.name"))
                     .append(Component.literal(" "))
@@ -119,7 +109,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
                     .copy()
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
 
-            text.add(Component.empty()
+            tooltipComponents.add(Component.empty()
                     .withStyle(ChatFormatting.DARK_GRAY)
                     .append(Component.translatable("grapple_tooltip.template.author"))
                     .append(Component.literal(" "))
@@ -128,7 +118,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         }
 
         if (!Screen.hasControlDown()) {
-            text.add(Component.translatable("grapple_tooltip.configuration.hint")
+            tooltipComponents.add(Component.translatable("grapple_tooltip.configuration.hint")
                     .withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
             return;
         }
@@ -137,8 +127,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         Optional<HookCustomization> optCustomizations = this.getCustomizations(stack);
 
         if(optCustomizations.isEmpty()) {
-            text.add(Component.literal(""));
-            text.add(Component.translatable("tooltip.blueprint.no_customizations")
+            tooltipComponents.add(Component.literal(""));
+            tooltipComponents.add(Component.translatable("tooltip.blueprint.no_customizations")
                     .withStyle(ChatFormatting.ITALIC, ChatFormatting.RED));
             return;
         }
@@ -146,7 +136,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         HookCustomization customizations = optCustomizations.get();
 
         if(customizations.getPropertiesPresent().isEmpty()) {
-            text.add(Component.translatable("tooltip.blueprint.no_customizations")
+            tooltipComponents.add(Component.translatable("tooltip.blueprint.no_customizations")
                     .withStyle(ChatFormatting.ITALIC, ChatFormatting.RED));
             return;
         }
@@ -159,18 +149,15 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
                 continue;
 
             Component formatted = hintText.copy().withStyle(ChatFormatting.DARK_GRAY);
-            text.add(formatted);
+            tooltipComponents.add(formatted);
         }
 
     }
 
 
-    public Optional<HookCustomization> getCustomizations(ItemStack itemstack) {
-        CompoundTag tag = itemstack.getOrCreateTag();
-        Tag customizationsTag = tag.get(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
-
-        return customizationsTag instanceof CompoundTag customizationsCompound
-                ? Optional.of(HookCustomization.fromNBT(customizationsCompound))
+    public Optional<HookCustomization> getCustomizations(ItemStack stack) {
+        return stack.has(ModItemComponents.CUSTOMIZABLE)
+                ? Optional.ofNullable(stack.get(ModItemComponents.CUSTOMIZABLE))
                 : Optional.empty();
     }
 
