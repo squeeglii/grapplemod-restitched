@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,38 +52,45 @@ public class BlueprintShelfBlock extends BaseEntityBlock {
 		return CODEC;
 	}
 
-    @Override
-	@NotNull
-	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult rayResult) {
-		BlockEntity blockEntity = worldIn.getBlockEntity(pos);
+	@Override
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		BlockEntity blockEntity = level.getBlockEntity(pos);
 
 		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity))
-			return InteractionResult.PASS;
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
-		ItemStack heldStack = playerIn.getItemInHand(hand);
+		ItemStack heldStack = player.getItemInHand(hand);
 		Item heldItem = heldStack.getItem();
-
-
 
 		// TemplateTable has no 'primary blueprint' so there's nothing to quick-apply from - open UI
 		if(blueprintShelfBlockEntity.isEmpty()) {
-			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
+			if(level.isClientSide) return ItemInteractionResult.SUCCESS;
 
-			playerIn.openMenu(blueprintShelfBlockEntity);
-			return InteractionResult.CONSUME;
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
 
 		// Item can't recieve upgrades - open UI
 		if(!(heldItem instanceof ICustomizationApplicable customizationReciever)) {
-			if(worldIn.isClientSide) return InteractionResult.SUCCESS;
-
-			playerIn.openMenu(blueprintShelfBlockEntity);
-			return InteractionResult.CONSUME;
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
 
 		// TODO : Apply main blueprint
 
-		return InteractionResult.sidedSuccess(worldIn.isClientSide);
+		return ItemInteractionResult.sidedSuccess(level.isClientSide);
+	}
+
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		BlockEntity blockEntity = level.getBlockEntity(pos);
+
+		if (!(blockEntity instanceof BlueprintShelfBlockEntity blueprintShelfBlockEntity))
+			return InteractionResult.PASS;
+
+		if(level.isClientSide)
+			return InteractionResult.SUCCESS;
+
+		player.openMenu(blueprintShelfBlockEntity);
+		return InteractionResult.CONSUME;
 	}
 
 	@Override

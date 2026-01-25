@@ -40,4 +40,8 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
     public TemplateAuthor(Component templateDisplayName, Component author) {
         this(DEFAULT_TEMPLATE_ID, templateDisplayName, author);
     }
+
+    public boolean isNameEmpty() {
+        return this.templateDisplayName.getString().isEmpty();
+    }
 }

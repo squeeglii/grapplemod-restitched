@@ -51,7 +51,7 @@ public class AirFrictionPhysicsController extends GrapplingHookPhysicsController
 
 	@Override
 	public void updatePlayerPos() {
-		Entity entity = this.holder;
+		LivingEntity entity = this.holder;
 
 		if (entity == null) return;
 

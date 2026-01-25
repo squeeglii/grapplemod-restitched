@@ -11,10 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class BackgroundWidget extends AbstractWidget {
 
-    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(
-            GrappleMod.MOD_ID,
-            "blueprint"
-    );
+    private static final ResourceLocation BG_TEXTURE = GrappleMod.id("blueprint");
 
     public BackgroundWidget(int posX, int posY, int sizeVertical, int sizeHorizontal, Component text) {
         super(posX, posY, sizeVertical, sizeHorizontal, text);

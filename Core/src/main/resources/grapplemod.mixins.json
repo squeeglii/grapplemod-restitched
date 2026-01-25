@@ -10,7 +10,6 @@
     "LivingEntityDamageHandlerMixin",
     "PlayerDropHandlerMixin",
     "PlayerJoinMixin",
-    "RegistryIdFixerMixin",
     "SendExtraEntityDataMixin",
     "ServerPlayerMixin",
     "ServerStartMixin"
@@ -20,7 +19,6 @@
     "client.CameraSetupHookMixin",
     "client.ClientHookMixin",
     "client.DebugMenuMixin",
-    "client.FixKeyMappingConflictsMixin",
     "client.GrappleCrosshairMixin",
     "client.KeybindingHandlerMixin",
     "client.LocalPlayerUpdatesMixin",

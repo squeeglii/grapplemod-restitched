@@ -10,7 +10,6 @@ import com.yyon.grapplinghook.content.item.type.IDropHandling;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
-import com.yyon.grapplinghook.customization.TemplateUtils;
 import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
@@ -49,7 +48,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
@@ -223,10 +221,9 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
 		Options options = Minecraft.getInstance().options;
 
-		Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
-
-		if(templateAuthor.isPresent()) {
-			Component author = templateAuthor.get()
+		if(stack.has(ModItemComponents.AUTHORED)) {
+			TemplateAuthor metadata = stack.get(ModItemComponents.AUTHORED);
+			Component author = metadata.author()
 					.copy()
 					.withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
 
@@ -375,8 +372,14 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	@NotNull
 	@Override
 	public Component getName(ItemStack stack) {
-		Optional<Component> templateDisplayName = TemplateUtils.getTemplateDisplayName(stack);
-		return templateDisplayName.orElseGet(() -> super.getName(stack));
+		if(!stack.has(ModItemComponents.AUTHORED))
+			return super.getName(stack);
+
+		TemplateAuthor metadata = stack.get(ModItemComponents.AUTHORED);
+
+		return metadata.isNameEmpty()
+				? super.getName(stack)
+				: metadata.templateDisplayName();
 	}
 
 	@Override
