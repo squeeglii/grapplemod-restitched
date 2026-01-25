@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.customization;
 
+import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.content.item.upgrade.BaseUpgradeItem;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 public class CustomizationCategory {
+
+    public static final Codec<CustomizationCategory> KEY_CODEC = Codec.lazyInitialized(GrappleModRegistries.CUSTOMIZATION_CATEGORIES::byNameCodec);
 
     private final BaseUpgradeItem upgradeItem;
     private final List<CustomizationProperty<?>> linkedProperties;

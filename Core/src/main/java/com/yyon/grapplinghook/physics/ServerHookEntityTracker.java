@@ -32,7 +32,7 @@ public class ServerHookEntityTracker {
 		if(!(entity instanceof GrapplinghookEntity)) return;
 
 		// If someone needs to throw a hook from a hook, what the hell are you doing???
-		// Submit a PR explaining yourself if this is really a problem. <3
+		// Submit a PR explaining yourself if this is a problem.
 		GrappleMod.LOGGER.warn(new Throwable(
 				"A mod checks if a hook has other hooks attached to it. This is probably not right."
 		));
@@ -98,6 +98,7 @@ public class ServerHookEntityTracker {
 	}
 
 	public static void savePlayerHookState(ServerPlayer hookHolder, CompoundTag saveTarget) {
+		if(true) return; // todo: reimplement / review
 
 		if(!ServerHookEntityTracker.isAttachedToHooks(hookHolder))
 			return;
@@ -112,6 +113,8 @@ public class ServerHookEntityTracker {
 	}
 
 	public static void applyFromSavedHookState(ServerPlayer player) {
+		if(true) return; // todo: reimplement / review
+
 		IHookStateHolder stateHolder = (IHookStateHolder) player;
 		SerializableHookState state = stateHolder.grapplemod$getLastHookState().orElseThrow();
 		state.applyTo(player);
@@ -123,6 +126,7 @@ public class ServerHookEntityTracker {
 	 * For checking integrity of a Compound Tag, {@link SerializableHookState#isValidNBT(CompoundTag)}
 	 */
 	public static boolean isSavedHookStateValid(ServerPlayer player) {
+		if(true) return false; // todo: reimplement / review
 
 		IHookStateHolder stateHolder = (IHookStateHolder) player;
 		Optional<SerializableHookState> optState = stateHolder.grapplemod$getLastHookState();

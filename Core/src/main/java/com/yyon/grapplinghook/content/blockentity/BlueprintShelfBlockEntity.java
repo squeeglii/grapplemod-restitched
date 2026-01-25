@@ -4,7 +4,6 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
 import com.yyon.grapplinghook.content.item.BlueprintItem;
 import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
-import com.yyon.grapplinghook.data.UpgraderUpper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;

@@ -5,12 +5,11 @@ import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.HookTemplates;
-import com.yyon.grapplinghook.customization.TemplateUtils;
+import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -40,13 +39,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     @Override
     public void applyCustomizations(ItemStack stack, HookCustomization customizations) {
-        CompoundTag tag = stack.getOrCreateTag();
-        Tag nbt = customizations.writeToNBT();
-
-        tag.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, nbt);
-        UpgraderUpper.setLatestVersionInTag(tag);
-
-        stack.setTag(tag);
+        stack.set(ModItemComponents.CUSTOMIZABLE, customizations);
     }
 
     @Override
@@ -61,14 +54,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     @Override
     public void commit(ItemStack stack, Component displayName, Component author) {
-        HookTemplates template = new HookTemplates(null, displayName, author);
-        CompoundTag metadata = template.saveMetadataToNBT();
-
-        CompoundTag base = stack.getOrCreateTag();
-        base.put(TemplateUtils.NBT_HOOK_TEMPLATE, metadata);
-        UpgraderUpper.setLatestVersionInTag(base);
-
-        stack.setTag(base);
+        HookTemplates.Template template = new HookTemplates.Template(null, displayName, author);
+        template.saveToStackComponents(stack);
     }
 
     @NotNull
@@ -81,9 +68,6 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        Optional<Component> templateAuthor = TemplateUtils.getTemplateAuthor(stack);
-        Optional<Component> templateName = TemplateUtils.getTemplateDisplayName(stack);
-
         // Blueprint item has no template NBT soooooo, it's probably not a template.
         if(this.isBlank(stack)) {
             tooltipComponents.add(Component.translatable("tooltip.blueprint.unused_hint")
@@ -91,8 +75,10 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
             return;
         }
 
-        if(templateName.isPresent()) {
-            Component name = templateName.get()
+        if(stack.has(ModItemComponents.AUTHORED)) {
+            TemplateAuthor metadata = stack.get(ModItemComponents.AUTHORED);
+
+            Component name = metadata.templateDisplayName()
                     .copy()
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
 
@@ -102,10 +88,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
                     .append(Component.literal(" "))
                     .append(name)
             );
-        }
 
-        if(templateAuthor.isPresent()) {
-            Component author = templateAuthor.get()
+            Component author = metadata.author()
                     .copy()
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
 
@@ -124,7 +108,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         }
 
 
-        Optional<HookCustomization> optCustomizations = this.getCustomizations(stack);
+        Optional<HookCustomization> optCustomizations = this.getCustomizationsOrDefault(stack);
 
         if(optCustomizations.isEmpty()) {
             tooltipComponents.add(Component.literal(""));
@@ -155,17 +139,16 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     }
 
 
-    public Optional<HookCustomization> getCustomizations(ItemStack stack) {
+    public Optional<HookCustomization> getCustomizationsOrDefault(ItemStack stack) {
         return stack.has(ModItemComponents.CUSTOMIZABLE)
                 ? Optional.ofNullable(stack.get(ModItemComponents.CUSTOMIZABLE))
                 : Optional.empty();
     }
 
-    public boolean isBlank(ItemStack itemStack) {
-        Optional<HookCustomization> optCustomizations = this.getCustomizations(itemStack);
+    public boolean isBlank(ItemStack stack) {
+        boolean isTemplateMetaMissing = !stack.has(ModItemComponents.AUTHORED);
+        boolean areCustomizationsMissing = !stack.has(ModItemComponents.CUSTOMIZABLE);
 
-        boolean isTemplateMetaMissing = TemplateUtils.getTemplateMetadataTag(itemStack).isEmpty();
-        boolean areCustomizationsMissing = optCustomizations.isEmpty();
         return isTemplateMetaMissing && areCustomizationsMissing;
     }
 }

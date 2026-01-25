@@ -19,7 +19,9 @@ public class CustomizationCheckbox extends Checkbox implements CustomTooltipHand
     private Component tooltipOverride;
 
     public CustomizationCheckbox(Supplier<HookCustomization> customizations, int x, int y, BooleanProperty option, Runnable onValueUpdate) {
-        super(x, y, option.getDisplayName(), Minecraft.getInstance().font, customizations.get().get(option), (checkbox, bl) -> onValueUpdate.run());
+        super(x, y, 0, option.getDisplayName(), Minecraft.getInstance().font, customizations.get().get(option), (checkbox, bl) -> onValueUpdate.run());
+
+        //todo: check maxWidth (0 in constructor ^) is correct here.
 
         this.customizations = customizations;
         this.option = option;

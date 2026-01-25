@@ -1,5 +1,7 @@
 package com.yyon.grapplinghook.content.blockentity;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
@@ -7,69 +9,69 @@ import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
 
-	private final HashMap<CustomizationCategory, Boolean> categoryUnlockStates = new HashMap<>();
-	private HookCustomization customization;
+	public static final Codec<Data> DATA_CODEC = RecordCodecBuilder.create(builder -> builder.apply2(
+			Data::new,
+
+			HookCustomization.CODEC
+				 .fieldOf("customizations")
+				 .forGetter(Data::getCustomization),
+
+			Codec.list(CustomizationCategory.KEY_CODEC)
+				 .fieldOf("unlocked")
+				 .forGetter(Data::getUnlockedCategories)
+	));
+
+	private Data data;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
-		this.customization = new HookCustomization();
+		this.data = new Data();
 	}
 
 
 	@Override
-	public void saveAdditional(CompoundTag nbtOut) {
-		super.saveAdditional(nbtOut);
-		UpgraderUpper.setLatestVersionInTag(nbtOut);
+	public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
 
-		CompoundTag unlockedNBT = nbtOut.getCompound("unlocked");
+		Tag data = DATA_CODEC.encode(this.data, NbtOps.INSTANCE, tag).getOrThrow();
+		tag.put("data", data);
 
-		this.categoryUnlockStates.forEach((key, value) -> {
-            unlockedNBT.putBoolean(key.getIdentifier().toString(), value);
-        });
-
-		nbtOut.put("unlocked", unlockedNBT);
-		nbtOut.put(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS, this.customization.writeToNBT());
+		//todo: verify, this should work though.
 	}
 
 	@Override
-	public void load(CompoundTag nbtIn) {
-		super.load(nbtIn); // The super call is required to load the tiles location
+	public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries); // The super call is required to load the tiles location
 
-		// Upgrade the data from old versions. If an upgrade has happened, it'll be returned
-		// and swapped in.
-		Optional<CompoundTag> fixedTag = UpgraderUpper.upgradeModificationTable(nbtIn);
-		CompoundTag parentNBTTagCompound = fixedTag.orElse(nbtIn);
+		CompoundTag dataTag = tag.getCompound("data");
 
-		CompoundTag unlockedNBT = parentNBTTagCompound.getCompound("unlocked");
+		if(dataTag.isEmpty()) {
+			this.data = new Data();
+			return;
+		}
 
-		GrappleModRegistries.CUSTOMIZATION_CATEGORIES.stream().forEach(category -> {
-			boolean unlocked = unlockedNBT.getBoolean(category.getIdentifier().toString());
-
-			if(unlocked) this.categoryUnlockStates.put(category, true);
-		});
-
-		CompoundTag custom = parentNBTTagCompound.getCompound(TemplateUtils.NBT_HOOK_CUSTOMIZATIONS);
-		this.customization = HookCustomization.fromNBT(custom);
+		this.data = DATA_CODEC.decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst(); //todo: verify
 	}
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		CompoundTag nbtTagCompound = new CompoundTag();
-		this.saveAdditional(nbtTagCompound);
+		this.saveAdditional(nbtTagCompound, null); //todo: check what to do about provider.
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
@@ -77,9 +79,9 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	/* Creates a tag containing all of the TileEntity information, used by vanilla to transmit from server to client */
 	@Override
 	@NotNull
-	public CompoundTag getUpdateTag() {
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
 		CompoundTag nbtTagCompound = new CompoundTag();
-		this.saveAdditional(nbtTagCompound);
+		this.saveAdditional(nbtTagCompound, registries);
 		return nbtTagCompound;
 	}
 
@@ -94,32 +96,82 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	}
 
 	public void unlockCategory(CustomizationCategory category) {
-		this.categoryUnlockStates.put(category, true);
+		this.data.categoryUnlockStates.put(category, true);
 		this.triggerUpdate();
 	}
 
 	public void setCustomization(HookCustomization customization) {
-		this.customization = customization;
+		this.data.customization = customization;
 
 		if(this.level != null && this.level.isClientSide)
-			NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
+			NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.data.customization));
 
 		this.triggerUpdate();
 	}
 
 	public boolean isUnlocked(CustomizationCategory category) {
-		return this.categoryUnlockStates.containsKey(category) && this.categoryUnlockStates.get(category);
+		return this.data.categoryUnlockStates.containsKey(category) && this.data.categoryUnlockStates.get(category);
 	}
 
 	public HookCustomization getCurrentCustomizations() {
-		return this.customization;
+		return this.data.customization;
 	}
 
-	public Set<CustomizationCategory> getUnlockedCategories() {
-		return this.categoryUnlockStates.entrySet()
-				.stream()
-				.filter(Map.Entry::getValue)
-				.map(Map.Entry::getKey)
-				.collect(Collectors.toUnmodifiableSet());
+	public List<CustomizationCategory> getUnlockedCategories() {
+		return this.data.getUnlockedCategories();
+	}
+
+	private Data getData() {
+		return this.data;
+	}
+
+
+	public static class Data {
+
+		private HookCustomization customization;
+		private Map<CustomizationCategory, Boolean> categoryUnlockStates;
+
+		public Data() {
+			this.customization = new HookCustomization();
+			this.categoryUnlockStates = new HashMap<>();
+		}
+
+		public Data(HookCustomization customization, List<CustomizationCategory> categoryUnlockStates) {
+			this.customization = customization;
+			this.categoryUnlockStates = new HashMap<>();
+
+			GrappleModRegistries.CUSTOMIZATION_CATEGORIES.stream()
+					.forEach(category -> this.categoryUnlockStates.put(category, false));
+
+			for(CustomizationCategory category : categoryUnlockStates) {
+				this.categoryUnlockStates.put(category, true);
+			}
+		}
+
+		public Data setCustomization(HookCustomization customization) {
+			this.customization = customization;
+			return this;
+		}
+
+		public Data setCategoryUnlockStates(HashMap<CustomizationCategory, Boolean> categoryUnlockStates) {
+			this.categoryUnlockStates = categoryUnlockStates;
+			return this;
+		}
+
+		public HookCustomization getCustomization() {
+			return this.customization;
+		}
+
+		public Map<CustomizationCategory, Boolean> getCategoryUnlockStates() {
+			return this.categoryUnlockStates;
+		}
+
+		public List<CustomizationCategory> getUnlockedCategories() {
+			return this.categoryUnlockStates.entrySet()
+					.stream()
+					.filter(Map.Entry::getValue)
+					.map(Map.Entry::getKey)
+					.toList();
+		}
 	}
 }

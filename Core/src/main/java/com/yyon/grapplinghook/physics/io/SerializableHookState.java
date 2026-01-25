@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.*;
 
+// todo: reimplement
 public class SerializableHookState {
 
     private static final String NBT_HOOKS = "hooks";

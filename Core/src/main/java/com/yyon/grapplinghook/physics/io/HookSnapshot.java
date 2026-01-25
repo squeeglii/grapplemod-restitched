@@ -10,6 +10,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 
+import java.util.Optional;
+
 public class HookSnapshot {
 
     private static final String NBT_POS = "pos";
@@ -18,6 +20,8 @@ public class HookSnapshot {
     private static final String NBT_SUB_POS = "sub_pos";
     private static final String NBT_DIRECTION = "direction";
     private static final String NBT_MAIN_HOOK = "is_main";
+
+    //todo: convert this to a codec to make serialisation logic more consistent.
 
     private final Vec hookPos;
     private final RopeSnapshot ropeSnapshot;
@@ -50,11 +54,10 @@ public class HookSnapshot {
 
         boolean isInMainHand = source.getBoolean(NBT_MAIN_HOOK);
 
-        CompoundTag collisionPosTag = collisionTag.getCompound(NBT_POS);
         ListTag lastSubCollisionPosTag = collisionTag.getList(NBT_SUB_POS, Tag.TAG_DOUBLE);
         String directionString = collisionTag.getString(NBT_DIRECTION);
 
-        BlockPos collisionPos = NbtUtils.readBlockPos(collisionPosTag);
+        Optional<BlockPos> collisionPos = NbtUtils.readBlockPos(collisionTag, NBT_POS);
         Vec collisionSubPos = new Vec(lastSubCollisionPosTag);
         Direction direction = directionString.equalsIgnoreCase("null")
                 ? null
@@ -65,7 +68,7 @@ public class HookSnapshot {
 
         this.isMainHook = isInMainHand;
 
-        this.lastBlockCollision = collisionPos;
+        this.lastBlockCollision = collisionPos.orElse(null);
         this.lastSubCollisionPos = collisionSubPos;
         this.lastBlockCollisionSide = direction;
     }
@@ -78,7 +81,7 @@ public class HookSnapshot {
         CompoundTag ropeShape = this.ropeSnapshot.toNBT();
         CompoundTag collision = new CompoundTag();
 
-        CompoundTag collisionPosTag = NbtUtils.writeBlockPos(this.lastBlockCollision);
+        Tag collisionPosTag = NbtUtils.writeBlockPos(this.lastBlockCollision);
         ListTag collisionSubPosTag = this.lastSubCollisionPos.toNBT();
         String directionString = this.lastBlockCollisionSide != null
                 ? this.lastBlockCollisionSide.getSerializedName()
