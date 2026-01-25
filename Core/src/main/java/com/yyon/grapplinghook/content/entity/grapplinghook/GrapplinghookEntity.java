@@ -7,7 +7,6 @@ import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
-import com.yyon.grapplinghook.customization.data.HookDeployment;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
@@ -193,9 +192,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	@Override
 	@NotNull
 	public ItemStack getItem() {
-		ItemStack stack = new ItemStack(this.getDefaultItem());
-		stack.set(ModItemComponents.FORCE_HOOK_DISPLAY, Unit.INSTANCE);
-		return stack;
+        return new ItemStack(this.getDefaultItem());
 	}
 
 	@Override

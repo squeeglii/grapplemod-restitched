@@ -40,8 +40,8 @@ public class PhysicsUpdateTrigger extends SimpleCriterionTrigger<PhysicsUpdateTr
 
         public static final Codec<PhysicsUpdateTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create((instance) -> instance
                 .group(
-                        ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(TriggerInstance::player),
-                        ExtraCodecs.strictOptionalField(PhysicsFramePredicate.CODEC, PHYSICS_PREDICATE_ID).forGetter(TriggerInstance::physics)
+                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+                        PhysicsFramePredicate.CODEC.optionalFieldOf(PHYSICS_PREDICATE_ID).forGetter(TriggerInstance::physics)
                 )
                 .apply(instance, TriggerInstance::new));
 

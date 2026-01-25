@@ -4,8 +4,6 @@ import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
-import com.yyon.grapplinghook.customization.TemplateUtils;
-import com.yyon.grapplinghook.data.UpgraderUpper;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
 import net.minecraft.core.BlockPos;

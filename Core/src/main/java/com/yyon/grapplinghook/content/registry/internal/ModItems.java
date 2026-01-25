@@ -209,8 +209,8 @@ public final class ModItems {
                 grappleHookVariants.add(ModItems.GRAPPLING_HOOK.get().getDefaultInstance());
 
                 HookTemplates.getTemplates().stream()
-                        .filter(HookTemplates::isEnabled)
-                        .map(HookTemplates::getAsStack)
+                        .filter(HookTemplates.Template::isEnabled)
+                        .map(HookTemplates.Template::getAsStack)
                         .forEachOrdered(grappleHookVariants::add);
 
                 return grappleHookVariants;

@@ -9,7 +9,6 @@ import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
-import com.yyon.grapplinghook.customization.data.HookDeployment;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.TemplateUtils;
 import com.yyon.grapplinghook.customization.data.TemplateAuthor;
@@ -155,7 +154,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			return;
 		}
 
-		stack.hurtAndBreak(1, (ServerPlayer) player, GrappleModUtils.currentHand(isMainHand));
+		stack.hurtAndBreak(1, player, GrappleModUtils.currentHand(isMainHand));
 		if (stack.getCount() <= 0) return;
 
 		boolean threw = isLeft
@@ -542,7 +541,11 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 
 	public void applyTemplateMetadata(ItemStack stack, TemplateAuthor template) {
-		stack.set(ModItemComponents.AUTHORED, template);
+		if(template != null) {
+			stack.set(ModItemComponents.AUTHORED, template);
+		} else {
+			stack.remove(ModItemComponents.AUTHORED);
+		}
 	}
 
 	public static Vec applyHolderRotation(Vec angleVec, LivingEntity holder) {

@@ -4,9 +4,11 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.registry.CustomizationProperties;
+import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.enums.RopeStyle;
 import com.yyon.grapplinghook.util.Vec;
@@ -25,6 +27,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -76,8 +79,8 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 	public static final Vector3f Y_AXIS = new Vector3f(0, 1, 0);
 	public static final Vector3f Z_AXIS = new Vector3f(0, 0, 1);
 
-    private static final ResourceLocation HOOK_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/hook.png");
-    private static final ResourceLocation ROPE_TEXTURES = new ResourceLocation("grapplemod", "textures/entity/rope.png");
+    private static final ResourceLocation HOOK_TEXTURES = GrappleMod.id("textures/entity/hook.png");
+    private static final ResourceLocation ROPE_TEXTURES = GrappleMod.id("textures/entity/rope.png");
 
 	private static final RenderType ROPE_RENDER_GLOWING = HOOK_TRANSLUCENT_GLOWING.apply(ROPE_TEXTURES);
 	private static final RenderType ROPE_RENDER = RenderType.entityTranslucentCull(ROPE_TEXTURES);
@@ -218,9 +221,9 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		return new Quaternionf().rotateAxis((float) Math.toRadians(angleDegrees), axis);
 	}
 
-	public void drawRope(PoseStack matrix, MultiBufferSource renderType, GrapplinghookEntity hookEntity, RopeSegmentHandler ropeHandler, Vec handPosition, int packedLight, float partialTicks) {
-		matrix.pushPose();
-		PoseStack.Pose poseEntry = matrix.last();
+	public void drawRope(PoseStack poseStack, MultiBufferSource renderType, GrapplinghookEntity hookEntity, RopeSegmentHandler ropeHandler, Vec handPosition, int packedLight, float partialTicks) {
+		poseStack.pushPose();
+		PoseStack.Pose poseEntry = poseStack.last();
 		Matrix4f poseMatrix = poseEntry.pose();
 		Matrix3f normalMatrix = poseEntry.normal();
 
@@ -237,7 +240,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 		if (ropeHandler == null) {
 			// if no segmenthandler, straight line from hand to hook
 			Vec finishRelative = this.getRelativeToEntity(hookEntity, new Vec(handPosition), partialTicks);
-			this.drawSegment(new Vec(0,0,0), finishRelative, 1.0F, vertexBuffer, poseMatrix, normalMatrix, packedLight, styleId);
+			this.drawSegment(new Vec(0,0,0), finishRelative, 1.0F, vertexBuffer, poseEntry, poseMatrix, normalMatrix, packedLight, styleId);
 
 		} else {
 			for (int i = 0; i < ropeHandler.segments.size() - 1; i++) {
@@ -257,16 +260,16 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 						? hookEntity.taut
 						: 1.0D;
 
-				this.drawSegment(from, to, taut, vertexBuffer, poseMatrix, normalMatrix, packedLight, styleId);
+				this.drawSegment(from, to, taut, vertexBuffer, poseEntry, poseMatrix, normalMatrix, packedLight, styleId);
 			}
 		}
 
-		this.drawRopeEnding(hookEntity, ropeHandler, handPosition, packedLight, partialTicks, styleId, vertexBuffer, poseMatrix, normalMatrix);
+		this.drawRopeEnding(hookEntity, ropeHandler, handPosition, packedLight, partialTicks, styleId, vertexBuffer, poseEntry, poseMatrix, normalMatrix);
 
-		matrix.popPose();
+		poseStack.popPose();
 	}
 
-	private void drawRopeEnding(GrapplinghookEntity hookEntity, RopeSegmentHandler ropeHandler, Vec handPosition, int packedLight, float partialTicks, RopeStyle styleId, VertexConsumer vertexBuffer, Matrix4f poseMatrix, Matrix3f normalMatrix) {
+	private void drawRopeEnding(GrapplinghookEntity hookEntity, RopeSegmentHandler ropeHandler, Vec handPosition, int packedLight, float partialTicks, RopeStyle styleId, VertexConsumer vertexBuffer, PoseStack.Pose pose, Matrix4f poseMatrix, Matrix3f normalMatrix) {
 		// draw tip of rope closest to hand
 		Vec hook_pos = Vec.partialPositionVec(hookEntity, partialTicks);
 		Vec hand_closest = ropeHandler == null || ropeHandler.segments.size() <= 2
@@ -304,16 +307,15 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 			Vec normal = corner.normalize(); //.add(forward.normalize().mult(-1)).normalize();
 			Vec cornerPos = this.getRelativeToEntity(hookEntity, handPosition, partialTicks).add(corner);
 			vertexBuffer
-					.vertex(poseMatrix, (float) cornerPos.x, (float) cornerPos.y, (float) cornerPos.z)
-					.color(255, 255, 255, 255)
-					.uv(uvs[side][0], uvs[side][1]).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-					.normal(normalMatrix, (float) normal.x, (float) normal.y, (float) normal.z)
-					.endVertex();
+					.addVertex(poseMatrix, (float) cornerPos.x, (float) cornerPos.y, (float) cornerPos.z)
+					.setColor(255, 255, 255, 255)
+					.setUv(uvs[side][0], uvs[side][1]).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+					.setNormal(pose, (float) normal.x, (float) normal.y, (float) normal.z);
 		}
 	}
 
 	// draw a segment of the rope
-    public void drawSegment(Vec start, Vec finish, double taut, VertexConsumer vertexBuffer, Matrix4f poseMatrix, Matrix3f normalMatrix, int packedLight, RopeStyle style) {
+    public void drawSegment(Vec start, Vec finish, double taut, VertexConsumer vertexBuffer, PoseStack.Pose pose, Matrix4f poseMatrix, Matrix3f normalMatrix, int packedLight, RopeStyle style) {
     	if (start.sub(finish).length() < 0.05)
 			return;
 
@@ -368,30 +370,25 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 				float uRight = flipNormal ? ropeStyleUVStart : ropeStyleUVEnd;
 
                 vertexBuffer
-						.vertex(poseMatrix, (float) corner1pos1.x, (float) corner1pos1.y, (float) corner1pos1.z)
-						.color(255, 255, 255, 255)
-						.uv(uLeft, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-						.normal(normalMatrix, (float) normal1.x, (float) normal1.y, (float) normal1.z)
-						.endVertex();
+						.addVertex(poseMatrix, (float) corner1pos1.x, (float) corner1pos1.y, (float) corner1pos1.z)
+						.setColor(255, 255, 255, 255)
+						.setUv(uLeft, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+						.setNormal(pose, (float) normal1.x, (float) normal1.y, (float) normal1.z);
                 vertexBuffer
-						.vertex(poseMatrix, (float) corner2pos1.x, (float) corner2pos1.y, (float) corner2pos1.z)
-						.color(255, 255, 255, 255)
-						.uv(uRight, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-						.normal(normalMatrix, (float) normal2.x, (float) normal2.y, (float) normal2.z)
-						.endVertex();
-
+						.addVertex(poseMatrix, (float) corner2pos1.x, (float) corner2pos1.y, (float) corner2pos1.z)
+						.setColor(255, 255, 255, 255)
+						.setUv(uRight, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+						.setNormal(pose, (float) normal2.x, (float) normal2.y, (float) normal2.z);
                 vertexBuffer
-						.vertex(poseMatrix, (float) corner2pos2.x, (float) corner2pos2.y, (float) corner2pos2.z)
-						.color(255, 255, 255, 255)
-						.uv(uRight, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-						.normal(normalMatrix, (float) normal2.x, (float) normal2.y, (float) normal2.z)
-						.endVertex();
+						.addVertex(poseMatrix, (float) corner2pos2.x, (float) corner2pos2.y, (float) corner2pos2.z)
+						.setColor(255, 255, 255, 255)
+						.setUv(uRight, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+						.setNormal(pose, (float) normal2.x, (float) normal2.y, (float) normal2.z);
 				vertexBuffer
-						.vertex(poseMatrix, (float) corner1pos2.x, (float) corner1pos2.y, (float) corner1pos2.z)
-						.color(255, 255, 255, 255)
-						.uv(uLeft, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-						.normal(normalMatrix, (float) normal1.x, (float) normal1.y, (float) normal1.z)
-						.endVertex();
+						.addVertex(poseMatrix, (float) corner1pos2.x, (float) corner1pos2.y, (float) corner1pos2.z)
+						.setColor(255, 255, 255, 255)
+						.setUv(uLeft, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+						.setNormal(pose, (float) normal1.x, (float) normal1.y, (float) normal1.z);
             }
         }
         
@@ -404,9 +401,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
 	public ItemStack getStackToRender() {
 		ItemStack stack = new ItemStack(this.item);
-		CompoundTag tag = stack.getOrCreateTag();
-		tag.putBoolean("hook", true);
-		stack.setTag(tag);
+		stack.set(ModItemComponents.FORCE_HOOK_DISPLAY, Unit.INSTANCE);
         return stack;
     }
 

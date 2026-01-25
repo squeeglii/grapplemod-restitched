@@ -15,9 +15,9 @@ public record PhysicsFramePredicate(Optional<List<ResourceLocation>> controllerT
     public static final Codec<PhysicsFramePredicate> CODEC = RecordCodecBuilder.create((instance) ->
             instance
                 .group(
-                        ExtraCodecs.strictOptionalField(Codec.list(ResourceLocation.CODEC), "controller_types").forGetter(PhysicsFramePredicate::controllerTypes),
-                        ExtraCodecs.strictOptionalField(MinMaxBounds.Doubles.CODEC, "speed").forGetter(PhysicsFramePredicate::speed),
-                        ExtraCodecs.strictOptionalField(Codec.BOOL, "is_using_rocket").forGetter(PhysicsFramePredicate::isUsingRocket)
+                        Codec.list(ResourceLocation.CODEC).optionalFieldOf("controller_types").forGetter(PhysicsFramePredicate::controllerTypes),
+                        MinMaxBounds.Doubles.CODEC.optionalFieldOf("speed").forGetter(PhysicsFramePredicate::speed),
+                        Codec.BOOL.optionalFieldOf("is_using_rocket").forGetter(PhysicsFramePredicate::isUsingRocket)
 
                 )
                 .apply(instance, PhysicsFramePredicate::new)

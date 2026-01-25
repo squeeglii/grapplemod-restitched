@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.customization.data.HookDeployment;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import net.minecraft.core.Registry;
