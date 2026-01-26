@@ -100,7 +100,7 @@ public class GrapplingHookPhysicsController {
 		}
 
 		if(!(holderFromWorld instanceof LivingEntity holderAsLiving)) {
-			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is tied to a holder entity id that is not a Living Entity! Holders are meant to be players!");
+			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is tied to a holder entity hookId that is not a Living Entity! Holders are meant to be players!");
 			this.disable();
 			return;
 		}
@@ -936,7 +936,7 @@ public class GrapplingHookPhysicsController {
 			this.grapplehookEntityIds.remove(hookid);
 
 		} else {
-			GrappleMod.LOGGER.warn("Error: controller received hook detach, but hook id not in grapplehookEntityIds");
+			GrappleMod.LOGGER.warn("Error: controller received hook detach, but hook hookId not in grapplehookEntityIds");
 		}
 		
 		GrapplinghookEntity hookToRemove = null;

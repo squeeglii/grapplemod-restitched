@@ -217,7 +217,7 @@ public final class HookCustomization {
 	}
 
 	/**
-	 * Attempts to parse a CustomizationProperty from a string id, checking to
+	 * Attempts to parse a CustomizationProperty from a string hookId, checking to
 	 * see if one is present in the registry. It emits error messages and returns empty if
 	 * not found.
 	 * @param id the identifier to try parse

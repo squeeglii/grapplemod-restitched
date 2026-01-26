@@ -37,6 +37,12 @@ public class NetworkManager {
 
         registerS2CPacket(AddExtraEntityDataS2CPayload.PAYLOAD_TYPE, AddExtraEntityDataS2CPayload.STREAM_CODEC);
         registerS2CPacket(DetachSingleHookS2CPayload.PAYLOAD_TYPE, DetachSingleHookS2CPayload.STREAM_CODEC);
+        registerS2CPacket(GrappleAttachS2CPayload.PAYLOAD_TYPE, GrappleAttachS2CPayload.STREAM_CODEC);
+        registerS2CPacket(GrappleDetachS2CPayload.PAYLOAD_TYPE, GrappleDetachS2CPayload.STREAM_CODEC);
+        registerS2CPacket(GrappleAttachHookS2CPayload.PAYLOAD_TYPE, GrappleAttachHookS2CPayload.STREAM_CODEC);
+        registerS2CPacket(RestoreGrappleStateS2CPayload.PAYLOAD_TYPE, RestoreGrappleStateS2CPayload.STREAM_CODEC);
+        registerS2CPacket(RopeSegmentUpdateS2CPayload.PAYLOAD_TYPE, RopeSegmentUpdateS2CPayload.STREAM_CODEC);
+        registerS2CPacket(SyncServerConfigS2CPayload.PAYLOAD_TYPE, SyncServerConfigS2CPayload.STREAM_CODEC);
 
         S2CPlayChannelEvents.REGISTER.register((handler, sender, server, channels) -> {
             ServerPlayer player = handler.player;
@@ -53,17 +59,6 @@ public class NetworkManager {
                 hookStateHolder.grapplemod$resetLastHookState();
             });
         });
-    }
-
-    public static void registerClientPacketListeners() {
-        //NetworkManager.addClientSideListener("data", AddExtraEntityDataS2CPacket::new);
-        //NetworkManager.addClientSideListener("detach_single_hook", DetachSingleHookS2CPayload::new);
-        NetworkManager.addClientSideListener("grapple_attach", GrappleAttachMessage::new);
-        NetworkManager.addClientSideListener("grapple_attach_pos", GrappleAttachPosMessage::new);
-        NetworkManager.addClientSideListener("grapple_detach", GrappleDetachMessage::new);
-        NetworkManager.addClientSideListener("logged_in", LoggedInMessage::new);
-        NetworkManager.addClientSideListener("segment", SegmentMessage::new);
-        NetworkManager.addClientSideListener("restore_grapple_state", RestoreGrappleStateMessage::new);
     }
 
     public static void packetToServer(C2SPayload payload) {

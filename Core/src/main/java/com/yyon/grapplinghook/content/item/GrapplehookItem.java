@@ -15,7 +15,7 @@ import com.yyon.grapplinghook.customization.type.AttachmentProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.DetachSingleHookS2CPayload;
-import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
+import com.yyon.grapplinghook.network.clientbound.GrappleDetachS2CPayload;
 import com.yyon.grapplinghook.network.serverbound.KeypressC2SPayload;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -196,7 +196,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			return;
 
 		int id = player.getId();
-		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, player.level());
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), id, player.level());
 
 		if (grapplehookEntitiesLeft.containsKey(player)) {
 			GrapplinghookEntity hookLeft = grapplehookEntitiesLeft.get(player);
@@ -499,7 +499,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 		int id = thrower.getId();
 		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
-		GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), thrower.getId(), thrower.level());
+		GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), thrower.getId(), thrower.level());
 	}
 	
 	public void detachLeft(LivingEntity thrower) {
@@ -514,7 +514,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		
 		// remove controller if hook is attached
 		if (getHookEntityRight(thrower) == null) {
-			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, thrower.level());
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), id, thrower.level());
 		} else {
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookLeft.getId()), id, thrower.level());
 		}
@@ -531,7 +531,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
 		// remove controller if hook is attached
 		if (getHookEntityLeft(thrower) == null) {
-			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, thrower.level());
+			GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), id, thrower.level());
 		} else {
 			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookRight.getId()), id, thrower.level());
 		}

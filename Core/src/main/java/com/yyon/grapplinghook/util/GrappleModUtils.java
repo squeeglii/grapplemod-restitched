@@ -3,13 +3,17 @@ package com.yyon.grapplinghook.util;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.S2CPayloadProcessor;
+import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -28,6 +32,8 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class GrappleModUtils {
+
+	public static final StreamCodec<ByteBuf, Direction> DIRECTION_STREAM_CODEC = ByteBufCodecs.idMapper(id -> Direction.values()[id], Direction::ordinal);
 
 	public static EquipmentSlot currentHand(boolean isMainHand) {
 		return  isMainHand ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;

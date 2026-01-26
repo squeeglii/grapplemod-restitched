@@ -364,7 +364,7 @@ public class ClientPhysicsControllerTracker {
 		GrapplingHookPhysicsController controller = this.controllers.get(id);
 
 		if (controller == null) {
-			GrappleMod.LOGGER.warn("Couldn't find a  controller for handling Ender-Launch (id: %s)".formatted(id));
+			GrappleMod.LOGGER.warn("Couldn't find a  controller for handling Ender-Launch (hookId: %s)".formatted(id));
 			return;
 		}
 

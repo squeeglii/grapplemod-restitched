@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.mixin;
 
 import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.LoggedInMessage;
+import com.yyon.grapplinghook.network.clientbound.SyncServerConfigS2CPayload;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
@@ -18,7 +18,7 @@ public class PlayerJoinMixin {
     @Inject(method = "placeNewPlayer(Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/server/network/CommonListenerCookie;)V",
             at = @At("TAIL"))
     public void onLogin(Connection connection, ServerPlayer player, CommonListenerCookie commonListenerCookie, CallbackInfo ci) {
-        NetworkManager.packetToClient(new LoggedInMessage(GrappleModLegacyConfig.getConf()), player);
+        NetworkManager.packetToClient(new SyncServerConfigS2CPayload(GrappleModLegacyConfig.getConf()), player);
     }
 
 }

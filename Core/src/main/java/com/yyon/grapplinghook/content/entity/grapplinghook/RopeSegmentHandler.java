@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.entity.grapplinghook;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.SegmentMessage;
+import com.yyon.grapplinghook.network.clientbound.RopeSegmentUpdateS2CPayload;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -28,9 +28,9 @@ public class RopeSegmentHandler {
 	private final GrapplinghookEntity hookEntity;
 	private final Level world;
 
-	public LinkedList<Vec> segments;
-	public LinkedList<Direction> segmentBottomSides;
-	public LinkedList<Direction> segmentTopSides;
+	public List<Vec> segments;
+	public List<Direction> segmentBottomSides;
+	public List<Direction> segmentTopSides;
 
 	private Vec prevHookPos;
 	private Vec prevHolderPos;
@@ -190,7 +190,7 @@ public class RopeSegmentHandler {
 		this.removeSegmentAt(index);
 
 		if (!this.world.isClientSide) {
-			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), false, index, new Vec(0, 0, 0), Direction.DOWN, Direction.DOWN);
+			RopeSegmentUpdateS2CPayload addmessage = new RopeSegmentUpdateS2CPayload(this.hookEntity.getId(), false, index, new Vec(0, 0, 0), Direction.DOWN, Direction.DOWN);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
 
 			NetworkManager.packetToClient(addmessage, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) world, playerpoint));
@@ -295,13 +295,14 @@ public class RopeSegmentHandler {
 		return (this.getDistToFarthest() > ropelen);
 	}
 
+	// todo: figure out why I added "actually" to the name.
 	public void actuallyAddSegment(int index, Vec bendpoint, Direction bottomside, Direction topside) {
         segments.add(index, bendpoint);
         segmentBottomSides.add(index, bottomside);
         segmentTopSides.add(index, topside);
 
 		if (!this.world.isClientSide) {
-			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), true, index, bendpoint, topside, bottomside);
+			RopeSegmentUpdateS2CPayload addmessage = new RopeSegmentUpdateS2CPayload(this.hookEntity.getId(), true, index, bendpoint, topside, bottomside);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
 
 			NetworkManager.packetToClient(addmessage, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) world, playerpoint));

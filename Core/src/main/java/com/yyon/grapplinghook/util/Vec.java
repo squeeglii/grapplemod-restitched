@@ -3,11 +3,25 @@ package com.yyon.grapplinghook.util;
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class Vec {
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, Vec> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.DOUBLE,
+			Vec::getX,
+			ByteBufCodecs.DOUBLE,
+			Vec::getY,
+			ByteBufCodecs.DOUBLE,
+			Vec::getZ,
+			Vec::new
+	);
+
 	public double x;
 	public double y;
 	public double z;

@@ -1,17 +1,35 @@
 package com.yyon.grapplinghook.physics.io;
 
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
+import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class RopeSnapshot {
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, RopeSnapshot> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.collection(ArrayList::new, Vec.STREAM_CODEC),
+            RopeSnapshot::internalSegments,
+            ByteBufCodecs.collection(ArrayList::new, GrappleModUtils.DIRECTION_STREAM_CODEC),
+            RopeSnapshot::internalTops,
+            ByteBufCodecs.collection(ArrayList::new, GrappleModUtils.DIRECTION_STREAM_CODEC),
+            RopeSnapshot::internalBottoms,
+            ByteBufCodecs.DOUBLE,
+            RopeSnapshot::getRopeLength,
+
+            RopeSnapshot::new
+    );
 
     private static final String NBT_SEGMENTS_LIST = "segments";
     private static final String NBT_ROPE_LENGTH = "rope_length";
@@ -20,17 +38,24 @@ public class RopeSnapshot {
     private static final String NBT_BOTTOM = "bottom";
     private static final String NBT_POS = "pos";
 
-    private final LinkedList<Vec> segments;
-    private final LinkedList<Direction> topSides;
-    private final LinkedList<Direction> bottomSides;
+    private final ArrayList<Vec> segments;
+    private final ArrayList<Direction> topSides;
+    private final ArrayList<Direction> bottomSides;
 
     private final double ropeLength;
 
+    //todo: cleanup
+    private RopeSnapshot(List<Vec> segments,  List<Direction> topSides, List<Direction> bottomSides, double ropeLength) {
+        this.segments = new ArrayList<>(segments);
+        this.topSides = new ArrayList<>(topSides);
+        this.bottomSides = new ArrayList<>(bottomSides);
+        this.ropeLength = ropeLength;
+    }
 
     public RopeSnapshot(RopeSegmentHandler segmentHandler) {
-        this.segments = new LinkedList<>();
-        this.topSides = new LinkedList<>();
-        this.bottomSides = new LinkedList<>();
+        this.segments = new ArrayList<>();
+        this.topSides = new ArrayList<>();
+        this.bottomSides = new ArrayList<>();
         this.ropeLength = segmentHandler.getCurrentRopeLength();
 
         this.segments.addAll(segmentHandler.getSegments());
@@ -39,9 +64,9 @@ public class RopeSnapshot {
     }
 
     public RopeSnapshot(CompoundTag nbt) {
-        this.segments = new LinkedList<>();
-        this.topSides = new LinkedList<>();
-        this.bottomSides = new LinkedList<>();
+        this.segments = new ArrayList<>();
+        this.topSides = new ArrayList<>();
+        this.bottomSides = new ArrayList<>();
 
         this.ropeLength = nbt.getDouble(NBT_ROPE_LENGTH);
         ListTag segmentsTag = nbt.getList(NBT_SEGMENTS_LIST, Tag.TAG_COMPOUND);
@@ -106,6 +131,18 @@ public class RopeSnapshot {
         this.segments.add(segment);
         this.topSides.add(topSide);
         this.bottomSides.add(bottomSide);
+    }
+
+    public ArrayList<Vec> internalSegments() {
+        return this.segments;
+    }
+
+    public ArrayList<Direction> internalTops() {
+        return this.topSides;
+    }
+
+    public ArrayList<Direction> internalBottoms() {
+        return this.bottomSides;
     }
 
 

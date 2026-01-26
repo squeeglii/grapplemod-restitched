@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.util;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.item.LongFallBootsItem;
-import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
+import com.yyon.grapplinghook.network.clientbound.GrappleDetachS2CPayload;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -33,7 +33,7 @@ public class SharedDamageHandler {
 
         if(deadEntity instanceof Player) {
             int id = deadEntity.getId();
-            GrappleDetachMessage detachPacket = new GrappleDetachMessage(id);
+            GrappleDetachS2CPayload detachPacket = new GrappleDetachS2CPayload(id);
             GrappleModUtils.sendToCorrectClient(detachPacket, id, level);
         }
     }

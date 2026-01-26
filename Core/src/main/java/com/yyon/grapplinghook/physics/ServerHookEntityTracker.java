@@ -63,7 +63,7 @@ public class ServerHookEntityTracker {
 
 	/**
 	 * Adds a grappling hook entity to be tracked.
-	 * @param ownerId the id of the hook thrower
+	 * @param ownerId the hookId of the hook thrower
 	 */
 	public static void removeAllHooksFor(int ownerId) {
 		if (!allGrapplehookEntities.containsKey(ownerId)) {

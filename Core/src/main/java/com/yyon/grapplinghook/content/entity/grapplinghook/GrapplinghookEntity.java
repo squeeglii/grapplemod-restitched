@@ -8,8 +8,8 @@ import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
-import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
+import com.yyon.grapplinghook.network.clientbound.GrappleAttachS2CPayload;
+import com.yyon.grapplinghook.network.clientbound.GrappleAttachHookS2CPayload;
 import com.yyon.grapplinghook.physics.io.HookSnapshot;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -25,7 +25,6 @@ import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,6 +40,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;
@@ -579,7 +579,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		this.isFirstAttach = true;
 
 		GrappleModUtils.sendToCorrectClient(
-				new GrappleAttachMessage(
+				new GrappleAttachS2CPayload(
 						this.getId(),
 						this.position().x, this.position().y, this.position().z,
 						this.shootingEntityID, blockpos,
@@ -591,14 +591,14 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 				this.level()
 		);
 
-		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
+		GrappleAttachHookS2CPayload msg = new GrappleAttachHookS2CPayload(this.getId(), this.position().toVector3f());
 		NetworkManager.packetToClient(msg, GrappleModUtils.getPlayersThatCanSeeChunkAt((ServerLevel) this.level(), new Vec(this.position())));
 
 		GrappleModServerEvents.HOOK_ATTACH.invoker().onHookAttach(this.shootingEntity, this);
 	}
 
-	public void clientAttach(double x, double y, double z) {
-		this.setAttachPos(x, y, z);
+	public void clientAttach(Vector3f attachPos) {
+		this.setAttachPos(attachPos);
 
 		if (this.shootingEntity instanceof Player) {
 			GrappleModClient.get().resetLauncherTime(this.shootingEntityID);
@@ -607,7 +607,11 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		GrappleModClientEvents.HOOK_ATTACH.invoker().onHookAttach(this.shootingEntity, this);
 	}
 
-	public void setAttachPos(double x, double y, double z) {
+	// this mostly comes from packets
+	public void setAttachPos(Vector3f attachPos) {
+		float x = attachPos.x;
+		float y = attachPos.y;
+		float z = attachPos.z;
 		this.setPosRaw(x, y, z);
 
 		this.setDeltaMovement(0, 0, 0);
