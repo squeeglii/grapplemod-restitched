@@ -1,12 +1,13 @@
 package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.network.C2SPayloadProcessor;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class PhysicsUpdateMessage extends BaseMessageServer {
+public class PhysicsUpdateMessage extends C2SPayloadProcessor {
 
     private PlayerPhysicsFrame frame;
 
@@ -39,7 +40,7 @@ public class PhysicsUpdateMessage extends BaseMessageServer {
     }
 
     @Override
-    public void processMessage(NetworkContext ctx) {
+    public void process(NetworkContext ctx) {
         ctx.getServer().execute(() -> GrappleMod
                 .get()
                 .getServerPhysicsObserver()

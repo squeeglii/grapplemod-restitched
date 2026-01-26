@@ -97,7 +97,7 @@ public class GrappleMod implements ModInitializer {
 
         this.queueCommandRegistration();
 
-        NetworkManager.registerPacketListeners();
+        NetworkManager.registerAll();
 
         this.serverPhysicsObserver = new ServerPhysicsObserver();
 

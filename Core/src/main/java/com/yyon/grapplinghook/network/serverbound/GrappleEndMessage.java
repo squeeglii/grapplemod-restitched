@@ -1,6 +1,7 @@
 package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.network.C2SPayloadProcessor;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.network.FriendlyByteBuf;
@@ -26,7 +27,7 @@ import java.util.HashSet;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrappleEndMessage extends BaseMessageServer {
+public class GrappleEndMessage extends C2SPayloadProcessor {
    
 	public int entityId;
 	public HashSet<Integer> hookEntityIds;
@@ -65,7 +66,7 @@ public class GrappleEndMessage extends BaseMessageServer {
 	}
 
 	@Override
-    public void processMessage(NetworkContext ctx) {
+    public void process(NetworkContext ctx) {
 		int id = this.entityId;
 		ServerPlayer player = ctx.getSender();
 

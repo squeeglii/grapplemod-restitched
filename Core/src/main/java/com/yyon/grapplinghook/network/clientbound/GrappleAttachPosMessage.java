@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,7 +28,7 @@ import java.util.function.Consumer;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrappleAttachPosMessage extends BaseMessageClient {
+public class GrappleAttachPosMessage extends S2CPayloadProcessor {
 
     public static Consumer<GrappleAttachPosMessage> packetProcessor = null;
    

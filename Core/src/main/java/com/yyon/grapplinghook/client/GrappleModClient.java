@@ -18,7 +18,6 @@ import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.customization.type.BooleanProperty;
 import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachMessage;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachPosMessage;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -73,7 +72,7 @@ public class GrappleModClient implements ClientModInitializer {
         ClientKey.registerAll();
         ModEntityLayerIdentifiers.registerAll();
 
-        NetworkManager.registerClientPacketListeners();
+        //NetworkManager.registerClientPacketListeners();
         GrappleModClient.registerClientsidePacketHandlers();
 
         this.clientPhysicsControllerTracker = new ClientPhysicsControllerTracker();
@@ -186,10 +185,6 @@ public class GrappleModClient implements ClientModInitializer {
 
     public void openModifierScreen(GrappleModifierBlockEntity tile) {
         Minecraft.getInstance().setScreen(new GrappleModifierBlockGUI(tile));
-    }
-
-    public void onMessageReceivedClient(BaseMessageClient msg, NetworkContext ctx) {
-        msg.processMessage(ctx);
     }
 
 

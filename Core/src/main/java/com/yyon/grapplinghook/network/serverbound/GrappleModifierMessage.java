@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.network.serverbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.network.C2SPayloadProcessor;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrappleModifierMessage extends BaseMessageServer {
+public class GrappleModifierMessage extends C2SPayloadProcessor {
    
 	public BlockPos pos;
 	public HookCustomization custom;
@@ -55,7 +56,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
 	}
 
 	@Override
-    public void processMessage(NetworkContext ctx) {
+    public void process(NetworkContext ctx) {
 		// Block Entities must be obtained on the main thread.
 		ctx.getServer().execute(() -> {
 			Level w = ctx.getSender().level();

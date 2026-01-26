@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public record TemplateAuthor(String templateId, Component templateDisplayName, Component author) {
@@ -22,7 +23,7 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
             ComponentSerialization.FLAT_CODEC.optionalFieldOf("author", Component.empty()).forGetter(TemplateAuthor::author)
     ));
 
-    public static final StreamCodec<? super RegistryFriendlyByteBuf, TemplateAuthor> STREAM_CODEC;
+    public static final StreamCodec<? super RegistryFriendlyByteBuf, TemplateAuthor> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
 
 
     public TemplateAuthor(String templateId, Component templateDisplayName, Component author) {

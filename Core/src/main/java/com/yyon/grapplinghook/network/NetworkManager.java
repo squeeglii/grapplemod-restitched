@@ -8,88 +8,31 @@ import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.util.scheduling.Ticker;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.function.Function;
 
 public class NetworkManager {
 
-    protected static ClientPlayNetworking.PlayChannelHandler generateClientPacketHandler(Function<FriendlyByteBuf, BaseMessageClient> packetFactory) {
-        return (client, handler, buf, responseSender) -> {
-            BaseMessageClient packet = packetFactory.apply(buf);
-            NetworkContext context = new NetworkContext()
-                    .setDestination(LogicalSide.FOR_CLIENT)
-                    .setClient(client)
-                    .setClientHandle(handler)
-                    .setRespond(responseSender);
-
-            packet.processMessage(context);
-        };
+    public static <T extends C2SPayload> void registerC2SPacket(CustomPacketPayload.Type<T> type, StreamCodec<RegistryFriendlyByteBuf, T> codec) {
+        PayloadTypeRegistry.playC2S().register(type, codec);
+        ServerPlayNetworking.registerGlobalReceiver(type, C2SPayloadProcessor::process);
     }
 
-    protected static ServerPlayNetworking.PlayChannelHandler generateServerPacketHandler(Function<FriendlyByteBuf, BaseMessageServer> packetFactory) {
-        return (server, player, handler, buf, responseSender) -> {
-            BaseMessageServer packet = packetFactory.apply(buf);
-            NetworkContext context = new NetworkContext()
-                    .setDestination(LogicalSide.FOR_SERVER)
-                    .setServer(server)
-                    .setServerHandle(handler)
-                    .setSender(player)
-                    .setRespond(responseSender);
-
-            packet.processMessage(context);
-        };
+    public static <T extends S2CPayload> void registerS2CPacket(CustomPacketPayload.Type<T> type, StreamCodec<RegistryFriendlyByteBuf, T> codec) {
+        PayloadTypeRegistry.playS2C().register(type, codec);
+        ClientPlayNetworking.registerGlobalReceiver(type, S2CPayloadProcessor::process);
     }
 
+    public static void registerAll() {
 
-    public static void registerClient(String channelId, Function<FriendlyByteBuf, BaseMessageClient> etc) {
-        ClientPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateClientPacketHandler(etc));
-    }
-
-    public static void registerServer(String channelId, Function<FriendlyByteBuf, BaseMessageServer> etc) {
-        ServerPlayNetworking.registerGlobalReceiver(GrappleMod.id(channelId), NetworkManager.generateServerPacketHandler(etc));
-    }
-
-    public static void packetToServer(BaseMessageServer server) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        server.encode(buf);
-        ClientPlayNetworking.send(server.getChannel(), buf);
-    }
-
-    public static void packetToClient(BaseMessageClient client, ServerPlayer... players) {
-        if(players.length == 0) {
-            GrappleMod.LOGGER.warn("Missing any players to send a packet to!");
-            return;
-        }
-
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        client.encode(buf);
-
-        for(ServerPlayer player: players)
-            ServerPlayNetworking.send(player, client.getChannel(), buf);
-    }
-
-    public static void registerClientPacketListeners() {
-        NetworkManager.registerClient("data", AddExtraDataMessage::new);
-        NetworkManager.registerClient("detach_single_hook", DetachSingleHookMessage::new);
-        NetworkManager.registerClient("grapple_attach", GrappleAttachMessage::new);
-        NetworkManager.registerClient("grapple_attach_pos", GrappleAttachPosMessage::new);
-        NetworkManager.registerClient("grapple_detach", GrappleDetachMessage::new);
-        NetworkManager.registerClient("logged_in", LoggedInMessage::new);
-        NetworkManager.registerClient("segment", SegmentMessage::new);
-        NetworkManager.registerClient("restore_grapple_state", RestoreGrappleStateMessage::new);
-    }
-
-    public static void registerPacketListeners() {
-        NetworkManager.registerServer("grapple_end", GrappleEndMessage::new);
-        NetworkManager.registerServer("grapple_modifier", GrappleModifierMessage::new);
-        NetworkManager.registerServer("keypress", KeypressMessage::new);
-        NetworkManager.registerServer("player_movement", PlayerMovementMessage::new);
-        NetworkManager.registerServer("physics_update", PhysicsUpdateMessage::new);
-        NetworkManager.registerServer("save_grapple_state", SaveGrappleStateMessage::new);
+        registerC2SPacket(SaveGrappleStateC2SPayload.PAYLOAD_TYPE, SaveGrappleStateC2SPayload.STREAM_CODEC);
+        registerC2SPacket(PlayerMovementC2SPayload.PAYLOAD_TYPE, PlayerMovementC2SPayload.STREAM_CODEC);
 
         S2CPlayChannelEvents.REGISTER.register((handler, sender, server, channels) -> {
             ServerPlayer player = handler.player;
@@ -106,5 +49,44 @@ public class NetworkManager {
                 hookStateHolder.grapplemod$resetLastHookState();
             });
         });
+    }
+
+    public static void registerClientPacketListeners() {
+        NetworkManager.addClientSideListener("data", AddExtraDataMessage::new);
+        NetworkManager.addClientSideListener("detach_single_hook", DetachSingleHookMessage::new);
+        NetworkManager.addClientSideListener("grapple_attach", GrappleAttachMessage::new);
+        NetworkManager.addClientSideListener("grapple_attach_pos", GrappleAttachPosMessage::new);
+        NetworkManager.addClientSideListener("grapple_detach", GrappleDetachMessage::new);
+        NetworkManager.addClientSideListener("logged_in", LoggedInMessage::new);
+        NetworkManager.addClientSideListener("segment", SegmentMessage::new);
+        NetworkManager.addClientSideListener("restore_grapple_state", RestoreGrappleStateMessage::new);
+    }
+
+    public static void registerPacketListeners() {
+        NetworkManager.addServerSideListener("grapple_end", GrappleEndMessage::new);
+        NetworkManager.addServerSideListener("grapple_modifier", GrappleModifierMessage::new);
+        NetworkManager.addServerSideListener("keypress", KeypressMessage::new);
+        //NetworkManager.addServerSideListener("player_movement", PlayerMovementC2SPayload::new);
+        NetworkManager.addServerSideListener("physics_update", PhysicsUpdateMessage::new);
+        //NetworkManager.addServerSideListener("save_grapple_state", SaveGrappleStateC2SPayload::new);
+    }
+
+    public static void packetToServer(C2SPayloadProcessor server) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        server.encode(buf);
+        ClientPlayNetworking.send(server.getChannel(), buf);
+    }
+
+    public static void packetToClient(S2CPayloadProcessor client, ServerPlayer... players) {
+        if(players.length == 0) {
+            GrappleMod.LOGGER.warn("Missing any players to send a packet to!");
+            return;
+        }
+
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        client.encode(buf);
+
+        for(ServerPlayer player: players)
+            ServerPlayNetworking.send(player, client.getChannel(), buf);
     }
 }

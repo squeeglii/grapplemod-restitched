@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
+import com.yyon.grapplinghook.network.C2SPayloadProcessor;
 import com.yyon.grapplinghook.network.NetworkContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +27,7 @@ import net.minecraft.world.item.ItemStack;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class KeypressMessage extends BaseMessageServer {
+public class KeypressMessage extends C2SPayloadProcessor {
 	
 	IGlobalKeyObserver.Keys key;
 	boolean isDown;
@@ -58,7 +59,7 @@ public class KeypressMessage extends BaseMessageServer {
 	}
 
 	@Override
-    public void processMessage(NetworkContext ctx) {
+    public void process(NetworkContext ctx) {
     	final ServerPlayer player = ctx.getSender();
 
 		ctx.getServer().execute(() -> {

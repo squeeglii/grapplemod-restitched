@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.BaseMessageClient;
+import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -10,7 +10,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -45,7 +44,7 @@ public class GrappleModUtils {
 		return false;
 	}
 
-	public static void sendToCorrectClient(BaseMessageClient message, int playerid, Level w) {
+	public static void sendToCorrectClient(S2CPayloadProcessor message, int playerid, Level w) {
 		Entity entity = w.getEntity(playerid);
 		if (entity instanceof ServerPlayer player) {
 			NetworkManager.packetToClient(message, player);

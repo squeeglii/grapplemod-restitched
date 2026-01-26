@@ -4,6 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -31,7 +32,7 @@ import net.minecraft.world.level.Level;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class SegmentMessage extends BaseMessageClient {
+public class SegmentMessage extends S2CPayloadProcessor {
    
 	private int id;
 	private boolean add;

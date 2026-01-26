@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.network.clientbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,7 +26,7 @@ import net.minecraft.resources.ResourceLocation;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class GrappleDetachMessage extends BaseMessageClient {
+public class GrappleDetachMessage extends S2CPayloadProcessor {
    
 	public int id;
 

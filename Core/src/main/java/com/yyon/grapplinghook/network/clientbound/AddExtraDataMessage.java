@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.network.clientbound;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.IExtendedSpawnPacketEntity;
 import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,7 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class AddExtraDataMessage extends BaseMessageClient {
+public class AddExtraDataMessage extends S2CPayloadProcessor {
 
     private Entity entity;
 

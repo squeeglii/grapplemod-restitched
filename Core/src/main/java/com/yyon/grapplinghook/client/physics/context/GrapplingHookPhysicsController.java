@@ -11,7 +11,7 @@ import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
 import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateMessage;
-import com.yyon.grapplinghook.network.serverbound.PlayerMovementMessage;
+import com.yyon.grapplinghook.network.serverbound.PlayerMovementC2SPayload;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
@@ -825,7 +825,7 @@ public class GrapplingHookPhysicsController {
 	
 	public void updateServerPos() {
 		this.limitVelocity();
-		NetworkManager.packetToServer(new PlayerMovementMessage(this.entityId, this.holder.position().x, this.holder.position().y, this.holder.position().z, this.holder.getDeltaMovement().x, this.holder.getDeltaMovement().y, this.holder.getDeltaMovement().z));
+		NetworkManager.packetToServer(new PlayerMovementC2SPayload(this.entityId, this.holder.position().x, this.holder.position().y, this.holder.position().z, this.holder.getDeltaMovement().x, this.holder.getDeltaMovement().y, this.holder.getDeltaMovement().z));
 	}
 
 	public void limitVelocity() {

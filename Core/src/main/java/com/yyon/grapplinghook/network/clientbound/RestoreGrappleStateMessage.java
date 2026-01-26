@@ -2,11 +2,12 @@ package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class RestoreGrappleStateMessage extends BaseMessageClient {
+public class RestoreGrappleStateMessage extends S2CPayloadProcessor {
 
     public RestoreGrappleStateMessage(ByteBuf packetIn) {
 

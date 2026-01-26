@@ -11,6 +11,7 @@ import com.yyon.grapplinghook.util.exception.InvalidDataException;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
@@ -43,7 +44,19 @@ public final class HookCustomization {
 	));
 
 
-	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = StreamCodec.of();
+	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
+
+	/*
+	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.compoundTagCodec().collection(HashMap::new, StreamCodec.composite(
+
+			)),
+			HookCustomization::getValues,
+			ByteBufCodecs.VAR_LONG,
+			HookCustomization::getChecksum,
+			HookCustomization::new
+	);
+	*/
 
 
 	private Map<CustomizationProperty<?>, Object> values;

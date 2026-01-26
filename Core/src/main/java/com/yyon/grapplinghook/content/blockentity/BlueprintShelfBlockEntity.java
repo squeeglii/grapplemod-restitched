@@ -5,6 +5,7 @@ import com.yyon.grapplinghook.content.block.BlueprintShelfBlock;
 import com.yyon.grapplinghook.content.item.BlueprintItem;
 import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -42,6 +43,17 @@ public class BlueprintShelfBlockEntity extends BaseContainerBlockEntity {
         return Component.translatable("blueprint_shelf.title.default");
     }
 
+
+    @Override
+    protected NonNullList<ItemStack> getItems() {
+        return null;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> items) {
+
+    }
+
     @NotNull
     @Override
     protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
@@ -56,15 +68,14 @@ public class BlueprintShelfBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         this.storedTemplates.clear();
-        ContainerHelper.loadAllItems(tag, this.storedTemplates);
+        ContainerHelper.loadAllItems(tag, this.storedTemplates, registries);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        UpgraderUpper.setLatestVersionInTag(tag);
-        ContainerHelper.saveAllItems(tag, this.storedTemplates, true);
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        ContainerHelper.saveAllItems(tag, this.storedTemplates, true, registries);
     }
 
     @Override
@@ -82,9 +93,9 @@ public class BlueprintShelfBlockEntity extends BaseContainerBlockEntity {
        used by vanilla to transmit from server to client */
     @Override
     @NotNull
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag nbtTagCompound = new CompoundTag();
-        this.saveAdditional(nbtTagCompound);
+        this.saveAdditional(nbtTagCompound, registries);
         return nbtTagCompound;
     }
 
@@ -159,7 +170,7 @@ public class BlueprintShelfBlockEntity extends BaseContainerBlockEntity {
                 return true;
 
             // Check NBT matches + is same Item
-            if(!ItemStack.isSameItemSameTags(stackInTableSlot, outputStack))
+            if(!ItemStack.isSameItemSameComponents(stackInTableSlot, outputStack))
                 return false;
 
             int maxOutputStackSize =  Math.min(outputStack.getMaxStackSize(), outputContainer.getMaxStackSize());
