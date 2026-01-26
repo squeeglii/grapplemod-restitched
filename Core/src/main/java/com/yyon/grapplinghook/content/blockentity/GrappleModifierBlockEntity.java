@@ -7,20 +7,18 @@ import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.customization.CustomizationCategory;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.serverbound.GrappleModifierMessage;
+import com.yyon.grapplinghook.network.serverbound.SyncModifierTableC2SPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GrappleModifierBlockEntity extends BlockEntity {
 
@@ -104,7 +102,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 		this.data.customization = customization;
 
 		if(this.level != null && this.level.isClientSide)
-			NetworkManager.packetToServer(new GrappleModifierMessage(this.worldPosition, this.data.customization));
+			NetworkManager.packetToServer(new SyncModifierTableC2SPayload(this.worldPosition, this.data.customization));
 
 		this.triggerUpdate();
 	}

@@ -14,9 +14,9 @@ import com.yyon.grapplinghook.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.customization.type.AttachmentProperty;
 import com.yyon.grapplinghook.customization.type.CustomizationProperty;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.DetachSingleHookMessage;
+import com.yyon.grapplinghook.network.clientbound.DetachSingleHookS2CPayload;
 import com.yyon.grapplinghook.network.clientbound.GrappleDetachMessage;
-import com.yyon.grapplinghook.network.serverbound.KeypressMessage;
+import com.yyon.grapplinghook.network.serverbound.KeypressC2SPayload;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.TextUtils;
@@ -118,7 +118,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 					GrappleModClient.get().launchPlayer(player);
 
 			} else if (key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT || key == IGlobalKeyObserver.Keys.THROWBOTH) {
-				NetworkManager.packetToServer(new KeypressMessage(key, true));
+				NetworkManager.packetToServer(new KeypressC2SPayload(key, true));
 
 			} else if (key == IGlobalKeyObserver.Keys.ROCKET) {
 				HookCustomization custom = this.getCustomizationsOrDefault(stack);
@@ -168,7 +168,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	public void onCustomKeyUp(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean ismainhand) {
 		if (player.level().isClientSide) {
 			if (key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT || key == IGlobalKeyObserver.Keys.THROWBOTH) {
-				NetworkManager.packetToServer(new KeypressMessage(key, false));
+				NetworkManager.packetToServer(new KeypressC2SPayload(key, false));
 			}
 
 			return;
@@ -516,7 +516,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		if (getHookEntityRight(thrower) == null) {
 			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, thrower.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookLeft.getId()), id, thrower.level());
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookLeft.getId()), id, thrower.level());
 		}
 	}
 	
@@ -533,7 +533,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		if (getHookEntityLeft(thrower) == null) {
 			GrappleModUtils.sendToCorrectClient(new GrappleDetachMessage(id), id, thrower.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookMessage(id, hookRight.getId()), id, thrower.level());
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookRight.getId()), id, thrower.level());
 		}
 	}
 	

@@ -20,6 +20,10 @@ public record SaveGrappleStateC2SPayload(Unit inst) implements C2SPayload {
             SaveGrappleStateC2SPayload::new
     );
 
+    public SaveGrappleStateC2SPayload() {
+        this(Unit.INSTANCE);
+    }
+
     @NotNull
     @Override
     public Type<SaveGrappleStateC2SPayload> type() {
@@ -28,6 +32,6 @@ public record SaveGrappleStateC2SPayload(Unit inst) implements C2SPayload {
 
     @Override
     public void process(ServerPlayNetworking.Context ctx) {
-
+        //todo: implement
     }
 }

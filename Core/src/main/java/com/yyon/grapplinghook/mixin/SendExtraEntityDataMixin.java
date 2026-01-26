@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.mixin;
 
 import com.yyon.grapplinghook.content.entity.grapplinghook.IExtendedSpawnPacketEntity;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.AddExtraDataMessage;
+import com.yyon.grapplinghook.network.clientbound.AddExtraEntityDataS2CPayload;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +21,7 @@ public class SendExtraEntityDataMixin {
     @Inject(method = "addPairing(Lnet/minecraft/server/level/ServerPlayer;)V", at = @At("TAIL"))
     public void appendDataChain(ServerPlayer player, CallbackInfo ci) {
         if(this.entity instanceof IExtendedSpawnPacketEntity) {
-            NetworkManager.packetToClient(new AddExtraDataMessage(this.entity), player);
+            NetworkManager.packetToClient(new AddExtraEntityDataS2CPayload(this.entity), player);
         }
     }
 

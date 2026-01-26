@@ -9,8 +9,8 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.serverbound.GrappleEndMessage;
-import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateMessage;
+import com.yyon.grapplinghook.network.serverbound.HaltCustomPhysicsC2SPayload;
+import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateC2SPayload;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementC2SPayload;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
 import com.yyon.grapplinghook.util.GrappleModUtils;
@@ -165,7 +165,7 @@ public class GrapplingHookPhysicsController {
 		// Not null & player
 		// Reset server-side physics tracking.
 		if(isEntityClientPlayer && !wasAlreadyDisabled) {
-			NetworkManager.packetToServer(new PhysicsUpdateMessage());
+			NetworkManager.packetToServer(new PhysicsUpdateC2SPayload());
 		}
 
 
@@ -175,7 +175,7 @@ public class GrapplingHookPhysicsController {
 		if (this.getType() == PhysicsControllers.AIR_FRICTION)
 			return;
 
-		NetworkManager.packetToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
+		NetworkManager.packetToServer(new HaltCustomPhysicsC2SPayload(this.entityId, this.grapplehookEntityIds));
 
 		if(this.holder instanceof LocalPlayer p) {
 			PlayerInfo playerInfo = p.connection.getPlayerInfo(p.getUUID());
@@ -234,7 +234,7 @@ public class GrapplingHookPhysicsController {
 				.setUsingRocket(this.rocketKeyDown);
 
 		GrappleMod.get().getServerPhysicsObserver().receiveNewFrame(clientPlayer, frame);
-		NetworkManager.packetToServer(new PhysicsUpdateMessage(frame));
+		NetworkManager.packetToServer(new PhysicsUpdateC2SPayload(frame));
 	}
 		
 	public void receivePlayerMovementMessage(float strafe, float forward, boolean sneak) {

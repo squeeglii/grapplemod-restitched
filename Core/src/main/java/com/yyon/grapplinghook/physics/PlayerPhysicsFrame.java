@@ -1,7 +1,12 @@
 package com.yyon.grapplinghook.physics;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yyon.grapplinghook.GrappleMod;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -13,16 +18,35 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class PlayerPhysicsFrame {
 
+    public static final Codec<PlayerPhysicsFrame> CODEC = RecordCodecBuilder.create();
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, PlayerPhysicsFrame> STREAM_CODEC = StreamCodec.composite(
+            ResourceLocation.STREAM_CODEC,
+            PlayerPhysicsFrame::getPhysicsControllerType,
+            ByteBufCodecs.FLOAT,
+            PlayerPhysicsFrame::getSpeed,
+            ByteBufCodecs.BOOL,
+            PlayerPhysicsFrame::isUsingRocket,
+            PlayerPhysicsFrame::new
+    );
+
     private ResourceLocation physicsControllerType;
 
-    private double speed;
+    private float speed;
     private boolean isUsingRocket;
 
 
     public PlayerPhysicsFrame() {
         this.physicsControllerType = GrappleMod.id("none");
-        this.speed = 0.0D;
+        this.speed = 0.0f;
         this.isUsingRocket = false;
+    }
+
+    // designed for codecs, not really got any checks
+    private PlayerPhysicsFrame(ResourceLocation physicsControllerType, float speed, boolean isUsingRocket) {
+        this.physicsControllerType = physicsControllerType;
+        this.speed = speed;
+        this.isUsingRocket = isUsingRocket;
     }
 
     public PlayerPhysicsFrame setPhysicsControllerType(ResourceLocation physicsControllerType) {
@@ -31,6 +55,10 @@ public final class PlayerPhysicsFrame {
     }
 
     public PlayerPhysicsFrame setSpeed(double speed) {
+        return this.setSpeed((float) speed);
+    }
+
+    public PlayerPhysicsFrame setSpeed(float speed) {
         this.speed = speed;
         return this;
     }
@@ -44,7 +72,7 @@ public final class PlayerPhysicsFrame {
         return this.physicsControllerType;
     }
 
-    public double getSpeed() {
+    public float getSpeed() {
         return this.speed;
     }
 
@@ -70,7 +98,7 @@ public final class PlayerPhysicsFrame {
         PlayerPhysicsFrame frame = new PlayerPhysicsFrame();
 
         frame.setPhysicsControllerType(buf.readResourceLocation())
-             .setSpeed(buf.readDouble())
+             .setSpeed(buf.readFloat())
              .setUsingRocket(buf.readBoolean());
 
         return frame;

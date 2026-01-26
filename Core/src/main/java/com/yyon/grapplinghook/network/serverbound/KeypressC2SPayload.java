@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.network.serverbound;
 
 import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.network.C2SPayload;
-import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -10,8 +10,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
 /*
  * This file is part of GrappleMod.
@@ -30,46 +31,49 @@ import org.joml.Vector3f;
     along with GrappleMod.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public record PlayerMovementC2SPayload(int entityId, Vector3f pos, Vector3f motion) implements C2SPayload {
-	public static final ResourceLocation IDENTIFIER = GrappleMod.id("player_movement");
-	public static final CustomPacketPayload.Type<PlayerMovementC2SPayload> PAYLOAD_TYPE = new Type<>(IDENTIFIER);
+public record KeypressC2SPayload(IGlobalKeyObserver.Keys key, boolean isDown) implements C2SPayload {
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, PlayerMovementC2SPayload> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.INT,
-			PlayerMovementC2SPayload::entityId,
-			ByteBufCodecs.VECTOR3F,
-			PlayerMovementC2SPayload::pos,
-			ByteBufCodecs.VECTOR3F,
-			PlayerMovementC2SPayload::motion,
+	public static final ResourceLocation IDENTIFIER = GrappleMod.id("keypress");
+	public static final CustomPacketPayload.Type<KeypressC2SPayload> PAYLOAD_TYPE = new Type<>(IDENTIFIER);
 
-			PlayerMovementC2SPayload::new
+	public static final StreamCodec<RegistryFriendlyByteBuf, KeypressC2SPayload> STREAM_CODEC = StreamCodec.composite(
+			IGlobalKeyObserver.Keys.STREAM_CODEC,
+			KeypressC2SPayload::key,
+			ByteBufCodecs.BOOL,
+			KeypressC2SPayload::isDown,
+			KeypressC2SPayload::new
 	);
 
 	@NotNull
 	@Override
-	public Type<PlayerMovementC2SPayload> type() {
+	public Type<KeypressC2SPayload> type() {
 		return PAYLOAD_TYPE;
 	}
 
 	@Override
 	public void process(ServerPlayNetworking.Context ctx) {
-		final ServerPlayer referencedPlayer = ctx.player();
+		final ServerPlayer player = ctx.player();
 
 		ctx.server().execute(() -> {
-			if(referencedPlayer.getId() != this.entityId) return;
+			if(player == null) return;
 
-			new Vec(this.pos()).applyAsPositionTo(referencedPlayer);
-			new Vec(this.motion()).applyAsMotionTo(referencedPlayer);
-
-			referencedPlayer.connection.resetPosition();
-
-			if (!referencedPlayer.onGround()) {
-				if (this.motion.y() >= 0) {
-					referencedPlayer.fallDistance = 0;
+			ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+			if (stack.getItem() instanceof IGlobalKeyObserver IGlobalKeyObserver) {
+				if (isDown) {
+					IGlobalKeyObserver.onCustomKeyDown(stack, player, key, true);
 				} else {
-					double gravity = 0.05 * 2;
-					// d = v^2 / 2g
-					referencedPlayer.fallDistance = (float) (Math.pow(this.motion.y(), 2) / (2 * gravity));
+					IGlobalKeyObserver.onCustomKeyUp(stack, player, key, true);
+				}
+
+				return;
+			}
+
+			stack = player.getItemInHand(InteractionHand.OFF_HAND);
+			if (stack.getItem() instanceof IGlobalKeyObserver IGlobalKeyObserver) {
+				if (isDown) {
+					IGlobalKeyObserver.onCustomKeyDown(stack, player, key, false);
+				} else {
+					IGlobalKeyObserver.onCustomKeyUp(stack, player, key, false);
 				}
 			}
 		});

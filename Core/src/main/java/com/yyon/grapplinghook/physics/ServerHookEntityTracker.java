@@ -81,7 +81,7 @@ public class ServerHookEntityTracker {
 		allGrapplehookEntities.put(ownerId, new HashSet<>());
 	}
 	
-	public static void handleGrappleEndFromClient(int ownerId, Level world, HashSet<Integer> hookEntityIds) {
+	public static void handleGrappleEndFromClient(int ownerId, Level world, Set<Integer> hookEntityIds) {
 		
 		for (int hookEntityId : hookEntityIds) {
 	      	Entity grapple = world.getEntity(hookEntityId);

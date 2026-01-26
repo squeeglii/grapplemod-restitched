@@ -43,7 +43,7 @@ public final class HookCustomization {
 		)
 	));
 
-
+	//todo: make a bedder codec than straight-up NBT serialization.
 	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
 
 	/*
