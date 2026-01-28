@@ -9,15 +9,5 @@ import java.util.function.Supplier;
 public interface C2SPayloadProcessor {
 
     void process(ServerPlayNetworking.Context ctx);
-    
-    default void onMessageReceived(Supplier<ServerPlayNetworking.Context> ctxSupplier) {
-        ServerPlayNetworking.Context ctx = ctxSupplier.get();
-        
-        final Player sendingPlayer = ctx.player();
-        if (sendingPlayer == null) {
-        	GrappleMod.LOGGER.warn("EntityPlayerMP was null when message was received");
-        }
 
-        ctx.server().execute(() -> this.process(ctx));
-    }
 }

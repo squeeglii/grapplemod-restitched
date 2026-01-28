@@ -133,35 +133,7 @@ public class GrappleModLegacyConfig implements ConfigData {
 	private static Config serverOptions = null;
 	
 	public static class ClientConfig {
-		@ConfigEntry.Gui.CollapsibleObject
-		@Tooltip
-		public Camera camera = new Camera();
-		public static class Camera {
-			@Tooltip
-			public float wallrun_camera_tilt_degrees = 10;
-			@Tooltip
-			public float wallrun_camera_animation_s = 0.5f;
-		}
-		
-		@ConfigEntry.Gui.CollapsibleObject
-		@Tooltip
-		public Sounds sounds = new Sounds();
-		public static class Sounds {
-			@Tooltip
-			public double wallrun_sound_effect_time_s = 0.35;
-			@Tooltip
-			public float wallrun_sound_volume = 1.0F;
-			@Tooltip
-			public float doublejump_sound_volume = 1.0F;
-			@Tooltip
-			public float slide_sound_volume = 1.0F;
-			@Tooltip
-			public float wallrunjump_sound_volume = 1.0F;
-			@Tooltip
-			public float rocket_sound_volume = 1.0F;
-			@Tooltip
-			public float enderstaff_sound_volume = 1.0F;
-		}
+
 	}
 	
     @ConfigEntry.Gui.CollapsibleObject

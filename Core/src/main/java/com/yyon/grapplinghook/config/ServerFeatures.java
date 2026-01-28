@@ -7,6 +7,8 @@ import com.yyon.grapplinghook.GrappleMod;
 // If you want them to be accessible across both the client & the server, sync
 // them every time they are changed (mark dirty and do it on the next tick?)
 
+// todo: ensure this is actually implemented - I think there was some work to make this a datapack thing?
+
 /**
  * A set of boolean toggles for general features that should be enabled
  * or disabled on the server.

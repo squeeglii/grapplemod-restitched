@@ -8,9 +8,4 @@ public interface S2CPayloadProcessor {
 
     void process(ClientPlayNetworking.Context ctx);
 
-    default void onMessageReceived(Supplier<ClientPlayNetworking.Context> ctxSupplier) {
-        ClientPlayNetworking.Context ctx = ctxSupplier.get();
-        ctx.client().execute(() -> this.process(ctx));
-    }
-
 }
