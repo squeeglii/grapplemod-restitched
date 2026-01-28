@@ -4,10 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.helper.*;
 import com.yyon.grapplinghook.config.helper.annotation.*;
 import com.yyon.grapplinghook.util.ReflectSupport;
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import net.minecraft.network.chat.Component;
@@ -40,8 +37,8 @@ public class ConfigUI {
 
     public static YetAnotherConfigLib buildServerConfig() {
         return buildConfig(
-                GrappleModConfig.class,
-                GrappleModConfig.HANDLER,
+                GrappleModCommonConfig.class,
+                GrappleModCommonConfig.HANDLER,
                 Component.translatable(ConfigUtil.TRANSLATION_TITLE),
                 builder -> {}
         );
@@ -162,6 +159,15 @@ public class ConfigUI {
 
             // If it's a primitive, box it in its object type to make isAssignableFrom more reliable.
             Class<?> type = ReflectSupport.boxPrimitive(field.getType());
+
+            InlineSubCategory[] subCategoryTitles = field.getDeclaredAnnotationsByType(InlineSubCategory.class);
+            for (InlineSubCategory subCategoryTitle : subCategoryTitles) {
+                String subCategoryTranslation = ConfigUtil.TRANSLATION_SUB_CATEGORY_NAME.formatted(subCategoryTitle.value());
+                Component subCategoryComponent = Component.translatable(subCategoryTranslation);
+                LabelOption option = LabelOption.createBuilder().line(subCategoryComponent).build();
+
+                category.option(option);
+            }
 
             if(Boolean.class.isAssignableFrom(type)) {
                 Optional<Option<Boolean>> optOption = createOption(field, TickBoxControllerBuilder::create, handler);

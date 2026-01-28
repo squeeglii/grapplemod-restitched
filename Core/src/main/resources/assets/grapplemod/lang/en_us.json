@@ -272,6 +272,12 @@
     "grapple_template.author.default": "GrappleMod",
     "grapple_template.author.unknown": "Unknown",
 
+    "config.auto.value.distance": "%1$.2f block(s)",
+    "config.auto.value.seconds": "%1$.2f second(s)",
+    "config.auto.value.degrees": "%1$.2f degree(s)",
+    "config.auto.value.ticks": "%1$.2f tick(s)",
+    "config.auto.value.percentage": "%1$.2f \uFF05",
+
     "text.autoconfig.grapplemod.title": "Grappling Hook Mod Config",
 
     "text.autoconfig.grapplemod.option.options": "options",

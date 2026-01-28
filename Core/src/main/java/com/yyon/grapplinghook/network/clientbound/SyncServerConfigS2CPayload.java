@@ -1,8 +1,7 @@
 package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
-import com.yyon.grapplinghook.network.NetworkContext;
+import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.network.S2CPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -29,12 +28,12 @@ import org.jetbrains.annotations.NotNull;
  */
 
 // Previously LoggedInMessage
-public record SyncServerConfigS2CPayload(GrappleModLegacyConfig.Config config) implements S2CPayload {
+public record SyncServerConfigS2CPayload(GrappleModCommonConfig config) implements S2CPayload {
 	public static final ResourceLocation IDENTIFIER = GrappleMod.id("sync_server_config");
 	public static final CustomPacketPayload.Type<SyncServerConfigS2CPayload> PAYLOAD_TYPE = new Type<>(IDENTIFIER);
 
 	public static final StreamCodec<RegistryFriendlyByteBuf, SyncServerConfigS2CPayload> STREAM_CODEC = StreamCodec.composite(
-			GrappleModLegacyConfig.Config.STREAM_CODEC, //todo: implement!
+			GrappleModCommonConfig.STREAM_CODEC, //todo: implement!
 			SyncServerConfigS2CPayload::config,
 			SyncServerConfigS2CPayload::new
 	);
@@ -47,7 +46,7 @@ public record SyncServerConfigS2CPayload(GrappleModLegacyConfig.Config config) i
 
 	@Override
 	public void process(ClientPlayNetworking.Context ctx) {
-		GrappleModLegacyConfig.setServerOptions(this.config);
+		GrappleModCommonConfig.syncIncomingFromServer(this.config);
 	}
 
 }
