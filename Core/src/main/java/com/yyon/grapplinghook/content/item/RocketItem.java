@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.TextUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -6,7 +6,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
 import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.registry.internal.*;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachS2CPayload;
 import com.yyon.grapplinghook.network.clientbound.GrappleAttachHookS2CPayload;

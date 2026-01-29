@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.client.gui.widget;
 
-import com.yyon.grapplinghook.customization.data.HookCustomization;
-import com.yyon.grapplinghook.customization.type.BooleanProperty;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.type.BooleanProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;

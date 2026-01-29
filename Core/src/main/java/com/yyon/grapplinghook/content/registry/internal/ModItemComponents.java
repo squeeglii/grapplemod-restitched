@@ -1,8 +1,8 @@
 package com.yyon.grapplinghook.content.registry.internal;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
-import com.yyon.grapplinghook.customization.data.TemplateAuthor;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.TemplateAuthor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;

@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook;
 
-import com.yyon.grapplinghook.command.GrappleModCommand;
+import com.yyon.grapplinghook.content.command.GrappleModCommand;
 import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.config.pack.DataPackProcessor;
@@ -72,13 +72,14 @@ public class GrappleMod implements ModInitializer {
         // I assume this is needed before items.
         ModItemComponents.bump();
 
+        ArmourMaterials.registerAllMaterials();
+        ModEnchantments.registerImmutable();
+
         ModBlocks.registerAllBlocks();
         ModItems.registerAllItems();  // Items must always be registered after blocks.
         ModEntities.registerAllEntities();
-        ModEnchantments.registerImmutable();
         BlockEntities.registerAllBlockEntities();
         AdvancementTriggers.registerAllTriggers();
-        ArmourMaterials.registerAllMaterials();
 
         CustomizationProperties.registerAll();
         CustomizationCategories.registerAll(); // Categories must always go after items + properties.
@@ -89,7 +90,6 @@ public class GrappleMod implements ModInitializer {
 
         // Some things don't need "registering" but are static so they still
         // need loading. Load them now for reliability.
-
         ModTags.bump();
         ModGamerules.bump();
 

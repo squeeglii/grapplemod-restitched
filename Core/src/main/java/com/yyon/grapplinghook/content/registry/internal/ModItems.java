@@ -6,7 +6,7 @@ import com.yyon.grapplinghook.content.item.smithing.LongFallBootsTemplateItem;
 import com.yyon.grapplinghook.content.item.upgrade.*;
 import com.yyon.grapplinghook.content.registry.helper.AbstractRegistryReference;
 import com.yyon.grapplinghook.content.registry.helper.TabBuilder;
-import com.yyon.grapplinghook.customization.HookTemplates;
+import com.yyon.grapplinghook.content.customization.HookTemplates;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

@@ -5,7 +5,7 @@ import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.S2CPayload;
 import com.yyon.grapplinghook.physics.io.RopeSnapshot;
 import com.yyon.grapplinghook.util.Vec;

@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.client.physics.context;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.util.EnchantmentValues;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;

@@ -8,7 +8,7 @@ import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.serverbound.HaltCustomPhysicsC2SPayload;
 import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateC2SPayload;

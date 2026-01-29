@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.registry.internal.ModItems;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

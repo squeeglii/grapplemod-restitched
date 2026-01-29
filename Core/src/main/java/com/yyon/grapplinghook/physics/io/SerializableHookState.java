@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.physics.io;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
-import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.physics.ServerHookEntityTracker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
