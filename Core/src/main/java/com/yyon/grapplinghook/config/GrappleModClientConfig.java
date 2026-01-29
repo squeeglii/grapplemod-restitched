@@ -72,7 +72,7 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
     private float enderstaffVolume = 100f;
     @InlineSubCategory("tweaks")
     @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SECONDS)
-    private double wallrunEffectSeconds = 0.35f;
+    private float wallrunEffectSeconds = 0.35f;
 
     public int getVersion() {
         return this.version;

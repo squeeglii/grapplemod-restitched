@@ -12,7 +12,6 @@ public class ConfigUtil {
 
     public static final Component COMMON_CONFIG_TRANSLATION = Component.translatable("config.auto.common.title");
     public static final Component CLIENT_CONFIG_TRANSLATION = Component.translatable("config.auto.client.title");
-    public static final Component BACK_TRANSLATION = Component.translatable("config.auto.back");
 
     public static final String TRANSLATION_CATEGORY_NAME = "config.grapplemod.category.%s";
     public static final String TRANSLATION_CATEGORY_TOOLTIP = "config.grapplemod.category.%s.tooltip";

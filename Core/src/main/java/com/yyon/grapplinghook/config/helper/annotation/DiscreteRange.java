@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DiscreteRange {
 
-    int min();
-    int max();
+    long min();
+    long max();
 
     String formatTranslationKey() default "";
 

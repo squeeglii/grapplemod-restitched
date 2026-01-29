@@ -13,7 +13,6 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-import java.lang.reflect.Field;
 import java.util.function.Function;
 
 // I reimplemented my autoconfig for YACL implementation from BridgingMod. A todo: is to
@@ -98,25 +97,25 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
     @SerialEntry @Category("item")
     private boolean hookAffectsEntities = true;
     @SerialEntry @Category("item") @ContinuousRange(min = 0.0f, max = 10.0f, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_BLOCKS)
-    private double ropeSnapBuffer = 5;
+    private float ropeSnapBuffer = 5.0f;
     @SerialEntry @Category("item") @ContinuousRange(min = 0.0f, max = 500.0f, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
-    private double ropeJumpPower = 1;
+    private float ropeJumpPower = 1.0f;
     @SerialEntry @Category("item")
     private boolean ropeJumpAtAngle = false;
     @SerialEntry @Category("item") @DiscreteRange(min = 0, max = 100, formatTranslationKey = ConfigUtil.TYPE_TICKS)
-    private long ropeJumpCooldown = 0;
+    private int ropeJumpCooldown = 0;
     @SerialEntry @Category("item") @ContinuousRange(min = 0.0f, max = 1.0f, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SPEED)
-    private double climbSpeed = 0.3f;
+    private float climbSpeed = 0.3f;
 
     public boolean doHooksAffectEntities() {
         return this.hookAffectsEntities;
     }
 
-    public double getRopeSnapBuffer() {
+    public float getRopeSnapBuffer() {
         return this.ropeSnapBuffer;
     }
 
-    public double getRopeJumpPower() {
+    public float getRopeJumpPower() {
         return this.ropeJumpPower / 100.0f;
     }
 
@@ -124,22 +123,22 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
         return this.ropeJumpAtAngle;
     }
 
-    public double getRopeJumpCooldown() {
+    public int getRopeJumpCooldown() {
         return this.ropeJumpCooldown;
     }
 
-    public double getClimbSpeed() {
+    public float getClimbSpeed() {
         return this.climbSpeed;
     }
 
 
     @InlineSubCategory("item.enderstaff")
     @SerialEntry @Category("item") @ContinuousRange(min = 0.0f, max = 500.0f, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
-    private double enderStaffStrength = 100.0f;
+    private float enderStaffStrength = 100.0f;
     @SerialEntry @Category("item") @DiscreteRange(min = 0, max = 100, formatTranslationKey = ConfigUtil.TYPE_TICKS)
     private int enderStaffCooldown = 100;
 
-    public double getEnderStaffStrength() {
+    public float getEnderStaffStrength() {
         return this.enderStaffStrength / 100.0f * 1.5f;
     }
 

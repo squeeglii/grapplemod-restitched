@@ -3,9 +3,9 @@ package com.yyon.grapplinghook.config;
 import com.yyon.grapplinghook.config.helper.ConfigUtil;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
-import net.minecraft.client.gui.layouts.LayoutSettings;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 public class ConfigUILanding extends Screen {
@@ -23,7 +23,7 @@ public class ConfigUILanding extends Screen {
 
     @Override
     protected void init() {
-        this.layout.addTitleHeader(TITLE, this.font);
+        this.layout.addTitleHeader(this.title, this.font);
 
         Button commonConfig = Button.builder(
                 ConfigUtil.COMMON_CONFIG_TRANSLATION,
@@ -41,19 +41,21 @@ public class ConfigUILanding extends Screen {
                 }
         ).build();
 
-        this.layout.addToContents(commonConfig, settings -> {});
-        this.layout.addToContents(clientConfig, settings -> {});
+        LinearLayout contents = LinearLayout.vertical().spacing(10);
+        contents.addChild(commonConfig);
+        contents.addChild(clientConfig);
 
+        this.layout.addToContents(contents);
 
         Button backButton = Button.builder(
-                ConfigUtil.BACK_TRANSLATION,
+                CommonComponents.GUI_CANCEL,
                 button -> this.onClose()
         ).build();
 
         this.layout.addToFooter(backButton, settings -> {});
 
         this.layout.visitWidgets(this::addRenderableWidget);
-        this.repositionElements();
+        this.layout.arrangeElements();
     }
 
     @Override

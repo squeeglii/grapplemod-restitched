@@ -195,7 +195,7 @@ public class ConfigUI {
                     Optional<Option<Integer>> optOption = createOption(
                             field,
                             option -> IntegerSliderControllerBuilder.create(option)
-                                        .range(range.min(), range.max())
+                                        .range((int) range.min(), (int) range.max())
                                         .step(1)
                                         .formatValue(valFormatter),
                             handler
@@ -206,6 +206,34 @@ public class ConfigUI {
                 }
 
                 Optional<Option<Integer>> optOption = createOption(field, IntegerFieldControllerBuilder::create, handler);
+                optOption.ifPresent(category::option);
+                continue;
+            }
+
+            if(Long.class.isAssignableFrom(type)) {
+                DiscreteRange[] discreteRangeAnno = field.getDeclaredAnnotationsByType(DiscreteRange.class);
+
+                if(discreteRangeAnno.length > 0) {
+                    DiscreteRange range = discreteRangeAnno[0];
+
+                    ValueFormatter<Long> valFormatter = range.formatTranslationKey().isEmpty()
+                            ? val -> Component.literal(val.toString())
+                            : val -> Component.translatable(range.formatTranslationKey(), val.toString());
+
+                    Optional<Option<Long>> optOption = createOption(
+                            field,
+                            option -> LongSliderControllerBuilder.create(option)
+                                    .range(range.min(), range.max())
+                                    .step(1L)
+                                    .formatValue(valFormatter),
+                            handler
+                    );
+
+                    optOption.ifPresent(category::option);
+                    continue;
+                }
+
+                Optional<Option<Long>> optOption = createOption(field, LongFieldControllerBuilder::create, handler);
                 optOption.ifPresent(category::option);
                 continue;
             }

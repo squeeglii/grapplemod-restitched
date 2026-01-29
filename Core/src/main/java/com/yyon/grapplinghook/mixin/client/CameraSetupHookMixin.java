@@ -28,8 +28,7 @@ public class CameraSetupHookMixin {
     @Inject(method = "renderLevel(Lnet/minecraft/client/DeltaTracker;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/Camera;setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V",
-                    shift = At.Shift.AFTER
+                    target = "Lnet/minecraft/client/renderer/GameRenderer;bobHurt(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"
             ))
     public void postCameraSetup(DeltaTracker deltaTracker, CallbackInfo ci, @Local PoseStack poseStack) { //todo: is this mixin right? @ local
         Player player = Minecraft.getInstance().player;
