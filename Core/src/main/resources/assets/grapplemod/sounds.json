@@ -1,25 +1,25 @@
 {
 	"slide": {
 		"category": "player",
-		"subtitle": "grapplemod.subtitle.slide",
+		"subtitle": "subtitle.grapplemod.slide",
 		"sounds": [ "grapplemod:slide1", "grapplemod:slide2", "grapplemod:slide3" ]
 	},
 
 	"doublejump": {
 		"category": "player",
-		"subtitle": "grapplemod.subtitle.doublejump",
+		"subtitle": "subtitle.grapplemod.doublejump",
 		"sounds": [ "grapplemod:jump1", "grapplemod:jump2", "grapplemod:jump3", "grapplemod:jump4" ]
 	},
 
 	"rocket": {
 		"category": "player",
-		"subtitle": "grapplemod.subtitle.rocket",
+		"subtitle": "subtitle.grapplemod.rocket",
 		"sounds": [ "grapplemod:rocket"]
 	},
 
 	"enderstaff": {
 		"category": "player",
-		"subtitle": "grapplemod.subtitle.enderstaff",
+		"subtitle": "subtitle.grapplemod.enderstaff",
 		"sounds": [ "grapplemod:enderstaff"]
 	}
 }

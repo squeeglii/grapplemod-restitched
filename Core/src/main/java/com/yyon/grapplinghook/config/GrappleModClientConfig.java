@@ -12,10 +12,13 @@ import com.yyon.grapplinghook.config.helper.impl.DefaultValueTracker;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 // I reimplemented my autoconfig for YACL implementation from BridgingMod. A todo: is to
 // extract the implementations from this and BridgingMod to a separate library. I just cba rn.
 // -w
+@Environment(EnvType.CLIENT)
 public class GrappleModClientConfig extends DefaultValueTracker implements IConfig {
 
     public static ConfigClassHandler<GrappleModClientConfig> HANDLER = ConfigClassHandler.createBuilder(GrappleModClientConfig.class)
@@ -31,9 +34,9 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
         this.saveDefaults(); // This should be run before /any/ saving or loading occurs.
     }
 
-    @SerialEntry
-    @HideInConfigUI
-    private int version = 2;
+    public static GrappleModClientConfig get() {
+        return HANDLER.instance();
+    }
 
 
     @Override
@@ -45,26 +48,30 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
         this.version = ConfigUtil.LATEST_CLIENT_VERSION;
     }
 
-    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 90, sliderStep = 0.5f, formatTranslationKey = "config.auto.value.degrees")
+    @SerialEntry
+    @HideInConfigUI
+    private int version = 2;
+
+    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 90, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_DEGREES)
     private float wallrunTilt = 10.0f;
-    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = "config.auto.value.seconds")
+    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SECONDS)
     private float wallrunAnimationSeconds = 0.5f;
 
     @InlineSubCategory("volume")
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = "config.auto.value.percentage")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float wallrunVolume = 100.0f;
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = "config.auto.value.percentage")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float wallrunJumpVolume = 100.0f;
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = "config.auto.value.percentage")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float doubleJumpVolume = 100.0f;
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = "config.auto.value.percentage")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float slideVolume = 100.0f;
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = "config.auto.value.percentage")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float rocketVolume = 100.0f;
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = "config.auto.value.percentage")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float enderstaffVolume = 100f;
     @InlineSubCategory("tweaks")
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = "config.auto.value.seconds")
+    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SECONDS)
     private double wallrunEffectSeconds = 0.35f;
 
     public int getVersion() {

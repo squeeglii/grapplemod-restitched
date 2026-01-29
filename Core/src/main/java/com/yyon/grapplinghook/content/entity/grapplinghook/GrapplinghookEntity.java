@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.api.GrappleModClientEvents;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
 import com.yyon.grapplinghook.network.NetworkManager;
@@ -316,7 +316,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		Vec vec3d = Vec.positionVec(this);
 		Vec vec3d1 = vec3d.add(Vec.motionVec(this));
 
-		if (hit instanceof EntityHitResult && !GrappleModLegacyConfig.getConf().grapplinghook.other.hookaffectsentities) {
+		if (hit instanceof EntityHitResult && !GrappleModCommonConfig.get().doHooksAffectEntities()) {
 			this.onHit(GrappleModUtils.rayTraceBlocks(this, this.level(), vec3d, vec3d1));
 			return;
 		}
@@ -581,11 +581,9 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 		GrappleModUtils.sendToCorrectClient(
 				new GrappleAttachS2CPayload(
 						this.getId(),
-						this.position().x, this.position().y, this.position().z,
+						this.position().toVector3f(),
 						this.shootingEntityID, blockpos,
-						this.segmentHandler.segments,
-						this.segmentHandler.segmentTopSides,
-						this.segmentHandler.segmentBottomSides,
+						new RopeSnapshot(this.segmentHandler),
 						this.customization),
 				this.shootingEntityID,
 				this.level()

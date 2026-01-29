@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.content.item;
 import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.ClientKey;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
@@ -71,6 +70,8 @@ import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHandling, ICustomizationApplicable {
 
+	public static final int DURABILITY = 500; // as of 1.21.1, this should be changed with data components rather than the config.
+
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
 	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
 
@@ -82,7 +83,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		super(
 				new Item.Properties()
 						.stacksTo(1)
-						.durability(GrappleModLegacyConfig.getConf().grapplinghook.other.default_durability)
+						.durability(DURABILITY)
 						.component(ModItemComponents.CUSTOMIZABLE, new HookCustomization())
 		);
 	}

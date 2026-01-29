@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.mixin.client;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.ClientKey;
 import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
 import com.yyon.grapplinghook.content.registry.internal.ModBlocks;
 import net.minecraft.client.Minecraft;
@@ -72,10 +72,10 @@ public class ClientHookMixin {
         }
     }
 
-    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;)V",
+    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;Z)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetData()V"))
-    public void handleLogOut(Screen pScreen, CallbackInfo ci) {
-        GrappleModLegacyConfig.setServerOptions(null);
+    public void handleLogOut(Screen nextScreen, boolean keepResourcePacks, CallbackInfo ci) {
+        GrappleModCommonConfig.resetConfigFromServer();
     }
 
 

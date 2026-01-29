@@ -6,7 +6,7 @@ import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
 import com.yyon.grapplinghook.client.render.entity.GrapplinghookEntityRenderer;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModClientConfig;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.registry.internal.ModEntities;
@@ -52,7 +52,7 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     private static final ResourceLocation SOUND_DOUBLE_JUMP = GrappleMod.id("doublejump");
-    private static final  ResourceLocation SOUND_SLIDE = GrappleMod.id("slide");
+    private static final ResourceLocation SOUND_SLIDE = GrappleMod.id("slide");
 
     private ClientPhysicsControllerTracker clientPhysicsControllerTracker;
 
@@ -60,6 +60,12 @@ public class GrappleModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         GrappleModClient.clientInstance = this;
+
+        try {
+            this.initConfig();
+        } catch (Exception e) {
+            GrappleMod.LOGGER.info(e);
+        }
 
         EntityRendererRegistry.register(ModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 
@@ -75,7 +81,12 @@ public class GrappleModClient implements ClientModInitializer {
         return GrappleModClient.clientInstance;
     }
 
+    public void initConfig() {
+        GrappleModClientConfig.HANDLER.defaults().saveDefaults();
+        GrappleModClientConfig.HANDLER.load();
 
+        //todo: reload creative tabs on save / load.
+    }
 
     public void registerPropertyOverride() {
         ItemProperties.register(ModItems.GRAPPLING_HOOK.get(), GrappleMod.vanillaId("rocket"), (stack, world, entity, seed) -> propertyEquipOverride(stack, ROCKET_ATTACHED.get()));
@@ -120,15 +131,15 @@ public class GrappleModClient implements ClientModInitializer {
 
 
     public void playSlideSound() {
-        this.playSound(GrappleModClient.SOUND_SLIDE, GrappleModLegacyConfig.getClientConf().sounds.slide_sound_volume);
+        this.playSound(GrappleModClient.SOUND_SLIDE, GrappleModClientConfig.get().getSlideVolume());
     }
 
     public void playDoubleJumpSound() {
-        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModLegacyConfig.getClientConf().sounds.doublejump_sound_volume * 0.7F);
+        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModClientConfig.get().getDoubleJumpVolume() * 0.7F);
     }
 
     public void playWallrunJumpSound() {
-        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModLegacyConfig.getClientConf().sounds.wallrunjump_sound_volume * 0.7F);
+        this.playSound(GrappleModClient.SOUND_DOUBLE_JUMP, GrappleModClientConfig.get().getWallrunJumpVolume() * 0.7F);
     }
 
     public void resetLauncherTime(int playerId) {
@@ -155,7 +166,7 @@ public class GrappleModClient implements ClientModInitializer {
         return this.getClientControllerManager().isSliding(entity, motion);
     }
 
-    public double getTimeSinceLastRopeJump(Level world) {
+    public long getTimeSinceLastRopeJump(Level world) {
         return world.getGameTime() - ClientPhysicsControllerTracker.prevRopeJumpTime;
     }
 

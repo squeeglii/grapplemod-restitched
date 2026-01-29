@@ -3,7 +3,8 @@ package com.yyon.grapplinghook.client.physics.context;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.ClientKey;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModClientConfig;
+import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
@@ -13,6 +14,7 @@ import com.yyon.grapplinghook.network.serverbound.HaltCustomPhysicsC2SPayload;
 import com.yyon.grapplinghook.network.serverbound.PhysicsUpdateC2SPayload;
 import com.yyon.grapplinghook.network.serverbound.PlayerMovementC2SPayload;
 import com.yyon.grapplinghook.physics.PlayerPhysicsFrame;
+import com.yyon.grapplinghook.util.EnchantmentValues;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
@@ -317,7 +319,7 @@ public class GrapplingHookPhysicsController {
 
 			// snap to rope length
 			if (oldspherevec.length() >= remainingLength) {
-				if (oldspherevec.length() - remainingLength > GrappleModLegacyConfig.getConf().grapplinghook.other.rope_snap_buffer) {
+				if (oldspherevec.length() - remainingLength > GrappleModCommonConfig.get().getRopeSnapBuffer()) {
 					// if rope is too long, the rope snaps
 
 					this.disable();
@@ -340,8 +342,8 @@ public class GrapplingHookPhysicsController {
 
 				if (isJumping && this.onGroundTimer >= 0) {
 					// jumping
-					double timer = GrappleModClient.get().getTimeSinceLastRopeJump(this.holder.level());
-					if (timer > GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_cooldown_s * 20.0) {
+					long timer = GrappleModClient.get().getTimeSinceLastRopeJump(this.holder.level());
+					if (timer > GrappleModCommonConfig.get().getRopeJumpCooldown()) {
 						doJump = true;
 						jumpSpeed = this.getJumpPower(player, spherevec, hookEntity);
 					}
@@ -409,7 +411,7 @@ public class GrapplingHookPhysicsController {
 
 		// jump
 		if (doJump) {
-			double maxJumpPower = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_power;
+			double maxJumpPower = GrappleModCommonConfig.get().getRopeJumpPower();
 			jumpSpeed = Mth.clamp(jumpSpeed, 0.0D, maxJumpPower);
 
 			this.doJump(entity, jumpSpeed, averagemotiontowards, minSphereVecDist);
@@ -450,7 +452,7 @@ public class GrapplingHookPhysicsController {
 
 		if (climbDelta == 0) return new Vec(0, 0, 0);
 
-		double climbSpeed = GrappleModLegacyConfig.getConf().grapplinghook.other.climb_speed;
+		double climbSpeed = GrappleModCommonConfig.get().getClimbSpeed();
 
 		if (dist + distToAnchor >= this.maxLen && climbDelta <= 0 && this.maxLen != 0)
 			return new Vec(0, 0, 0);
@@ -745,7 +747,7 @@ public class GrapplingHookPhysicsController {
 	}
 
 	private double getJumpPower(Entity player, double jumppower) {
-		double maxjump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_power;
+		double maxjump = GrappleModCommonConfig.get().getRopeJumpPower();
 		if (this.onGroundTimer > 0) { // on ground: jump normally
 			this.onGroundTimer = 20;
 			return 0;
@@ -765,7 +767,7 @@ public class GrapplingHookPhysicsController {
 	
 	public void doJump(Entity player, double jumppower, Vec averagemotiontowards, double min_spherevec_dist) {
 		if (jumppower > 0) {
-			if (GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_at_angle && min_spherevec_dist > 1) {
+			if (GrappleModCommonConfig.get().shouldJumpAtAngleFromRope() && min_spherevec_dist > 1) {
 				motion.mutableAdd(averagemotiontowards.withMagnitude(jumppower));
 			} else {
 				if (jumppower > player.getDeltaMovement().y + jumppower) {
@@ -782,10 +784,10 @@ public class GrapplingHookPhysicsController {
 	}
 	
 	public double getJumpPower(Entity player, Vec spherevec, GrapplinghookEntity hookEntity) {
-		double maxjump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_power;
+		double maxjump = GrappleModCommonConfig.get().getRopeJumpPower();
 		Vec jump = new Vec(0, maxjump, 0);
 
-		boolean useRopeAngleAsJump = GrappleModLegacyConfig.getConf().grapplinghook.other.rope_jump_at_angle && spherevec != null;
+		boolean useRopeAngleAsJump = GrappleModCommonConfig.get().shouldJumpAtAngleFromRope() && spherevec != null;
 
 		if (useRopeAngleAsJump) {
 			jump = jump.project(spherevec);
@@ -825,7 +827,7 @@ public class GrapplingHookPhysicsController {
 	
 	public void updateServerPos() {
 		this.limitVelocity();
-		NetworkManager.packetToServer(new PlayerMovementC2SPayload(this.entityId, this.holder.position().x, this.holder.position().y, this.holder.position().z, this.holder.getDeltaMovement().x, this.holder.getDeltaMovement().y, this.holder.getDeltaMovement().z));
+		NetworkManager.packetToServer(new PlayerMovementC2SPayload(this.entityId, this.holder.position().toVector3f(), this.holder.getDeltaMovement().toVector3f()));
 	}
 
 	public void limitVelocity() {
@@ -1059,7 +1061,7 @@ public class GrapplingHookPhysicsController {
 
 	public boolean isWallRunning() {
 		double currentSpeed = Math.sqrt(Math.pow(this.motion.x, 2) + Math.pow(this.motion.z,  2));
-		if (currentSpeed <= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
+		if (currentSpeed <= EnchantmentValues.MIN_WALLRUN_SPEED) {
 			this.isOnWall = false;
 			return false;
 		}
@@ -1068,7 +1070,7 @@ public class GrapplingHookPhysicsController {
 			GrappleModClient.get().setWallrunTicks(GrappleModClient.get().getWallrunTicks() + 1);
 		}
 		
-		if (GrappleModClient.get().getWallrunTicks() < GrappleModLegacyConfig.getConf().enchantments.wallrun.max_wallrun_time * 40) {
+		if (GrappleModClient.get().getWallrunTicks() < EnchantmentValues.MAX_WALLRUN_TIME) {
 			if (!(this.playerSneak)) {
 				// continue wallrun
 				if (this.isOnWall && !this.holder.onGround() && this.holder.horizontalCollision) {
@@ -1116,7 +1118,7 @@ public class GrapplingHookPhysicsController {
 				this.motion.y = 0;
 
 			// drag
-			double dragForce = GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_drag;
+			double dragForce = EnchantmentValues.WALLRUN_DRAG;
 			double speed = this.motion.length();
 			
 			if (dragForce > speed)
@@ -1130,8 +1132,8 @@ public class GrapplingHookPhysicsController {
 			this.motion.mutableAdd(wallFriction);
 			this.ticksSinceLastWallrunSoundEffect++;
 
-			double wallRunningSoundTime = GrappleModLegacyConfig.getClientConf().sounds.wallrun_sound_effect_time_s;
-			double wallRunningMaxSpeed = GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_max_speed;
+			double wallRunningSoundTime = GrappleModClientConfig.get().getWallrunVolume();
+			double wallRunningMaxSpeed = EnchantmentValues.MAX_WALLRUN_SPEED;
 			double timeLimit = speed != 0
 					? wallRunningSoundTime * 20 * wallRunningMaxSpeed / speed
 					: -1;
@@ -1143,7 +1145,7 @@ public class GrapplingHookPhysicsController {
 					BlockState blockState = this.holder.level().getBlockState(blockpos);
 			        SoundType soundtype = blockState.getSoundType();
 
-		            this.holder.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.30F * GrappleModLegacyConfig.getClientConf().sounds.wallrun_sound_volume, soundtype.getPitch());
+		            this.holder.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.30F * GrappleModClientConfig.get().getWallrunVolume(), soundtype.getPitch());
 					this.ticksSinceLastWallrunSoundEffect = 0;
 				}
 			}
@@ -1156,10 +1158,10 @@ public class GrapplingHookPhysicsController {
 
 		if (shouldJump && isWallRunning) {
 			GrappleModClient.get().setWallrunTicks(0);
-			Vec jump = new Vec(0, GrappleModLegacyConfig.getConf().enchantments.wallrun.wall_jump_up, 0);
+			Vec jump = new Vec(0, EnchantmentValues.WALLRUN_JUMP_UP_FORCE, 0);
 
 			if (this.wallDirection != null) {
-				double wallJumpSide = GrappleModLegacyConfig.getConf().enchantments.wallrun.wall_jump_side;
+				double wallJumpSide = EnchantmentValues.WALLRUN_JUMP_SIDE_FORCE;
 				Vec wallDir = this.wallDirection.scale(-wallJumpSide);
 				jump.mutableAdd(wallDir);
 			}
@@ -1183,21 +1185,21 @@ public class GrapplingHookPhysicsController {
 	}
 
 	public void doDoubleJump() {
-		if (-this.motion.y > GrappleModLegacyConfig.getConf().enchantments.doublejump.dont_doublejump_if_falling_faster_than) {
+		if (EnchantmentValues.LIMIT_DOUBLE_JUMP_AT_FALL_SPEED_LIMIT && -this.motion.y > EnchantmentValues.DOUBLE_JUMP_FALL_SPEED_LIMIT) {
 			return;
 		}
 
-		if (this.motion.y < 0 && !GrappleModLegacyConfig.getConf().enchantments.doublejump.doublejump_relative_to_falling) {
+		if (this.motion.y < 0 && !EnchantmentValues.DOUBLE_JUMP_RELATIVE_TO_FALL_SPEED) {
 			this.motion.y = 0;
 		}
 
-		this.motion.y += GrappleModLegacyConfig.getConf().enchantments.doublejump.doublejumpforce;
+		this.motion.y += EnchantmentValues.DOUBLE_JUMP_FORCE;
 		this.motion.applyAsMotionTo(this.holder);
 		this.holder.resetFallDistance();
 	}
 	
 	public void applySlidingFriction() {
-		double dragForce = GrappleModLegacyConfig.getConf().enchantments.slide.sliding_friction;
+		double dragForce = EnchantmentValues.SLIDE_FRICTION;
 		
 		if (dragForce > this.motion.length()) {dragForce = this.motion.length(); }
 		
@@ -1207,7 +1209,7 @@ public class GrapplingHookPhysicsController {
 	}
 
 	public void doSlidingJump() {
-		this.motion.y = GrappleModLegacyConfig.getConf().enchantments.slide.slidingjumpforce;
+		this.motion.y = EnchantmentValues.SLIDE_JUMP_FORCE;
 	}
 
 	public void resetRocketProgression() {

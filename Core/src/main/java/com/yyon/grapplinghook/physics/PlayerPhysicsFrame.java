@@ -18,7 +18,11 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class PlayerPhysicsFrame {
 
-    public static final Codec<PlayerPhysicsFrame> CODEC = RecordCodecBuilder.create();
+    public static final Codec<PlayerPhysicsFrame> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+            ResourceLocation.CODEC.fieldOf("physicsControllerType").forGetter(PlayerPhysicsFrame::getPhysicsControllerType),
+            Codec.FLOAT.fieldOf("speed").forGetter(PlayerPhysicsFrame::getSpeed),
+            Codec.BOOL.fieldOf("isUsingRocket").forGetter(PlayerPhysicsFrame::isUsingRocket)
+    ).apply(builder, PlayerPhysicsFrame::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PlayerPhysicsFrame> STREAM_CODEC = StreamCodec.composite(
             ResourceLocation.STREAM_CODEC,
@@ -86,21 +90,5 @@ public final class PlayerPhysicsFrame {
                 this.getPhysicsControllerType(),
                 this.getSpeed()
         );
-    }
-
-    public void writeToBuffer(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.getPhysicsControllerType());
-        buf.writeDouble(this.getSpeed());
-        buf.writeBoolean(this.isUsingRocket());
-    }
-
-    public static PlayerPhysicsFrame fromBuffer(FriendlyByteBuf buf) {
-        PlayerPhysicsFrame frame = new PlayerPhysicsFrame();
-
-        frame.setPhysicsControllerType(buf.readResourceLocation())
-             .setSpeed(buf.readFloat())
-             .setUsingRocket(buf.readBoolean());
-
-        return frame;
     }
 }

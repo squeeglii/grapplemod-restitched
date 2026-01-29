@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook;
 
 import com.yyon.grapplinghook.command.GrappleModCommand;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.config.pack.DataPackProcessor;
 import com.yyon.grapplinghook.content.registry.CustomizationCategories;
@@ -12,9 +12,6 @@ import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.scheduling.Ticker;
 import dev.isxander.yacl3.platform.YACLPlatform;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -25,7 +22,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.world.InteractionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -109,17 +105,11 @@ public class GrappleMod implements ModInitializer {
     }
 
     private void initConfig() {
-        ConfigHolder<?> cfg = AutoConfig.register(GrappleModLegacyConfig.class, GsonConfigSerializer::new);
+        GrappleModCommonConfig.HANDLER.defaults().saveDefaults();
+        GrappleModCommonConfig.HANDLER.load();
 
-        cfg.registerSaveListener((holder, config) -> {
-            ModItems.invalidateCreativeTabCache();
-            return InteractionResult.SUCCESS;
-        });
-
-        cfg.registerLoadListener((holder, config) -> {
-            ModItems.invalidateCreativeTabCache();
-            return InteractionResult.SUCCESS;
-        });
+        GrappleModCommonConfig.resetConfigFromServer(); // ensure that the config being used is the client-side one.
+        //todo: ModItems.invalidateCreativeTabCache(); on save / reload.
     }
 
     private void queueCommandRegistration() {

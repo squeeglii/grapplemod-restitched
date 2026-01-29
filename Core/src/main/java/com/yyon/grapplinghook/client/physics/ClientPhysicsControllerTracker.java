@@ -8,13 +8,15 @@ import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsControlle
 import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
 import com.yyon.grapplinghook.client.sound.RocketSound;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModClientConfig;
+import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.EnderStaffItem;
 import com.yyon.grapplinghook.content.item.GrapplehookItem;
 import com.yyon.grapplinghook.content.physics.PhysicsControllers;
 import com.yyon.grapplinghook.content.registry.internal.ModEnchantments;
 import com.yyon.grapplinghook.customization.data.HookCustomization;
+import com.yyon.grapplinghook.util.EnchantmentValues;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.Minecraft;
@@ -113,7 +115,7 @@ public class ClientPhysicsControllerTracker {
 
 		long timer = player.level().getGameTime() - previousTime;
 
-		if (timer > GrappleModLegacyConfig.getConf().enderstaff.ender_staff_recharge) {
+		if (timer > GrappleModCommonConfig.get().getEnderStaffCooldown()) {
 			ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
 			ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
 			Item mainHandItem = mainHandStack.getItem();
@@ -140,9 +142,9 @@ public class ClientPhysicsControllerTracker {
 				this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, custom);
 			}
 
-			facing.mutableScale(GrappleModLegacyConfig.getConf().enderstaff.ender_staff_strength);
+			facing.mutableScale(GrappleModCommonConfig.get().getEnderStaffStrength());
 			this.receiveEnderLaunch(player.getId(), facing.x, facing.y, facing.z);
-			GrappleModClient.get().playSound(GrappleMod.id("enderstaff"), GrappleModLegacyConfig.getClientConf().sounds.enderstaff_sound_volume * 0.5F);
+			GrappleModClient.get().playSound(GrappleMod.id("enderstaff"), GrappleModClientConfig.get().getEnderstaffVolume() * 0.5F);
 		}
 	}
 	
@@ -178,7 +180,7 @@ public class ClientPhysicsControllerTracker {
 		BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 		if(rayTraceResult == null) {
 			double currentSpeed = Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.z,  2));
-			if(currentSpeed >= GrappleModLegacyConfig.getConf().enchantments.wallrun.wallrun_min_speed) {
+			if(currentSpeed >= EnchantmentValues.MIN_WALLRUN_SPEED) {
 				return true;
 			}
 		}
@@ -240,7 +242,7 @@ public class ClientPhysicsControllerTracker {
 			}
 
 			double speed = motion.removeAlong(new Vec (0,1,0)).length();
-			return speed > GrappleModLegacyConfig.getConf().enchantments.slide.sliding_end_min_speed && (wasSliding || speed > GrappleModLegacyConfig.getConf().enchantments.slide.sliding_min_speed);
+			return speed > EnchantmentValues.MIN_SUSTAIN_SLIDE_SPEED && (wasSliding || speed > EnchantmentValues.MIN_SLIDE_SPEED);
 
 		}
 		

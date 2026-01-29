@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.network.clientbound;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.network.NetworkContext;
 import com.yyon.grapplinghook.network.S2CPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;

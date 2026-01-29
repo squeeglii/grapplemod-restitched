@@ -1,14 +1,13 @@
 package com.yyon.grapplinghook.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.GrapplingHookPhysicsController;
-import com.yyon.grapplinghook.config.GrappleModLegacyConfig;
+import com.yyon.grapplinghook.config.GrappleModClientConfig;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -32,7 +31,7 @@ public class CameraSetupHookMixin {
                     target = "Lnet/minecraft/client/Camera;setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V",
                     shift = At.Shift.AFTER
             ))
-    public void postCameraSetup(DeltaTracker deltaTracker, CallbackInfo ci, @Local PoseStack poseStack) {
+    public void postCameraSetup(DeltaTracker deltaTracker, CallbackInfo ci, @Local PoseStack poseStack) { //todo: is this mixin right? @ local
         Player player = Minecraft.getInstance().player;
         if (!Minecraft.getInstance().isRunning() || player == null) return;
 
@@ -57,7 +56,7 @@ public class CameraSetupHookMixin {
         if (currentCameraTilt != targetCameraTilt) {
             float cameraDiff = targetCameraTilt - currentCameraTilt;
             if (cameraDiff != 0) {
-                float anim_s = GrappleModLegacyConfig.getClientConf().camera.wallrun_camera_animation_s;
+                float anim_s = GrappleModClientConfig.get().getWallrunAnimationSeconds();
                 float speed = (anim_s == 0)
                         ? 9999
                         :  1.0f / (anim_s * 20.0f);
@@ -70,7 +69,7 @@ public class CameraSetupHookMixin {
 
         if (this.currentCameraTilt == 0) return;
 
-        float angle = this.currentCameraTilt * GrappleModLegacyConfig.getClientConf().camera.wallrun_camera_tilt_degrees;
+        float angle = this.currentCameraTilt * GrappleModClientConfig.get().getWallrunTilt();
         poseStack.mulPose(Axis.ZP.rotationDegrees(angle));
     }
 

@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.util;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
+import com.yyon.grapplinghook.network.S2CPayload;
 import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -50,7 +51,7 @@ public class GrappleModUtils {
 		return false;
 	}
 
-	public static void sendToCorrectClient(S2CPayloadProcessor message, int playerid, Level w) {
+	public static void sendToCorrectClient(S2CPayload message, int playerid, Level w) {
 		Entity entity = w.getEntity(playerid);
 		if (entity instanceof ServerPlayer player) {
 			NetworkManager.packetToClient(message, player);

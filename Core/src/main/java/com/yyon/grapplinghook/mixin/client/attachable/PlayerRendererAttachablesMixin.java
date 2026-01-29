@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererAttachablesMixin {
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At("TAIL"))
     public void appendRenderLayers(EntityRendererProvider.Context context, boolean bl, CallbackInfo ci) {
         PlayerRenderer self = (PlayerRenderer) (Object) this;

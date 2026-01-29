@@ -7,6 +7,7 @@ import com.yyon.grapplinghook.util.ReflectSupport;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,18 +31,22 @@ public class ConfigUI {
         return buildConfig(
                 GrappleModClientConfig.class,
                 GrappleModClientConfig.HANDLER,
-                Component.translatable(ConfigUtil.CLIENT_TRANSLATION_TITLE),
+                Component.translatable(ConfigUtil.GRAPPLE_MOD_CLIENT_TRANSLATION_TITLE),
                 builder -> {}
         );
     }
 
-    public static YetAnotherConfigLib buildServerConfig() {
+    public static YetAnotherConfigLib buildCommonConfig() {
         return buildConfig(
                 GrappleModCommonConfig.class,
                 GrappleModCommonConfig.HANDLER,
-                Component.translatable(ConfigUtil.TRANSLATION_TITLE),
+                Component.translatable(ConfigUtil.GRAPPLE_MOD_COMMON_TRANSLATION_TITLE),
                 builder -> {}
         );
+    }
+
+    public static Screen buildModMenuConfig(Screen parent) {
+        return new ConfigUILanding(parent);
     }
 
     private static <T extends IConfig> YetAnotherConfigLib buildConfig(Class<T> modConfigClass, ConfigClassHandler<T> handler, Component title, Consumer<YetAnotherConfigLib.Builder> customSections) {
@@ -160,6 +165,8 @@ public class ConfigUI {
             // If it's a primitive, box it in its object type to make isAssignableFrom more reliable.
             Class<?> type = ReflectSupport.boxPrimitive(field.getType());
 
+            //todo: getDeclaredFields() can return fields in any order, so this could get jumbled. See if there's
+            // a way to confirm the grouping.
             InlineSubCategory[] subCategoryTitles = field.getDeclaredAnnotationsByType(InlineSubCategory.class);
             for (InlineSubCategory subCategoryTitle : subCategoryTitles) {
                 String subCategoryTranslation = ConfigUtil.TRANSLATION_SUB_CATEGORY_NAME.formatted(subCategoryTitle.value());
@@ -249,7 +256,7 @@ public class ConfigUI {
                                 .formatValue(val ->
                                     val instanceof ITranslatable translatable
                                         ? Component.translatable(translatable.getTranslationKey())
-                                        : Component.literal(val.name()) // Causes build error without a cast. Keep it, even with IDE warning.
+                                        : Component.literal(((Enum<?>) val).name()) // Causes build error without a cast. Keep it, even with IDE warning.
                                 ),
                         handler
                 );
