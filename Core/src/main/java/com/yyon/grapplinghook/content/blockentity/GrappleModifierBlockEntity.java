@@ -46,7 +46,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 
-		Tag data = DATA_CODEC.encode(this.data, NbtOps.INSTANCE, tag).getOrThrow();
+		Tag data = DATA_CODEC.encode(this.data, NbtOps.INSTANCE, new CompoundTag()).getOrThrow();
 		tag.put("data", data);
 
 		//todo: verify, this should work though.
@@ -63,7 +63,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 			return;
 		}
 
-		this.data = DATA_CODEC.decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst(); //todo: verify
+		this.data = DATA_CODEC.decode(NbtOps.INSTANCE, dataTag).getOrThrow().getFirst(); //todo: verify
 	}
 
 	@Override

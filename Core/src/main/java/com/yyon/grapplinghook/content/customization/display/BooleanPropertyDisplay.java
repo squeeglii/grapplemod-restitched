@@ -26,7 +26,7 @@ public class BooleanPropertyDisplay extends AbstractPropertyDisplay<Boolean, Boo
 
     @Override
     public AbstractWidget getConfigurationUIElement(Supplier<HookCustomization> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight) {
-        return new CustomizationCheckbox(source, x, y, this.getProperty(), onUpdate);
+        return new CustomizationCheckbox(source, x, y, advisedWidth, this.getProperty(), onUpdate);
     }
 
 }
