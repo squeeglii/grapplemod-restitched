@@ -52,11 +52,6 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
     @HideInConfigUI
     private int version = 2;
 
-    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 90, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_DEGREES)
-    private float wallrunTilt = 10.0f;
-    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SECONDS)
-    private float wallrunAnimationSeconds = 0.5f;
-
     @InlineSubCategory("volume")
     @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float wallrunVolume = 100.0f;
@@ -70,25 +65,6 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
     private float rocketVolume = 100.0f;
     @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 100, sliderStep = 1f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
     private float enderstaffVolume = 100f;
-    @InlineSubCategory("tweaks")
-    @SerialEntry @Category("sound") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SECONDS)
-    private float wallrunEffectSeconds = 0.35f;
-
-    public int getVersion() {
-        return this.version;
-    }
-
-    public float getWallrunTilt() {
-        return this.wallrunTilt;
-    }
-
-    public float getWallrunAnimationSeconds() {
-        return this.wallrunAnimationSeconds;
-    }
-
-    public double getWallrunEffectSeconds() {
-        return this.wallrunEffectSeconds;
-    }
 
     public float getWallrunVolume() {
         return this.wallrunVolume / 100.0f;
@@ -113,4 +89,19 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
     public float getEnderstaffVolume() {
         return this.enderstaffVolume / 100.0f;
     }
+
+
+    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 90, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_DEGREES)
+    private float wallrunTilt = 10.0f;
+    @SerialEntry @Category("camera") @ContinuousRange(min = 0, max = 2, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SECONDS)
+    private float wallrunAnimationSeconds = 0.5f;
+
+    public float getWallrunTilt() {
+        return this.wallrunTilt;
+    }
+
+    public float getWallrunAnimationSeconds() {
+        return this.wallrunAnimationSeconds;
+    }
+
 }

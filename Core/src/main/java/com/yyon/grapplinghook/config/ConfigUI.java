@@ -23,6 +23,7 @@ import java.util.function.Function;
 public class ConfigUI {
 
     public static DecimalFormat FLOAT_FORMAT = new DecimalFormat("#.##");
+    public static DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.####");
 
     public static String DEFAULT_CATEGORY_NAME = "other".trim().toLowerCase(); // enforce lowercase.
 
@@ -76,7 +77,7 @@ public class ConfigUI {
         String nameTranslation = ConfigUtil.TRANSLATION_OPTION_NAME.formatted(id);
 
         IConfig instance = handler.instance();
-        Object defaultValue = instance.getDefaultForField(field).orElse(null);
+        Object defaultValue = handler.defaults().getDefaultForField(field).orElse(null);
 
         if(defaultValue == null) {
             GrappleMod.LOGGER.error("Config field '%s' has no default value. Skipping.");
@@ -251,6 +252,34 @@ public class ConfigUI {
                     Optional<Option<Float>> optOption = createOption(
                             field,
                             option -> FloatSliderControllerBuilder.create(option)
+                                    .range((float) range.min(), (float) range.max())
+                                    .step((float) range.sliderStep())
+                                    .formatValue(valFormatter),
+                            handler
+                    );
+
+                    optOption.ifPresent(category::option);
+                    continue;
+                }
+
+                Optional<Option<Float>> optOption = createOption(field, FloatFieldControllerBuilder::create, handler);
+                optOption.ifPresent(category::option);
+                continue;
+            }
+
+            if(Double.class.isAssignableFrom(type)) {
+                ContinuousRange[] discreteRangeAnno = field.getDeclaredAnnotationsByType(ContinuousRange.class);
+
+                if(discreteRangeAnno.length > 0) {
+                    ContinuousRange range = discreteRangeAnno[0];
+
+                    ValueFormatter<Double> valFormatter = range.formatTranslationKey().isEmpty()
+                            ? val -> Component.literal(DOUBLE_FORMAT.format(val))
+                            : val -> Component.translatable(range.formatTranslationKey(), DOUBLE_FORMAT.format(val));
+
+                    Optional<Option<Double>> optOption = createOption(
+                            field,
+                            option -> DoubleSliderControllerBuilder.create(option)
                                     .range(range.min(), range.max())
                                     .step(range.sliderStep())
                                     .formatValue(valFormatter),
@@ -261,7 +290,12 @@ public class ConfigUI {
                     continue;
                 }
 
-                Optional<Option<Float>> optOption = createOption(field, FloatFieldControllerBuilder::create, handler);
+                ValueFormatter<Double> vf = val -> Component.literal(DOUBLE_FORMAT.format(val));
+                Optional<Option<Double>> optOption = createOption(
+                        field,
+                        option -> DoubleFieldControllerBuilder.create(option).formatValue(vf),
+                        handler
+                );
                 optOption.ifPresent(category::option);
                 continue;
             }

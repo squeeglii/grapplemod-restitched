@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContinuousRange {
 
-    float min();
-    float max();
+    double min();
+    double max();
 
-    float sliderStep() default 0.1f;
+    double sliderStep() default 0.1f;
 
     String formatTranslationKey() default "";
 }

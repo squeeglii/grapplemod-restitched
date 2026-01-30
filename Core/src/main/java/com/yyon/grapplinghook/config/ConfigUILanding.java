@@ -48,7 +48,7 @@ public class ConfigUILanding extends Screen {
         this.layout.addToContents(contents);
 
         Button backButton = Button.builder(
-                CommonComponents.GUI_CANCEL,
+                CommonComponents.GUI_DONE,
                 button -> this.onClose()
         ).build();
 

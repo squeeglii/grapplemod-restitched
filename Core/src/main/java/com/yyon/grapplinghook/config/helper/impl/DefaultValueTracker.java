@@ -13,7 +13,7 @@ public class DefaultValueTracker implements IDefaultProvider {
 
     public void saveDefaults() {
         if(this.defaultValues != null) {
-            GrappleMod.LOGGER.warn("Tried to re-save the defaults variables for object. These are locked!");
+            GrappleMod.LOGGER.trace("Tried to re-save the defaults variables for object. These are locked!");
             return;
         }
 

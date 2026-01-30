@@ -91,6 +91,34 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
     @HideInConfigUI
     private int version = 2;
 
+    // gameplay section
+
+    @SerialEntry @Category("gameplay")
+    private boolean forceAllowFlight = true;
+    @SerialEntry @Category("gameplay") @ContinuousRange(min = 0.0f, max = 1.0f, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SPEED)
+    private float maxStrafeSpeedInAir = 0.7f;
+    @SerialEntry @Category("gameplay")
+    private double strafeAcceleration = 0.015f;
+    @SerialEntry @Category("gameplay") // todo: this has been inverted from v1.x -- double check this maps right.
+    private boolean overrideMovementInAir = true;
+
+    public boolean forceAllowFlight() {
+        return this.forceAllowFlight;
+    }
+
+    public double getMaxStrafeSpeedInAir() {
+        return this.maxStrafeSpeedInAir;
+    }
+
+    public double getStrafeAcceleration() {
+        return this.strafeAcceleration;
+    }
+
+    public boolean shouldOverrideMovementInAir() {
+        return this.overrideMovementInAir;
+    }
+
+
     // items section -- each item uses a sub-category for a subsection.
 
     @InlineSubCategory("item.grappling_hook")
@@ -144,31 +172,5 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
 
     public int getEnderStaffCooldown() {
         return this.enderStaffCooldown;
-    }
-
-
-    @SerialEntry @Category("gameplay")
-    private boolean forceAllowFlight = true;
-    @SerialEntry @Category("gameplay") @ContinuousRange(min = 0.0f, max = 1.0f, sliderStep = 0.05f, formatTranslationKey = ConfigUtil.TYPE_SPEED)
-    private float maxStrafeSpeedInAir = 0.7f;
-    @SerialEntry @Category("gameplay")
-    private float strafeAcceleration = 0.015f;
-    @SerialEntry @Category("gameplay") // todo: this has been inverted from v1.x -- double check this maps right.
-    private boolean overrideMovementInAir = true;
-
-    public boolean forceAllowFlight() {
-        return this.forceAllowFlight;
-    }
-
-    public float getMaxStrafeSpeedInAir() {
-        return this.maxStrafeSpeedInAir;
-    }
-
-    public float getStrafeAcceleration() {
-        return this.strafeAcceleration;
-    }
-
-    public boolean shouldOverrideMovementInAir() {
-        return this.overrideMovementInAir;
     }
 }
