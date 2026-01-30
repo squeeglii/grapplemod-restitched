@@ -298,7 +298,7 @@ public class RopeSegmentHandler {
 
 	// todo: figure out why I added "actually" to the name.
 	public void actuallyAddSegment(int index, Vec bendPoint, Direction bottomSide, Direction topSide) {
-		this.actuallyAddSegment(index, bendPoint, bottomSide, topSide);
+		this.actuallyAddSegment(index, bendPoint, NullableDirection.fromVanilla(bottomSide), NullableDirection.fromVanilla(topSide));
 	}
 
 	public void actuallyAddSegment(int index, Vec bendPoint, NullableDirection bottomSide, NullableDirection topSide) {

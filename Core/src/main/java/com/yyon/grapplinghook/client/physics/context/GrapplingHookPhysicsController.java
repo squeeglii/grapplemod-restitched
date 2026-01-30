@@ -42,7 +42,7 @@ import static com.yyon.grapplinghook.content.registry.CustomizationProperties.*;
 
 public class GrapplingHookPhysicsController {
 
-	public int entityId;
+	public int holderId;
 	public Level world;
 	public LivingEntity holder;
 
@@ -83,8 +83,8 @@ public class GrapplingHookPhysicsController {
 
 	private HookCustomization custom;
 	
-	public GrapplingHookPhysicsController(int grapplehookEntityId, int entityId, Level world, HookCustomization custom) {
-		this.entityId = entityId;
+	public GrapplingHookPhysicsController(int grapplehookEntityId, int holderId, Level world, HookCustomization custom) {
+		this.holderId = holderId;
 		this.world = world;
 		this.custom = custom;
 		
@@ -93,17 +93,17 @@ public class GrapplingHookPhysicsController {
 			this.maxLen = custom.get(MAX_ROPE_LENGTH.get());
 		}
 
-		Entity holderFromWorld = world.getEntity(entityId);
+		Entity holderFromWorld = world.getEntity(holderId);
 
-		if(this.holder == null) {
+		if(holderFromWorld == null) {
 			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is missing an expected holder entity! Report this to 'GrappleMod: Restitched'");
-			this.disable();
+			this.disable(true);
 			return;
 		}
 
 		if(!(holderFromWorld instanceof LivingEntity holderAsLiving)) {
 			GrappleMod.LOGGER.warn("GrapplingHookPhysicsController is tied to a holder entity hookId that is not a Living Entity! Holders are meant to be players!");
-			this.disable();
+			this.disable(true);
 			return;
 		}
 
@@ -111,7 +111,7 @@ public class GrapplingHookPhysicsController {
 
 		// This could happen if a player is killed before their hook actually lands.
 		if(!this.holder.isAlive()) {
-			this.disable();
+			this.disable(true);
 			return;
 		}
 
@@ -171,13 +171,13 @@ public class GrapplingHookPhysicsController {
 		}
 
 
-		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.entityId) == null)
+		if (GrappleModClient.get().getClientControllerManager().unregisterController(this.holderId) == null)
 			return;
 
 		if (this.getType() == PhysicsControllers.AIR_FRICTION)
 			return;
 
-		NetworkManager.packetToServer(new HaltCustomPhysicsC2SPayload(this.entityId, this.grapplehookEntityIds));
+		NetworkManager.packetToServer(new HaltCustomPhysicsC2SPayload(this.holderId, this.grapplehookEntityIds));
 
 		if(this.holder instanceof LocalPlayer p) {
 			PlayerInfo playerInfo = p.connection.getPlayerInfo(p.getUUID());
@@ -188,7 +188,7 @@ public class GrapplingHookPhysicsController {
 		if(!stopPropagation && !wasAlreadyDisabled) {
 			GrappleModClient.get()
 					.getClientControllerManager()
-					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.entityId, this.holder.level(), null, this.custom);
+					.createControl(PhysicsControllers.AIR_FRICTION, -1, this.holderId, this.holder.level(), null, this.custom);
 		}
 	}
 	
@@ -827,7 +827,7 @@ public class GrapplingHookPhysicsController {
 	
 	public void updateServerPos() {
 		this.limitVelocity();
-		NetworkManager.packetToServer(new PlayerMovementC2SPayload(this.entityId, this.holder.position().toVector3f(), this.holder.getDeltaMovement().toVector3f()));
+		NetworkManager.packetToServer(new PlayerMovementC2SPayload(this.holderId, this.holder.position().toVector3f(), this.holder.getDeltaMovement().toVector3f()));
 	}
 
 	public void limitVelocity() {
