@@ -22,6 +22,8 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
+import java.util.LinkedList;
+
 /*
  * This file is part of GrappleMod.
 
@@ -87,9 +89,9 @@ public record GrappleAttachS2CPayload(int hookId, Vector3f hookPos, int holderId
 
                 grapple.clientAttach(this.hookPos);
                 RopeSegmentHandler segmentHandler = grapple.getSegmentHandler();
-                segmentHandler.segments = this.ropeState.getSegments();
-                segmentHandler.segmentTopSides = this.ropeState.getTopSides();
-                segmentHandler.segmentBottomSides = this.ropeState.getBottomSides();
+                segmentHandler.segments = new LinkedList<>(this.ropeState.getSegments());
+                segmentHandler.segmentTopSides = new LinkedList<>(this.ropeState.getTopSides());
+                segmentHandler.segmentBottomSides = new LinkedList<>(this.ropeState.getBottomSides());
 
                 Entity holder = world.getEntity(this.holderId);
 

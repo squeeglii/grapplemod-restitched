@@ -39,12 +39,15 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, GrappleModCommonConfig config) {
-            throw new UnsupportedOperationException("Unimplemented");
+            GrappleMod.LOGGER.error("CONFIG SYNC DISABLED! All clients will use the default config no matter what.");
+            //throw new UnsupportedOperationException("Unimplemented");
         }
 
         @Override
         public GrappleModCommonConfig decode(RegistryFriendlyByteBuf buf) {
-            throw new UnsupportedOperationException("Unimplemented");
+            GrappleMod.LOGGER.error("CONFIG SYNC DISABLED! All clients will use the default config no matter what.");
+            return new GrappleModCommonConfig();
+            //throw new UnsupportedOperationException("Unimplemented");
         }
 
     };

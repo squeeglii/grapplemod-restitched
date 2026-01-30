@@ -578,13 +578,18 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
         this.thisPos = Vec.positionVec(this);
 		this.isFirstAttach = true;
 
+		GrappleAttachS2CPayload shootPacket = new GrappleAttachS2CPayload(
+				this.getId(),
+				this.position().toVector3f(),
+				this.shootingEntityID, blockpos,
+				new RopeSnapshot(this.segmentHandler),
+				this.customization
+		);
+
+		GrappleMod.LOGGER.info(shootPacket);
+
 		GrappleModUtils.sendToCorrectClient(
-				new GrappleAttachS2CPayload(
-						this.getId(),
-						this.position().toVector3f(),
-						this.shootingEntityID, blockpos,
-						new RopeSnapshot(this.segmentHandler),
-						this.customization),
+				shootPacket,
 				this.shootingEntityID,
 				this.level()
 		);

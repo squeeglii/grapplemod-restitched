@@ -30,7 +30,7 @@ public final class HookCustomization {
 	// properties: Map<ResourceLocation, Mixed-Type>
 	//  - ... n
 	// crc32: long
-	public static final Codec<HookCustomization> CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(builder -> builder.apply2(
+	public static final Codec<HookCustomization> CODEC = RecordCodecBuilder.create(builder -> builder.apply2(
 			HookCustomization::new,
 
 			CustomizationProperty.VALUE_MAP_CODEC
@@ -41,9 +41,9 @@ public final class HookCustomization {
 			 .fieldOf("crc32")
 			 .forGetter(HookCustomization::getChecksum)
 		)
-	));
+	);
 
-	//todo: make a bedder codec than straight-up NBT serialization.
+	//todo: make a better codec than straight-up NBT serialization.
 	public static final StreamCodec<? super RegistryFriendlyByteBuf, HookCustomization> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
 
 	/*
@@ -278,4 +278,13 @@ public final class HookCustomization {
 		return newVol;
 	}
 
+	@Override
+	public String toString() {
+		String[] propertyList = this.getPropertiesPresent().stream()
+				.map(CustomizationProperty::getIdentifier)
+				.map(Objects::toString)
+				.toArray(String[]::new);
+
+		return "[ Hook Customization, Defined Keys: {%s}, Checksum: %s ]".formatted(String.join(",", propertyList), this.getChecksum());
+	}
 }

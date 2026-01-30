@@ -2,6 +2,7 @@ package com.yyon.grapplinghook.physics.io;
 
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.util.GrappleModUtils;
+import com.yyon.grapplinghook.util.NullableDirection;
 import com.yyon.grapplinghook.util.Vec;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,19 +12,17 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RopeSnapshot {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RopeSnapshot> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.collection(ArrayList::new, Vec.STREAM_CODEC),
             RopeSnapshot::internalSegments,
-            ByteBufCodecs.collection(ArrayList::new, GrappleModUtils.DIRECTION_STREAM_CODEC),
+            ByteBufCodecs.collection(ArrayList::new, GrappleModUtils.NULLABLE_DIRECTION_STREAM_CODEC),
             RopeSnapshot::internalTops,
-            ByteBufCodecs.collection(ArrayList::new, GrappleModUtils.DIRECTION_STREAM_CODEC),
+            ByteBufCodecs.collection(ArrayList::new, GrappleModUtils.NULLABLE_DIRECTION_STREAM_CODEC),
             RopeSnapshot::internalBottoms,
             ByteBufCodecs.DOUBLE,
             RopeSnapshot::getRopeLength,
@@ -39,16 +38,19 @@ public class RopeSnapshot {
     private static final String NBT_POS = "pos";
 
     private final ArrayList<Vec> segments;
-    private final ArrayList<Direction> topSides;
-    private final ArrayList<Direction> bottomSides;
+    private final List<Direction> topSides;
+    private final List<Direction> bottomSides;
 
     private final double ropeLength;
 
+    //todo: cleanup! This class can be better integrated with the segment handler, + nullable directions should
+    // probs just be used across the whole project rather than being converted here.
+
     //todo: cleanup
-    private RopeSnapshot(List<Vec> segments,  List<Direction> topSides, List<Direction> bottomSides, double ropeLength) {
+    private RopeSnapshot(List<Vec> segments, List<NullableDirection> topSides, List<NullableDirection> bottomSides, double ropeLength) {
         this.segments = new ArrayList<>(segments);
-        this.topSides = new ArrayList<>(topSides);
-        this.bottomSides = new ArrayList<>(bottomSides);
+        this.topSides = topSides.stream().map(NullableDirection::toVanilla).collect(Collectors.toList());
+        this.bottomSides = bottomSides.stream().map(NullableDirection::toVanilla).collect(Collectors.toList());
         this.ropeLength = ropeLength;
     }
 
@@ -137,12 +139,16 @@ public class RopeSnapshot {
         return this.segments;
     }
 
-    public ArrayList<Direction> internalTops() {
-        return this.topSides;
+    public List<NullableDirection> internalTops() {
+        return this.topSides.stream()
+                .map(NullableDirection::fromVanilla)
+                .collect(Collectors.toList());
     }
 
-    public ArrayList<Direction> internalBottoms() {
-        return this.bottomSides;
+    public List<NullableDirection> internalBottoms() {
+        return this.bottomSides.stream()
+                .map(NullableDirection::fromVanilla)
+                .collect(Collectors.toList());
     }
 
 
@@ -160,5 +166,16 @@ public class RopeSnapshot {
 
     public double getRopeLength() {
         return this.ropeLength;
+    }
+
+
+    @Override
+    public String toString() {
+        return "[ RopeSnapshot, %sx Elements ]: { %s | %s | %s }".formatted(
+                this.segments.size(),
+                Arrays.toString(this.segments.toArray()),
+                Arrays.toString(this.internalTops().toArray()),
+                Arrays.toString(this.internalBottoms().toArray())
+        );
     }
 }

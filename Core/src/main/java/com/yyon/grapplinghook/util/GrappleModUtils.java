@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.util;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.S2CPayload;
-import com.yyon.grapplinghook.network.S2CPayloadProcessor;
 import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -34,7 +33,7 @@ import java.util.function.Supplier;
 
 public class GrappleModUtils {
 
-	public static final StreamCodec<ByteBuf, Direction> DIRECTION_STREAM_CODEC = ByteBufCodecs.idMapper(id -> Direction.values()[id], Direction::ordinal);
+	public static final StreamCodec<ByteBuf, NullableDirection> NULLABLE_DIRECTION_STREAM_CODEC = ByteBufCodecs.idMapper(id -> NullableDirection.values()[id], NullableDirection::ordinal);
 
 	public static EquipmentSlot currentHand(boolean isMainHand) {
 		return  isMainHand ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;

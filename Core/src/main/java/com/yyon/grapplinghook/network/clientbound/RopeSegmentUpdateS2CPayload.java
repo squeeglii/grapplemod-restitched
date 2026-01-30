@@ -5,11 +5,11 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.network.S2CPayload;
 import com.yyon.grapplinghook.util.GrappleModUtils;
+import com.yyon.grapplinghook.util.NullableDirection;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 // Previously SegmentMessage
-public record RopeSegmentUpdateS2CPayload(int hookId, boolean shouldAdd, int index, Vec pos, Direction topFacing, Direction bottomFacing) implements S2CPayload {
+public record RopeSegmentUpdateS2CPayload(int hookId, boolean shouldAdd, int index, Vec pos, NullableDirection topFacing, NullableDirection bottomFacing) implements S2CPayload {
 	public static final ResourceLocation IDENTIFIER = GrappleMod.id("rope_segment_update");
 	public static final CustomPacketPayload.Type<RopeSegmentUpdateS2CPayload> PAYLOAD_TYPE = new Type<>(IDENTIFIER);
 
@@ -50,9 +50,9 @@ public record RopeSegmentUpdateS2CPayload(int hookId, boolean shouldAdd, int ind
 			RopeSegmentUpdateS2CPayload::index,
 			Vec.STREAM_CODEC,
 			RopeSegmentUpdateS2CPayload::pos,
-			GrappleModUtils.DIRECTION_STREAM_CODEC,
+			GrappleModUtils.NULLABLE_DIRECTION_STREAM_CODEC,
 			RopeSegmentUpdateS2CPayload::topFacing,
-			GrappleModUtils.DIRECTION_STREAM_CODEC,
+			GrappleModUtils.NULLABLE_DIRECTION_STREAM_CODEC,
 			RopeSegmentUpdateS2CPayload::bottomFacing,
 			RopeSegmentUpdateS2CPayload::new
 	);
