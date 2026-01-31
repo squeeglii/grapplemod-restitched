@@ -22,6 +22,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public final class ModItems {
@@ -62,14 +63,14 @@ public final class ModItems {
 
     private static final CreativeModeTab.DisplayItemsGenerator MOD_TAB_GENERATOR = (displayParameters, output) -> {
 
-        displayParameters.holders().lookupOrThrow(Registries.ENCHANTMENT);
-
         List<ItemStack> creativeMenu = itemsInRegistryOrder.stream()
                 .map(items::get)
                 .map(ItemEntry::getTabProvider)
                 .map(provider -> provider.build(displayParameters))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
+
+        GrappleMod.LOGGER.info("All enchs: {}", Arrays.toString(displayParameters.holders().lookupOrThrow(Registries.ENCHANTMENT).listElementIds().map(ResourceKey::location).toArray()));
 
         // Add enchanted books to end of creative menu.
         ModEnchantments.getRecommendedEnchantments().stream()
@@ -80,6 +81,7 @@ public final class ModItems {
                 .map(EnchantedBookItem::createForEnchantment)
                 .forEach(creativeMenu::add);
 
+        output.acceptAll(creativeMenu);
     };
 
     private static final ResourceKey<CreativeModeTab> ITEM_GROUP_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, GrappleMod.id("main"));
@@ -172,11 +174,8 @@ public final class ModItems {
 
         private static TabBuilder populateBootVariants() {
             return displayParams -> {
-
-
                 //todo: this may vary depending on datapacks.
                 LinkedList<ItemStack> variants = new LinkedList<>();
-
 
                 // Always include plain. The feather falling is for aesthetic value anyway.
                 ItemStack plainItem = LONG_FALL_BOOTS.get().getDefaultInstance();
@@ -232,6 +231,8 @@ public final class ModItems {
     }
 
     private static Optional<Holder.Reference<Enchantment>> tryGetEnchantment(CreativeModeTab.ItemDisplayParameters tabParams, ResourceKey<Enchantment> enchantment) {
+        GrappleMod.LOGGER.info("ench: {}", enchantment.location());
+
         return tabParams.holders()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .get(enchantment);
