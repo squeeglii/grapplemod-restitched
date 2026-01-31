@@ -103,7 +103,7 @@ public class ClientPhysicsControllerTracker {
 	}
 
 	public void checkSlide(Player player) {
-		if (ClientKey.SLIDE.isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
+		if (ClientKey.SLIDE.get().isDown() && !controllers.containsKey(player.getId()) && this.isSliding(player, Vec.motionVec(player))) {
 			this.createControl(PhysicsControllers.AIR_FRICTION, -1, player.getId(), player.level(), null, null);
 		}
 	}
@@ -175,7 +175,7 @@ public class ClientPhysicsControllerTracker {
 		if(!(entity.horizontalCollision && !entity.onGround() && !entity.isCrouching())) return false;
 		if(entity.onClimbable()) return false;
 		if(!GrappleModUtils.hasArmourAbility(entity, ModEnchantments.EFFECT_WALL_RUNNING)) return false;
-		if(ClientKey.DETACH.isDown() || Minecraft.getInstance().options.keyJump.isDown()) return false;
+		if(ClientKey.DETACH.get().isDown() || Minecraft.getInstance().options.keyJump.isDown()) return false;
 
 		BlockHitResult rayTraceResult = GrappleModUtils.rayTraceBlocks(entity, entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 		if(rayTraceResult == null) {
@@ -231,7 +231,7 @@ public class ClientPhysicsControllerTracker {
 	public boolean isSliding(LivingEntity entity, Vec motion) {
 		if (entity.isInWater() || entity.isInLava()) return false;
 		
-		if (entity.onGround() && ClientKey.SLIDE.isDown()) {
+		if (entity.onGround() && ClientKey.SLIDE.get().isDown()) {
 			if (!GrappleModUtils.hasArmourAbility(entity, ModEnchantments.EFFECT_SLIDING)) return false;
 			boolean wasSliding = false;
 			int id = entity.getId();
