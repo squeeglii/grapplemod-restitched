@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.upgrade_table.title" },
         "description": { "translate": "advancement.grapplemod.core.upgrade_table.description" },
-        "icon": { "item": "grapplemod:modification_table" },
+        "icon": { "id": "grapplemod:modification_table" },
         "frame": "goal"
     },
 

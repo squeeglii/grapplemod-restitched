@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.upgrade_table_complete.title" },
         "description": { "translate": "advancement.grapplemod.core.upgrade_table_complete.description" },
-        "icon": { "item": "minecraft:nether_star" },
+        "icon": { "id": "minecraft:nether_star" },
         "frame": "challenge"
     },
 

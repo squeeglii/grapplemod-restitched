@@ -15,6 +15,6 @@
 		}
 	},
 	"result": {
-		"item": "grapplemod:base_upgrade"
+		"id": "grapplemod:base_upgrade"
 	}
 }

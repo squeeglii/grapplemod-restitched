@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.blueprint_on_upgrade_table.title" },
         "description": { "translate": "advancement.grapplemod.core.blueprint_on_upgrade_table.description" },
-        "icon": { "item": "grapplemod:blueprint" },
+        "icon": { "id": "grapplemod:blueprint" },
         "frame": "task"
     },
 

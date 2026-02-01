@@ -3,9 +3,10 @@
 	"category": "misc",
 	"ingredients": [
 		{ "item": "minecraft:paper" },
-		{ "item": "minecraft:blue_dye" }
+		{ "tag": "c:dyes/blue" }
 	],
 	"result": {
-		"item": "grapplemod:blueprint"
+		"id": "grapplemod:blueprint",
+		"count": 2
 	}
 }

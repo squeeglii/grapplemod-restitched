@@ -101,11 +101,9 @@ public abstract class GrappleCrosshairMixin {
             int totalbarLength = w / 8;
 
             RenderSystem.getModelViewStack().pushMatrix();
-
             this.drawRect(w / 2 - totalbarLength / 2, h * 3 / 4, totalbarLength, 2, 50, 100);
             this.drawRect(w / 2 - totalbarLength / 2, h * 3 / 4, (int) (totalbarLength * rocketFuel), 2, 200, 255);
-
-            RenderSystem.getModelViewStack().pushMatrix();
+            RenderSystem.getModelViewStack().popMatrix();
         }
     }
 

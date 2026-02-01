@@ -12,6 +12,6 @@
 		"s": { "item": "minecraft:stick" }
 	},
 	"result": {
-		"item": "grapplemod:ender_staff"
+		"id": "grapplemod:ender_staff"
 	}
 }

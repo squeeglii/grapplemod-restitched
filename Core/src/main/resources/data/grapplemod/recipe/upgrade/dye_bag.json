@@ -9,16 +9,16 @@
 			"item": "minecraft:leather"
 		},
 		{
-			"tag": "grapplemod:dye"
+			"tag": "c:dyes"
 		},
 		{
-			"tag": "grapplemod:dye"
+			"tag": "c:dyes"
 		},
 		{
 			"item": "minecraft:glow_ink_sac"
 		}
 	],
 	"result": {
-		"item": "grapplemod:dye_bag_upgrade"
+		"id": "grapplemod:dye_bag_upgrade"
 	}
 }

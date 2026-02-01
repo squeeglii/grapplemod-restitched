@@ -3,7 +3,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.rocket_forcefield_combo.title" },
         "description": { "translate": "advancement.grapplemod.core.rocket_forcefield_combo.description" },
-        "icon": { "item": "grapplemod:rocket" },
+        "icon": { "id": "grapplemod:rocket" },
         "frame": "task"
     },
 

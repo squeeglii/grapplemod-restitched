@@ -12,6 +12,6 @@
 		"r": { "item": "minecraft:firework_rocket" }
 	},
 	"result": {
-		"item": "grapplemod:rocket"
+		"id": "grapplemod:rocket"
 	}
 }

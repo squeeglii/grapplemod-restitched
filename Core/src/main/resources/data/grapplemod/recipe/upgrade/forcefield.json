@@ -10,6 +10,6 @@
 		}
 	],
 	"result": {
-		"item": "grapplemod:forcefield_upgrade"
+		"id": "grapplemod:forcefield_upgrade"
 	}
 }

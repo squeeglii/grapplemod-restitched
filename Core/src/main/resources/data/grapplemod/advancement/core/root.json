@@ -2,7 +2,7 @@
     "display": {
         "title": { "translate": "advancement.grapplemod.core.root.title" },
         "description": { "translate": "advancement.grapplemod.core.root.description" },
-        "icon": { "item": "grapplemod:grappling_hook" },
+        "icon": { "id": "grapplemod:grappling_hook" },
         "background": "grapplemod:textures/gui/advancements/bg/core.png",
         "announce_to_chat": true,
         "show_toast": true,

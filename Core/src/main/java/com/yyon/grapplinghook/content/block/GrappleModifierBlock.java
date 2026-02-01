@@ -209,10 +209,11 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		HookCustomization custom = blockEntity.getCurrentCustomizations();
 
 		ItemStack newStack = heldStack.split(1);
-		item.applyCustomizations(newStack, custom);
 
 		if(item instanceof IAuthorable authorable)
 			authorable.commit(newStack, null, playerIn);
+
+		item.applyCustomizations(newStack, custom);
 
 		if(!playerIn.addItem(newStack))
 			playerIn.drop(newStack, true);

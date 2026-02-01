@@ -13,6 +13,6 @@
 		}
 	],
 	"result": {
-		"item": "grapplemod:swing_upgrade"
+		"id": "grapplemod:swing_upgrade"
 	}
 }

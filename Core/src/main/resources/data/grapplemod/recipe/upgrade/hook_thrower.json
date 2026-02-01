@@ -10,6 +10,6 @@
 		}
 	],
 	"result": {
-		"item": "grapplemod:hook_thrower_upgrade"
+		"id": "grapplemod:hook_thrower_upgrade"
 	}
 }

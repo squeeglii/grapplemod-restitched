@@ -10,6 +10,6 @@
 		}
 	],
 	"result": {
-		"item": "grapplemod:magnet_upgrade"
+		"id": "grapplemod:magnet_upgrade"
 	}
 }
