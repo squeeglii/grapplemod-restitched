@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +24,17 @@ public class ModEntityLayerIdentifiers {
         renderLayers = new HashMap<>();
     }
 
-    public static void registerAll() { }
+    public static void registerAll() {
+        GrappleMod.LOGGER.info("Known Layers: {}", Arrays.toString(ModelLayers.getKnownLocations().toArray()));
+    }
 
     public static RenderLayerEntry layer(String path, String modelLayerName, Supplier<MeshDefinition> def) {
         ResourceLocation qualId = GrappleMod.vanillaId(path);
+        // Hours sunk into fixing this, round 2:  4
+        // Despite ModelLayerLocation taking a ResourceLocation in, somewhere in the internals, it seems to lose
+        // the namespace and fallback to the default Minecraft one.
+        // Using any kind of modded namespace results in a full game crash.
+
         RenderLayerEntry entry = new RenderLayerEntry(qualId, modelLayerName, def);
 
         entry.registerModelLocation();
@@ -63,6 +71,7 @@ public class ModEntityLayerIdentifiers {
         }
 
         public ModelLayerLocation getLocation() {
+            GrappleMod.LOGGER.info("Getting Model Layer Location: {}", this.location);
             return this.location;
         }
 

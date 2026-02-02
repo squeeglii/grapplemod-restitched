@@ -33,14 +33,14 @@ public class LongFallBootsModel<T extends LivingEntity> extends HumanoidModel<T>
         CubeDeformation bigHeel = new CubeDeformation(0.3f);
 
         rightLeg.addOrReplaceChild(
-                "right_leg_spike",
+                "right_leg_heel",
                 CubeListBuilder.create()
                         .texOffs(0, 16)
                         .addBox(0, -1.0f, 3, 1, 7, 3, bigHeel),
                 PartPose.offsetAndRotation(-0.7f, 7.0f, -2.3f, 0.50f, 0, 0)
         );
         leftLeg.addOrReplaceChild(
-                "left_leg_spike",
+                "left_leg_heel",
                 CubeListBuilder.create()
                         .texOffs(0, 16)
                         .addBox(0, -1.0f, 3, 1, 7, 3, bigHeel),

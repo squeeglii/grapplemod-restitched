@@ -28,6 +28,8 @@ public class ArmourMaterials {
 
 
     public static final MaterialEntry<ArmorMaterial> LONG_FALL_BOOTS = material("long_fall_boot_ish", (id) -> {
+        GrappleMod.LOGGER.info("Defining armour material: {}", id);
+
         Supplier<Ingredient> repairIngredient = () -> Ingredient.of(new ItemStack(Items.QUARTZ, 1));
         List<ArmorMaterial.Layer> armourLayers = List.of(new ArmorMaterial.Layer(id));
 

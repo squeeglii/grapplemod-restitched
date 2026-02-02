@@ -25,7 +25,7 @@ import net.minecraft.world.item.armortrim.ArmorTrim;
 
 public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends M> extends RenderLayer<T, M> {
 
-    public static final ResourceLocation BOOTS_TEXTURE = GrappleMod.id("textures/armor/long_fall_boots.png");
+    public static final ResourceLocation BOOTS_TEXTURE = GrappleMod.id("textures/models/armor/long_fall_boot_ish_layer_custom.png");
 
     private final A model;
     private final TextureAtlas armorTrimAtlas;
@@ -44,11 +44,11 @@ public class LongFallBootsLayer<T extends LivingEntity, M extends HumanoidModel<
 
         this.getParentModel().copyPropertiesTo(this.model);
 
-        this.renderModel(poseStack, buffer, packedLight, model, DyeColor.WHITE.getTextureDiffuseColor());
+        this.renderModel(poseStack, buffer, packedLight, this.model, DyeColor.WHITE.getTextureDiffuseColor());
 
         if(itemStack.has(DataComponents.TRIM)) {
             ArmorTrim trim = itemStack.get(DataComponents.TRIM);
-            this.renderTrim(poseStack, buffer, packedLight, trim, model);
+            this.renderTrim(poseStack, buffer, packedLight, trim, this.model);
         }
 
         if (itemStack.hasFoil()) {

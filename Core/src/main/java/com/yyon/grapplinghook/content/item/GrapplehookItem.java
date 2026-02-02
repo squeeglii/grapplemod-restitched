@@ -246,7 +246,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
 					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both.desc", ClientKey.THROW_HOOKS.get()));
 					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand.desc", ClientKey.THROW_OFF_HOOK));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_handt.desc", ClientKey.THROW_MAIN_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_hand.desc", ClientKey.THROW_MAIN_HOOK));
 				} else {
 					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both_hold.desc", ClientKey.THROW_HOOKS.get()));
 					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand_hold.desc", ClientKey.THROW_OFF_HOOK));
@@ -429,8 +429,8 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			return;
 
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
-		double angle = this.getSingleHookAngle(entityLiving, custom);
-		boolean shouldThrowBothHands = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle != 0;
+		double doubleAngle = this.getDoubleHookAngle(entityLiving, custom);
+		boolean shouldThrowBothHands = custom.get(DOUBLE_HOOK_ATTACHED.get()) && doubleAngle != 0;
 
 		if (shouldThrowBothHands)
             this.throwOffHand(stack, worldIn, entityLiving, shouldThrowBothHands);
