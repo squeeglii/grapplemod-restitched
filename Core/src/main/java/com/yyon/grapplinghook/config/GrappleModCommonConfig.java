@@ -3,20 +3,28 @@ package com.yyon.grapplinghook.config;
 import com.google.gson.FieldNamingPolicy;
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.config.helper.ConfigUtil;
+import com.yyon.grapplinghook.config.helper.FieldCodec;
+import com.yyon.grapplinghook.config.helper.FieldCodecGroup;
 import com.yyon.grapplinghook.config.helper.IConfig;
 import com.yyon.grapplinghook.config.helper.annotation.*;
 import com.yyon.grapplinghook.config.helper.impl.DefaultValueTracker;
 import com.yyon.grapplinghook.network.NetworkManager;
 import com.yyon.grapplinghook.network.clientbound.SyncServerConfigS2CPayload;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
-import dev.isxander.yacl3.config.v2.api.ConfigSerializer;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
+import io.netty.buffer.ByteBuf;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
+import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 // I reimplemented my autoconfig for YACL implementation from BridgingMod. A todo: is to
 // extract the implementations from this and BridgingMod to a separate library. I just cba rn.
@@ -34,29 +42,31 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
                     .build())
             .build();
 
+    /** Config handler with added save-load listener hooks. */
     public static final ConfigClassHandler<GrappleModCommonConfig> HANDLER = new WrappedConfigClassHandler<>(
             INTERNAL_HANDLER,
             Set.of(GrappleModCommonConfig::redistributeConfigToClients),
             Set.of(GrappleModCommonConfig::redistributeConfigToClients)
     );
 
-    //todo: find something more elegant?
-    public static final StreamCodec<RegistryFriendlyByteBuf, GrappleModCommonConfig> STREAM_CODEC = new StreamCodec<>() {
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, GrappleModCommonConfig config) {
-            GrappleMod.LOGGER.error("CONFIG SYNC DISABLED! All clients will use the default config no matter what.");
-            //throw new UnsupportedOperationException("Unimplemented");
-        }
-
-        @Override
-        public GrappleModCommonConfig decode(RegistryFriendlyByteBuf buf) {
-            GrappleMod.LOGGER.error("CONFIG SYNC DISABLED! All clients will use the default config no matter what.");
-            return new GrappleModCommonConfig();
-            //throw new UnsupportedOperationException("Unimplemented");
-        }
-
-    };
+    public static final FieldCodecGroup<RegistryFriendlyByteBuf, GrappleModCommonConfig> STREAM_CODEC = new FieldCodecGroup<>(
+            GrappleModCommonConfig::new,
+            List.of(
+                    new FieldCodec<>(ByteBufCodecs.INT, conf -> conf.version, (config, val) -> config.version = val),
+                    new FieldCodec<>(ByteBufCodecs.BOOL, conf -> conf.forceAllowFlight, (config, val) -> config.forceAllowFlight = val),
+                    new FieldCodec<>(ByteBufCodecs.FLOAT, conf -> conf.maxStrafeSpeedInAir, (config, val) -> config.maxStrafeSpeedInAir = val),
+                    new FieldCodec<>(ByteBufCodecs.DOUBLE, conf -> conf.strafeAcceleration, (config, val) -> config.strafeAcceleration = val),
+                    new FieldCodec<>(ByteBufCodecs.BOOL, conf -> conf.overrideMovementInAir, (config, val) -> config.overrideMovementInAir = val),
+                    new FieldCodec<>(ByteBufCodecs.BOOL, conf -> conf.hookAffectsEntities, (config, val) -> config.hookAffectsEntities = val),
+                    new FieldCodec<>(ByteBufCodecs.FLOAT, conf -> conf.ropeSnapBuffer, (config, val) -> config.ropeSnapBuffer = val),
+                    new FieldCodec<>(ByteBufCodecs.FLOAT, conf -> conf.ropeJumpPower, (config, val) -> config.ropeJumpPower = val),
+                    new FieldCodec<>(ByteBufCodecs.BOOL, conf -> conf.ropeJumpAtAngle, (config, val) -> config.ropeJumpAtAngle = val),
+                    new FieldCodec<>(ByteBufCodecs.INT, conf -> conf.ropeJumpCooldown, (config, val) -> config.ropeJumpCooldown = val),
+                    new FieldCodec<>(ByteBufCodecs.FLOAT, conf -> conf.climbSpeed, (config, val) -> config.climbSpeed = val),
+                    new FieldCodec<>(ByteBufCodecs.FLOAT, conf -> conf.enderStaffStrength, (config, val) -> config.enderStaffStrength = val),
+                    new FieldCodec<>(ByteBufCodecs.INT, conf -> conf.enderStaffCooldown, (config, val) -> config.enderStaffCooldown = val)
+            )
+    );
 
     public GrappleModCommonConfig() {
         this.saveDefaults(); // This should be run before /any/ saving or loading occurs.
@@ -69,13 +79,19 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
         this.version = ConfigUtil.LATEST_COMMON_VERSION;
     }
 
-
+    /**
+     * Gets the config instance. It returns the local common config if playing in single player and the
+     * common config if connected to a server.
+     *
+     * Be careful! If executing from the integrated server, this will get the synced config and will not update.
+     */
     public static GrappleModCommonConfig get() {
         return GrappleModCommonConfig.isUsingServerProvidedConfig()
                 ? GrappleModCommonConfig.serverProvidedConfig
                 : HANDLER.instance();
     }
 
+    /** Run when config is received from remote server. Overrides the local config to keep in sync with server. */
     public static void syncIncomingFromServer(GrappleModCommonConfig serverConfig) {
         if(GrappleModCommonConfig.isUsingServerProvidedConfig())
             GrappleMod.LOGGER.info("Replacing existing server-provided mod config with another server-provided config!");
@@ -84,18 +100,21 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
         GrappleModCommonConfig.serverProvidedConfig = serverConfig;
     }
 
+    /** Run when disconnected from remote server. Restores local config. */
     public static void resetConfigFromServer() {
         GrappleMod.LOGGER.info("Using client-provided common config.");
         GrappleModCommonConfig.serverProvidedConfig = null;
     }
 
+    /** Is the local config currently overridden by a server. */
     public static boolean isUsingServerProvidedConfig() {
         return GrappleModCommonConfig.serverProvidedConfig != null;
     }
 
     //todo: add file listener for dedicated-server reloads.
+    /** Broadcasts from the server-side the current config. */
     public static void redistributeConfigToClients() {
-        GrappleModCommonConfig config = GrappleModCommonConfig.get();
+        GrappleModCommonConfig config = GrappleModCommonConfig.HANDLER.instance(); // use this over get() to work on integrated server
         SyncServerConfigS2CPayload packet = new SyncServerConfigS2CPayload(config);
 
         NetworkManager.broadcastToClients(packet);
