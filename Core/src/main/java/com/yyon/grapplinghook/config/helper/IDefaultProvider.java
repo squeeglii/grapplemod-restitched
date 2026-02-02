@@ -5,8 +5,6 @@ import java.util.Optional;
 
 public interface IDefaultProvider {
 
-    void saveDefaults();
-
     Optional<Object> getDefaultForField(Field field);
 
 }

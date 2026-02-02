@@ -21,7 +21,7 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public class GrappleModClientConfig extends DefaultValueTracker implements IConfig {
 
-    public static ConfigClassHandler<GrappleModClientConfig> HANDLER = ConfigClassHandler.createBuilder(GrappleModClientConfig.class)
+    public static final ConfigClassHandler<GrappleModClientConfig> HANDLER = ConfigClassHandler.createBuilder(GrappleModClientConfig.class)
             .id(GrappleMod.id("client"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(GrappleMod.getDefaultConfigPath().resolve(GrappleMod.MOD_ID + "-client.json"))
@@ -30,13 +30,30 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
                     .build())
             .build();
 
+    //todo: figure out the mess of defaults. it works but it ain't elegant.
+
     public GrappleModClientConfig() {
-        this.saveDefaults(); // This should be run before /any/ saving or loading occurs.
+        this.saveFieldDefaults(); // This should be run before /any/ saving or loading occurs.
     }
 
     public static GrappleModClientConfig get() {
         return HANDLER.instance();
     }
+
+    public static void saveWithHooks() {
+        // todo: hooks!
+        HANDLER.save();
+    }
+
+    public static void loadWithHooks() {
+        HANDLER.load();
+        // todo: hooks!
+    }
+
+    public static void saveDefaults() {
+        HANDLER.defaults().saveFieldDefaults();
+    }
+
 
 
     @Override

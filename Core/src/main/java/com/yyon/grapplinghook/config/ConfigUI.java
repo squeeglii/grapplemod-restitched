@@ -32,6 +32,7 @@ public class ConfigUI {
         return buildConfig(
                 GrappleModClientConfig.class,
                 GrappleModClientConfig.HANDLER,
+                GrappleModClientConfig::saveWithHooks,
                 Component.translatable(ConfigUtil.GRAPPLE_MOD_CLIENT_TRANSLATION_TITLE),
                 builder -> {}
         );
@@ -41,6 +42,7 @@ public class ConfigUI {
         return buildConfig(
                 GrappleModCommonConfig.class,
                 GrappleModCommonConfig.HANDLER,
+                GrappleModCommonConfig::saveWithHooks,
                 Component.translatable(ConfigUtil.GRAPPLE_MOD_COMMON_TRANSLATION_TITLE),
                 builder -> {}
         );
@@ -50,7 +52,7 @@ public class ConfigUI {
         return new ConfigUILanding(parent);
     }
 
-    private static <T extends IConfig> YetAnotherConfigLib buildConfig(Class<T> modConfigClass, ConfigClassHandler<T> handler, Component title, Consumer<YetAnotherConfigLib.Builder> customSections) {
+    private static <T extends IConfig> YetAnotherConfigLib buildConfig(Class<T> modConfigClass, ConfigClassHandler<T> handler, Runnable saveFunc, Component title, Consumer<YetAnotherConfigLib.Builder> customSections) {
         YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder();
         Map<String, List<Field>> sortedCategories = sortConfigIntoCategories(modConfigClass);
 
@@ -65,8 +67,8 @@ public class ConfigUI {
 
         return builder
                 .title(title)
-                .save(handler::save)
-                .screenInit(screen -> handler.instance())
+                .save(saveFunc)
+                //.screenInit(screen -> handler.instance())
                 .build();
     }
 

@@ -11,7 +11,7 @@ public class DefaultValueTracker implements IDefaultProvider {
 
     private HashMap<String, Object> defaultValues = null;
 
-    public void saveDefaults() {
+    protected void saveFieldDefaults() {
         if(this.defaultValues != null) {
             GrappleMod.LOGGER.trace("Tried to re-save the defaults variables for object. These are locked!");
             return;

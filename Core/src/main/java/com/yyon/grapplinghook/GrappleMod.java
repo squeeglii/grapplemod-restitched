@@ -19,7 +19,6 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -106,8 +105,8 @@ public class GrappleMod implements ModInitializer {
     }
 
     private void initConfig() {
-        GrappleModCommonConfig.HANDLER.defaults().saveDefaults();
-        GrappleModCommonConfig.HANDLER.load();
+        GrappleModCommonConfig.saveDefaults();
+        GrappleModCommonConfig.loadWithHooks();
 
         GrappleModCommonConfig.resetConfigFromServer(); // ensure that the config being used is the client-side one.
         //todo: ModItems.invalidateCreativeTabCache(); on save / reload.

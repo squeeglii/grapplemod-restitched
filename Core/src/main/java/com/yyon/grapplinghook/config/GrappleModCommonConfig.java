@@ -22,7 +22,7 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
 
     public static GrappleModCommonConfig serverProvidedConfig = null;
 
-    public static Function<ConfigClassHandler<GrappleModCommonConfig>, ConfigSerializer<GrappleModCommonConfig>> SERIALIZER = config ->
+    private static Function<ConfigClassHandler<GrappleModCommonConfig>, ConfigSerializer<GrappleModCommonConfig>> SERIALIZER = config ->
             GsonConfigSerializerBuilder.create(config)
                     .setPath(GrappleMod.getDefaultConfigPath().resolve(GrappleMod.MOD_ID + "-common.json"))
                     .setJson5(false)
@@ -53,7 +53,27 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
     };
 
     public GrappleModCommonConfig() {
-        this.saveDefaults(); // This should be run before /any/ saving or loading occurs.
+        this.saveFieldDefaults(); // This should be run before /any/ saving or loading occurs.
+    }
+
+    public static GrappleModCommonConfig get() {
+        return GrappleModCommonConfig.isUsingServerProvidedConfig()
+                ? GrappleModCommonConfig.serverProvidedConfig
+                : HANDLER.instance();
+    }
+
+    public static void saveWithHooks() {
+        // todo: hooks!
+        HANDLER.save();
+    }
+
+    public static void loadWithHooks() {
+        HANDLER.load();
+        // todo: hooks!
+    }
+
+    public static void saveDefaults() {
+        HANDLER.defaults().saveFieldDefaults();
     }
 
     @Override
@@ -61,13 +81,6 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
         //todo: here, fix any old values & copy to new places.
         // then, bump value to latest.
         this.version = ConfigUtil.LATEST_COMMON_VERSION;
-    }
-
-
-    public static GrappleModCommonConfig get() {
-        return GrappleModCommonConfig.isUsingServerProvidedConfig()
-                ? GrappleModCommonConfig.serverProvidedConfig
-                : HANDLER.instance();
     }
 
     public static void syncIncomingFromServer(GrappleModCommonConfig serverConfig) {

@@ -82,8 +82,8 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public void initConfig() {
-        GrappleModClientConfig.HANDLER.defaults().saveDefaults();
-        GrappleModClientConfig.HANDLER.load();
+        GrappleModClientConfig.saveDefaults();
+        GrappleModClientConfig.loadWithHooks();
 
         //todo: reload creative tabs on save / load.
     }
