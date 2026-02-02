@@ -44,8 +44,8 @@ public class ClientHookMixin {
 
         // keep in same order as enum from KeypressItem
         boolean[] keys = {
-                ClientKey.HOOK_ENDER_LAUNCH.get().isDown(), ClientKey.THROW_LEFT_HOOK.isDown(),
-                ClientKey.THROW_RIGHT_HOOK.isDown(), ClientKey.THROW_HOOKS.get().isDown(),
+                ClientKey.HOOK_ENDER_LAUNCH.get().isDown(), ClientKey.THROW_OFF_HOOK.isDown(),
+                ClientKey.THROW_MAIN_HOOK.isDown(), ClientKey.THROW_HOOKS.get().isDown(),
                 ClientKey.ROCKET.get().isDown()
         };
 

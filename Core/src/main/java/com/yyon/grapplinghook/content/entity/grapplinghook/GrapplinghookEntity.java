@@ -122,7 +122,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 
 		this.shootingEntity = shooter;
 		this.shootingEntityID = this.shootingEntity.getId();
-		
+
 		this.isInDoublePair = isInDoublePair;
 		
 		Vec pos = Vec.positionVec(this.shootingEntity).add(new Vec(0, this.shootingEntity.getEyeHeight(), 0));
@@ -140,6 +140,7 @@ public class GrapplinghookEntity extends ThrowableItemProjectile implements IExt
 	public GrapplinghookEntity(HookSnapshot snapshot, HookCustomization volume, Entity shootingEntity, boolean isInPair) {
 		super(ModEntities.GRAPPLE_HOOK.get(), snapshot.getX(), snapshot.getY(), snapshot.getZ(), shootingEntity.level());
 
+		//todo: save pair details to HookSnapshot
 		RopeSnapshot rope = snapshot.getRopeSnapshot();
 
 		this.shootingEntity = shootingEntity;

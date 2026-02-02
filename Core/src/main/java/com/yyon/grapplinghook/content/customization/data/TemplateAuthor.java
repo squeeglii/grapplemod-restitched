@@ -12,6 +12,7 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
 
     private static final String DEFAULT_TEMPLATE_ID = "user-generated";
     private static final Component DEFAULT_AUTHOR = Component.translatable("grapple_template.author.unknown");
+    private static final Component DEFAULT_NAME = Component.translatable("grapple_template.name.unknown");
 
     //todo: properly implement the codec across the project.
 
@@ -31,7 +32,7 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
                 ? DEFAULT_TEMPLATE_ID
                 : templateId;
         this.templateDisplayName = templateDisplayName == null
-                ? Component.empty()
+                ? DEFAULT_NAME
                 : templateDisplayName;
         this.author = author == null
                 ? DEFAULT_AUTHOR

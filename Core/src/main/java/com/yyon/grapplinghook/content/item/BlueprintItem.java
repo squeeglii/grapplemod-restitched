@@ -4,7 +4,6 @@ import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
-import com.yyon.grapplinghook.content.customization.HookTemplates;
 import com.yyon.grapplinghook.content.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.content.customization.type.CustomizationProperty;
 import net.minecraft.ChatFormatting;
@@ -53,8 +52,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     @Override
     public void commit(ItemStack stack, Component displayName, Component author) {
-        HookTemplates.Template template = new HookTemplates.Template(null, displayName, author);
-        template.saveToStackComponents(stack);
+        TemplateAuthor authorComp = new TemplateAuthor(displayName, author);
+        stack.set(ModItemComponents.AUTHORED, authorComp);
     }
 
     @NotNull
@@ -146,7 +145,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     public boolean isBlank(ItemStack stack) {
         boolean isTemplateMetaMissing = !stack.has(ModItemComponents.AUTHORED);
-        boolean areCustomizationsMissing = !stack.has(ModItemComponents.CUSTOMIZABLE);
+        boolean areCustomizationsMissing = !stack.has(ModItemComponents.CUSTOMIZABLE) ||
+                                           stack.get(ModItemComponents.CUSTOMIZABLE).isDefault();
 
         return isTemplateMetaMissing && areCustomizationsMissing;
     }

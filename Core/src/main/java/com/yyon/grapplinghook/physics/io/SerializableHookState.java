@@ -117,8 +117,8 @@ public class SerializableHookState {
         ServerHookEntityTracker.addGrappleEntity(player, e);
 
         HashMap<Entity, GrapplinghookEntity> grapplehookClientEntityTracker = e.isHeldInMainHand()
-                ? GrapplehookItem.grapplehookEntitiesRight
-                : GrapplehookItem.grapplehookEntitiesLeft;
+                ? GrapplehookItem.grapplehookEntitiesMainHand
+                : GrapplehookItem.grapplehookEntitiesOffHand;
 
         grapplehookClientEntityTracker.put(player, e);
         player.level().addFreshEntity(e);

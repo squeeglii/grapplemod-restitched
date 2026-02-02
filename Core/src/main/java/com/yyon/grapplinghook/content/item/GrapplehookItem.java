@@ -26,16 +26,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.options.controls.KeyBindsList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -73,11 +72,9 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 	public static final int DURABILITY = 500; // as of 1.21.1, this should be changed with data components rather than the config.
 
-	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesLeft = new HashMap<>();
-	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesRight = new HashMap<>();
+	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesOffHand = new HashMap<>();
+	public static HashMap<Entity, GrapplinghookEntity> grapplehookEntitiesMainHand = new HashMap<>();
 
-	//todo: integrate deploy state.
-	//todo: ensure deploy state & customizations are properly saved & loaded.
 	//todo: left/right hand --> main & off hand.
 
 	public GrapplehookItem() {
@@ -119,7 +116,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				if (this.getCustomizationsOrDefault(stack).get(ENDER_STAFF_ATTACHED.get()))
 					GrappleModClient.get().launchPlayer(player);
 
-			} else if (key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT || key == IGlobalKeyObserver.Keys.THROWBOTH) {
+			} else if (key == IGlobalKeyObserver.Keys.THROW_OFF_HAND || key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND || key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS) {
 				NetworkManager.packetToServer(new KeypressC2SPayload(key, true));
 
 			} else if (key == IGlobalKeyObserver.Keys.ROCKET) {
@@ -133,33 +130,33 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
 
-		boolean isEitherSingleHandThrowKeyDown = key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT;
+		boolean isEitherSingleHandThrowKeyDown = key == IGlobalKeyObserver.Keys.THROW_OFF_HAND || key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND;
 
-		if (key == IGlobalKeyObserver.Keys.THROWBOTH || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && isEitherSingleHandThrowKeyDown)) {
+		if (key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && isEitherSingleHandThrowKeyDown)) {
 			throwBoth(stack, player.level(), player, isMainHand);
 			return;
 		}
 
 		if(!isEitherSingleHandThrowKeyDown) return;
 
-		boolean isLeft = key == Keys.THROWLEFT;
+		boolean isOffHand = key == Keys.THROW_OFF_HAND;
 
-		GrapplinghookEntity hook = isLeft
-				? getHookEntityLeft(player)
-				: getHookEntityRight(player);
+		GrapplinghookEntity hook = isOffHand
+				? getHookEntityOffHand(player)
+				: getHookEntityMainHand(player);
 
 		if (hook != null) {
-			if(isLeft) detachLeft(player);
-			else detachRight(player);
+			if(isOffHand) detachOffHand(player);
+			else detachMainHand(player);
 			return;
 		}
 
 		stack.hurtAndBreak(1, player, GrappleModUtils.currentHand(isMainHand));
 		if (stack.getCount() <= 0) return;
 
-		boolean threw = isLeft
-				? throwLeft(stack, player.level(), player)
-				: throwRight(stack, player.level(), player, isMainHand);
+		boolean threw = isOffHand
+				? throwOffHand(stack, player.level(), player, false)
+				: throwMainHand(stack, player.level(), player, false);
 
 		if (!threw) return;
 
@@ -167,9 +164,9 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 	
 	@Override
-	public void onCustomKeyUp(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean ismainhand) {
+	public void onCustomKeyUp(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean isMainHand) {
 		if (player.level().isClientSide) {
-			if (key == IGlobalKeyObserver.Keys.THROWLEFT || key == IGlobalKeyObserver.Keys.THROWRIGHT || key == IGlobalKeyObserver.Keys.THROWBOTH) {
+			if (key == IGlobalKeyObserver.Keys.THROW_OFF_HAND || key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND || key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS) {
 				NetworkManager.packetToServer(new KeypressC2SPayload(key, false));
 			}
 
@@ -179,15 +176,15 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
 
 		if (custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-			GrapplinghookEntity hookLeft = getHookEntityLeft(player);
-			GrapplinghookEntity hookRight = getHookEntityRight(player);
+			GrapplinghookEntity hookLeft = getHookEntityOffHand(player);
+			GrapplinghookEntity hookRight = getHookEntityMainHand(player);
 
-			if (key == IGlobalKeyObserver.Keys.THROWBOTH) {
+			if (key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS) {
 				detachBoth(player);
-			} else if (key == IGlobalKeyObserver.Keys.THROWLEFT) {
-				if (hookLeft != null) detachLeft(player);
-			} else if (key == IGlobalKeyObserver.Keys.THROWRIGHT) {
-				if (hookRight != null) detachRight(player);
+			} else if (key == IGlobalKeyObserver.Keys.THROW_OFF_HAND) {
+				if (hookLeft != null) detachOffHand(player);
+			} else if (key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND) {
+				if (hookRight != null) detachMainHand(player);
 			}
 		}
 	}
@@ -200,19 +197,19 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		int id = player.getId();
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), id, player.level());
 
-		if (grapplehookEntitiesLeft.containsKey(player)) {
-			GrapplinghookEntity hookLeft = grapplehookEntitiesLeft.get(player);
-			setHookEntityLeft(player, null);
-			if (hookLeft != null) {
-				hookLeft.removeServer();
+		if (grapplehookEntitiesOffHand.containsKey(player)) {
+			GrapplinghookEntity hookOffHand = grapplehookEntitiesOffHand.get(player);
+			setHookEntityOffHand(player, null);
+			if (hookOffHand != null) {
+				hookOffHand.removeServer();
 			}
 		}
 
-		if (grapplehookEntitiesRight.containsKey(player)) {
-			GrapplinghookEntity hookRight = grapplehookEntitiesRight.get(player);
-			setHookEntityLeft(player, null);
-			if (hookRight != null) {
-				hookRight.removeServer();
+		if (grapplehookEntitiesMainHand.containsKey(player)) {
+			GrapplinghookEntity hookMainHand = grapplehookEntitiesMainHand.get(player);
+			setHookEntityOffHand(player, null);
+			if (hookMainHand != null) {
+				hookMainHand.removeServer();
 			}
 		}
 	}
@@ -248,12 +245,12 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
 				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
 					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both.desc", ClientKey.THROW_HOOKS.get()));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_left.desc", ClientKey.THROW_LEFT_HOOK));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_right.desc", ClientKey.THROW_RIGHT_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand.desc", ClientKey.THROW_OFF_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_handt.desc", ClientKey.THROW_MAIN_HOOK));
 				} else {
 					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both_hold.desc", ClientKey.THROW_HOOKS.get()));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_left_hold.desc", ClientKey.THROW_LEFT_HOOK));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_right_hold.desc", ClientKey.THROW_RIGHT_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand_hold.desc", ClientKey.THROW_OFF_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_hand_hold.desc", ClientKey.THROW_MAIN_HOOK));
 				}
 
 			} else {
@@ -421,13 +418,13 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		return Math.max(0.0D, Vec.motionVec(holder).distanceAlong(directionVec));
 	}
 
-	public void throwBoth(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean isMainHand) {
+	public void throwBoth(ItemStack stack, Level worldIn, Player entityLiving, boolean isMainHand) {
 		if (this.hasHookEntity(entityLiving)) {
 			this.detachBoth(entityLiving);
 			return;
 		}
 
-		stack.hurtAndBreak(1, (ServerPlayer) entityLiving, GrappleModUtils.currentHand(isMainHand));
+		stack.hurtAndBreak(1, entityLiving, GrappleModUtils.currentHand(isMainHand));
 		if (stack.getCount() <= 0)
 			return;
 
@@ -436,111 +433,113 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		boolean shouldThrowBothHands = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle != 0;
 
 		if (shouldThrowBothHands)
-            this.throwLeft(stack, worldIn, entityLiving);
+            this.throwOffHand(stack, worldIn, entityLiving, shouldThrowBothHands);
 
-		this.throwRight(stack, worldIn, entityLiving, isMainHand);
+		this.throwMainHand(stack, worldIn, entityLiving, shouldThrowBothHands);
 
 		entityLiving.level().playSound(null, entityLiving.position().x, entityLiving.position().y, entityLiving.position().z, SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 2.0F * 0.5F);
 	}
 
-	public boolean throwLeft(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+	public boolean throwOffHand(ItemStack stack, Level worldIn, Player entityLiving, boolean isDoublePair) {
     	HookCustomization custom = this.getCustomizationsOrDefault(stack);
 
-		double angle = this.getDoubleHookAngle(entityLiving, custom);
+		int handAdjustment = entityLiving.getMainArm() == HumanoidArm.RIGHT ? -1 : 1; // flip based on off-hand
+		double angle = this.getDoubleHookAngle(entityLiving, custom) * handAdjustment;
 		double verticalAngle = this.getSingleHookAngle(entityLiving, custom);
 
-		Vec initialAngle = Vec.fromAngles(Math.toRadians(-angle), Math.toRadians(verticalAngle));
+		Vec initialAngle = Vec.fromAngles(Math.toRadians(angle), Math.toRadians(verticalAngle));
 		Vec anglevec = applyHolderRotation(initialAngle, entityLiving);
 	  	Vec direction = this.calculateThrowDirectionVector(anglevec);
 	  	double extraSpeed = this.calculateExtraSpeedFromAngles(entityLiving, direction);
 
-		GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, false, true);
+		GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, false, isDoublePair);
         hookEntity.shoot(direction, hookEntity.getSpeed() + extraSpeed, 0.0F);
         
 		worldIn.addFreshEntity(hookEntity);
-		setHookEntityLeft(entityLiving, hookEntity);
+		setHookEntityOffHand(entityLiving, hookEntity);
 		return true;
 	}
 	
-	public boolean throwRight(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand) {
+	public boolean throwMainHand(ItemStack stack, Level worldIn, Player entityLiving, boolean isDoublePair) {
 	    HookCustomization custom = this.getCustomizationsOrDefault(stack);
-		double angle = this.getDoubleHookAngle(entityLiving, custom);
+
+		int handAdjustment = entityLiving.getMainArm() == HumanoidArm.RIGHT ? 1 : -1; // flip based on main-hand
+		double angle = this.getDoubleHookAngle(entityLiving, custom) * handAdjustment;
   		double verticalAngle = this.getSingleHookAngle(entityLiving, custom);
 
-		boolean isNotDouble = !custom.get(DOUBLE_HOOK_ATTACHED.get()) || angle == 0;
+		boolean isDoubleHook = custom.get(DOUBLE_HOOK_ATTACHED.get()) && angle > 0;
 
-		Vec initialAngle = isNotDouble
-				? new Vec(0,0,1).rotatePitch(Math.toRadians(verticalAngle))
-				: Vec.fromAngles(Math.toRadians(angle), Math.toRadians(verticalAngle));
+		Vec initialAngle = isDoubleHook
+				? Vec.fromAngles(Math.toRadians(angle), Math.toRadians(verticalAngle))
+				: new Vec(0,0,1).rotatePitch(Math.toRadians(verticalAngle));
 
 		Vec anglevec = applyHolderRotation(initialAngle, entityLiving);
 		Vec direction = this.calculateThrowDirectionVector(anglevec);
 		double extraSpeed = this.calculateExtraSpeedFromAngles(entityLiving, direction);
 
-		GrapplinghookEntity hookEntity = isNotDouble
-				? this.createGrapplehookEntity(stack, worldIn, entityLiving, righthand, false)
-				: this.createGrapplehookEntity(stack, worldIn, entityLiving, true, true);
+		GrapplinghookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, true, isDoublePair);
 
 		hookEntity.shoot(direction, hookEntity.getSpeed() + extraSpeed, 0.0F);
 
 		worldIn.addFreshEntity(hookEntity);
-		setHookEntityRight(entityLiving, hookEntity);
+		setHookEntityMainHand(entityLiving, hookEntity);
 
 		return true;
 	}
 	
 	public void detachBoth(LivingEntity thrower) {
-		GrapplinghookEntity hookLeft = getHookEntityLeft(thrower);
-		GrapplinghookEntity hookRight = getHookEntityRight(thrower);
+		GrapplinghookEntity hookOffHand = getHookEntityOffHand(thrower);
+		GrapplinghookEntity hookMainHand = getHookEntityMainHand(thrower);
 
-		setHookEntityLeft(thrower, null);
-		setHookEntityRight(thrower, null);
+		setHookEntityOffHand(thrower, null);
+		setHookEntityMainHand(thrower, null);
 		
-		if (hookLeft != null) hookLeft.removeServer();
-		if (hookRight != null) hookRight.removeServer();
+		if (hookOffHand != null) hookOffHand.removeServer();
+		if (hookMainHand != null) hookMainHand.removeServer();
 
 		int id = thrower.getId();
 		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
 		GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), thrower.getId(), thrower.level());
 	}
 	
-	public void detachLeft(LivingEntity thrower) {
+	public void detachOffHand(LivingEntity thrower) {
 
-		GrapplinghookEntity hookLeft = getHookEntityLeft(thrower);
-		setHookEntityLeft(thrower, null);
+		GrapplinghookEntity hookOffHand = getHookEntityOffHand(thrower);
+		setHookEntityOffHand(thrower, null);
 		
-		if (hookLeft != null) hookLeft.removeServer();
+		if (hookOffHand != null) hookOffHand.removeServer();
 
 		int id = thrower.getId();
 		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
 		
-		// remove controller if hook is attached
-		if (getHookEntityRight(thrower) == null) {
+		// remove controller if no hook is attached
+		if (getHookEntityMainHand(thrower) == null) {
 			GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), id, thrower.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookLeft.getId()), id, thrower.level());
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookOffHand.getId()), id, thrower.level());
 		}
 	}
 	
-	public void detachRight(LivingEntity thrower) {
-		GrapplinghookEntity hookRight = getHookEntityRight(thrower);
-		setHookEntityRight(thrower, null);
+	public void detachMainHand(LivingEntity thrower) {
+		GrapplinghookEntity hookMainHand = getHookEntityMainHand(thrower);
+		setHookEntityMainHand(thrower, null);
 		
-		if (hookRight != null) hookRight.removeServer();
+		if (hookMainHand != null) hookMainHand.removeServer();
 		
 		int id = thrower.getId();
 
 		GrappleModServerEvents.HOOK_RETRACT.invoker().onHookRetracted(thrower);
-		// remove controller if hook is attached
-		if (getHookEntityLeft(thrower) == null) {
+
+		// remove controller if no hook is attached
+		if (getHookEntityOffHand(thrower) == null) {
 			GrappleModUtils.sendToCorrectClient(new GrappleDetachS2CPayload(id), id, thrower.level());
 		} else {
-			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookRight.getId()), id, thrower.level());
+			GrappleModUtils.sendToCorrectClient(new DetachSingleHookS2CPayload(id, hookMainHand.getId()), id, thrower.level());
 		}
 	}
 	
-	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean righthand, boolean isdouble) {
-		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, righthand, this.getCustomizationsOrDefault(stack), isdouble);
+	public GrapplinghookEntity createGrapplehookEntity(ItemStack stack, Level worldIn, LivingEntity entityLiving, boolean isMainHand, boolean isDoublePair) {
+		GrapplinghookEntity hookEntity = new GrapplinghookEntity(worldIn, entityLiving, isMainHand, this.getCustomizationsOrDefault(stack), isDoublePair);
 		ServerHookEntityTracker.addGrappleEntity(entityLiving, hookEntity);
 		return hookEntity;
 	}
@@ -559,34 +558,34 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 
 
-	public void setHookEntityLeft(Entity entity, GrapplinghookEntity hookEntity) {
-		GrapplehookItem.grapplehookEntitiesLeft.put(entity, hookEntity);
+	public void setHookEntityOffHand(Entity entity, GrapplinghookEntity hookEntity) {
+		GrapplehookItem.grapplehookEntitiesOffHand.put(entity, hookEntity);
 	}
-	public void setHookEntityRight(Entity entity, GrapplinghookEntity hookEntity) {
-		GrapplehookItem.grapplehookEntitiesRight.put(entity, hookEntity);
+	public void setHookEntityMainHand(Entity entity, GrapplinghookEntity hookEntity) {
+		GrapplehookItem.grapplehookEntitiesMainHand.put(entity, hookEntity);
 	}
 
 
 	public boolean hasHookEntity(Entity entity) {
-		GrapplinghookEntity hookLeft = getHookEntityLeft(entity);
-		GrapplinghookEntity hookRight = getHookEntityRight(entity);
-		return (hookLeft != null) || (hookRight != null);
+		GrapplinghookEntity offHook = getHookEntityOffHand(entity);
+		GrapplinghookEntity mainHook = getHookEntityMainHand(entity);
+		return (offHook != null) || (mainHook != null);
 	}
 
-	public GrapplinghookEntity getHookEntityLeft(Entity entity) {
-		if (!GrapplehookItem.grapplehookEntitiesLeft.containsKey(entity)) return null;
+	public GrapplinghookEntity getHookEntityOffHand(Entity entity) {
+		if (!GrapplehookItem.grapplehookEntitiesOffHand.containsKey(entity)) return null;
 
-		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesLeft.get(entity);
+		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesOffHand.get(entity);
 		if (hookEntity != null && hookEntity.isAlive())
 			return hookEntity;
 
 		return null;
 	}
 
-	public GrapplinghookEntity getHookEntityRight(Entity entity) {
-		if (!GrapplehookItem.grapplehookEntitiesRight.containsKey(entity)) return null;
+	public GrapplinghookEntity getHookEntityMainHand(Entity entity) {
+		if (!GrapplehookItem.grapplehookEntitiesMainHand.containsKey(entity)) return null;
 
-		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesRight.get(entity);
+		GrapplinghookEntity hookEntity = GrapplehookItem.grapplehookEntitiesMainHand.get(entity);
 		if (hookEntity != null && hookEntity.isAlive())
 			return hookEntity;
 

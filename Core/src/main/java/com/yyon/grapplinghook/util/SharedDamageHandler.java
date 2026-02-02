@@ -28,8 +28,8 @@ public class SharedDamageHandler {
             return;
 
         ServerHookEntityTracker.removeAllHooksFor(deadEntity);
-        GrapplehookItem.grapplehookEntitiesLeft.remove(deadEntity);
-        GrapplehookItem.grapplehookEntitiesRight.remove(deadEntity);
+        GrapplehookItem.grapplehookEntitiesOffHand.remove(deadEntity);
+        GrapplehookItem.grapplehookEntitiesMainHand.remove(deadEntity);
 
         if(deadEntity instanceof Player) {
             int id = deadEntity.getId();

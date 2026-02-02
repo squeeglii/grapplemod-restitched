@@ -261,6 +261,10 @@ public final class HookCustomization {
 		return Collections.unmodifiableSet(this.values.keySet());
 	}
 
+	public boolean isDefault() {
+		return this.values.isEmpty();
+	}
+
 	private Map<CustomizationProperty<?>, Object> getValues() {
 		return this.values;
 	}

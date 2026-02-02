@@ -1,7 +1,6 @@
 package com.yyon.grapplinghook.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.yyon.grapplinghook.GrappleMod;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -10,7 +9,6 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ClientKey {
 
@@ -35,8 +33,8 @@ public class ClientKey {
     public static final WithFallback ROCKET = ClientKey.createKeyBindingWithFallback(new KeyMapping("key.rocket.desc", GLFW.GLFW_KEY_UNKNOWN, "key.grapplemod.category"), options -> options.keyAttack);
     public static final WithFallback SLIDE = ClientKey.createKeyBindingWithFallback(new KeyMapping("key.slide.desc", GLFW.GLFW_KEY_UNKNOWN, "key.grapplemod.category"), options -> options.keyShift);
 
-    public static final KeyMapping THROW_LEFT_HOOK = ClientKey.createKeyBinding(new KeyMapping("key.leftthrow.desc", InputConstants.UNKNOWN.getValue(), "key.grapplemod.category"));
-    public static final KeyMapping THROW_RIGHT_HOOK = ClientKey.createKeyBinding(new KeyMapping("key.rightthrow.desc", InputConstants.UNKNOWN.getValue(), "key.grapplemod.category"));
+    public static final KeyMapping THROW_OFF_HOOK = ClientKey.createKeyBinding(new KeyMapping("key.off_throw.desc", InputConstants.UNKNOWN.getValue(), "key.grapplemod.category"));
+    public static final KeyMapping THROW_MAIN_HOOK = ClientKey.createKeyBinding(new KeyMapping("key.main_throw.desc", InputConstants.UNKNOWN.getValue(), "key.grapplemod.category"));
     public static final KeyMapping CLIMB_UP = ClientKey.createKeyBinding(new KeyMapping("key.climbup.desc", InputConstants.UNKNOWN.getValue(), "key.grapplemod.category"));
     public static final KeyMapping CLIMB_DOWN = ClientKey.createKeyBinding(new KeyMapping("key.climbdown.desc", InputConstants.UNKNOWN.getValue(), "key.grapplemod.category"));
 
