@@ -8,11 +8,13 @@ import com.yyon.grapplinghook.physics.io.IHookStateHolder;
 import com.yyon.grapplinghook.util.scheduling.Ticker;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class NetworkManager {
@@ -72,6 +74,18 @@ public class NetworkManager {
         }
 
         for(ServerPlayer player: players)
+            ServerPlayNetworking.send(player, payload);
+    }
+
+    public static void broadcastToClients(S2CPayload payload) {
+        MinecraftServer server = GrappleMod.getServer();
+
+        if(server == null) {
+            GrappleMod.LOGGER.warn("Tried to broadcast packet while no server was running.");
+            return;
+        }
+
+        for(ServerPlayer player: PlayerLookup.all(server))
             ServerPlayNetworking.send(player, payload);
     }
 }

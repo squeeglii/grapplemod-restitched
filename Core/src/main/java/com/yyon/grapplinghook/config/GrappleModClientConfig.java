@@ -15,13 +15,15 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import java.util.Set;
+
 // I reimplemented my autoconfig for YACL implementation from BridgingMod. A todo: is to
 // extract the implementations from this and BridgingMod to a separate library. I just cba rn.
 // -w
 @Environment(EnvType.CLIENT)
 public class GrappleModClientConfig extends DefaultValueTracker implements IConfig {
 
-    public static ConfigClassHandler<GrappleModClientConfig> HANDLER = ConfigClassHandler.createBuilder(GrappleModClientConfig.class)
+    private static final ConfigClassHandler<GrappleModClientConfig> INTERNAL_HANDLER = ConfigClassHandler.createBuilder(GrappleModClientConfig.class)
             .id(GrappleMod.id("client"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(GrappleMod.getDefaultConfigPath().resolve(GrappleMod.MOD_ID + "-client.json"))
@@ -29,6 +31,12 @@ public class GrappleModClientConfig extends DefaultValueTracker implements IConf
                     .appendGsonBuilder(builder -> builder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES))
                     .build())
             .build();
+
+    public static final ConfigClassHandler<GrappleModClientConfig> HANDLER = new WrappedConfigClassHandler<>(
+            INTERNAL_HANDLER,
+            Set.of(),
+            Set.of()
+    );
 
     public GrappleModClientConfig() {
         this.saveDefaults(); // This should be run before /any/ saving or loading occurs.

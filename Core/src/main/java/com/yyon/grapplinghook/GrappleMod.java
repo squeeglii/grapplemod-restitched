@@ -8,20 +8,22 @@ import com.yyon.grapplinghook.content.registry.CustomizationCategories;
 import com.yyon.grapplinghook.content.registry.CustomizationProperties;
 import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.network.NetworkManager;
+import com.yyon.grapplinghook.network.clientbound.SyncServerConfigS2CPayload;
 import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.scheduling.Ticker;
 import dev.isxander.yacl3.platform.YACLPlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,10 +49,12 @@ import java.util.Optional;
  */
 public class GrappleMod implements ModInitializer {
 
+
     public static final String MOD_ID = "grapplemod";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private static GrappleMod instance;
+    private static MinecraftServer currentServerInstance = null;
+    private static GrappleMod instance = null;
 
     private ServerFeatures serverFeatures;
     private Ticker ticker;
@@ -103,6 +107,9 @@ public class GrappleMod implements ModInitializer {
         this.registerDataPacks();
 
         ServerTickEvents.START_SERVER_TICK.register(this.ticker::tick);
+
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> currentServerInstance = server);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> currentServerInstance = null);
     }
 
     private void initConfig() {
@@ -157,6 +164,10 @@ public class GrappleMod implements ModInitializer {
 
     public static GrappleMod get() {
         return instance;
+    }
+
+    public static MinecraftServer getServer() {
+        return currentServerInstance;
     }
 
     public static ResourceLocation id(String id) {

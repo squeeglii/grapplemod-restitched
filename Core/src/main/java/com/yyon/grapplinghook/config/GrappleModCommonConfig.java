@@ -6,6 +6,8 @@ import com.yyon.grapplinghook.config.helper.ConfigUtil;
 import com.yyon.grapplinghook.config.helper.IConfig;
 import com.yyon.grapplinghook.config.helper.annotation.*;
 import com.yyon.grapplinghook.config.helper.impl.DefaultValueTracker;
+import com.yyon.grapplinghook.network.NetworkManager;
+import com.yyon.grapplinghook.network.clientbound.SyncServerConfigS2CPayload;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.ConfigSerializer;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
@@ -13,6 +15,7 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
+import java.util.Set;
 import java.util.function.Function;
 
 // I reimplemented my autoconfig for YACL implementation from BridgingMod. A todo: is to
@@ -22,17 +25,20 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
 
     public static GrappleModCommonConfig serverProvidedConfig = null;
 
-    public static Function<ConfigClassHandler<GrappleModCommonConfig>, ConfigSerializer<GrappleModCommonConfig>> SERIALIZER = config ->
-            GsonConfigSerializerBuilder.create(config)
+    private static final ConfigClassHandler<GrappleModCommonConfig> INTERNAL_HANDLER = ConfigClassHandler.createBuilder(GrappleModCommonConfig.class)
+            .id(GrappleMod.id("common"))
+            .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(GrappleMod.getDefaultConfigPath().resolve(GrappleMod.MOD_ID + "-common.json"))
                     .setJson5(false)
                     .appendGsonBuilder(builder -> builder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES))
-                    .build();
-
-    public static ConfigClassHandler<GrappleModCommonConfig> HANDLER = ConfigClassHandler.createBuilder(GrappleModCommonConfig.class)
-            .id(GrappleMod.id("common"))
-            .serializer(SERIALIZER)
+                    .build())
             .build();
+
+    public static final ConfigClassHandler<GrappleModCommonConfig> HANDLER = new WrappedConfigClassHandler<>(
+            INTERNAL_HANDLER,
+            Set.of(GrappleModCommonConfig::redistributeConfigToClients),
+            Set.of(GrappleModCommonConfig::redistributeConfigToClients)
+    );
 
     //todo: find something more elegant?
     public static final StreamCodec<RegistryFriendlyByteBuf, GrappleModCommonConfig> STREAM_CODEC = new StreamCodec<>() {
@@ -72,7 +78,7 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
 
     public static void syncIncomingFromServer(GrappleModCommonConfig serverConfig) {
         if(GrappleModCommonConfig.isUsingServerProvidedConfig())
-            GrappleMod.LOGGER.warn("Replacing existing server-provided mod config with another server-provided config!");
+            GrappleMod.LOGGER.info("Replacing existing server-provided mod config with another server-provided config!");
 
         GrappleMod.LOGGER.info("Using server-provided common config.");
         GrappleModCommonConfig.serverProvidedConfig = serverConfig;
@@ -85,6 +91,14 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
 
     public static boolean isUsingServerProvidedConfig() {
         return GrappleModCommonConfig.serverProvidedConfig != null;
+    }
+
+    //todo: add file listener for dedicated-server reloads.
+    public static void redistributeConfigToClients() {
+        GrappleModCommonConfig config = GrappleModCommonConfig.get();
+        SyncServerConfigS2CPayload packet = new SyncServerConfigS2CPayload(config);
+
+        NetworkManager.broadcastToClients(packet);
     }
 
 
