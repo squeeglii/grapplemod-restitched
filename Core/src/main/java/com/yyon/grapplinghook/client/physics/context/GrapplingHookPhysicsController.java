@@ -390,12 +390,13 @@ public class GrapplingHookPhysicsController {
 		if (motor)
 			this.processMotorPhysics(playerPos, facing, entity, gravity, close);
 
-		// forcefield
+		// forcefield - does not go through this path if via ForcefieldPhysicsController
 		if (this.custom.get(FORCEFIELD_ATTACHED.get())) {
 			Vec blockPush = this.checkRepel(playerPos, entity.level());
 			blockPush.mutableScale(this.custom.get(FORCEFIELD_FORCE.get()))
 					 .mutableScale(0.5D)
 					 .mutableMultiply(0.5D, 2.0D, 0.5D);
+
 			this.motion.mutableAdd(blockPush);
 		}
 

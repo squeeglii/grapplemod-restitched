@@ -139,9 +139,9 @@
     "grapple_property.limits_restricted": "Use the Limits Upgrade to unlock",
     "grapple_property.blocked": "Blocked by the server",
 
-    "enum.crouch_activation.when_crouching": "When Sneaking",
-    "enum.crouch_activation.when_not_crouching": "When NOT Sneaking",
-    "enum.crouch_activation.always": "Always Active",
+    "enum.grapplemod.crouch_activation.when_crouching": "When Sneaking",
+    "enum.grapplemod.crouch_activation.when_not_crouching": "When NOT Sneaking",
+    "enum.grapplemod.crouch_activation.always": "Always Active",
 
     "enum.grapplemod.rope_style.regular": "Rope-ey",
     "enum.grapplemod.rope_style.iron": "Cable",

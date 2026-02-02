@@ -130,7 +130,7 @@ public class GrappleModCommonConfig extends DefaultValueTracker implements IConf
     @SerialEntry @Category("item") @ContinuousRange(min = 0.0f, max = 10.0f, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_BLOCKS)
     private float ropeSnapBuffer = 5.0f;
     @SerialEntry @Category("item") @ContinuousRange(min = 0.0f, max = 500.0f, sliderStep = 0.5f, formatTranslationKey = ConfigUtil.TYPE_PERCENTAGE)
-    private float ropeJumpPower = 1.0f;
+    private float ropeJumpPower = 100.0f;
     @SerialEntry @Category("item")
     private boolean ropeJumpAtAngle = false;
     @SerialEntry @Category("item") @DiscreteRange(min = 0, max = 100, formatTranslationKey = ConfigUtil.TYPE_TICKS)

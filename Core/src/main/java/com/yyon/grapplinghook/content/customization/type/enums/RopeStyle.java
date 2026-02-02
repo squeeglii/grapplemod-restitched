@@ -37,7 +37,7 @@ public enum RopeStyle implements IFriendlyNameProvider, StringRepresentable {
 
     @Override
     public String getFriendlyName() {
-        return "rope_style";
+        return "grapplemod.rope_style";
     }
 
     @NotNull

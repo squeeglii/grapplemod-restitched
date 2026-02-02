@@ -23,7 +23,7 @@ public enum CrouchToggle implements IFriendlyNameProvider, StringRepresentable {
 
     @Override
     public String getFriendlyName() {
-        return "crouch_activation";
+        return "grapplemod.crouch_activation";
     }
 
     @NotNull
