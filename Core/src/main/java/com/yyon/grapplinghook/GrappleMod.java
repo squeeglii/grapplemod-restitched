@@ -74,7 +74,7 @@ public class GrappleMod implements ModInitializer {
         this.serverFeatures = new ServerFeatures();
 
         // I assume this is needed before items.
-        ModItemComponents.bump();
+        ModDataComponents.bump();
 
         ModArmourMaterials.registerAllMaterials();
         ModEnchantments.registerImmutable();

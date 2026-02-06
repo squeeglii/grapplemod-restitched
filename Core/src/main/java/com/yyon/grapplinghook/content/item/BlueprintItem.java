@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
-import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
+import com.yyon.grapplinghook.content.registry.internal.ModDataComponents;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.content.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.content.customization.type.CustomizationProperty;
@@ -26,7 +26,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
                 new Item.Properties()
                         .stacksTo(64)
                         //.component(GrappleModItemComponents.AUTHORED, new TemplateAuthor()) // blank!
-                        .component(ModItemComponents.CUSTOMIZABLE, new HookCustomization())
+                        .component(ModDataComponents.CUSTOMIZABLE, new HookCustomization())
         );
     }
 
@@ -37,7 +37,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
     @Override
     public void applyCustomizations(ItemStack stack, HookCustomization customizations) {
-        stack.set(ModItemComponents.CUSTOMIZABLE, customizations);
+        stack.set(ModDataComponents.CUSTOMIZABLE, customizations);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
     @Override
     public void commit(ItemStack stack, Component displayName, Component author) {
         TemplateAuthor authorComp = new TemplateAuthor(displayName, author);
-        stack.set(ModItemComponents.AUTHORED, authorComp);
+        stack.set(ModDataComponents.AUTHORED, authorComp);
     }
 
     @NotNull
@@ -73,8 +73,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
             return;
         }
 
-        if(stack.has(ModItemComponents.AUTHORED)) {
-            TemplateAuthor metadata = stack.get(ModItemComponents.AUTHORED);
+        if(stack.has(ModDataComponents.AUTHORED)) {
+            TemplateAuthor metadata = stack.get(ModDataComponents.AUTHORED);
 
             Component name = metadata.templateDisplayName()
                     .copy()
@@ -138,15 +138,15 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
 
 
     public Optional<HookCustomization> getCustomizationsOrDefault(ItemStack stack) {
-        return stack.has(ModItemComponents.CUSTOMIZABLE)
-                ? Optional.ofNullable(stack.get(ModItemComponents.CUSTOMIZABLE))
+        return stack.has(ModDataComponents.CUSTOMIZABLE)
+                ? Optional.ofNullable(stack.get(ModDataComponents.CUSTOMIZABLE))
                 : Optional.empty();
     }
 
     public boolean isBlank(ItemStack stack) {
-        boolean isTemplateMetaMissing = !stack.has(ModItemComponents.AUTHORED);
-        boolean areCustomizationsMissing = !stack.has(ModItemComponents.CUSTOMIZABLE) ||
-                                           stack.get(ModItemComponents.CUSTOMIZABLE).isDefault();
+        boolean isTemplateMetaMissing = !stack.has(ModDataComponents.AUTHORED);
+        boolean areCustomizationsMissing = !stack.has(ModDataComponents.CUSTOMIZABLE) ||
+                                           stack.get(ModDataComponents.CUSTOMIZABLE).isDefault();
 
         return isTemplateMetaMissing && areCustomizationsMissing;
     }

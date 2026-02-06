@@ -1,7 +1,8 @@
 package com.yyon.grapplinghook.content.block;
 
 import com.mojang.serialization.MapCodec;
-import com.yyon.grapplinghook.client.GrappleModClient;
+import com.yyon.grapplinghook.GrappleMod;
+import com.yyon.grapplinghook.client.gui.menu.ModificationTableMenu;
 import com.yyon.grapplinghook.config.ServerFeatures;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
@@ -22,11 +23,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -101,8 +101,6 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return RenderShape.MODEL;
 	}
 
-
-
 	@Override
 	@NotNull
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
@@ -110,13 +108,12 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		Item heldItem = heldStack.getItem();
 
 		if (heldItem instanceof BaseUpgradeItem upgradeItem)
-			return this.handleUpgradeItem(level, pos, player, hand, upgradeItem);
+			return this.handleExpandTableUpgrades(level, pos, player, hand, upgradeItem);
 
 		if (heldItem instanceof ICustomizationApplicable customItem)
-			return this.handleApplyCustomizations(customItem, level, pos, player, heldStack);
+			return this.handleQuickApplyCustomizations(customItem, level, pos, player, heldStack);
 
 		if (heldItem == Items.DIAMOND_BOOTS) {
-
 			if (level.isClientSide)
 				return ItemInteractionResult.SUCCESS;
 
@@ -142,17 +139,29 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 	@Override
 	@NotNull
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide)
-			return InteractionResult.CONSUME;
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
 
 		BlockEntity ent = level.getBlockEntity(pos);
 
-		if (!(ent instanceof GrappleModifierBlockEntity tile))
+		if (!(ent instanceof GrappleModifierBlockEntity))
 			return InteractionResult.FAIL;
 
-		GrappleModClient.get().openModifierScreen(tile);
+		player.openMenu(state.getMenuProvider(level, pos));
 
 		return InteractionResult.SUCCESS;
+	}
+
+	@Override
+	@NotNull
+	protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+		GrappleMod.LOGGER.info("Getting modification table menu provider.");
+
+		ContainerLevelAccess access = ContainerLevelAccess.create(level, pos);
+		return new SimpleMenuProvider(
+				(id, inventory, player) -> new ModificationTableMenu(id, inventory, access),
+				Component.empty()
+		);
 	}
 
 	/**
@@ -197,7 +206,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return ItemInteractionResult.CONSUME;
 	}
 
-	private ItemInteractionResult handleApplyCustomizations(ICustomizationApplicable item, Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
+	private ItemInteractionResult handleQuickApplyCustomizations(ICustomizationApplicable item, Level worldIn, BlockPos pos, Player playerIn, ItemStack heldStack) {
 		if (worldIn.isClientSide)
 			return ItemInteractionResult.SUCCESS;
 
@@ -226,7 +235,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 		return ItemInteractionResult.CONSUME;
 	}
 
-	private ItemInteractionResult handleUpgradeItem(Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BaseUpgradeItem upgradeItem) {
+	private ItemInteractionResult handleExpandTableUpgrades(Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BaseUpgradeItem upgradeItem) {
 		if (worldIn.isClientSide)
 			return ItemInteractionResult.SUCCESS;
 

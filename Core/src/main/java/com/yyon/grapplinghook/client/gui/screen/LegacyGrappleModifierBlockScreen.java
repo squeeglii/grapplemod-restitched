@@ -63,7 +63,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 		this.customization = blockEntity.getCurrentCustomizations();
 		this.currentActiveCategory = null;
 
-		this.currentView = ModifierGUILayoutView.UNKNOWN;
+		this.currentView = ModifierGUILayoutView.MAIN;
 	}
 
 
@@ -92,8 +92,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	@Override
 	public boolean shouldCloseOnEsc() {
-		return this.currentView == ModifierGUILayoutView.MAIN ||
-			   this.currentView == ModifierGUILayoutView.UNKNOWN;
+		return this.currentView == ModifierGUILayoutView.MAIN;
 	}
 
 	@Override
@@ -354,7 +353,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 	}
 
 	public void resetScreenLayout() {
-		this.currentView = ModifierGUILayoutView.UNKNOWN;
+		this.currentView = ModifierGUILayoutView.MAIN;
 		this.currentActiveCategory = null;
 		this.widgetPosYIncrementor = 0;
 		this.options = new HashMap<>();

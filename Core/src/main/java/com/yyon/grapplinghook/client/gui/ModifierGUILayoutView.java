@@ -9,6 +9,7 @@ public enum ModifierGUILayoutView {
     MAIN,
     HELP,
     CATEGORY_LOCKED,
-    CATEGORY_PROPERTIES
+    CATEGORY_PROPERTIES,
+    AUTHORING_SCREEN
 
 }

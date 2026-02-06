@@ -7,7 +7,7 @@ import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
 import com.yyon.grapplinghook.content.item.type.IGlobalKeyObserver;
-import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
+import com.yyon.grapplinghook.content.registry.internal.ModDataComponents;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.content.customization.data.TemplateAuthor;
 import com.yyon.grapplinghook.content.customization.type.AttachmentProperty;
@@ -82,7 +82,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 				new Item.Properties()
 						.stacksTo(1)
 						.durability(DURABILITY)
-						.component(ModItemComponents.CUSTOMIZABLE, new HookCustomization())
+						.component(ModDataComponents.CUSTOMIZABLE, new HookCustomization())
 		);
 	}
 
@@ -191,7 +191,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 	@Override
 	public void onDroppedByPlayer(ItemStack stack, Player player) {
-		if(!stack.has(ModItemComponents.FORCE_HOOK_DISPLAY))
+		if(!stack.has(ModDataComponents.FORCE_HOOK_DISPLAY))
 			return;
 
 		int id = player.getId();
@@ -220,8 +220,8 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
 		Options options = Minecraft.getInstance().options;
 
-		if(stack.has(ModItemComponents.AUTHORED)) {
-			TemplateAuthor metadata = stack.get(ModItemComponents.AUTHORED);
+		if(stack.has(ModDataComponents.AUTHORED)) {
+			TemplateAuthor metadata = stack.get(ModDataComponents.AUTHORED);
 			Component author = metadata.author()
 					.copy()
 					.withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
@@ -371,10 +371,10 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	@NotNull
 	@Override
 	public Component getName(ItemStack stack) {
-		if(!stack.has(ModItemComponents.AUTHORED))
+		if(!stack.has(ModDataComponents.AUTHORED))
 			return super.getName(stack);
 
-		TemplateAuthor metadata = stack.get(ModItemComponents.AUTHORED);
+		TemplateAuthor metadata = stack.get(ModDataComponents.AUTHORED);
 
 		return metadata.isNameEmpty()
 				? super.getName(stack)
@@ -402,8 +402,8 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	 */
 	@Override
 	public void applyCustomizations(ItemStack stack, HookCustomization custom) {
-		stack.remove(ModItemComponents.AUTHORED);
-		stack.set(ModItemComponents.CUSTOMIZABLE, custom);
+		stack.remove(ModDataComponents.AUTHORED);
+		stack.set(ModDataComponents.CUSTOMIZABLE, custom);
 	}
 
 	public Vec calculateThrowDirectionVector(Vec angleVec) {
@@ -546,9 +546,9 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 	public void applyTemplateMetadata(ItemStack stack, TemplateAuthor template) {
 		if(template != null) {
-			stack.set(ModItemComponents.AUTHORED, template);
+			stack.set(ModDataComponents.AUTHORED, template);
 		} else {
-			stack.remove(ModItemComponents.AUTHORED);
+			stack.remove(ModDataComponents.AUTHORED);
 		}
 	}
 
@@ -609,10 +609,10 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	 * saving it to the item itself.
 	 */
 	public HookCustomization getCustomizationsOrDefault(ItemStack stack) {
-		return stack.getOrDefault(ModItemComponents.CUSTOMIZABLE, new HookCustomization());
+		return stack.getOrDefault(ModDataComponents.CUSTOMIZABLE, new HookCustomization());
 	}
 
 	public boolean shouldDisplayAsHookOnly(ItemStack stack) {
-		return stack.has(ModItemComponents.FORCE_HOOK_DISPLAY);
+		return stack.has(ModDataComponents.FORCE_HOOK_DISPLAY);
 	}
 }

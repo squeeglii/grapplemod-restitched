@@ -8,7 +8,7 @@ import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.entity.grapplinghook.RopeSegmentHandler;
 import com.yyon.grapplinghook.content.registry.CustomizationProperties;
-import com.yyon.grapplinghook.content.registry.internal.ModItemComponents;
+import com.yyon.grapplinghook.content.registry.internal.ModDataComponents;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.content.customization.type.enums.RopeStyle;
 import com.yyon.grapplinghook.util.Vec;
@@ -400,7 +400,7 @@ public class GrapplinghookEntityRenderer<T extends GrapplinghookEntity> extends 
 
 	public ItemStack getStackToRender() {
 		ItemStack stack = new ItemStack(this.item);
-		stack.set(ModItemComponents.FORCE_HOOK_DISPLAY, Unit.INSTANCE);
+		stack.set(ModDataComponents.FORCE_HOOK_DISPLAY, Unit.INSTANCE);
         return stack;
     }
 

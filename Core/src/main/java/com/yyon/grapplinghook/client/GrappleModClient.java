@@ -127,11 +127,6 @@ public class GrappleModClient implements ClientModInitializer {
         this.getClientControllerManager().startRocket(player, custom);
     }
 
-    public void openModifierScreen(GrappleModifierBlockEntity tile) {
-        Minecraft.getInstance().setScreen(new LegacyGrappleModifierBlockScreen(tile));
-    }
-
-
     public void playSlideSound() {
         this.playSound(GrappleModClient.SOUND_SLIDE, GrappleModClientConfig.get().getSlideVolume());
     }

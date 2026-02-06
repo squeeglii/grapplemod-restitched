@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Unit;
 
-public class ModItemComponents {
+public class ModDataComponents {
 
     public static final DataComponentType<HookCustomization> CUSTOMIZABLE = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
@@ -18,10 +18,10 @@ public class ModItemComponents {
     );
 
     // Should never be saved - exclusively for UI previews.
-    public static final DataComponentType<HookCustomization> MODIFICATION_TABLE_DELTA = Registry.register(
+    public static final DataComponentType<HookCustomization> CUSTOMIZATION_DELTA = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
             GrappleMod.id("previous_customization"),
-            DataComponentType.<HookCustomization>builder().build()
+            DataComponentType.<HookCustomization>builder().persistent(HookCustomization.CODEC).networkSynchronized(HookCustomization.STREAM_CODEC).cacheEncoding().build()
     );
 
     public static final DataComponentType<Unit> FORCE_HOOK_DISPLAY = Registry.register(
