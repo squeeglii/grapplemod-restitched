@@ -6,7 +6,6 @@ package com.yyon.grapplinghook.client.gui;
 // - I cba to figure that out yet.
 public enum ModifierGUILayoutView {
 
-    UNKNOWN,
     MAIN,
     HELP,
     CATEGORY_LOCKED,

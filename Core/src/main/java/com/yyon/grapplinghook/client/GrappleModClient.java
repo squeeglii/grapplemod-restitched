@@ -1,7 +1,7 @@
 package com.yyon.grapplinghook.client;
 
 import com.yyon.grapplinghook.GrappleMod;
-import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
+import com.yyon.grapplinghook.client.gui.screen.LegacyGrappleModifierBlockScreen;
 import com.yyon.grapplinghook.client.physics.ClientPhysicsControllerTracker;
 import com.yyon.grapplinghook.client.physics.context.AirFrictionPhysicsController;
 import com.yyon.grapplinghook.client.physics.context.ForcefieldPhysicsController;
@@ -14,6 +14,7 @@ import com.yyon.grapplinghook.content.registry.internal.ModEntityLayerIdentifier
 import com.yyon.grapplinghook.content.registry.internal.ModItems;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.content.customization.type.BooleanProperty;
+import com.yyon.grapplinghook.content.registry.internal.ModMenuScreens;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.Vec;
 import net.fabricmc.api.ClientModInitializer;
@@ -69,8 +70,9 @@ public class GrappleModClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.GRAPPLE_HOOK.get(), new GrapplehookEntityRenderFactory());
 
-        ClientKey.registerAll();
+        ModKeys.registerAll();
         ModEntityLayerIdentifiers.registerAll();
+        ModMenuScreens.registerAll();
 
         this.clientPhysicsControllerTracker = new ClientPhysicsControllerTracker();
         this.registerPropertyOverride();
@@ -126,7 +128,7 @@ public class GrappleModClient implements ClientModInitializer {
     }
 
     public void openModifierScreen(GrappleModifierBlockEntity tile) {
-        Minecraft.getInstance().setScreen(new GrappleModifierBlockGUI(tile));
+        Minecraft.getInstance().setScreen(new LegacyGrappleModifierBlockScreen(tile));
     }
 
 

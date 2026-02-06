@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.content.customization.display;
 
-import com.yyon.grapplinghook.client.gui.GrappleModifierBlockGUI;
+import com.yyon.grapplinghook.client.gui.screen.LegacyGrappleModifierBlockScreen;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.content.customization.type.CustomizationProperty;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -27,8 +27,8 @@ public abstract class AbstractPropertyDisplay<T, P extends CustomizationProperty
 
     public abstract AbstractWidget getConfigurationUIElement(Supplier<HookCustomization> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight);
 
-    public final AbstractWidget getModifierBlockUI(GrappleModifierBlockGUI gui, int x, int y) {
-        return this.getConfigurationUIElement(gui::getCurrentCustomizations, gui, gui::markConfigurationsDirty, x, y, GrappleModifierBlockGUI.FULL_SIZE_X - (2 * GrappleModifierBlockGUI.OUTER_PADDING_X), 20);
+    public final AbstractWidget getModifierBlockUI(LegacyGrappleModifierBlockScreen gui, int x, int y) {
+        return this.getConfigurationUIElement(gui::getCurrentCustomizations, gui, gui::markConfigurationsDirty, x, y, LegacyGrappleModifierBlockScreen.FULL_SIZE_X - (2 * LegacyGrappleModifierBlockScreen.OUTER_PADDING_X), 20);
     }
 
     public final P getProperty() {

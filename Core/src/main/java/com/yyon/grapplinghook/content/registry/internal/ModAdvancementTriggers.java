@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.LinkedHashSet;
 import java.util.function.Supplier;
 
-public class AdvancementTriggers {
+public class ModAdvancementTriggers {
 
     private static final LinkedHashSet<TriggerEntry<?>> advancementTriggers;
 

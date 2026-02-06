@@ -17,6 +17,13 @@ public class ModItemComponents {
             DataComponentType.<HookCustomization>builder().persistent(HookCustomization.CODEC).networkSynchronized(HookCustomization.STREAM_CODEC).cacheEncoding().build()
     );
 
+    // Should never be saved - exclusively for UI previews.
+    public static final DataComponentType<HookCustomization> MODIFICATION_TABLE_DELTA = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            GrappleMod.id("previous_customization"),
+            DataComponentType.<HookCustomization>builder().build()
+    );
+
     public static final DataComponentType<Unit> FORCE_HOOK_DISPLAY = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
             GrappleMod.id("force_hook_display"),

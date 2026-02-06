@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.item;
 
 import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.client.ClientKey;
+import com.yyon.grapplinghook.client.ModKeys;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
@@ -244,21 +244,21 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
 				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both.desc", ClientKey.THROW_HOOKS.get()));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand.desc", ClientKey.THROW_OFF_HOOK));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_hand.desc", ClientKey.THROW_MAIN_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both.desc", ModKeys.THROW_HOOKS.get()));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand.desc", ModKeys.THROW_OFF_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_hand.desc", ModKeys.THROW_MAIN_HOOK));
 				} else {
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both_hold.desc", ClientKey.THROW_HOOKS.get()));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand_hold.desc", ClientKey.THROW_OFF_HOOK));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_hand_hold.desc", ClientKey.THROW_MAIN_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_both_hold.desc", ModKeys.THROW_HOOKS.get()));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_off_hand_hold.desc", ModKeys.THROW_OFF_HOOK));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_double_main_hand_hold.desc", ModKeys.THROW_MAIN_HOOK));
 				}
 
 			} else {
 				if (!custom.get(DETACH_HOOK_ON_KEY_UP.get())) {
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw.desc", ClientKey.THROW_HOOKS.get()));
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.release.desc", ClientKey.THROW_HOOKS.get()));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw.desc", ModKeys.THROW_HOOKS.get()));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.release.desc", ModKeys.THROW_HOOKS.get()));
 				} else {
-					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_hold.desc", ClientKey.THROW_HOOKS.get()));
+					tooltipComponents.add(TextUtils.keybinding("grappletooltip.throw_hold.desc", ModKeys.THROW_HOOKS.get()));
 				}
 			}
 
@@ -268,37 +268,37 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 					options.keyUp, options.keyLeft, options.keyDown, options.keyRight
 			));
 
-			tooltipComponents.add(TextUtils.keybinding("grappletooltip.jump.desc", ClientKey.DETACH.get()));
-			tooltipComponents.add(TextUtils.keybinding("grappletooltip.slow.desc", ClientKey.DAMPEN_SWING.get()));
+			tooltipComponents.add(TextUtils.keybinding("grappletooltip.jump.desc", ModKeys.DETACH.get()));
+			tooltipComponents.add(TextUtils.keybinding("grappletooltip.slow.desc", ModKeys.DAMPEN_SWING.get()));
 
 			tooltipComponents.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)
-					.append(ClientKey.CLIMB.get().getTranslatedKeyMessage()).append("+")
+					.append(ModKeys.CLIMB.get().getTranslatedKeyMessage()).append("+")
 					.append(options.keyUp.getTranslatedKeyMessage())
 					.append(" / ")
-					.append(ClientKey.CLIMB_UP.getTranslatedKeyMessage())
+					.append(ModKeys.CLIMB_UP.getTranslatedKeyMessage())
 					.append(" - ").append(Component.translatable("grappletooltip.climbup.desc"))
 			);
 
 			tooltipComponents.add(Component.empty().withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)
-					.append(ClientKey.CLIMB.get().getTranslatedKeyMessage()).append("+")
+					.append(ModKeys.CLIMB.get().getTranslatedKeyMessage()).append("+")
 					.append(options.keyDown.getTranslatedKeyMessage())
 					.append(" / ")
-					.append(ClientKey.CLIMB_DOWN.getTranslatedKeyMessage())
+					.append(ModKeys.CLIMB_DOWN.getTranslatedKeyMessage())
 					.append(" - ").append(Component.translatable("grappletooltip.climbdown.desc"))
 			);
 
 			if (custom.get(ENDER_STAFF_ATTACHED.get())) {
-				tooltipComponents.add(TextUtils.keybinding("grappletooltip.enderlaunch.desc", ClientKey.HOOK_ENDER_LAUNCH.get()));
+				tooltipComponents.add(TextUtils.keybinding("grappletooltip.enderlaunch.desc", ModKeys.HOOK_ENDER_LAUNCH.get()));
 			}
 
 			if (custom.get(ROCKET_ATTACHED.get())) {
-				tooltipComponents.add(TextUtils.keybinding("grappletooltip.rocket.desc", ClientKey.ROCKET.get()));
+				tooltipComponents.add(TextUtils.keybinding("grappletooltip.rocket.desc", ModKeys.ROCKET.get()));
 			}
 
 			if (custom.get(MOTOR_ATTACHED.get())) {
 				Component text = switch (custom.get(MOTOR_ACTIVATION.get())) {
-					case WHEN_CROUCHING -> TextUtils.keybinding("grappletooltip.motoron.desc", ClientKey.TOGGLE_MOTOR.get());
-					case WHEN_NOT_CROUCHING -> TextUtils.keybinding("grappletooltip.motoroff.desc", ClientKey.TOGGLE_MOTOR.get());
+					case WHEN_CROUCHING -> TextUtils.keybinding("grappletooltip.motoron.desc", ModKeys.TOGGLE_MOTOR.get());
+					case WHEN_NOT_CROUCHING -> TextUtils.keybinding("grappletooltip.motoroff.desc", ModKeys.TOGGLE_MOTOR.get());
 					default -> null;
 				};
 

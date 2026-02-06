@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.content.item;
 
-import com.yyon.grapplinghook.content.registry.internal.ArmourMaterials;
+import com.yyon.grapplinghook.content.registry.internal.ModArmourMaterials;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -9,8 +9,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -34,7 +32,7 @@ import java.util.List;
 public class LongFallBootsItem extends ArmorItem {
 
 	public LongFallBootsItem() {
-	    super(ArmourMaterials.LONG_FALL_BOOTS.asHolder(), Type.BOOTS, new Item.Properties().stacksTo(1));
+	    super(ModArmourMaterials.LONG_FALL_BOOTS.asHolder(), Type.BOOTS, new Item.Properties().stacksTo(1));
 	}
 	
 	@Override

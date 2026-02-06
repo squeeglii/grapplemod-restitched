@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.content.blockentity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.yyon.grapplinghook.content.registry.internal.BlockEntities;
+import com.yyon.grapplinghook.content.registry.internal.ModBlockEntities;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.content.customization.CustomizationCategory;
 import com.yyon.grapplinghook.content.customization.data.HookCustomization;
@@ -37,7 +37,7 @@ public class GrappleModifierBlockEntity extends BlockEntity {
 	private Data data;
 
 	public GrappleModifierBlockEntity(BlockPos pos, BlockState state) {
-		super(BlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
+		super(ModBlockEntities.GRAPPLE_MODIFIER.get(), pos, state);
 		this.data = new Data();
 	}
 

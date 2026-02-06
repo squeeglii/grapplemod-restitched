@@ -1,5 +1,6 @@
-package com.yyon.grapplinghook.client.gui;
+package com.yyon.grapplinghook.client.gui.screen;
 
+import com.yyon.grapplinghook.client.gui.ModifierGUILayoutView;
 import com.yyon.grapplinghook.client.gui.widget.*;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
@@ -20,7 +21,7 @@ import net.minecraft.util.Mth;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GrappleModifierBlockGUI extends Screen {
+public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	private ModifierGUILayoutView currentView;
 
@@ -53,7 +54,7 @@ public class GrappleModifierBlockGUI extends Screen {
 	private CustomizationCategory currentActiveCategory;
 
 
-	public GrappleModifierBlockGUI(GrappleModifierBlockEntity blockEntity) {
+	public LegacyGrappleModifierBlockScreen(GrappleModifierBlockEntity blockEntity) {
 		super(Component.translatable("grapple_modifier.title"));
 
 		this.noticeMessage = null;

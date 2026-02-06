@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class BlockEntities {
+public class ModBlockEntities {
 
     private static final HashMap<ResourceLocation, BlockEntityEntry<?>> blockEntities;
 
@@ -21,12 +21,12 @@ public class BlockEntities {
         blockEntities = new HashMap<>();
     }
 
-    public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = BlockEntities
+    public static final BlockEntityEntry<BlockEntityType<GrappleModifierBlockEntity>> GRAPPLE_MODIFIER = ModBlockEntities
             .blockEntity("modification_table",() -> BlockEntityType.Builder
                     .of(GrappleModifierBlockEntity::new, ModBlocks.GRAPPLE_MODIFIER.get())
                     .build(null));
 
-    public static final BlockEntityEntry<BlockEntityType<BlueprintShelfBlockEntity>> BLUEPRINT_SHELF = BlockEntities
+    public static final BlockEntityEntry<BlockEntityType<BlueprintShelfBlockEntity>> BLUEPRINT_SHELF = ModBlockEntities
             .blockEntity("blueprint_shelf",() -> BlockEntityType.Builder
                     .of(BlueprintShelfBlockEntity::new, ModBlocks.BLUEPRINT_SHELF.get())
                     .build(null));

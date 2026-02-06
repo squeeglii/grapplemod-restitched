@@ -18,7 +18,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 // yes, the correct british "armour".
-public class ArmourMaterials {
+public class ModArmourMaterials {
 
     private static final LinkedHashSet<MaterialEntry<?>> armourMaterials;
 

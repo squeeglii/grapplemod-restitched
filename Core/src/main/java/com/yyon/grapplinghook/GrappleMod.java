@@ -8,7 +8,6 @@ import com.yyon.grapplinghook.content.registry.CustomizationCategories;
 import com.yyon.grapplinghook.content.registry.CustomizationProperties;
 import com.yyon.grapplinghook.content.registry.internal.*;
 import com.yyon.grapplinghook.network.NetworkManager;
-import com.yyon.grapplinghook.network.clientbound.SyncServerConfigS2CPayload;
 import com.yyon.grapplinghook.physics.ServerPhysicsObserver;
 import com.yyon.grapplinghook.util.GrappleModUtils;
 import com.yyon.grapplinghook.util.scheduling.Ticker;
@@ -77,14 +76,14 @@ public class GrappleMod implements ModInitializer {
         // I assume this is needed before items.
         ModItemComponents.bump();
 
-        ArmourMaterials.registerAllMaterials();
+        ModArmourMaterials.registerAllMaterials();
         ModEnchantments.registerImmutable();
 
         ModBlocks.registerAllBlocks();
         ModItems.registerAllItems();  // Items must always be registered after blocks.
         ModEntities.registerAllEntities();
-        BlockEntities.registerAllBlockEntities();
-        AdvancementTriggers.registerAllTriggers();
+        ModBlockEntities.registerAllBlockEntities();
+        ModAdvancementTriggers.registerAllTriggers();
 
         CustomizationProperties.registerAll();
         CustomizationCategories.registerAll(); // Categories must always go after items + properties.
@@ -92,9 +91,9 @@ public class GrappleMod implements ModInitializer {
         // Some stuff should be re-registered when a world loads I think? Dynamic registries are strange.
         ModEnchantments.registerRuntime();
 
-
         // Some things don't need "registering" but are static so they still
         // need loading. Load them now for reliability.
+        ModMenus.bump();
         ModTags.bump();
         ModGamerules.bump();
 

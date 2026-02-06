@@ -2,7 +2,7 @@ package com.yyon.grapplinghook.client.physics.context;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.GrappleModClient;
-import com.yyon.grapplinghook.client.ClientKey;
+import com.yyon.grapplinghook.client.ModKeys;
 import com.yyon.grapplinghook.config.GrappleModClientConfig;
 import com.yyon.grapplinghook.config.GrappleModCommonConfig;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
@@ -275,7 +275,7 @@ public class GrapplingHookPhysicsController {
 		boolean motor = false;
 		if (this.custom.get(MOTOR_ATTACHED.get())) {
 			boolean isActive = this.custom.get(MOTOR_ACTIVATION.get())
-					                      .meetsActivationCondition(ClientKey.TOGGLE_MOTOR.get());
+					                      .meetsActivationCondition(ModKeys.TOGGLE_MOTOR.get());
 			if(isActive) motor = true;
 		}
 
@@ -336,7 +336,7 @@ public class GrapplingHookPhysicsController {
 
 			// handle keyboard input (jumping and climbing)
 			if (entity instanceof Player player) {
-				boolean detachKeyDown = ClientKey.DETACH.get().isDown();
+				boolean detachKeyDown = ModKeys.DETACH.get().isDown();
 				boolean isJumping = detachKeyDown && !this.playerJump;
 				this.playerJump = detachKeyDown;
 
@@ -349,7 +349,7 @@ public class GrapplingHookPhysicsController {
 					}
 				}
 
-				if (ClientKey.DAMPEN_SWING.get().isDown()) {
+				if (ModKeys.DAMPEN_SWING.get().isDown()) {
 					// slow down
 					Vec motiontorwards = spherevec.withMagnitude(-0.1);
 					motiontorwards = new Vec(motiontorwards.x, 0, motiontorwards.z);
@@ -362,7 +362,7 @@ public class GrapplingHookPhysicsController {
 
 				}
 
-				if ((ClientKey.CLIMB.get().isDown() || ClientKey.CLIMB_UP.isDown() || ClientKey.CLIMB_DOWN.isDown()) && !motor) {
+				if ((ModKeys.CLIMB.get().isDown() || ModKeys.CLIMB_UP.isDown() || ModKeys.CLIMB_DOWN.isDown()) && !motor) {
 					Vec climbMotion = anchor.y != playerPos.y
 							? this.calculateClimbingMotion(hookEntity, playerToAnchorDist, distToAnchor, spherevec)
 							: new Vec(0, 0, 0);
@@ -438,7 +438,7 @@ public class GrapplingHookPhysicsController {
 		// climb up/down rope
 		double climbDelta = 0;
 
-		if (ClientKey.CLIMB.get().isDown()) {
+		if (ModKeys.CLIMB.get().isDown()) {
 			climbDelta = this.playerForward;
 
 			if (GrappleModClient.get().isMovingSlowly(this.holder))
@@ -447,8 +447,8 @@ public class GrapplingHookPhysicsController {
 			climbDelta = Mth.clamp(climbDelta, -1.0D, 1.0D);
 
 		}
-		else if (ClientKey.CLIMB_UP.isDown()) { climbDelta = 1.0D; }
-		else if (ClientKey.CLIMB_DOWN.isDown()) { climbDelta = -1.0D; }
+		else if (ModKeys.CLIMB_UP.isDown()) { climbDelta = 1.0D; }
+		else if (ModKeys.CLIMB_DOWN.isDown()) { climbDelta = -1.0D; }
 
 
 		if (climbDelta == 0) return new Vec(0, 0, 0);
@@ -961,7 +961,7 @@ public class GrapplingHookPhysicsController {
 		Options options = Minecraft.getInstance().options;
 
 		boolean overrideKey = this.areControlsOverridenByEquipment();
-		boolean isRocketActivated = ClientKey.ROCKET.get().isDown() || (overrideKey && options.keyUse.isDown());
+		boolean isRocketActivated = ModKeys.ROCKET.get().isDown() || (overrideKey && options.keyUse.isDown());
 
 		if (!isRocketActivated) {
 			this.rocketKeyDown = false;
@@ -1105,7 +1105,7 @@ public class GrapplingHookPhysicsController {
 			this.playerJump = false;
 		}
 		
-		if (isWallRunning && !ClientKey.DETACH.get().isDown()) {
+		if (isWallRunning && !ModKeys.DETACH.get().isDown()) {
 
 			Vec wallSide = this.getWallDirection();
 
@@ -1153,7 +1153,7 @@ public class GrapplingHookPhysicsController {
 		}
 		
 		// jump
-		boolean isDetachRequested = ClientKey.DETACH.get().isDown();
+		boolean isDetachRequested = ModKeys.DETACH.get().isDown();
 		boolean shouldJump = isDetachRequested && this.isOnWall && !this.playerJump;
 		this.playerJump = isDetachRequested && this.isOnWall;
 
