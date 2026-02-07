@@ -159,7 +159,7 @@ public class GrappleModifierBlock extends BaseEntityBlock {
 
 		ContainerLevelAccess access = ContainerLevelAccess.create(level, pos);
 		return new SimpleMenuProvider(
-				(id, inventory, player) -> new ModificationTableMenu(id, inventory, access),
+				(id, inventory, player) -> new ModificationTableMenu(id, inventory, player, access),
 				Component.empty()
 		);
 	}

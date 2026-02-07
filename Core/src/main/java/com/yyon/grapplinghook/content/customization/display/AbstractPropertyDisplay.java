@@ -17,13 +17,12 @@ public abstract class AbstractPropertyDisplay<T, P extends CustomizationProperty
         this.property = property;
     }
 
-    public Component getModificationHint(HookCustomization volume) {
+    public Component getValueHint(HookCustomization volume) {
         if(!volume.has(this.property)) return null;
-        return this.getModificationHint(volume.get(this.property));
+        return this.getValueHint(volume.get(this.property));
     }
 
-    public abstract Component getModificationHint(T value);
-
+    public abstract Component getValueHint(T value);
 
     public abstract AbstractWidget getConfigurationUIElement(Supplier<HookCustomization> source, Screen context, Runnable onUpdate, int x, int y, int advisedWidth, int advisedHeight);
 

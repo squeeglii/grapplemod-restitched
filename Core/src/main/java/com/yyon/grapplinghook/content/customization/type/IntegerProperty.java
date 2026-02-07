@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.content.customization.type;
 import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.content.customization.display.IntegerPropertyDisplay;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
 
 import java.nio.ByteBuffer;
 
@@ -33,16 +32,6 @@ public class IntegerProperty extends CustomizationProperty<Integer> {
     @Override
     public Integer decodeValueFrom(ByteBuf targetBuffer) {
         return targetBuffer.readInt();
-    }
-
-    @Override
-    public void saveValueToTag(CompoundTag nbt, Integer value) {
-        nbt.putInt(this.getIdentifier().toString(), this.ifNullDefault(value));
-    }
-
-    @Override
-    public Integer loadValueFromTag(CompoundTag nbt) {
-        return nbt.getInt(this.getIdentifier().toString());
     }
 
     @Override

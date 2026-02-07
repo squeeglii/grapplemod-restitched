@@ -16,11 +16,9 @@ public class IntegerPropertyDisplay extends AbstractPropertyDisplay<Integer, Int
     }
 
     @Override
-    public Component getModificationHint(Integer value) {
+    public Component getValueHint(Integer value) {
         if(value == null) return null;
-        return this.getProperty().getDisplayName()
-                .copy()
-                .append(": %s".formatted(value));
+        return Component.literal(String.valueOf(value));
     }
 
     @Override

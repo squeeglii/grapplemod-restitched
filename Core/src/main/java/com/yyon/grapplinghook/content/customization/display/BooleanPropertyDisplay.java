@@ -16,12 +16,12 @@ public class BooleanPropertyDisplay extends AbstractPropertyDisplay<Boolean, Boo
     }
 
     @Override
-    public Component getModificationHint(Boolean value) {
+    public Component getValueHint(Boolean value) {
         if(value == null) return null;
         String checkboxString = value
                 ? "[✓]"
                 : "[ ]";
-        return this.getProperty().getDisplayName().copy().append(": " + checkboxString);
+        return Component.literal(checkboxString);
     }
 
     @Override

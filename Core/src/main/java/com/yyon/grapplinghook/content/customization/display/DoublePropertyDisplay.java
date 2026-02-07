@@ -16,10 +16,10 @@ public class DoublePropertyDisplay extends AbstractPropertyDisplay<Double, Doubl
     }
 
     @Override
-    public Component getModificationHint(Double value) {
+    public Component getValueHint(Double value) {
         if(value == null) return null;
         double v = Math.floor(value * 100) / 100;
-        return this.getProperty().getDisplayName().copy().append(": %.3f".formatted(v));
+        return Component.literal("%.3f".formatted(v));
     }
 
     @Override

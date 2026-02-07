@@ -17,10 +17,9 @@ public class EnumPropertyDisplay<E extends Enum<E>> extends AbstractPropertyDisp
     }
 
     @Override
-    public Component getModificationHint(E value) {
+    public Component getValueHint(E value) {
         if(value == null) return null;
-        Component valTranslation = this.getValueTranslationKey(value);
-        return this.getProperty().getDisplayName().copy().append(": ").append(valTranslation);
+        return this.getValueTranslationKey(value);
     }
 
     public Component getValueTranslationKey(E value) {

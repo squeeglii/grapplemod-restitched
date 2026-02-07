@@ -261,6 +261,16 @@ public final class HookCustomization {
 		return Collections.unmodifiableSet(this.values.keySet());
 	}
 
+	public Set<CustomizationProperty<?>> getPropertyChanges(HookCustomization other) {
+
+		Set<CustomizationProperty<?>> changedProperties = new HashSet<>();
+
+		changedProperties.addAll(this.values.keySet());
+		changedProperties.addAll(other.getPropertiesPresent());
+
+		return Collections.unmodifiableSet(changedProperties);
+	}
+
 	public boolean isDefault() {
 		return this.values.isEmpty();
 	}

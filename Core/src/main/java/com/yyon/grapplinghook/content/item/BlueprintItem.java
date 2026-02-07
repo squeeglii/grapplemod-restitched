@@ -1,5 +1,6 @@
 package com.yyon.grapplinghook.content.item;
 
+import com.yyon.grapplinghook.content.customization.PropertyDelta;
 import com.yyon.grapplinghook.content.item.type.IAuthorable;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.registry.internal.ModDataComponents;
@@ -73,6 +74,8 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
             return;
         }
 
+        boolean hasDelta = stack.has(ModDataComponents.CUSTOMIZATION_DELTA);
+
         if(stack.has(ModDataComponents.AUTHORED)) {
             TemplateAuthor metadata = stack.get(ModDataComponents.AUTHORED);
 
@@ -99,7 +102,7 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
             );
         }
 
-        if (!Screen.hasControlDown()) {
+        if (!hasDelta && !Screen.hasControlDown()) {
             tooltipComponents.add(Component.translatable("grapple_tooltip.configuration.hint")
                     .withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
             return;
@@ -118,20 +121,58 @@ public class BlueprintItem extends Item implements ICustomizationApplicable, IAu
         HookCustomization customizations = optCustomizations.get();
 
         if(customizations.getPropertiesPresent().isEmpty()) {
+            tooltipComponents.add(Component.literal(""));
             tooltipComponents.add(Component.translatable("tooltip.blueprint.no_customizations")
                     .withStyle(ChatFormatting.ITALIC, ChatFormatting.RED));
             return;
         }
 
 
-        for(CustomizationProperty<?> property: customizations.getPropertiesPresent()) {
-            Component hintText = property.getDisplay().getModificationHint(customizations);
 
-            if(hintText == null)
-                continue;
+        if (hasDelta) {
+            HookCustomization defaultCustom = new HookCustomization();
+            HookCustomization prevCustom = stack.get(ModDataComponents.CUSTOMIZATION_DELTA);
+            //HookCustomization customizations;
 
-            Component formatted = hintText.copy().withStyle(ChatFormatting.DARK_GRAY);
-            tooltipComponents.add(formatted);
+            tooltipComponents.add(Component.translatable("grappletooltip.properties.delta.title").withStyle(
+                    ChatFormatting.GRAY, ChatFormatting.UNDERLINE
+            ));
+
+            for(CustomizationProperty<?> property: customizations.getPropertyChanges(prevCustom)) {
+                PropertyDelta delta = property.compareValues(property, prevCustom, customizations);
+
+                Component entry = switch (delta) {
+                    case SAME -> property.getDisplayName().copy()
+                            .append(": ")
+                            .append(property.getDisplay().getValueHint(customizations))
+                            .withStyle(ChatFormatting.DARK_GRAY);
+                    case CHANGED -> property.getDisplayName().copy()
+                            .append(": ")
+                            .append(property.getDisplay().getValueHint(prevCustom))
+                            .append(Component.literal(" -> "))
+                            .append(property.getDisplay().getValueHint(customizations))
+                            .withStyle(ChatFormatting.GREEN);
+                    case CHANGED_TO_DEFAULT -> property.getDisplayName().copy()
+                            .append(": ")
+                            .append(property.getDisplay().getValueHint(prevCustom))
+                            .append(Component.literal(" -> "))
+                            .append(property.getDisplay().getValueHint(defaultCustom))
+                            .withStyle(ChatFormatting.RED, ChatFormatting.STRIKETHROUGH);
+                };
+
+                tooltipComponents.add(entry);
+            }
+
+        } else {
+            for (CustomizationProperty<?> property : customizations.getPropertiesPresent()) {
+                Component hintText = property.getDisplay().getValueHint(customizations);
+
+                if (hintText == null)
+                    continue;
+
+                Component formatted = property.getDisplayName().copy().append(": ").append(hintText).withStyle(ChatFormatting.DARK_GRAY);
+                tooltipComponents.add(formatted);
+            }
         }
 
     }

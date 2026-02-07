@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.content.item;
 import com.yyon.grapplinghook.api.GrappleModServerEvents;
 import com.yyon.grapplinghook.client.GrappleModClient;
 import com.yyon.grapplinghook.client.ModKeys;
+import com.yyon.grapplinghook.content.customization.PropertyDelta;
 import com.yyon.grapplinghook.content.entity.grapplinghook.GrapplinghookEntity;
 import com.yyon.grapplinghook.content.item.type.ICustomizationApplicable;
 import com.yyon.grapplinghook.content.item.type.IDropHandling;
@@ -79,7 +80,7 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 	public GrapplehookItem() {
 		super(
-				new Item.Properties()
+				new Properties()
 						.stacksTo(1)
 						.durability(DURABILITY)
 						.component(ModDataComponents.CUSTOMIZABLE, new HookCustomization())
@@ -110,16 +111,16 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 
 	@Override
-	public void onCustomKeyDown(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean isMainHand) {
+	public void onCustomKeyDown(ItemStack stack, Player player, Keys key, boolean isMainHand) {
 		if (player.level().isClientSide) {
-			if (key == IGlobalKeyObserver.Keys.LAUNCHER) {
+			if (key == Keys.LAUNCHER) {
 				if (this.getCustomizationsOrDefault(stack).get(ENDER_STAFF_ATTACHED.get()))
 					GrappleModClient.get().launchPlayer(player);
 
-			} else if (key == IGlobalKeyObserver.Keys.THROW_OFF_HAND || key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND || key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS) {
+			} else if (key == Keys.THROW_OFF_HAND || key == Keys.THROW_MAIN_HAND || key == Keys.THROW_BOTH_HOOKS) {
 				NetworkManager.packetToServer(new KeypressC2SPayload(key, true));
 
-			} else if (key == IGlobalKeyObserver.Keys.ROCKET) {
+			} else if (key == Keys.ROCKET) {
 				HookCustomization custom = this.getCustomizationsOrDefault(stack);
 				if (custom.get(ROCKET_ATTACHED.get()))
 					GrappleModClient.get().startRocket(player, custom);
@@ -130,9 +131,9 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
 
-		boolean isEitherSingleHandThrowKeyDown = key == IGlobalKeyObserver.Keys.THROW_OFF_HAND || key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND;
+		boolean isEitherSingleHandThrowKeyDown = key == Keys.THROW_OFF_HAND || key == Keys.THROW_MAIN_HAND;
 
-		if (key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && isEitherSingleHandThrowKeyDown)) {
+		if (key == Keys.THROW_BOTH_HOOKS || (!custom.get(DOUBLE_HOOK_ATTACHED.get()) && isEitherSingleHandThrowKeyDown)) {
 			throwBoth(stack, player.level(), player, isMainHand);
 			return;
 		}
@@ -164,9 +165,9 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 	}
 	
 	@Override
-	public void onCustomKeyUp(ItemStack stack, Player player, IGlobalKeyObserver.Keys key, boolean isMainHand) {
+	public void onCustomKeyUp(ItemStack stack, Player player, Keys key, boolean isMainHand) {
 		if (player.level().isClientSide) {
-			if (key == IGlobalKeyObserver.Keys.THROW_OFF_HAND || key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND || key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS) {
+			if (key == Keys.THROW_OFF_HAND || key == Keys.THROW_MAIN_HAND || key == Keys.THROW_BOTH_HOOKS) {
 				NetworkManager.packetToServer(new KeypressC2SPayload(key, false));
 			}
 
@@ -179,11 +180,11 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			GrapplinghookEntity hookLeft = getHookEntityOffHand(player);
 			GrapplinghookEntity hookRight = getHookEntityMainHand(player);
 
-			if (key == IGlobalKeyObserver.Keys.THROW_BOTH_HOOKS) {
+			if (key == Keys.THROW_BOTH_HOOKS) {
 				detachBoth(player);
-			} else if (key == IGlobalKeyObserver.Keys.THROW_OFF_HAND) {
+			} else if (key == Keys.THROW_OFF_HAND) {
 				if (hookLeft != null) detachOffHand(player);
-			} else if (key == IGlobalKeyObserver.Keys.THROW_MAIN_HAND) {
+			} else if (key == Keys.THROW_MAIN_HAND) {
 				if (hookRight != null) detachMainHand(player);
 			}
 		}
@@ -220,6 +221,8 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 		HookCustomization custom = this.getCustomizationsOrDefault(stack);
 		Options options = Minecraft.getInstance().options;
 
+		boolean hasDelta = stack.has(ModDataComponents.CUSTOMIZATION_DELTA);
+
 		if(stack.has(ModDataComponents.AUTHORED)) {
 			TemplateAuthor metadata = stack.get(ModDataComponents.AUTHORED);
 			Component author = metadata.author()
@@ -236,10 +239,10 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			tooltipComponents.add(Component.literal(" "));
 		}
 
-		if (Screen.hasShiftDown()) {
+		if (Screen.hasShiftDown() && !hasDelta) {
 			tooltipComponents.add(Component.literal(""));
 			tooltipComponents.add(Component.translatable("grappletooltip.controls.title").withStyle(
-					ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
+					ChatFormatting.GRAY, ChatFormatting.UNDERLINE
 			));
 
 			if (custom.get(DOUBLE_HOOK_ATTACHED.get())) {
@@ -313,19 +316,63 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			return;
 		}
 
-		if (Screen.hasControlDown()) {
+		// Preview of Components like:
+		// property: value
+		// property: [/]
+		//...
+		if (Screen.hasControlDown() && !hasDelta) {
 			tooltipComponents.add(Component.translatable("grappletooltip.properties.title").withStyle(
-					ChatFormatting.GRAY, ChatFormatting.BOLD, ChatFormatting.UNDERLINE
+					ChatFormatting.GRAY, ChatFormatting.UNDERLINE
 			));
-			tooltipComponents.add(Component.literal(""));
 
 			for(CustomizationProperty<?> property: custom.getPropertiesPresent()) {
-				Component hintText = property.getDisplay().getModificationHint(custom);
+				Component hintText = property.getDisplay().getValueHint(custom);
 				if(hintText == null) continue;
 
-				Component formatted = hintText.copy().withStyle(ChatFormatting.DARK_GRAY);
+				Component formatted = property.getDisplayName().copy().append(hintText).withStyle(ChatFormatting.DARK_GRAY);
 
 				tooltipComponents.add(formatted);
+			}
+
+			return;
+		}
+
+		// Preview of changes:
+		// unchanged_property: val (gray)
+		// property: valBefore -> valAfter (green)
+		// --removed_property: val_before -> val_after (default value)--   (all crossed out, red)
+		if (hasDelta) {
+			HookCustomization defaultCustom = new HookCustomization();
+			HookCustomization prevCustom = stack.get(ModDataComponents.CUSTOMIZATION_DELTA);
+		  //HookCustomization custom;
+
+			tooltipComponents.add(Component.translatable("grappletooltip.properties.delta.title").withStyle(
+					ChatFormatting.GRAY, ChatFormatting.UNDERLINE
+			));
+
+			for(CustomizationProperty<?> property: custom.getPropertyChanges(prevCustom)) {
+				PropertyDelta delta = property.compareValues(property, prevCustom, custom);
+
+				Component entry = switch (delta) {
+                    case SAME -> property.getDisplayName().copy()
+							.append(": ")
+							.append(property.getDisplay().getValueHint(custom))
+							.withStyle(ChatFormatting.DARK_GRAY);
+                    case CHANGED -> property.getDisplayName().copy()
+							.append(": ")
+							.append(property.getDisplay().getValueHint(prevCustom))
+							.append(Component.literal(" -> "))
+							.append(property.getDisplay().getValueHint(custom))
+							.withStyle(ChatFormatting.GREEN);
+                    case CHANGED_TO_DEFAULT -> property.getDisplayName().copy()
+							.append(": ")
+							.append(property.getDisplay().getValueHint(prevCustom))
+							.append(Component.literal(" -> "))
+							.append(property.getDisplay().getValueHint(defaultCustom))
+							.withStyle(ChatFormatting.RED, ChatFormatting.STRIKETHROUGH);
+                };
+
+				tooltipComponents.add(entry);
 			}
 
 			return;
@@ -360,12 +407,14 @@ public class GrapplehookItem extends Item implements IGlobalKeyObserver, IDropHa
 			tooltipComponents.add(Component.literal(""));
 		}
 
-		tooltipComponents.add(Component.translatable("grapple_tooltip.controls.hint").withStyle(
-				ChatFormatting.ITALIC, ChatFormatting.GRAY
-		));
-		tooltipComponents.add(Component.translatable("grapple_tooltip.configuration.hint").withStyle(
-				ChatFormatting.ITALIC, ChatFormatting.GRAY
-		));
+		if(!hasDelta) {
+			tooltipComponents.add(Component.translatable("grapple_tooltip.controls.hint").withStyle(
+					ChatFormatting.ITALIC, ChatFormatting.GRAY
+			));
+			tooltipComponents.add(Component.translatable("grapple_tooltip.configuration.hint").withStyle(
+					ChatFormatting.ITALIC, ChatFormatting.GRAY
+			));
+		}
 	}
 
 	@NotNull

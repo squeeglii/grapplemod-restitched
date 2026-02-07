@@ -10,9 +10,9 @@ import net.minecraft.network.codec.StreamCodec;
 
 public record TemplateAuthor(String templateId, Component templateDisplayName, Component author) {
 
-    private static final String DEFAULT_TEMPLATE_ID = "user-generated";
-    private static final Component DEFAULT_AUTHOR = Component.translatable("grapple_template.author.unknown");
-    private static final Component DEFAULT_NAME = Component.translatable("grapple_template.name.unknown");
+    public static final String DEFAULT_TEMPLATE_ID = "user-generated";
+    public static final Component DEFAULT_AUTHOR = Component.translatable("grapple_template.author.unknown");
+    public static final Component DEFAULT_NAME = Component.translatable("grapple_template.name.unknown");
 
     //todo: properly implement the codec across the project.
 
@@ -41,6 +41,14 @@ public record TemplateAuthor(String templateId, Component templateDisplayName, C
 
     public TemplateAuthor(Component templateDisplayName, Component author) {
         this(DEFAULT_TEMPLATE_ID, templateDisplayName, author);
+    }
+
+    public TemplateAuthor() {
+        this(DEFAULT_TEMPLATE_ID, DEFAULT_NAME, DEFAULT_AUTHOR);
+    }
+
+    public TemplateAuthor adopt(Component author) {
+        return new TemplateAuthor(DEFAULT_TEMPLATE_ID, this.templateDisplayName, author);
     }
 
     public boolean isNameEmpty() {

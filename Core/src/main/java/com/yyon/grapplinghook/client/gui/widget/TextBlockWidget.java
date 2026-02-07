@@ -10,16 +10,16 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
-public class TextWidget extends AbstractWidget {
+public class TextBlockWidget extends AbstractWidget {
 
     private ChatFormatting[] formatting;
 
-    public TextWidget(int posX, int posY, int sizeY, int sizeX, Component text, ChatFormatting... globalFormatting) {
+    public TextBlockWidget(int posX, int posY, int sizeY, int sizeX, Component text, ChatFormatting... globalFormatting) {
         super(posX, posY, sizeY, sizeX, text);
         this.formatting = globalFormatting;
     }
 
-    public TextWidget(int x, int y, Component text, ChatFormatting... globalFormatting) {
+    public TextBlockWidget(int x, int y, Component text, ChatFormatting... globalFormatting) {
         this(x, y, 50, 15 * text.getString().split("\n").length + 5, text);
         this.formatting = globalFormatting;
     }

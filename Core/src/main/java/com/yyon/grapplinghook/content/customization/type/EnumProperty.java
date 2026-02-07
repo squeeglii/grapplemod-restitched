@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.content.customization.type;
 import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.content.customization.display.EnumPropertyDisplay;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
 
 import java.nio.ByteBuffer;
 
@@ -37,17 +36,6 @@ public class EnumProperty<E extends Enum<E>> extends CustomizationProperty<E> {
     @Override
     public E decodeValueFrom(ByteBuf targetBuffer) {
         int ordinal = targetBuffer.readInt();
-        return this.reverse(ordinal);
-    }
-
-    @Override
-    public void saveValueToTag(CompoundTag nbt, E value) {
-        nbt.putInt(this.getIdentifier().toString(), this.ifNullDefault(value).ordinal());
-    }
-
-    @Override
-    public E loadValueFromTag(CompoundTag nbt) {
-        int ordinal = nbt.getInt(this.getIdentifier().toString());
         return this.reverse(ordinal);
     }
 

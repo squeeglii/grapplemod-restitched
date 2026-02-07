@@ -26,6 +26,7 @@
 
     "grappletooltip.attachments.title":  "Attachments",
     "grappletooltip.properties.title": "Customizations",
+    "grappletooltip.properties.delta.title": "Changes",
     "grappletooltip.controls.title": "Controls",
     "grappletooltip.throw.desc": "Throw grappling hook",
     "grappletooltip.release.desc": "Release",
@@ -124,8 +125,7 @@
     "grapple_modifier.title": "Grapple Hook Modifier Table",
     "grapple_modifier.close_button": "Close",
     "grapple_modifier.reset_button": "Reset",
-    "grapple_modifier.back_button": "Back",
-    "grapple_modifier.help_button": "Help",
+    "grapple_modifier.overview.title": "Categories:",
     "grapple_modifier.notice.reset_customizations": "All customizations have been reset!",
     "grapple_modifier.notice.saved_customizations": "Saved customizations!",
     "grapple_modifier.category_unlock.title": "Category not unlocked: %s!",

@@ -1,15 +1,14 @@
-package com.yyon.grapplinghook.client.gui;
+package com.yyon.grapplinghook.client.gui.screen.blueprint;
 
 // Okay so, why this and not just multiple distinct screens like a sane implementation?
 // - keep roughly in-line with the old implementation, with the added features
 // - testing if UIs could still dynamically be created for future pop-in menus
 // - I cba to figure that out yet.
-public enum ModifierGUILayoutView {
+public enum CurrentModifierView {
 
-    MAIN,
+    OVERVIEW,
     HELP,
     CATEGORY_LOCKED,
-    CATEGORY_PROPERTIES,
-    AUTHORING_SCREEN
+    CATEGORY_EDIT
 
 }

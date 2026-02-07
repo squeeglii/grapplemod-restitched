@@ -1,6 +1,8 @@
 package com.yyon.grapplinghook.content.customization.type;
 
 import com.mojang.serialization.Codec;
+import com.yyon.grapplinghook.content.customization.PropertyDelta;
+import com.yyon.grapplinghook.content.customization.data.HookCustomization;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import com.yyon.grapplinghook.content.customization.PropertyAvailability;
 import com.yyon.grapplinghook.content.customization.predicate.PropertyPredicate;
@@ -8,13 +10,14 @@ import com.yyon.grapplinghook.content.customization.predicate.SuccessPropertyPre
 import com.yyon.grapplinghook.content.customization.display.AbstractPropertyDisplay;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
 
 public abstract class CustomizationProperty<T> {
+
+    private static final HookCustomization DEFAULT_CUSTOM = new HookCustomization();
 
     public static final Codec<CustomizationProperty<?>> KEY_CODEC = Codec.lazyInitialized(GrappleModRegistries.CUSTOMIZATION_PROPERTIES::byNameCodec);
     public static final Codec<Map<CustomizationProperty<?>, Object>> VALUE_MAP_CODEC = Codec.dispatchedMap(KEY_CODEC, CustomizationProperty::getValueCodec);
@@ -44,8 +47,6 @@ public abstract class CustomizationProperty<T> {
     public abstract void encodeValueTo(ByteBuf targetBuffer, T value);
     public abstract T decodeValueFrom(ByteBuf targetBuffer);
 
-    public abstract void saveValueToTag(CompoundTag nbt, T value);
-    public abstract T loadValueFromTag(CompoundTag nbt);
     public abstract byte[] valueToChecksumBytes(T value);
 
     public abstract AbstractPropertyDisplay<T, ? extends CustomizationProperty<T>> getDisplay();
@@ -56,7 +57,19 @@ public abstract class CustomizationProperty<T> {
                 : value;
     }
 
+    public PropertyDelta compareValues(CustomizationProperty<?> property, HookCustomization oldCustom, HookCustomization newCustom) {
+        Object oldVal = oldCustom.get(property);
+        Object newVal = newCustom.get(property);
+        Object defaultVal = DEFAULT_CUSTOM.get(property);
 
+        if(oldVal.equals(newVal))
+            return PropertyDelta.SAME;
+
+        if(newVal.equals(defaultVal))
+            return PropertyDelta.CHANGED_TO_DEFAULT;
+
+        return PropertyDelta.CHANGED;
+    }
 
     public CustomizationProperty<T> setDefaultValue(T defaultValue) {
         this.defaultValue = defaultValue;

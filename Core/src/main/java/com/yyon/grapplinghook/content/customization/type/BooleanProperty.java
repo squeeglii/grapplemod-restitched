@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.content.customization.type;
 import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.content.customization.display.BooleanPropertyDisplay;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
 
 public class BooleanProperty extends CustomizationProperty<Boolean> {
 
@@ -27,16 +26,6 @@ public class BooleanProperty extends CustomizationProperty<Boolean> {
     @Override
     public Boolean decodeValueFrom(ByteBuf targetBuffer) {
         return targetBuffer.readBoolean();
-    }
-
-    @Override
-    public void saveValueToTag(CompoundTag nbt, Boolean value) {
-        nbt.putBoolean(this.getIdentifier().toString(), this.ifNullDefault(value));
-    }
-
-    @Override
-    public Boolean loadValueFromTag(CompoundTag nbt) {
-        return nbt.getBoolean(this.getIdentifier().toString());
     }
 
     @Override

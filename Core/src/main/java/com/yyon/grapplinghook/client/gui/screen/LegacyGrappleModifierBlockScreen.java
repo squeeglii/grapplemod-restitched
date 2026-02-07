@@ -1,6 +1,6 @@
 package com.yyon.grapplinghook.client.gui.screen;
 
-import com.yyon.grapplinghook.client.gui.ModifierGUILayoutView;
+import com.yyon.grapplinghook.client.gui.screen.blueprint.CurrentModifierView;
 import com.yyon.grapplinghook.client.gui.widget.*;
 import com.yyon.grapplinghook.content.blockentity.GrappleModifierBlockEntity;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LegacyGrappleModifierBlockScreen extends Screen {
 
-	private ModifierGUILayoutView currentView;
+	private CurrentModifierView currentView;
 
 	public static final int FULL_SIZE_X = 260;
 	public static final int FULL_SIZE_Y = 221;
@@ -63,7 +63,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 		this.customization = blockEntity.getCurrentCustomizations();
 		this.currentActiveCategory = null;
 
-		this.currentView = ModifierGUILayoutView.MAIN;
+		this.currentView = CurrentModifierView.OVERVIEW;
 	}
 
 
@@ -77,7 +77,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 		switch (currentView) {
 			case HELP -> this.showHelpScreenLayout();
 			case CATEGORY_LOCKED -> this.showCategoryLockedScreen(currentActiveCategory);
-			case CATEGORY_PROPERTIES -> this.showCategoryScreen(currentActiveCategory);
+			case CATEGORY_EDIT -> this.showCategoryScreen(currentActiveCategory);
 
 			// Main, Unknown, and anything unimplemented.
 			default -> this.showMainScreenLayout();
@@ -92,7 +92,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	@Override
 	public boolean shouldCloseOnEsc() {
-		return this.currentView == ModifierGUILayoutView.MAIN;
+		return this.currentView == CurrentModifierView.OVERVIEW;
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 		if (keyCode == 256 && !this.shouldCloseOnEsc()) {
 
 			Component notice = switch (this.currentView) {
-				case CATEGORY_PROPERTIES -> Component.translatable("grapple_modifier.notice.saved_customizations");
+				case CATEGORY_EDIT -> Component.translatable("grapple_modifier.notice.saved_customizations");
 				default -> null;
 			};
 
@@ -119,7 +119,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	public void showMainScreenLayout(Component noticeMessage) {
 		this.resetScreenLayout();
-		this.currentView = ModifierGUILayoutView.MAIN;
+		this.currentView = CurrentModifierView.OVERVIEW;
 
 		this.noticeMessage = noticeMessage;
 
@@ -207,7 +207,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	public void showCategoryLockedScreen(CustomizationCategory category) {
 		this.resetScreenLayout();
-		this.currentView = ModifierGUILayoutView.CATEGORY_LOCKED;
+		this.currentView = CurrentModifierView.CATEGORY_LOCKED;
 
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapple_modifier.back_button"), actionGoBack)
@@ -244,7 +244,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	public void showHelpScreenLayout() {
 		this.resetScreenLayout();
-		this.currentView = ModifierGUILayoutView.HELP;
+		this.currentView = CurrentModifierView.HELP;
 
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapple_modifier.back_button"), actionGoBack)
@@ -274,7 +274,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 
 	public void showCategoryScreen(CustomizationCategory category) {
 		this.resetScreenLayout();
-		this.currentView = ModifierGUILayoutView.CATEGORY_PROPERTIES;
+		this.currentView = CurrentModifierView.CATEGORY_EDIT;
 
 		this.addRenderableWidget(
 				Button.builder(Component.translatable("grapple_modifier.back_button"), action ->
@@ -353,7 +353,7 @@ public class LegacyGrappleModifierBlockScreen extends Screen {
 	}
 
 	public void resetScreenLayout() {
-		this.currentView = ModifierGUILayoutView.MAIN;
+		this.currentView = CurrentModifierView.OVERVIEW;
 		this.currentActiveCategory = null;
 		this.widgetPosYIncrementor = 0;
 		this.options = new HashMap<>();

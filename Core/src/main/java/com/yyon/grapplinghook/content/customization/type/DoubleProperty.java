@@ -3,7 +3,6 @@ package com.yyon.grapplinghook.content.customization.type;
 import com.mojang.serialization.Codec;
 import com.yyon.grapplinghook.content.customization.display.DoublePropertyDisplay;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
 
 import java.nio.ByteBuffer;
 
@@ -33,16 +32,6 @@ public class DoubleProperty extends CustomizationProperty<Double> {
     @Override
     public Double decodeValueFrom(ByteBuf targetBuffer) {
         return targetBuffer.readDouble();
-    }
-
-    @Override
-    public void saveValueToTag(CompoundTag nbt, Double value) {
-        nbt.putDouble(this.getIdentifier().toString(), this.ifNullDefault(value));
-    }
-
-    @Override
-    public Double loadValueFromTag(CompoundTag nbt) {
-        return nbt.getDouble(this.getIdentifier().toString());
     }
 
     @Override
