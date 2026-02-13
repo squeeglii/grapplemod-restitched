@@ -1,23 +1,17 @@
-package com.yyon.grapplinghook.client.gui.screen.blueprint;
+package com.yyon.grapplinghook.client.gui.view;
 
 import net.minecraft.client.gui.components.AbstractWidget;
 
 import java.util.List;
 
-public class HelpView extends AbstractBlueprintView {
-
-    public HelpView() {
-        super(CurrentModifierView.HELP);
-    }
+public class BlankView extends SwitchableScreenView {
 
     @Override
     public void create() {
-
     }
 
     @Override
     public void destroy(List<AbstractWidget> widgets) {
-
     }
 
     @Override

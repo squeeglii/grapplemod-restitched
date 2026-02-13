@@ -27,7 +27,7 @@ public class CategoryEditView extends AbstractBlueprintView {
     }
 
     @Override
-    public int getHeight() {
+    public int getContentsHeight() {
         return 0;
     }
 

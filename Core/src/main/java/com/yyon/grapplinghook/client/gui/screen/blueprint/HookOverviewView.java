@@ -2,7 +2,6 @@ package com.yyon.grapplinghook.client.gui.screen.blueprint;
 
 import com.yyon.grapplinghook.GrappleMod;
 import com.yyon.grapplinghook.client.gui.screen.ModificationTableMenuScreen;
-import com.yyon.grapplinghook.client.gui.widget.TextBlockWidget;
 import com.yyon.grapplinghook.content.customization.CustomizationCategory;
 import com.yyon.grapplinghook.content.registry.GrappleModRegistries;
 import net.minecraft.ChatFormatting;
@@ -37,7 +36,9 @@ public class HookOverviewView extends AbstractBlueprintView {
 
     @Override
     public void create() {
-        this.layout.newCellSettings().alignVerticallyTop().alignHorizontallyCenter().padding(4);
+        this.layout.rowSpacing(4);
+        this.layout.columnSpacing(6);
+        this.layout.newCellSettings().alignVerticallyTop().alignHorizontallyCenter();
 
         StringWidget title = new StringWidget(Component.translatable("grapple_modifier.overview.title").withStyle(ChatFormatting.WHITE, ChatFormatting.UNDERLINE), Minecraft.getInstance().font);
 
@@ -51,7 +52,7 @@ public class HookOverviewView extends AbstractBlueprintView {
                     Button.builder(category.getName(), this.onCategorySelect(category))
                             .pos(0, 0)
                             .tooltip(Tooltip.create(category.getEmbedContent()))
-                            .size(40, 20)
+                            .size(this.width - 6 / 2, 20)
                             .build()
             );
         });
@@ -87,7 +88,7 @@ public class HookOverviewView extends AbstractBlueprintView {
 
 
     @Override
-    public int getHeight() {
+    public int getContentsHeight() {
         return this.layout.getHeight();
     }
 }

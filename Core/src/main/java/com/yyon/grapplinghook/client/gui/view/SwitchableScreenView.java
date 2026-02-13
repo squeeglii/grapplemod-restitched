@@ -1,12 +1,16 @@
 package com.yyon.grapplinghook.client.gui.view;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class SwitchableScreenView {
+public abstract class SwitchableScreenView extends ContainerObjectSelectionList.Entry<SwitchableScreenView> {
 
     private final List<AbstractWidget> widgets;
 
@@ -18,35 +22,33 @@ public abstract class SwitchableScreenView {
         this.widgets.add(widget);
     }
 
+    // todo: make the creation process more sensible. Stop calls to addWidget after create.
     // add widgets
-    public abstract void create();
+    /** @return total height of contents */
+    public abstract int create();
 
-    //destroy those widgets
+    //destroy those widgets if necessary, idk. They get removed anyway.
     public abstract void destroy(List<AbstractWidget> widgets);
 
-    public abstract int getHeight();
+    @Override
+    public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
 
-    public final List<AbstractWidget> getWidgets() {
+    }
+
+    @NotNull
+    @Override
+    public final List<AbstractWidget> children() {
         return Collections.unmodifiableList(this.widgets);
     }
 
-    public static SwitchableScreenView newBlankView() {
-        return new BlankView();
+    @Override
+    public List<? extends NarratableEntry> narratables() {
+        return Collections.unmodifiableList(this.widgets);
     }
 
 
-    public static class BlankView extends SwitchableScreenView {
-
-        @Override
-        public void create() { }
-
-        @Override
-        public void destroy(List<AbstractWidget> widgets) { }
-
-        @Override
-        public int getHeight() {
-            return 0;
-        }
+    public static SwitchableScreenView newBlankView() {
+        return new BlankView();
     }
 
 }
